@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    void Interact();
+    void Interact(Player player);
 }
 public class PlayerInteraction : MonoBehaviour
 {
@@ -30,10 +30,11 @@ public class PlayerInteraction : MonoBehaviour
         if (_input.InteractPressed)
         {
             Ray ray = new Ray(_player.cameraTransform.position, _player.cameraTransform.forward);
+            Debug.DrawRay(_player.cameraTransform.position, _player.cameraTransform.forward * interactionDistance, Color.blue);
             if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
             {
                 var interactable = hit.collider.GetComponent<IInteractable>();
-                interactable?.Interact();
+                interactable?.Interact(_player);
             }
         }
     }

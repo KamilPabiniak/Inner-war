@@ -10,8 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private PlayerCrouch _crouch;
 
     [Header("Movement Interpolation")]
-    public float acceleration = 5f; // Szybkość przyspieszania
-    public float deceleration = 5f; // Szybkość zwalniania
+    public float acceleration = 5f; 
+    public float deceleration = 5f;
 
     private Vector3 currentVelocity = Vector3.zero;
 
@@ -39,8 +39,7 @@ public class PlayerMovement : MonoBehaviour
             float reductionFactor = (100f - _player.crouchSpeedReduction) / 100f;
             targetVelocity *= reductionFactor;
         }
-
-        // Interpolacja prędkości (przyspieszenie/zwalnianie)
+        
         if (moveInput.magnitude > 0.1f)
         {
             currentVelocity = Vector3.Lerp(currentVelocity, targetVelocity, acceleration * Time.deltaTime);

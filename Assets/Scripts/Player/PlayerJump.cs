@@ -4,7 +4,6 @@ public class PlayerJump : MonoBehaviour
 {
     private Player _player;
     private PlayerInput _input;
-    private float verticalVelocity;
 
     private void Start()
     {
@@ -18,14 +17,12 @@ public class PlayerJump : MonoBehaviour
         HandleJump();
     }
 
+    //NO JUMPING ALLOWED
     private void HandleJump()
     {
         if (_input.JumpPressed && _player.characterController.isGrounded)
         {
-            verticalVelocity = _player.jumpForce;
+            
         }
-
-        verticalVelocity -= _player.gravity * Time.deltaTime;
-        _player.characterController.Move(Vector3.up * verticalVelocity * Time.deltaTime);
     }
 }
