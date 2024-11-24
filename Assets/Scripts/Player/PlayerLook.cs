@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerLook : MonoBehaviour
 {
@@ -8,48 +7,42 @@ public class PlayerLook : MonoBehaviour
     public float verticalClamp = 85f;
 
     [Header("Camera Bobbing")]
-    public bool enableBobbing = true; 
-    public float bobbingSpeed = 10f; 
-    public float bobbingStrenght = 0.05f; 
-    
-    private Player _player;
-    private PlayerInput _input;
-    private float xRotation = 0f;
-    private float bobbingOffset = 0f;
-    private float bobbingTimer = 0f;
-    private Quaternion leanRotation = Quaternion.identity;
+    public bool enableBobbing = true;
+    public float bobbingSpeed = 10f;
+    public float bobbingStrength = 0.05f;
+
+    private Player player;
+    private PlayerInput input;
+    private float xRotation;
+    private float bobbingOffset;
+    private float bobbingTimer;
+
+    private Quaternion leanRotation = Quaternion.identity; 
 
     private void Start()
     {
-        _player = GetComponent<Player>();
-        _input = GetComponent<PlayerInput>();
+        player = GetComponent<Player>();
+        input = GetComponent<PlayerInput>();
         LockCursor();
     }
 
     private void Update()
     {
+        if (!player.InputEnabled) return;
+
         HandleCursor();
-
-        if (!_player.InputEnabled || Cursor.lockState != CursorLockMode.Locked)
-            return;
-
-        HandleLook(_input.LookInput);
+        HandleLook(input.LookInput);
 
         if (enableBobbing)
-            HandleCameraBobbing(_input.MoveInput);
+            HandleCameraBobbing(input.MoveInput);
     }
 
     private void HandleCursor()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
             UnlockCursor();
-        }
-
-        if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
-        {
+        else if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
             LockCursor();
-        }
     }
 
     private void LockCursor()
@@ -72,17 +65,17 @@ public class PlayerLook : MonoBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -verticalClamp, verticalClamp);
 
-        Quaternion cameraRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        _player.cameraTransform.localRotation = cameraRotation * leanRotation;
-        _player.playerBody.Rotate(Vector3.up * mouseX);
+        // Uwzględnienie leanRotation w rotacji kamery
+        player.CameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0) * leanRotation;
+        player.CharacterController.transform.Rotate(Vector3.up * mouseX);
     }
 
     private void HandleCameraBobbing(Vector2 moveInput)
     {
-        if (moveInput.magnitude > 0.1f) 
+        if (moveInput.magnitude > 0.1f)
         {
             bobbingTimer += Time.deltaTime * bobbingSpeed;
-            bobbingOffset = Mathf.Sin(bobbingTimer) * bobbingStrenght;
+            bobbingOffset = Mathf.Sin(bobbingTimer) * bobbingStrength;
         }
         else
         {
@@ -90,13 +83,17 @@ public class PlayerLook : MonoBehaviour
             bobbingOffset = Mathf.Lerp(bobbingOffset, 0, Time.deltaTime * bobbingSpeed);
         }
 
-        Vector3 cameraPosition = _player.cameraTransform.localPosition;
-        cameraPosition.y += bobbingOffset;
-        _player.cameraTransform.localPosition = cameraPosition;
+        Vector3 cameraPosition = player.CameraTransform.localPosition;
+        cameraPosition.y = bobbingOffset;
+        player.CameraTransform.localPosition = cameraPosition;
     }
 
-    public void ApplyLeanRotation(Quaternion leanRot)
+    /// <summary>
+    /// Ustawia dodatkową rotację wychylenia.
+    /// </summary>
+    /// <param name="rotation">Rotacja do zastosowania.</param>
+    public void ApplyLeanRotation(Quaternion rotation)
     {
-        leanRotation = leanRot;
+        leanRotation = rotation;
     }
 }

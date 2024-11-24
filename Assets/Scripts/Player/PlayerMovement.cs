@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float acceleration = 5f; 
     public float deceleration = 5f;
 
-    private Vector3 currentVelocity = Vector3.zero;
+    public Vector3 currentVelocity { get; private set; } = Vector3.zero;
 
     private void Start()
     {
@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovement(Vector2 moveInput)
     {
+        if (!_player.characterController.enabled) return;
         Vector3 targetVelocity = new Vector3(moveInput.x, 0, moveInput.y);
         targetVelocity = transform.TransformDirection(targetVelocity) * moveSpeed;
 

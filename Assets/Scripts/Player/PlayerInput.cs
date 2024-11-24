@@ -1,68 +1,72 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour, PlayerInputActions.IPlayerActions
+public class PlayerInput : MonoBehaviour
 {
-    private Player _player;
-    private PlayerInputActions _inputActions;
+    private Player player;
+    private PlayerInputActions inputActions;
 
     public Vector2 MoveInput { get; private set; }
     public Vector2 LookInput { get; private set; }
-    public bool JumpPressed { get; private set; }
-    public bool CrouchPressed { get; private set; }
-    public bool InteractPressed { get; private set; }
-    public bool LeanLeftPressed { get; private set; } 
-    public bool LeanRightPressed { get; private set; } 
+    public bool IsVaultPressed { get; private set; }
+    public bool IsCrouchPressed { get; private set; }
+    public bool IsInteractPressed { get; private set; }
+    public bool IsLeanLeftPressed { get; private set; }
+    public bool IsLeanRightPressed { get; private set; }
 
     private void Awake()
     {
-        _player = GetComponent<Player>();
-        _inputActions = new PlayerInputActions();
-        _inputActions.Player.SetCallbacks(this);
+        player = GetComponent<Player>();
+        inputActions = new PlayerInputActions();
+        inputActions.Player.SetCallbacks(new PlayerActions(this));
     }
 
-    private void OnEnable()
-    {
-        _inputActions.Player.Enable();
-    }
+    private void OnEnable() => inputActions.Player.Enable();
 
-    private void OnDisable()
-    {
-        _inputActions.Player.Disable();
-    }
+    private void OnDisable() => inputActions.Player.Disable();
+    
+    public void ResetVaultRequest() => IsVaultPressed = false;
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        MoveInput = context.ReadValue<Vector2>();
-    }
 
-    public void OnLook(InputAction.CallbackContext context)
+    private class PlayerActions : PlayerInputActions.IPlayerActions
     {
-        LookInput = context.ReadValue<Vector2>();
-    }
+        private readonly PlayerInput _playerInput;
 
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        JumpPressed = _player.InputEnabled && context.performed;
-    }
+        public PlayerActions(PlayerInput input) => _playerInput = input;
 
-    public void OnCrouch(InputAction.CallbackContext context)
-    {
-        CrouchPressed = _player.InputEnabled && context.performed;
-    }
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            _playerInput.MoveInput = context.ReadValue<Vector2>();
+        }
 
-    public void OnInteract(InputAction.CallbackContext context)
-    {
-        InteractPressed = _player.InputEnabled && context.performed;
-    }
+        public void OnLook(InputAction.CallbackContext context)
+        {
+            _playerInput.LookInput = context.ReadValue<Vector2>();
+        }
 
-    public void OnLeanLeft(InputAction.CallbackContext context)
-    {
-        LeanLeftPressed = _player.InputEnabled && context.performed;
-    }
+        public void OnVault(InputAction.CallbackContext context)
+        {
+            _playerInput.IsVaultPressed = _playerInput.player.InputEnabled && context.performed;
+        }
 
-    public void OnLeanRight(InputAction.CallbackContext context)
-    {
-        LeanRightPressed = _player.InputEnabled && context.performed;
+        public void OnCrouch(InputAction.CallbackContext context)
+        {
+            _playerInput.IsCrouchPressed = _playerInput.player.InputEnabled && context.performed;
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            _playerInput.IsInteractPressed = _playerInput.player.InputEnabled && context.performed;
+        }
+
+        public void OnLeanLeft(InputAction.CallbackContext context)
+        {
+            _playerInput.IsLeanLeftPressed = _playerInput.player.InputEnabled && context.performed;
+        }
+
+        public void OnLeanRight(InputAction.CallbackContext context)
+        {
+            _playerInput.IsLeanRightPressed = _playerInput.player.InputEnabled && context.performed;
+        }
     }
 }

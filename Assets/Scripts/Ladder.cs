@@ -52,7 +52,7 @@ public class Ladder : MonoBehaviour, IInteractable
     {
         isClimbing = true;
 
-        _player.gravityEnabled = false;
+        _player.GravityEnabled = false;
         _player.DisableInput();
         
         Vector3 directionToLadder = (transform.position - _player.transform.position).normalized;
@@ -90,7 +90,7 @@ public class Ladder : MonoBehaviour, IInteractable
     public void ExitLadder(bool isTop)
     {
         isClimbing = false;
-        _player.gravityEnabled = true;
+        _player.GravityEnabled = true;
 
         Vector3 exitPosition = isTop ? topExitPoint.position : bottomExitPoint.position;
         Quaternion exitRotation = Quaternion.LookRotation(-transform.forward);

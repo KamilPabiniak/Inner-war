@@ -27,7 +27,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void HandleInteraction()
     {
-        if (_input.InteractPressed)
+        if (_input.IsInteractPressed)
         {
             Ray ray = new Ray(_player.cameraTransform.position, _player.cameraTransform.forward);
             Debug.DrawRay(_player.cameraTransform.position, _player.cameraTransform.forward * interactionDistance, Color.blue);

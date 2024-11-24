@@ -20,8 +20,8 @@ public class PlayerCrouch : MonoBehaviour
 
     private void HandleCrouch()
     {
-        _player.characterController.height = _input.CrouchPressed ? _player.crouchHeight : _player.standingHeight;
-        _isCrouch = _input.CrouchPressed;
+        _player.characterController.height = _input.IsCrouchPressed ? _player.crouchHeight : _player.standingHeight;
+        _isCrouch = _input.IsCrouchPressed;
     }
 
     public bool IsCrouch() => _isCrouch;
