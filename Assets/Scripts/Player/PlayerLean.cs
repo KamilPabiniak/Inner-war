@@ -1,9 +1,9 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(Player.Player))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerLook))]
-public class PlayerLean : MonoBehaviour
+public class PlayerLean : PlayerModule
 {
     [Header("Lean Settings")]
     [Tooltip("Kąt wychylenia w stopniach.")]
@@ -14,8 +14,7 @@ public class PlayerLean : MonoBehaviour
 
     [Tooltip("Szybkość interpolacji wychylenia.")]
     public float leanSpeed = 5f;
-
-    private Player player;
+    
     private PlayerInput input;
     private PlayerLook playerLook;
 
@@ -28,32 +27,26 @@ public class PlayerLean : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<Player>();
         input = GetComponent<PlayerInput>();
         playerLook = GetComponent<PlayerLook>();
     }
 
     private void Start()
     {
-        // Ustawienie początkowych wartości dla pozycji i rotacji kamery
-        originalPosition = player.CameraTransform.localPosition;
+        originalPosition = Player.CameraTransform.localPosition;
         targetPosition = originalPosition;
         currentPosition = originalPosition;
     }
 
     private void Update()
     {
-        if (!player.InputEnabled) return;
-
         HandleLeanInput();
-
-        // Płynna interpolacja rotacji i pozycji
+        
         currentRotation = Quaternion.Lerp(currentRotation, targetRotation, leanSpeed * Time.deltaTime);
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, leanSpeed * Time.deltaTime);
-
-        // Aktualizacja rotacji i pozycji kamery
+        
         playerLook.ApplyLeanRotation(currentRotation);
-        player.CameraTransform.localPosition = currentPosition;
+        Player.CameraTransform.localPosition = currentPosition;
     }
 
     private void HandleLeanInput()

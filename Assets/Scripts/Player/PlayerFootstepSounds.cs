@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerFootstepSounds : MonoBehaviour
+public class PlayerFootstepSounds : PlayerModule
 {
     [Header("Audio Settings")]
     public float footstepInterval = 0.5f;

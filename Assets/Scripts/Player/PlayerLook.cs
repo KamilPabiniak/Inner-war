@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
+public class PlayerLook : PlayerModule
 {
     [Header("Mouse Settings")]
     public float mouseSensitivity = 100f;
@@ -10,8 +10,7 @@ public class PlayerLook : MonoBehaviour
     public bool enableBobbing = true;
     public float bobbingSpeed = 10f;
     public float bobbingStrength = 0.05f;
-
-    private Player player;
+    
     private PlayerInput input;
     private float xRotation;
     private float bobbingOffset;
@@ -21,20 +20,24 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
-        player = GetComponent<Player>();
         input = GetComponent<PlayerInput>();
         LockCursor();
     }
 
     private void Update()
     {
-        if (!player.InputEnabled) return;
+        if (Player.state == global::Player.Player.State.Walking)
+        {
+            HandleCursor();
+            HandleLook(input.LookInput);
 
-        HandleCursor();
-        HandleLook(input.LookInput);
-
-        if (enableBobbing)
-            HandleCameraBobbing(input.MoveInput);
+            if (enableBobbing)
+                HandleCameraBobbing(input.MoveInput);
+        }
+        else if (Player.state == global::Player.Player.State.Climbing)
+        {
+            HandleClimbingLook();
+        }
     }
 
     private void HandleCursor()
@@ -64,10 +67,9 @@ public class PlayerLook : MonoBehaviour
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -verticalClamp, verticalClamp);
-
-        // Uwzględnienie leanRotation w rotacji kamery
-        player.CameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0) * leanRotation;
-        player.CharacterController.transform.Rotate(Vector3.up * mouseX);
+        
+        Player.CameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0) * leanRotation;
+        Player.CharacterController.transform.Rotate(Vector3.up * mouseX);
     }
 
     private void HandleCameraBobbing(Vector2 moveInput)
@@ -83,9 +85,15 @@ public class PlayerLook : MonoBehaviour
             bobbingOffset = Mathf.Lerp(bobbingOffset, 0, Time.deltaTime * bobbingSpeed);
         }
 
-        Vector3 cameraPosition = player.CameraTransform.localPosition;
+        Vector3 cameraPosition = Player.CameraTransform.localPosition;
         cameraPosition.y = bobbingOffset;
-        player.CameraTransform.localPosition = cameraPosition;
+        Player.CameraTransform.localPosition = cameraPosition;
+    }
+    
+    private void HandleClimbingLook()
+    {
+        // Reset rotation to match player's transform on exit.
+        Player.CameraTransform.localRotation = Quaternion.identity;
     }
 
     /// <summary>

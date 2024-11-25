@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerModule
 {
     [Header("Settings")] 
     public float moveSpeed = 5f;
-    
-    private Player _player;
+    public float climbSpeed = 3f;
+
     private PlayerInput _input;
-    private PlayerCrouch _crouch;
+    private bool _isCrouch;
 
     [Header("Movement Interpolation")]
     public float acceleration = 5f; 
@@ -17,27 +17,31 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        _player = GetComponent<Player>();
         _input = GetComponent<PlayerInput>();
-        _crouch = GetComponent<PlayerCrouch>();
     }
-    
+
     private void Update()
     {
-        if (!_player.InputEnabled) return;
-
-        HandleMovement(_input.MoveInput);
+        if (Player.state == global::Player.Player.State.Walking)
+        {
+            HandleWalking(_input.MoveInput);
+            HandleCrouch();
+        }
+        else if (Player.state == global::Player.Player.State.Climbing)
+        {
+            HandleClimbing(_input.MoveInput);
+        }
     }
 
-    private void HandleMovement(Vector2 moveInput)
+    private void HandleWalking(Vector2 moveInput)
     {
-        if (!_player.characterController.enabled) return;
+        if (!Player.characterController.enabled) return;
         Vector3 targetVelocity = new Vector3(moveInput.x, 0, moveInput.y);
         targetVelocity = transform.TransformDirection(targetVelocity) * moveSpeed;
 
-        if (_crouch.IsCrouch())
+        if (_isCrouch)
         {
-            float reductionFactor = (100f - _player.crouchSpeedReduction) / 100f;
+            float reductionFactor = (100f - Player.crouchSpeedReduction) / 100f;
             targetVelocity *= reductionFactor;
         }
         
@@ -50,6 +54,23 @@ public class PlayerMovement : MonoBehaviour
             currentVelocity = Vector3.Lerp(currentVelocity, Vector3.zero, deceleration * Time.deltaTime);
         }
 
-        _player.characterController.Move(currentVelocity * Time.deltaTime);
+        Player.characterController.Move(currentVelocity * Time.deltaTime);
+    }
+    
+    private void HandleCrouch()
+    {
+        Player.characterController.height = _input.IsCrouchPressed ? Player.crouchHeight : Player.standingHeight;
+        _isCrouch = _input.IsCrouchPressed;
+    }
+
+    private void HandleClimbing(Vector2 moveInput)
+    {
+        if (!Player.characterController.enabled) return;
+
+        Vector3 climbDirection = Vector3.up * (moveInput.y * climbSpeed);
+        Vector3 fixedHorizontalPosition = new Vector3(transform.position.x, Player.characterController.transform.position.y, transform.position.z);
+        Player.characterController.transform.position = fixedHorizontalPosition;
+
+        Player.characterController.Move(climbDirection * Time.deltaTime);
     }
 }

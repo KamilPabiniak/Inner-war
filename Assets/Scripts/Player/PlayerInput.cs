@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : PlayerModule
 {
-    private Player player;
     private PlayerInputActions inputActions;
 
     public Vector2 MoveInput { get; private set; }
@@ -16,7 +15,6 @@ public class PlayerInput : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<Player>();
         inputActions = new PlayerInputActions();
         inputActions.Player.SetCallbacks(new PlayerActions(this));
     }
@@ -46,27 +44,27 @@ public class PlayerInput : MonoBehaviour
 
         public void OnVault(InputAction.CallbackContext context)
         {
-            _playerInput.IsVaultPressed = _playerInput.player.InputEnabled && context.performed;
+            _playerInput.IsVaultPressed = context.performed;
         }
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            _playerInput.IsCrouchPressed = _playerInput.player.InputEnabled && context.performed;
+            _playerInput.IsCrouchPressed = context.performed;
         }
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            _playerInput.IsInteractPressed = _playerInput.player.InputEnabled && context.performed;
+            _playerInput.IsInteractPressed = context.performed;
         }
 
         public void OnLeanLeft(InputAction.CallbackContext context)
         {
-            _playerInput.IsLeanLeftPressed = _playerInput.player.InputEnabled && context.performed;
+            _playerInput.IsLeanLeftPressed = context.performed;
         }
 
         public void OnLeanRight(InputAction.CallbackContext context)
         {
-            _playerInput.IsLeanRightPressed = _playerInput.player.InputEnabled && context.performed;
+            _playerInput.IsLeanRightPressed = context.performed;
         }
     }
 }
