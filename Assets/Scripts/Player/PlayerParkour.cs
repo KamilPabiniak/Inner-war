@@ -39,13 +39,10 @@ public class PlayerParkour : PlayerModule
     {
         if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit firstHit, vaultDistance, vaultLayer))
         {
-            Debug.Log("Obstacle detected!");
-            
             Vector3 climbStart = firstHit.point + (_cameraTransform.forward * playerRadius) + (Vector3.up * 0.6f * climbHeight);
 
             if (Physics.Raycast(climbStart, Vector3.down, out RaycastHit secondHit, climbHeight))
             {
-                Debug.Log("Valid climb position found!");
                 StartCoroutine(Climb(secondHit.point));
             }
             else

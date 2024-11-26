@@ -5,6 +5,8 @@ public class PlayerMovement : PlayerModule
     [Header("Settings")] 
     public float moveSpeed = 5f;
     public float climbSpeed = 3f;
+    [Tooltip("Redukcja prędkości podczas kucania (w %).")]
+    [Range(0, 100)] public float crouchSpeedReduction = 50f;
 
     private PlayerInput _input;
     private bool _isCrouch;
@@ -22,12 +24,12 @@ public class PlayerMovement : PlayerModule
 
     private void Update()
     {
-        if (Player.state == global::Player.Player.State.Walking)
+        if (Player.state == Player.State.Walking)
         {
             HandleWalking(_input.MoveInput);
             HandleCrouch();
         }
-        else if (Player.state == global::Player.Player.State.Climbing)
+        else if (Player.state == Player.State.Climbing)
         {
             HandleClimbing(_input.MoveInput);
         }
@@ -41,7 +43,7 @@ public class PlayerMovement : PlayerModule
 
         if (_isCrouch)
         {
-            float reductionFactor = (100f - Player.crouchSpeedReduction) / 100f;
+            float reductionFactor = (100f - crouchSpeedReduction) / 100f;
             targetVelocity *= reductionFactor;
         }
         

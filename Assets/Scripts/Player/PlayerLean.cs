@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Player.Player))]
+[RequireComponent(typeof(Player))]
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerLook))]
 public class PlayerLean : PlayerModule

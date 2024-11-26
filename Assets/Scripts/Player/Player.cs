@@ -1,151 +1,154 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace Player
-{
-    [RequireComponent(typeof(CharacterController))]
-    public class Player : MonoBehaviour
+[RequireComponent(typeof(CharacterController))]
+ public class Player : MonoBehaviour
+ { 
+     [Header("Settings")] 
+     [Tooltip("Wysokość gracza podczas stania.")]
+     public float standingHeight = 2f;
+     [Tooltip("Wysokość gracza podczas kucania.")]
+     public float crouchHeight = 1f;
+     [Tooltip("Przyspieszenie pod grawitacyjne.")]
+     public float gravity = 20f;
+
+     public State state;
+
+    public enum State
     {
-        [Header("Settings")]
-        [Tooltip("Wysokość gracza podczas stania.")]
-        public float standingHeight = 2f;
-        [Tooltip("Wysokość gracza podczas kucania.")]
-        public float crouchHeight = 1f;
-        [Tooltip("Redukcja prędkości podczas kucania (w %).")]
-        [Range(0, 100)] public float crouchSpeedReduction = 50f;
-        [Tooltip("Przyspieszenie pod grawitacyjne.")]
-        public float gravity = 20f;
+        Walking,
+        Climbing
+    }
 
-        public State state;
+    [Header("References")]
+    public Transform cameraTransform;
+    public CharacterController characterController;
+    public Transform CameraTransform => cameraTransform;
+    public CharacterController CharacterController => characterController;
 
-        public enum State
+    [Header("Modules")]
+    public PlayerModule[] modules;
+    public PlayerInput Input { get; private set; }
+
+    private bool InputEnabled { get; set; } = true;
+    private bool GravityEnabled { get; set; } = true;
+    private bool CharacterControllerEnabled { get; set; } = true;
+
+    private float _verticalVelocity;
+
+    private void Awake()
+    {
+        modules = GetComponents<PlayerModule>();
+    }
+
+    private void Start()
+    {
+        foreach (var module in modules)
         {
-            Walking,
-            Climbing
+            module.Initialize(this);
         }
+        Input = GetModule<PlayerInput>();
+    }
 
-        [Header("References")]
-        public Transform cameraTransform;
-        public CharacterController characterController;
-        public Transform CameraTransform => cameraTransform;
-        public CharacterController CharacterController => characterController;
-    
-        [Header("Modules")]
-        public PlayerModule[] modules;
+    private void OnValidate()
+    {
+        if (characterController != null) { characterController.enabled = CharacterControllerEnabled; }
+        if (Input != null) { Input.enabled = InputEnabled; }
+    }
 
-        private PlayerInput _input;
+    private void Update()
+    {
+        if (characterController.enabled) { ApplyGround(); }
+    }
 
-        private bool InputEnabled { get; set; } = true;
-        private bool GravityEnabled { get; set; } = true;
-        private bool CharacterControllerEnabled { get; set; } = true;
-    
-        private float _verticalVelocity;
-
-        private void Awake()
+    public T GetModule<T>() where T : PlayerModule
+    {
+        foreach (var module in modules)
         {
-            modules = GetComponents<PlayerModule>();
-        }
-    
-        private void Start()
-        {
-            foreach (var module in modules)
+            if (module is T foundModule)
             {
-                module.Initialize(this);
+                return foundModule;
             }
-            _input = GetModule<PlayerInput>();
+        }
+        return null;
+    }
+
+    private void ApplyGround()
+    {
+        if (!characterController.isGrounded)
+        {
+            _verticalVelocity -= gravity * Time.deltaTime;
+        }
+        else if (_verticalVelocity < 0)
+        {
+            _verticalVelocity = 0f;
         }
 
-        private void OnValidate()
-        {
-            if (characterController != null) { characterController.enabled = CharacterControllerEnabled; }
-            if (_input != null) { _input.enabled = InputEnabled; }
-        }
+        if (!GravityEnabled) return;
+        Gravity();
+    }
 
-        private void Update()
-        {
-            if (characterController.enabled) { ApplyGround(); }
-        }
+    private void Gravity()
+    {
+        Vector3 gravityMovement = Vector3.up * (_verticalVelocity * Time.deltaTime);
+        characterController.Move(gravityMovement);
+    }
 
-        public T GetModule<T>() where T : PlayerModule
+    /// <summary>
+    /// Przełącznik stanu CharacterController z Inspektora.
+    /// </summary>
+    [ContextMenu("Toggle CharacterController")]
+    public void ToggleCharacterController()
+    {
+        CharacterControllerEnabled = !CharacterControllerEnabled;
+        if (characterController != null)
         {
-            foreach (var module in modules)
-            {
-                if (module is T foundModule)
-                {
-                    return foundModule;
-                }
-            }
-            return null;
-        }
-    
-        private void ApplyGround()
-        {
-            if (!characterController.isGrounded)
-            {
-                _verticalVelocity -= gravity * Time.deltaTime;
-            }
-            else if (_verticalVelocity < 0)
+            characterController.enabled = CharacterControllerEnabled;
+        
+            if (!characterController.enabled)
             {
                 _verticalVelocity = 0f;
             }
-
-            if (!GravityEnabled) return;
-            Gravity();
         }
 
-        private void Gravity()
-        {
-            Vector3 gravityMovement = Vector3.up * (_verticalVelocity * Time.deltaTime);
-            characterController.Move(gravityMovement);
-        }
+        Debug.Log($"CharacterController is now {(CharacterControllerEnabled ? "Enabled" : "Disabled")}");
+    }
 
-        /// <summary>
-        /// Przełącznik stanu CharacterController z Inspektora.
-        /// </summary>
-        [ContextMenu("Toggle CharacterController")]
-        public void ToggleCharacterController()
-        {
-            CharacterControllerEnabled = !CharacterControllerEnabled;
-            if (characterController != null)
-            {
-                characterController.enabled = CharacterControllerEnabled;
-            
-                if (!characterController.enabled)
-                {
-                    _verticalVelocity = 0f;
-                }
-            }
+    /// <summary>
+    /// Przełącznik stanu wejścia gracza z Inspektora.
+    /// </summary>
+    [ContextMenu("Toggle Input")]
+    public void ToggleInput()
+    {
+        InputEnabled = !InputEnabled;
+        if (Input == null) return;
+        Input.enabled = InputEnabled;
+        Debug.Log($"Input is now {(InputEnabled ? "Enabled" : "Disabled")}");
+    }
 
-            Debug.Log($"CharacterController is now {(CharacterControllerEnabled ? "Enabled" : "Disabled")}");
-        }
-
-        /// <summary>
-        /// Przełącznik stanu wejścia gracza z Inspektora.
-        /// </summary>
-        [ContextMenu("Toggle Input")]
-        public void ToggleInput()
-        {
-            InputEnabled = !InputEnabled;
-            if (_input == null) return;
-            _input.enabled = InputEnabled;
-            Debug.Log($"Input is now {(InputEnabled ? "Enabled" : "Disabled")}");
-        }
-    
-        public void SetInputEnabled(bool isEnabled)
-        {
-            InputEnabled = isEnabled;
-            _input.enabled = InputEnabled;
-            Debug.Log($"Input is now {(isEnabled ? "enabled" : "disabled")}");
-        }
+    public void SetInputEnabled(bool isEnabled)
+    {
+        InputEnabled = isEnabled;
+        Input.enabled = InputEnabled;
+        Debug.Log($"Input is now {(isEnabled ? "enabled" : "disabled")}");
+    }
     
 
-        /// <summary>
-        /// Przełącznik stanu grawitacji z Inspektora.
-        /// </summary>
-        [ContextMenu("Toggle Gravity")]
-        public void ToggleGravity()
-        {
-            GravityEnabled = !GravityEnabled;
-            Debug.Log($"Gravity is now {(GravityEnabled ? "Enabled" : "Disabled")}");
-        }
+    /// <summary>
+    /// Przełącznik stanu grawitacji z Inspektora.
+    /// </summary>
+    [ContextMenu("Toggle Gravity")]
+    public void ToggleGravity()
+    {
+        GravityEnabled = !GravityEnabled;
+        Debug.Log($"Gravity is now {(GravityEnabled ? "Enabled" : "Disabled")}");
+    }
+
+    public void SetGravityEnabled(bool isEnabled)
+    {
+        GravityEnabled  = isEnabled;
+        
+        Debug.Log($"Gravity is now {(isEnabled ? "Enabled" : "Disabled")}");
     }
 }
+

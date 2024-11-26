@@ -3,101 +3,124 @@ using UnityEngine;
 
 public class Climb : MonoBehaviour
 {
-    private Player.Player _player;
+    private Player _player;
 
-    public float bottomRaycastDistance = 0.5f; // Odległość raycasta w dół
-    public float topRaycastAngle = 15f; // Kąt raycasta w górę
-    public float entryCooldown = 1f; // Czas cooldownu po wejściu na drabinę
+    [Header("Raycast Settings")]
+    public float bottomRaycastDistance = 0.5f;
+    public float topRaycastAngle = 15f;
+    public float topRaycastDistance = 2f;
 
-    private bool _entryCooldownActive = false;
+    public float alignmentSpeed;
+    public float offsetFromLadder = 1f; 
+    private Coroutine climbCoroutine;
+    private bool isClimbingAligned = false; 
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-
-        _player = other.GetComponent<Player.Player>();
+        _player = other.GetComponent<Player>();
         if (_player == null) return;
-
-        AlignToLadder();
+        _player.ToggleInput();
         _player.ToggleGravity();
-        _player.state = Player.Player.State.Climbing;
 
-        // Aktywujemy cooldown
-        _entryCooldownActive = true;
-        StartCoroutine(ResetEntryCooldown());
+        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
+        climbCoroutine = StartCoroutine(AlignToLadderCoroutine(() =>
+        {
+            isClimbingAligned = true;
+            _player.state = Player.State.Climbing;
+        }));
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player") || _player == null) return;
 
+        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
+
+        isClimbingAligned = false;
         _player.ToggleGravity();
-        _player.state = Player.Player.State.Walking;
+        _player.state = Player.State.Walking;
     }
 
-    private void AlignToLadder()
+    private IEnumerator AlignToLadderCoroutine(System.Action onComplete)
     {
-        Quaternion ladderRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
-        _player.transform.rotation = ladderRotation;
+        Vector3 targetPosition = transform.position + new Vector3(0, 0,offsetFromLadder);
+        targetPosition.y = _player.transform.position.y;
 
-        Vector3 alignedPosition = _player.transform.position;
-        alignedPosition.x = transform.position.x;
-        alignedPosition.z = transform.position.z;
-        _player.transform.position = alignedPosition;
-    }
+        Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
+        
+        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f || 
+               Quaternion.Angle(_player.transform.rotation, targetRotation) > 1f)
+        {
+            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignmentSpeed * Time.deltaTime);
+            _player.transform.rotation = Quaternion.Slerp(_player.transform.rotation, targetRotation, alignmentSpeed * Time.deltaTime);
 
-    private IEnumerator ResetEntryCooldown()
-    {
-        yield return new WaitForSeconds(entryCooldown);
-        _entryCooldownActive = false;
+            yield return null;
+        }
+
+        _player.transform.position = targetPosition;
+        _player.transform.rotation = targetRotation;
+        _player.ToggleInput();
+        onComplete?.Invoke();
     }
 
     private void Update()
     {
-        if (_player != null && _player.state == Player.Player.State.Climbing)
+        if (_player != null && _player.state == Player.State.Climbing && isClimbingAligned)
         {
-            if (!_entryCooldownActive)
-            {
-                HandleBottomExit();
-            }
-
+            HandleBottomExit();
             HandleTopExit();
         }
     }
 
     private void HandleBottomExit()
     {
+        if (_player.Input.MoveInput.y >= 0) return;
+
         Ray ray = new Ray(_player.transform.position, Vector3.down);
+        Debug.DrawRay(_player.transform.position, Vector3.down, Color.magenta);
+
         if (Physics.Raycast(ray, out RaycastHit hit, bottomRaycastDistance))
         {
-            ExitLadderAtBottom();
+            ExitLadder(Vector3.back); 
         }
     }
 
     private void HandleTopExit()
     {
-        Vector3 direction = Quaternion.Euler(-topRaycastAngle, 0, 0) * _player.transform.forward;
-        Ray ray = new Ray(_player.transform.position, direction);
+        if (_player.Input.MoveInput.y <= 0) return;
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, 2f)) // Długość raycasta do dostosowania
+        Vector3 direction = Quaternion.Euler(topRaycastAngle, 0, 0) * _player.transform.forward;
+        Ray ray = new Ray(_player.transform.position, direction);
+        Debug.DrawRay(_player.transform.position, direction, Color.red);
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, topRaycastDistance))
         {
-            ExitLadderAtTop();
+            ExitLadder(Vector3.forward);
         }
     }
 
-    private void ExitLadderAtTop()
+    private void ExitLadder(Vector3 exitDirection)
     {
-        _player.state = Player.Player.State.Walking;
-        _player.ToggleGravity();
-        Vector3 exitPosition = _player.transform.position + Vector3.forward * 0.5f;
-        _player.transform.position = exitPosition;
+        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
+        climbCoroutine = StartCoroutine(SmoothExitLadder(exitDirection));
     }
 
-    private void ExitLadderAtBottom()
+    private IEnumerator SmoothExitLadder(Vector3 exitDirection)
     {
-        _player.state = Player.Player.State.Walking;
-        _player.ToggleGravity();
-        Vector3 exitPosition = _player.transform.position - Vector3.forward * 0.5f;
-        _player.transform.position = exitPosition;
+        isClimbingAligned = false; 
+        _player.state = Player.State.Walking;
+
+        Vector3 targetPosition = _player.transform.position + exitDirection * 0.5f;
+
+        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f)
+        {
+            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignmentSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        _player.transform.position = targetPosition;
+        yield return new WaitForSeconds(1f);
+        _player.SetGravityEnabled(true);
     }
 }

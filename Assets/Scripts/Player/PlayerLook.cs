@@ -26,7 +26,7 @@ public class PlayerLook : PlayerModule
 
     private void Update()
     {
-        if (Player.state == global::Player.Player.State.Walking)
+        if (Player.state == Player.State.Walking)
         {
             HandleCursor();
             HandleLook(input.LookInput);
@@ -34,7 +34,7 @@ public class PlayerLook : PlayerModule
             if (enableBobbing)
                 HandleCameraBobbing(input.MoveInput);
         }
-        else if (Player.state == global::Player.Player.State.Climbing)
+        else if (Player.state == Player.State.Climbing)
         {
             HandleClimbingLook();
         }
@@ -92,8 +92,8 @@ public class PlayerLook : PlayerModule
     
     private void HandleClimbingLook()
     {
-        // Reset rotation to match player's transform on exit.
         Player.CameraTransform.localRotation = Quaternion.identity;
+        xRotation = 0;
     }
 
     /// <summary>
