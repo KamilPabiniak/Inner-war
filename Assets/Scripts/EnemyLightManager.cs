@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyLightManager : MonoBehaviour
+public class EnemyLightManager
 {
     private static List<Light> enemyLights = new List<Light>();
-    
+
     public static void RegisterEnemyLight(Light light)
     {
         if (light != null && !enemyLights.Contains(light))
@@ -12,6 +12,7 @@ public class EnemyLightManager : MonoBehaviour
             enemyLights.Add(light);
         }
     }
+
     public static void UnregisterEnemyLight(Light light)
     {
         if (light != null && enemyLights.Contains(light))
@@ -22,6 +23,6 @@ public class EnemyLightManager : MonoBehaviour
 
     public static List<Light> GetEnemyLights()
     {
-        return new List<Light>(enemyLights); 
+        return new List<Light>(enemyLights);
     }
 }
