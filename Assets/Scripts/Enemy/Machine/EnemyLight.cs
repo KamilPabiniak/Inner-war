@@ -20,8 +20,10 @@ public class EnemyLight : MonoBehaviour
     public Color rayHitColor = Color.green;
     [Tooltip("Kolor linii Raycastów, które nie trafiaj¹ w gracza.")]
     public Color rayMissColor = Color.red;
+    public bool debugConsole = true;
 
     private Light lightComponent;
+    [SerializeField] private MachineEnemy mEnemy;
     private float detectionProgress = 0f;
 
     private void Awake()
@@ -52,11 +54,19 @@ public class EnemyLight : MonoBehaviour
 
         if (detectionProgress >= 50f && detectionProgress < 100f)
         {
-            Debug.Log($"[{name}] Wykrywanie na poziomie 50%!");
+            if (debugConsole)
+            {
+                Debug.Log($"[{name}] Wykrywanie na poziomie 50%!");
+            }
+            mEnemy.ChangeState(new InvestigateState(transform.position));
         }
         else if (detectionProgress >= 100f)
         {
-            Debug.Log($"[{name}] Wykrywanie na poziomie 100%!");
+            if (debugConsole)
+            {
+                Debug.Log($"[{name}] Wykrywanie na poziomie 100%!");
+            }
+            mEnemy.ChangeState(new AttackState());
         }
 
         UpdateLightAppearance();
@@ -106,6 +116,7 @@ public class EnemyLight : MonoBehaviour
         if (detectionProgress >= 50f && detectionProgress < 100f)
         {
             newColor = Color.yellow;
+            Debug.Log(newColor);
         }
         else if (detectionProgress >= 100f)
         {
