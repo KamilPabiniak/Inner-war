@@ -8,18 +8,18 @@ public class EnemyFOV : MonoBehaviour
     public LayerMask obstructionMask; // Warstwa przeszkód.
 
     [Header("Detection Settings")]
-    public float viewRadius = 10f; // Zasiêg widzenia.
+    public float viewRadius = 10f;
     public float detectionIncreaseRate = 10f; // Szybkoœæ wykrywania.
     public float detectionDecreaseRate = 5f; // Szybkoœæ redukcji wykrywania.
     public AnimationCurve distanceEffectMultiplier = AnimationCurve.Linear(0, 1, 10, 0.1f);
 
     [Header("Debug Options")]
-    public bool debugFOV = true; // Czy rysowaæ FOV w Gizmos.
-    public Color fovColor = Color.green; // Kolor obszaru FOV.
-    public Color detectionColor = Color.red; // Kolor wykrytego celu.
-    public bool debugConsole = true; // Czy logowaæ informacje.
+    public bool debugFOV = true; 
+    public Color fovColor = Color.green;
+    public Color detectionColor = Color.red; 
+    public bool debugConsole = true; 
 
-    private float detectionProgress = 0f; // Progres wykrycia.
+    private float detectionProgress = 0f; 
     private EnemyBase enemy;
     private bool isPlayerDetected;
 
@@ -30,32 +30,27 @@ public class EnemyFOV : MonoBehaviour
 
     private void Update()
     {
-        // Wykrywanie gracza, tylko gdy gracz jest w polu widzenia.
         Collider[] targetsInRange = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         if (targetsInRange.Length > 0)
         {
-            // Znalezienie najbli¿szego gracza
             Transform target = targetsInRange[0].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
             
             if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
             {
-                // Sprawdzenie, czy nie ma przeszkód miêdzy wrogiem a graczem.
                 if (!Physics.Raycast(transform.position, directionToTarget, viewRadius, obstructionMask))
                 {
                     float distance = Vector3.Distance(transform.position, target.position);
                     float distanceMultiplier = distanceEffectMultiplier.Evaluate(distance);
                     detectionProgress += distanceMultiplier * detectionIncreaseRate * Time.deltaTime / Vector3.Distance(transform.position, target.position);
                     detectionProgress = Mathf.Clamp(detectionProgress, 0f, 100f);
-
-                    // Debugowanie w konsoli
+                    
                     if (debugConsole)
                     {
                         Debug.Log($"[{name}] Wykrywanie gracza: {detectionProgress}%.");
                     }
-
-                    // Jeœli wykrycie osi¹gnie 100%, zmieñ stan na atak
+                    
                     if (detectionProgress >= 100f)
                     {
                         enemy.ChangeState(new AttackState());
@@ -64,13 +59,11 @@ public class EnemyFOV : MonoBehaviour
             }
             else
             {
-                // Jeœli gracz nie jest w k¹cie widzenia, zmniejszaj progres wykrycia.
                 detectionProgress -= detectionDecreaseRate * Time.deltaTime;
             }
         }
         else
         {
-            // Brak graczy w zasiêgu, zmniejszaj progres wykrycia.
             detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
 

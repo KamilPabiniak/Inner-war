@@ -4,24 +4,29 @@ public abstract class EnemyBase : MonoBehaviour
 {
     private IEnemyState currentState;
     public Transform target;
-    protected Light enemyLight;
     protected bool isMachine;
+    
+    [Header("Patrol Settings")]
+    public float patrolRange = 10f;
+    public float waitTimeAtPatrolPoint = 2f;
+    private Vector3 currentPatrolPoint;
 
     [Header("Debug Settings")]
     [SerializeField] private bool enableConsoleDebug;
     [SerializeField] private bool patrolDebug;
+    [SerializeField] private bool debugPatrolPoint;
     [SerializeField] private bool investigateDebug;
     [SerializeField] private bool chaseDebug;
 
     private void Awake()
     {
-        enemyLight = GetComponent<Light>();
         EnemyMediator.RegisterEnemy(this);
     }
 
     private void OnDestroy()
     {
         EnemyMediator.UnregisterEnemy(this);
+        EnemyMediator.ReleasePatrolPoint(currentPatrolPoint);
     }
 
     private void Update()
@@ -35,15 +40,17 @@ public abstract class EnemyBase : MonoBehaviour
         currentState = newState;
         currentState.EnterState(this);
     }
-
-    public void SetLightColor(Color color)
+    
+    public Vector3 RequestPatrolPoint()
     {
-        if (isMachine && enemyLight != null)
-        {
-            enemyLight.color = color;
-        }
+        return EnemyMediator.GetPatrolPoint(transform.position, patrolRange);
     }
 
+    public void ReleasePatrolPoint(Vector3 point)
+    {
+        EnemyMediator.ReleasePatrolPoint(point);
+    }
+    
     public virtual void Patrol()
     {
         if (enableConsoleDebug && patrolDebug)
@@ -70,5 +77,16 @@ public abstract class EnemyBase : MonoBehaviour
             Debug.Log($"[{name}] Otrzymano alarm! Ruszam do: {alertPosition}.");
         }
         ChangeState(new InvestigateState(alertPosition));
+    }
+    
+    private void OnDrawGizmos()
+    {
+        if (debugPatrolPoint && currentPatrolPoint != Vector3.zero)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(currentPatrolPoint, 2f);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(transform.position, currentPatrolPoint);
+        }
     }
 }

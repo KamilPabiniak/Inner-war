@@ -1,9 +1,13 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(Light))]
 public class EnemyLight : MonoBehaviour
 {
     [Header("Detection Settings")]
+    public LayerMask targetMask;
+    public float viewRadius = 10f;
     [Tooltip("Prêdkoœæ wzrostu wykrycia.")]
     public float detectionIncreaseRate = 10f;
     [Tooltip("Prêdkoœæ spadku wykrycia.")]
@@ -14,6 +18,9 @@ public class EnemyLight : MonoBehaviour
     public AnimationCurve distanceEffectMultiplier = AnimationCurve.Linear(0, 1, 10, 0.1f);
 
     [Header("Debug Settings")]
+    public bool debugFOV = true; 
+    public Color fovColor = Color.green;
+    public Color detectionColor = Color.red; 
     [Tooltip("Czy wyœwietlaæ debugowe linie Raycastów?")]
     public bool debugRays = true;
     [Tooltip("Kolor linii Raycastów trafiaj¹cych w gracza.")]
@@ -22,13 +29,14 @@ public class EnemyLight : MonoBehaviour
     public Color rayMissColor = Color.red;
     public bool debugConsole = true;
 
-    private Light lightComponent;
+    [SerializeField] private Light lightComponent;
+    private Transform _target;
     [SerializeField] private MachineEnemy mEnemy;
-    private float detectionProgress = 0f;
+    private bool _isPlayerInRange;
+    private float _detectionProgress = 0f;
 
     private void Awake()
     {
-        lightComponent = GetComponent<Light>();
         EnemyLightManager.RegisterEnemyLight(lightComponent);
     }
 
@@ -37,22 +45,45 @@ public class EnemyLight : MonoBehaviour
         EnemyLightManager.UnregisterEnemyLight(lightComponent);
     }
 
-    public void UpdateDetectionState(Transform target)
+    private void Update()
     {
-        float lightIntensity = CalculateLightIntensity(target);
+        Collider[] targetsInRange = Physics.OverlapSphere(transform.position, lightComponent.range, targetMask);
 
-        if (lightIntensity > detectionThreshold)
+        if (targetsInRange.Length > 0)
         {
-            detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
+            _target = targetsInRange[0].transform;
         }
         else
         {
-            detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+            _target = null;
         }
 
-        detectionProgress = Mathf.Clamp(detectionProgress, 0f, 100f);
+        if (_target)
+        {
+            UpdateDetectionState();
+        }
+        else
+        {
+            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+        }
+    }
 
-        if (detectionProgress >= 50f && detectionProgress < 100f)
+    private void UpdateDetectionState()
+    {
+        float lightIntensity = CalculateLightIntensity(_target);
+
+        if (lightIntensity > detectionThreshold)
+        {
+            _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
+        }
+        else
+        {
+            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+        }
+
+        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
+
+        if (_detectionProgress >= 50f && _detectionProgress < 100f)
         {
             if (debugConsole)
             {
@@ -60,7 +91,7 @@ public class EnemyLight : MonoBehaviour
             }
             mEnemy.ChangeState(new InvestigateState(transform.position));
         }
-        else if (detectionProgress >= 100f)
+        else if (_detectionProgress >= 100f)
         {
             if (debugConsole)
             {
@@ -113,12 +144,11 @@ public class EnemyLight : MonoBehaviour
     {
         Color newColor = Color.white;
 
-        if (detectionProgress >= 50f && detectionProgress < 100f)
+        if (_detectionProgress >= 50f && _detectionProgress < 100f)
         {
             newColor = Color.yellow;
-            Debug.Log(newColor);
         }
-        else if (detectionProgress >= 100f)
+        else if (_detectionProgress >= 100f)
         {
             newColor = Color.red;
         }
@@ -132,5 +162,14 @@ public class EnemyLight : MonoBehaviour
 
         Color color = hit ? rayHitColor : rayMissColor;
         Debug.DrawLine(origin, origin + direction * 10f, color, 0.1f);
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (!debugFOV) return;
+
+        // Rysowanie okrêgu widzenia
+        Gizmos.color = _isPlayerInRange ? detectionColor : fovColor;
+        Gizmos.DrawWireSphere(transform.position, lightComponent.range);
     }
 }
