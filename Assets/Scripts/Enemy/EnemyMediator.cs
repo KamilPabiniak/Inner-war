@@ -27,34 +27,50 @@ public static class EnemyMediator
     
     public static Vector3 GetPatrolPoint(Vector3 origin, float range)
     {
-        Vector3 point;
-        do
+        int maxAttempts = 5;
+        for (int i = 0; i < maxAttempts; i++)
         {
-            point = origin + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
+            Vector3 randomPoint = origin + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
+            
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, range, NavMesh.AllAreas))
+            {
+                Vector3 validPoint = hit.position;
+                
+                if (IsPointValid(validPoint))
+                {
+                    occupiedPatrolPoints.Add(validPoint);
+                    return validPoint;
+                }
+            }
         }
-        while (!IsPointValid(point));
-        
-        occupiedPatrolPoints.Add(point);
-        return point;
+
+        Debug.LogError($"Nie znaleziono odpowiedniego punktu patrolowego po {maxAttempts} próbach.");
+        return origin; 
+    }
+    
+    private static bool IsPointValid(Vector3 point)
+    {
+        foreach (var occupiedPoint in occupiedPatrolPoints)
+        {
+            if (Vector3.Distance(point, occupiedPoint) < MinPatrolPointDistance)
+            {
+                return false; 
+            }
+        }
+        return true; 
     }
 
+    
     public static void ReleasePatrolPoint(Vector3 point)
     {
         if (occupiedPatrolPoints.Contains(point))
         {
             occupiedPatrolPoints.Remove(point);
         }
-    }
-
-    private static bool IsPointValid(Vector3 point)
-    {
-        foreach (var occupiedPoint in occupiedPatrolPoints)
+        else
         {
-            if (Vector3.Distance(point, occupiedPoint) < MinPatrolPointDistance)
-                return false;
+            Debug.LogWarning($"Próba zwolnienia punktu, który nie jest zajêty: {point}");
         }
-
-        return NavMesh.SamplePosition(point, out _, 1f, NavMesh.AllAreas);
     }
 
     public static void SendAlert(Vector3 alertPosition)

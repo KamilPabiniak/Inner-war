@@ -1,14 +1,17 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class EnemyBase : MonoBehaviour
 {
     private IEnemyState currentState;
     public Transform target;
     protected bool isMachine;
+    private bool isChangingState = false;
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;
     public float waitTimeAtPatrolPoint = 2f;
+    public NavMeshAgent navMeshAgent;
     private Vector3 currentPatrolPoint;
 
     [Header("Debug Settings")]
@@ -21,6 +24,7 @@ public abstract class EnemyBase : MonoBehaviour
     private void Awake()
     {
         EnemyMediator.RegisterEnemy(this);
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void OnDestroy()
@@ -36,9 +40,12 @@ public abstract class EnemyBase : MonoBehaviour
 
     public void ChangeState(IEnemyState newState)
     {
+        if (isChangingState) return;
+        isChangingState = true;
         currentState?.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
+        isChangingState = false;
     }
     
     public Vector3 RequestPatrolPoint()
@@ -77,16 +84,5 @@ public abstract class EnemyBase : MonoBehaviour
             Debug.Log($"[{name}] Otrzymano alarm! Ruszam do: {alertPosition}.");
         }
         ChangeState(new InvestigateState(alertPosition));
-    }
-    
-    private void OnDrawGizmos()
-    {
-        if (debugPatrolPoint && currentPatrolPoint != Vector3.zero)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(currentPatrolPoint, 2f);
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, currentPatrolPoint);
-        }
     }
 }

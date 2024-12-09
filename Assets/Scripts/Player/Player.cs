@@ -27,7 +27,7 @@ using UnityEngine.Serialization;
     public CharacterController CharacterController => characterController;
 
     [Header("Modules")]
-    public PlayerModule[] modules;
+    [SerializeField] private PlayerModule[] modules;
     public PlayerInput Input { get; private set; }
 
     private bool InputEnabled { get; set; } = true;
