@@ -6,6 +6,7 @@ public class PatrolState : IEnemyState
     private Vector3 patrolPoint;
     private bool isWaiting;
     private float waitTimer;
+    
     public void EnterState(EnemyBase enemy)
     {
         Debug.Log($"[{enemy.name}] Wchodzi w stan patrolowania.");
@@ -17,11 +18,9 @@ public class PatrolState : IEnemyState
         if (isWaiting)
         {
             waitTimer -= Time.deltaTime;
-            if (waitTimer <= 0f)
-            {
-                isWaiting = false;
-                SetNewPatrolPoint(enemy);
-            }
+            if (!(waitTimer <= 0f)) return;
+            isWaiting = false;
+            SetNewPatrolPoint(enemy);
             return;
         }
 
@@ -29,7 +28,11 @@ public class PatrolState : IEnemyState
         {
             isWaiting = true;
             waitTimer = enemy.waitTimeAtPatrolPoint;
-            enemy.ReleasePatrolPoint(patrolPoint);
+            if (patrolPoint != Vector3.zero)
+            {
+                EnemyMediator.ReleasePatrolPoint(patrolPoint);
+                patrolPoint = Vector3.zero; 
+            }
         }
     }
 
@@ -37,7 +40,7 @@ public class PatrolState : IEnemyState
     {
         if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
         Debug.Log($"[{enemy.name}] Opuszcza stan patrolowania.");
-        enemy.ReleasePatrolPoint(patrolPoint);
+        EnemyMediator.ReleasePatrolPoint(patrolPoint);
     }
     
     private void SetNewPatrolPoint(EnemyBase enemy)
@@ -55,7 +58,6 @@ public class PatrolState : IEnemyState
                 return; 
             patrolPoint = hit.position;
             enemy.navMeshAgent.SetDestination(patrolPoint);
-            Debug.Log($"[{enemy.name}] Nowy punkt patrolowy: {patrolPoint}.");
         }
         else
         {

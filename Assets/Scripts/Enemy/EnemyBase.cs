@@ -10,9 +10,15 @@ public abstract class EnemyBase : MonoBehaviour
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;
+    [Tooltip("Minimalna odleg³oœæ miêdzy punktami patrolowymi.")]
+    [SerializeField] private float minPatrolPointDistance = 5f;
     public float waitTimeAtPatrolPoint = 2f;
     public NavMeshAgent navMeshAgent;
     private Vector3 currentPatrolPoint;
+    
+    [Header("Investigate Settings")]
+    [Tooltip("Czas oczekiwania w ostatniej znanej pozycji gracza.")]
+    public float waitTimeAtInvestigation = 3f;
 
     [Header("Debug Settings")]
     [SerializeField] private bool enableConsoleDebug;
@@ -20,11 +26,10 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private bool debugPatrolPoint;
     [SerializeField] private bool investigateDebug;
     [SerializeField] private bool chaseDebug;
-
+    
     private void Awake()
     {
         EnemyMediator.RegisterEnemy(this);
-        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void OnDestroy()
@@ -50,15 +55,10 @@ public abstract class EnemyBase : MonoBehaviour
     
     public Vector3 RequestPatrolPoint()
     {
-        return EnemyMediator.GetPatrolPoint(transform.position, patrolRange);
-    }
-
-    public void ReleasePatrolPoint(Vector3 point)
-    {
-        EnemyMediator.ReleasePatrolPoint(point);
+        return EnemyMediator.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
     }
     
-    public virtual void Patrol()
+    public void Patrol()
     {
         if (enableConsoleDebug && patrolDebug)
         {

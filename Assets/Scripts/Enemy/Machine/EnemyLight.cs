@@ -167,8 +167,6 @@ public class EnemyLight : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         if (!debugFOV) return;
-
-        // Rysowanie okrêgu widzenia
         Gizmos.color = _isPlayerInRange ? detectionColor : fovColor;
         Gizmos.DrawWireSphere(transform.position, lightComponent.range);
     }

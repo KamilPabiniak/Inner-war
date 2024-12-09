@@ -6,8 +6,7 @@ public static class EnemyMediator
 {
     private static List<EnemyBase> registeredEnemies = new List<EnemyBase>();
     private static List<Vector3> occupiedPatrolPoints = new List<Vector3>();
-    private static float MinPatrolPointDistance = 5f;
-
+    
     public static void RegisterEnemy(EnemyBase enemy)
     {
         if (!registeredEnemies.Contains(enemy))
@@ -25,22 +24,23 @@ public static class EnemyMediator
     }
     
     
-    public static Vector3 GetPatrolPoint(Vector3 origin, float range)
+    public static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDistance)
     {
+        NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();
         int maxAttempts = 5;
-        for (int i = 0; i < maxAttempts; i++)
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
-            Vector3 randomPoint = origin + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
+            int triangleIndex = Random.Range(0, navMeshData.indices.Length / 3) * 3;
+            Vector3 vertex1 = navMeshData.vertices[navMeshData.indices[triangleIndex]];
+            Vector3 vertex2 = navMeshData.vertices[navMeshData.indices[triangleIndex + 1]];
+            Vector3 vertex3 = navMeshData.vertices[navMeshData.indices[triangleIndex + 2]];
+            Vector3 randomPoint = GetRandomPointInTriangle(vertex1, vertex2, vertex3);
+            //Vector3 randomPoint = origin + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
             
-            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, range, NavMesh.AllAreas))
+            if (Vector3.Distance(origin, randomPoint) <= range && IsPointValid(randomPoint, minDistance))
             {
-                Vector3 validPoint = hit.position;
-                
-                if (IsPointValid(validPoint))
-                {
-                    occupiedPatrolPoints.Add(validPoint);
-                    return validPoint;
-                }
+                occupiedPatrolPoints.Add(randomPoint);
+                return randomPoint;
             }
         }
 
@@ -48,16 +48,31 @@ public static class EnemyMediator
         return origin; 
     }
     
-    private static bool IsPointValid(Vector3 point)
+    private static bool IsPointValid(Vector3 point,  float minDistance)
     {
         foreach (var occupiedPoint in occupiedPatrolPoints)
         {
-            if (Vector3.Distance(point, occupiedPoint) < MinPatrolPointDistance)
+            if (Vector3.Distance(point, occupiedPoint) < minDistance)
             {
                 return false; 
             }
         }
         return true; 
+    }
+    
+    private static Vector3 GetRandomPointInTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
+    {
+        float a = Random.value;
+        float b = Random.value;
+        
+        if (a + b > 1f)
+        {
+            a = 1f - a;
+            b = 1f - b;
+        }
+
+        float c = 1f - a - b;
+        return a * v1 + b * v2 + c * v3;
     }
 
     
@@ -66,10 +81,6 @@ public static class EnemyMediator
         if (occupiedPatrolPoints.Contains(point))
         {
             occupiedPatrolPoints.Remove(point);
-        }
-        else
-        {
-            Debug.LogWarning($"Próba zwolnienia punktu, który nie jest zajêty: {point}");
         }
     }
 

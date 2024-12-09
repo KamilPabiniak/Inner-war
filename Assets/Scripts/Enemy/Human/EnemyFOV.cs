@@ -51,6 +51,11 @@ public class EnemyFOV : MonoBehaviour
                         Debug.Log($"[{name}] Wykrywanie gracza: {detectionProgress}%.");
                     }
                     
+                    if (detectionProgress >= 50f && detectionProgress < 100f)
+                    {
+                        enemy.ChangeState(new InvestigateState(transform.position));
+                    }
+                    
                     if (detectionProgress >= 100f)
                     {
                         enemy.ChangeState(new AttackState());

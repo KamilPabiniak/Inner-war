@@ -1644,10 +1644,10 @@ MonoBehaviour:
   body: {fileID: 9013308028059374636}
   otherFoot: {fileID: 1128967110}
   speed: 4
-  stepDistance: 1.5
-  stepLength: 1.5
-  stepHeight: 0.5
-  footOffset: {x: 0, y: 0.35, z: 0}
+  stepDistance: 1
+  stepLength: 1
+  stepHeight: 0.3
+  footOffset: {x: 0.1, y: 0.1, z: 0}
 --- !u!4 &458663395
 Transform:
   m_ObjectHideFlags: 0
@@ -2515,7 +2515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1051031192
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2617,9 +2617,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  patrolRange: 10
+  patrolRange: 5
+  minPatrolPointDistance: 2
   waitTimeAtPatrolPoint: 2
-  navMeshAgent: {fileID: 0}
+  navMeshAgent: {fileID: 1051031201}
   enableConsoleDebug: 0
   patrolDebug: 0
   debugPatrolPoint: 0
@@ -2890,10 +2891,10 @@ MonoBehaviour:
   body: {fileID: 9013308028059374636}
   otherFoot: {fileID: 458663394}
   speed: 4
-  stepDistance: 1.5
-  stepLength: 1.5
-  stepHeight: 0.5
-  footOffset: {x: 0, y: 0.35, z: 0}
+  stepDistance: 1
+  stepLength: 1
+  stepHeight: 0.3
+  footOffset: {x: 0.1, y: 0.1, z: 0}
 --- !u!4 &1128967111
 Transform:
   m_ObjectHideFlags: 0
@@ -5473,8 +5474,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 2.3
-  m_Speed: 10
-  m_Acceleration: 8
+  m_Speed: 7
+  m_Acceleration: 4
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -7423,8 +7424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   patrolRange: 10
+  minPatrolPointDistance: 1
   waitTimeAtPatrolPoint: 2
-  navMeshAgent: {fileID: 0}
+  navMeshAgent: {fileID: 1243422495714488449}
   enableConsoleDebug: 1
   patrolDebug: 0
   debugPatrolPoint: 0
