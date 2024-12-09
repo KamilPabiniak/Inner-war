@@ -6,7 +6,7 @@ public static class EnemyMediator
 {
     private static List<EnemyBase> registeredEnemies = new List<EnemyBase>();
     private static List<Vector3> occupiedPatrolPoints = new List<Vector3>();
-    public static float MinPatrolPointDistance = 5f;
+    private static float MinPatrolPointDistance = 5f;
 
     public static void RegisterEnemy(EnemyBase enemy)
     {
