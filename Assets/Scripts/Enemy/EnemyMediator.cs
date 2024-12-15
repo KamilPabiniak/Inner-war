@@ -43,8 +43,7 @@ public static class EnemyMediator
                 return randomPoint;
             }
         }
-
-        Debug.LogError($"Nie znaleziono odpowiedniego punktu patrolowego po {maxAttempts} próbach.");
+        
         return origin; 
     }
     
