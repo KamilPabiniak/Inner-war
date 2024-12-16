@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Climbable : MonoBehaviour
+public class Climbable : MonoBehaviour, IInteractable
 {
     private Player _player;
 
@@ -15,10 +15,10 @@ public class Climbable : MonoBehaviour
     private Coroutine climbCoroutine;
     private bool isClimbingAligned = false; 
 
-    private void OnTriggerEnter(Collider other)
+    public void Interact(Player player)
     {
-        if (!other.CompareTag("Player")) return;
-        _player = other.GetComponent<Player>();
+        if (player.state == Player.State.Climbing || isClimbingAligned) return;
+        _player = player;
         if (_player == null) return;
         _player.ToggleInput();
         _player.ToggleGravity();
@@ -30,26 +30,24 @@ public class Climbable : MonoBehaviour
             _player.state = Player.State.Climbing;
         }));
     }
-
-    private void OnTriggerExit(Collider other)
+    
+    private void Update()
     {
-        if (!other.CompareTag("Player") || _player == null) return;
-
-        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
-
-        isClimbingAligned = false;
-        _player.ToggleGravity();
-        _player.state = Player.State.Walking;
+        if (_player != null && _player.state == Player.State.Climbing && isClimbingAligned)
+        {
+            HandleBottomExit();
+            HandleTopExit();
+        }
     }
 
     private IEnumerator AlignToLadderCoroutine(System.Action onComplete)
     {
-        Vector3 targetPosition = transform.position + new Vector3(0, 0,offsetFromLadder);
+        Vector3 targetPosition = transform.position + new Vector3(0, 0, offsetFromLadder);
         targetPosition.y = _player.transform.position.y;
 
         Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
-        
-        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f || 
+
+        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f ||
                Quaternion.Angle(_player.transform.rotation, targetRotation) > 1f)
         {
             _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignmentSpeed * Time.deltaTime);
@@ -62,15 +60,6 @@ public class Climbable : MonoBehaviour
         _player.transform.rotation = targetRotation;
         _player.ToggleInput();
         onComplete?.Invoke();
-    }
-
-    private void Update()
-    {
-        if (_player != null && _player.state == Player.State.Climbing && isClimbingAligned)
-        {
-            HandleBottomExit();
-            HandleTopExit();
-        }
     }
 
     private void HandleBottomExit()
@@ -112,12 +101,6 @@ public class Climbable : MonoBehaviour
         _player.state = Player.State.Walking;
 
         Vector3 targetPosition = _player.transform.position + exitDirection * 0.5f;
-
-        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f)
-        {
-            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignmentSpeed * Time.deltaTime);
-            yield return null;
-        }
 
         _player.transform.position = targetPosition;
         yield return new WaitForSeconds(1f);
