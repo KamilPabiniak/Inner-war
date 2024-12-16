@@ -64,7 +64,6 @@ public class EnemyLight : MonoBehaviour
         }
         else
         {
-            if (_detectionProgress == 0) return;
             _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
     }
@@ -72,40 +71,37 @@ public class EnemyLight : MonoBehaviour
     private void UpdateDetectionState()
     {
         float lightIntensity = CalculateLightIntensity(_target);
-
         _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
         
-        if (lightIntensity > detectionThreshold)
-        {
-            if (_detectionProgress == 100) return;
-            _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
-        }
-        else
-        {
-            if (_detectionProgress == 0) return;
-            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
-            mEnemy.seeTarget = false;
-        }
-
         if (mEnemy.CurrentState is not AttackState)
         {
-             if (_detectionProgress == 0) 
-             {
+            if (lightIntensity > detectionThreshold)
+            {
+                _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
+            }
+            else
+            {
+                _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+                mEnemy.seeTarget = false;
+            }
+
+            if (_detectionProgress == 0) 
+            {
                 if (mEnemy.CurrentState is not PatrolState)
                 {
                     mEnemy.ChangeState(new PatrolState());
                 }
-             }
+            }
             
-             if (_detectionProgress >= 0.01f && _detectionProgress < 100f)
-             {
+            if (_detectionProgress >= 0.01f && _detectionProgress < 100f)
+            {
                 if (mEnemy.CurrentState is not InvestigateState)
                 {
                     mEnemy.ChangeState(new InvestigateState(_target.transform.position, mEnemy));
                     mEnemy.seeTarget = true;
                     mEnemy.SetTarget(_target);
                 }
-             } 
+            } 
         }
        
         
