@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[RequireComponent(typeof(Light))]
 public class EnemyLight : MonoBehaviour
 {
     [Header("Detection Settings")]
@@ -29,6 +28,7 @@ public class EnemyLight : MonoBehaviour
     public Color rayMissColor = Color.red;
     public bool debugConsole = true;
 
+    [Header("References")]
     [SerializeField] private Light lightComponent;
     private Transform _target;
     [SerializeField] private MachineEnemy mEnemy;
@@ -64,6 +64,7 @@ public class EnemyLight : MonoBehaviour
         }
         else
         {
+            if (_detectionProgress == 0) return;
             _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
     }
@@ -72,32 +73,49 @@ public class EnemyLight : MonoBehaviour
     {
         float lightIntensity = CalculateLightIntensity(_target);
 
+        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
+        
         if (lightIntensity > detectionThreshold)
         {
+            if (_detectionProgress == 100) return;
             _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
         }
         else
         {
+            if (_detectionProgress == 0) return;
             _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+            mEnemy.seeTarget = false;
         }
 
-        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
-
-        if (_detectionProgress >= 50f && _detectionProgress < 100f)
+        if (mEnemy.CurrentState is not AttackState)
         {
-            if (debugConsole)
-            {
-                Debug.Log($"[{name}] Wykrywanie na poziomie 50%!");
-            }
-            mEnemy.ChangeState(new InvestigateState(transform.position));
+             if (_detectionProgress == 0) 
+             {
+                if (mEnemy.CurrentState is not PatrolState)
+                {
+                    mEnemy.ChangeState(new PatrolState());
+                }
+             }
+            
+             if (_detectionProgress >= 0.01f && _detectionProgress < 100f)
+             {
+                if (mEnemy.CurrentState is not InvestigateState)
+                {
+                    mEnemy.ChangeState(new InvestigateState(_target.transform.position, mEnemy));
+                    mEnemy.seeTarget = true;
+                    mEnemy.SetTarget(_target);
+                }
+             } 
         }
-        else if (_detectionProgress >= 100f)
+       
+        
+        if (_detectionProgress >= 100f)
         {
-            if (debugConsole)
+            if (mEnemy.CurrentState is not AttackState)
             {
-                Debug.Log($"[{name}] Wykrywanie na poziomie 100%!");
+                mEnemy.SetTarget(_target);
+                mEnemy.ChangeState(new AttackState());
             }
-            mEnemy.ChangeState(new AttackState());
         }
 
         UpdateLightAppearance();

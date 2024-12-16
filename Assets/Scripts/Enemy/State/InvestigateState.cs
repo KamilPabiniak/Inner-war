@@ -1,33 +1,38 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class InvestigateState : IEnemyState
 {
-    private Vector3 lastKnownPosition;
-    private float investigationTimer;
-    private bool isWaiting;
-    private float waitTime;
+    private EnemyBase _enemyBase;
+    private Vector3 _lastKnownPosition;
+    private float _investigationTimer;
+    private bool _isWaiting;
+    private float _waitTime;
+    private Coroutine _headRotationCoroutine;
+    private Quaternion _originalHeadRotation;
+    private Transform _debugTarget;
 
-    public InvestigateState(Vector3 position)
+    public InvestigateState(Vector3 position, EnemyBase enemyBase)
     {
-        lastKnownPosition  = position;
+        _lastKnownPosition  = position;
+        _enemyBase = enemyBase;
     }
 
     public void EnterState(EnemyBase enemy)
     {
-        Debug.Log($"[{enemy.name}] Idê sprawdziæ miejsce alarmu.");
-        waitTime = enemy.waitTimeAtInvestigation;
-        investigationTimer = 0f;
-        isWaiting = false;
-        
-        if (NavMesh.SamplePosition(lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+        Debug.Log($"[{enemy.name}] IdÄ™ sprawdziÄ‡ podejrzany ruch.");
+        _waitTime = enemy.waitTimeAtInvestigation;
+        _investigationTimer = 0f;
+        _isWaiting = false;
+        SaveOriginalHeadRotation(enemy);
+
+        if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {
             enemy.navMeshAgent.SetDestination(hit.position);
-            Debug.Log($"[{enemy.name}] Idê do ostatniej znanej pozycji gracza: {lastKnownPosition}");
         }
         else
         {
-            Debug.LogWarning($"[{enemy.name}] Nie mogê znaleŸæ pozycji na NavMesh w okolicy {lastKnownPosition}");
             enemy.ChangeState(new PatrolState());
         }
     }
@@ -36,54 +41,130 @@ public class InvestigateState : IEnemyState
     {
         Transform target = enemy.target;
 
-        if (target != null && CanSeeTarget(enemy, target))
+        if (target != null && enemy.CanSeeTarget())
         {
-            lastKnownPosition = target.position;
+            _lastKnownPosition = target.position;
 
-            if (NavMesh.SamplePosition(lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
             {
                 enemy.navMeshAgent.SetDestination(hit.position);
-                Debug.Log($"[{enemy.name}] Widzê gracza! Pod¹¿am za nim.");
+                StartHeadRotation(enemy, hit.position);
             }
         }
-        else if (!enemy.navMeshAgent.pathPending && enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
+        else
         {
-            if (!isWaiting)
-            {
-                isWaiting = true;
-                investigationTimer = waitTime;
-                Debug.Log($"[{enemy.name}] Nie widzê gracza. Czekam w miejscu: {lastKnownPosition}");
-            }
-            else
-            {
-                investigationTimer -= Time.deltaTime;
+            _enemyBase.ClearTarget();
+            ResetHeadRotation(enemy);
+        }
 
-                if (investigationTimer <= 0f)
-                {
-                    Debug.Log($"[{enemy.name}] Nie znalaz³em gracza. Wracam do patrolowania.");
-                    enemy.ChangeState(new PatrolState());
-                }
+        if (enemy.navMeshAgent.pathPending || !(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
+        if (!_isWaiting)
+        {
+            _isWaiting = true;
+            _investigationTimer = _waitTime;
+            _enemyBase.ClearTarget();
+        }
+        else
+        {
+            _investigationTimer -= Time.deltaTime;
+
+            if (_investigationTimer <= 0f)
+            {
+                _enemyBase.ClearTarget();
+                enemy.ChangeState(new PatrolState());
             }
         }
     }
+
 
     public void ExitState(EnemyBase enemy)
     {
-        Debug.Log($"[{enemy.name}] Opuszcza stan sprawdzania alarmu.");
+        ResetHeadRotation(enemy);
     }
     
-    private bool CanSeeTarget(EnemyBase enemy, Transform target)
+    
+    private void SaveOriginalHeadRotation(EnemyBase enemy)
     {
-        Vector3 directionToTarget = (target.position - enemy.transform.position).normalized;
-        float distanceToTarget = Vector3.Distance(enemy.transform.position, target.position);
-
-        if (Physics.Raycast(enemy.transform.position, directionToTarget, out RaycastHit hit, distanceToTarget))
+        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
         {
-            if (hit.transform == target)
-            {
-                return true; 
-            }
+            _originalHeadRotation = machineEnemy.originalHeadRot;
         }
-        return false; 
     }
+
+    private void StartHeadRotation(EnemyBase enemy, Vector3 targetPosition)
+    {
+        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
+        {
+            targetPosition.y += 1.5f; 
+            
+            if (_headRotationCoroutine != null)
+            {
+                enemy.StopCoroutine(_headRotationCoroutine);
+            }
+            
+            _headRotationCoroutine = enemy.StartCoroutine(RotateHeadTowards(machineEnemy, targetPosition));
+        }
+    }
+
+
+
+    private void ResetHeadRotation(EnemyBase enemy)
+    {
+        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
+        {
+            if (_headRotationCoroutine != null)
+            {
+                enemy.StopCoroutine(_headRotationCoroutine);
+                _headRotationCoroutine = null;
+            }
+            
+            enemy.StartCoroutine(SmoothResetHeadRotation(machineEnemy));
+        }
+    }
+
+
+    private IEnumerator RotateHeadTowards(MachineEnemy machineEnemy, Vector3 targetPosition)
+    {
+        float rotationSpeed = machineEnemy.headRotationSpeed;
+        Transform headTransform = machineEnemy.head.transform;
+
+        while (true)
+        {
+            Vector3 directionToTarget = (targetPosition - headTransform.position).normalized;
+
+            if (directionToTarget.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(Vector3.up, -directionToTarget);
+                
+                headTransform.rotation = Quaternion.Slerp(
+                    headTransform.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.deltaTime
+                );
+            }
+
+            Debug.DrawRay(directionToTarget,  Vector3.up * 2f, Color.cyan);
+            yield return null;
+        }
+    }
+
+
+    private IEnumerator SmoothResetHeadRotation(MachineEnemy machineEnemy)
+    {
+        float duration = 1f;
+        Quaternion startRotation = machineEnemy.head.transform.localRotation;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / duration;
+            
+            machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, _originalHeadRotation, t);
+            yield return null;
+        }
+
+        machineEnemy.head.transform.localRotation = _originalHeadRotation;
+    }
+
 }

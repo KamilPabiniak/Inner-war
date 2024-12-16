@@ -1,19 +1,15 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MachineEnemy : EnemyBase
 {
+    public GameObject head;
+    public Quaternion originalHeadRot;
+    public float headRotationSpeed;
+
     private void Start()
     {
-        isMachine = true;
         ChangeState(new PatrolState());
-    }
-
-    public override void ChaseTarget()
-    {
-        base.ChaseTarget();
-        if (target != null)
-        {
-            EnemyMediator.SendAlert(target.position);
-        }
+        originalHeadRot = head.transform.localRotation;
     }
 }

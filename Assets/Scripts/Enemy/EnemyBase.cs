@@ -4,13 +4,15 @@ using UnityEngine.AI;
 public abstract class EnemyBase : MonoBehaviour
 {
     private IEnemyState currentState;
-    public Transform target;
-    protected bool isMachine;
-    private bool isChangingState = false;
+    public IEnemyState CurrentState => currentState;
+    
+    public  Transform target { get; private set; }
+    public bool seeTarget;
+    private bool isChangingState;
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;
-    [Tooltip("Minimalna odleg³oœæ miêdzy punktami patrolowymi.")]
+    [Tooltip("Minimalna odlegÅ‚oÅ›Ä‡ miÄ™dzy punktami patrolowymi.")]
     [SerializeField] private float minPatrolPointDistance = 5f;
     public float waitTimeAtPatrolPoint = 2f;
     public NavMeshAgent navMeshAgent;
@@ -19,6 +21,11 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Investigate Settings")]
     [Tooltip("Czas oczekiwania w ostatniej znanej pozycji gracza.")]
     public float waitTimeAtInvestigation = 3f;
+    
+    [Header("Attack Settings")]
+    public float attackDuration = 5f;
+    public float attackSpeedMultiplier = 1.5f;
+
 
     [Header("Debug Settings")]
     [SerializeField] private bool enableConsoleDebug;
@@ -34,8 +41,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        EnemyMediator.UnregisterEnemy(this);
         EnemyMediator.ReleasePatrolPoint(currentPatrolPoint);
+        EnemyMediator.UnregisterEnemy(this);
     }
 
     private void Update()
@@ -45,7 +52,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public void ChangeState(IEnemyState newState)
     {
-        if (isChangingState) return;
+        if (isChangingState || currentState == newState) return;
         isChangingState = true;
         currentState?.ExitState(this);
         currentState = newState;
@@ -57,24 +64,27 @@ public abstract class EnemyBase : MonoBehaviour
     {
         return EnemyMediator.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
     }
-    
-    public void Patrol()
+
+    public bool CanSeeTarget()
     {
-        if (enableConsoleDebug && patrolDebug)
+        if (seeTarget)
         {
-            Debug.Log($"[{name}] Patroluje.");
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
-
-    public virtual void ChaseTarget()
+    
+    public void SetTarget(Transform targetSet)
     {
-        if (target != null)
-        {
-            if (enableConsoleDebug && chaseDebug)
-            {
-                Debug.Log($"[{name}] Œciga cel: {target.name}.");
-            }
-        }
+        target = targetSet;
+    }
+
+    public void ClearTarget()
+    {
+        target = null;
     }
 
     public void OnAlertReceived(Vector3 alertPosition)
@@ -83,6 +93,6 @@ public abstract class EnemyBase : MonoBehaviour
         {
             Debug.Log($"[{name}] Otrzymano alarm! Ruszam do: {alertPosition}.");
         }
-        ChangeState(new InvestigateState(alertPosition));
+        //ChangeState(new InvestigateState(alertPosition));
     }
 }
