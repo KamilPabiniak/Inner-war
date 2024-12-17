@@ -11,7 +11,8 @@ public class InvestigateState : IEnemyState
     private float _waitTime;
     private Coroutine _headRotationCoroutine;
     private Quaternion _originalHeadRotation;
-    private Transform _debugTarget;
+    private float _lostSightTimer;
+    private readonly float _sightLossDuration = 5f;
 
     public InvestigateState(Vector3 position, EnemyBase enemyBase)
     {
@@ -43,6 +44,7 @@ public class InvestigateState : IEnemyState
 
         if (target != null && enemy.CanSeeTarget())
         {
+            _lostSightTimer = 0f;
             _lastKnownPosition = target.position;
 
             if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
@@ -53,11 +55,25 @@ public class InvestigateState : IEnemyState
         }
         else
         {
-            _enemyBase.ClearTarget();
-            ResetHeadRotation(enemy);
+            _lostSightTimer += Time.deltaTime;
+
+            if (_lostSightTimer <= _sightLossDuration)
+            {
+                if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+                {
+                    enemy.navMeshAgent.SetDestination(hit.position);
+                    StartHeadRotation(enemy, hit.position);
+                }
+            }
+            else
+            {
+                _lostSightTimer += Time.deltaTime;
+                _enemyBase.ClearTarget();
+                ResetHeadRotation(enemy);
+            }
         }
 
-        if (enemy.navMeshAgent.pathPending || !(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
+        if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return; //enemy.navMeshAgent.pathPending ||
         if (!_isWaiting)
         {
             _isWaiting = true;

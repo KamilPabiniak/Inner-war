@@ -3603,9 +3603,37 @@ PrefabInstance:
       propertyPath: m_Weight
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2333045114140165403, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.7010574
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333045114140165403, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.09229593
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333045114140165403, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.09229593
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333045114140165403, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7010574
+      objectReference: {fileID: 0}
+    - target: {fileID: 2333045114140165403, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2864206546194849563, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Weight
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_Range
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_SpotAngle
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 3247145216075624242, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Name
@@ -3652,7 +3680,63 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: headRotationSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: originalHeadRot.w
+      value: -0.7010574
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: originalHeadRot.x
+      value: 0.09229596
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: originalHeadRot.y
+      value: -0.09229596
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: originalHeadRot.z
+      value: 0.7010574
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotationStopPoints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotationStopDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.data[0].y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.data[0].z
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.data[1].y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.data[2].y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotatePoints.Array.data[2].z
+      value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: rotationStopPoints.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
@@ -3720,8 +3804,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_Speed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 0.05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
