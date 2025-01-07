@@ -121,26 +121,16 @@ public class PatrolState : IEnemyState
         float angle = Mathf.Lerp(-maxAngle, maxAngle, i / (float)(stopPoints - 1)); 
         rotationAngles.Add(angle);
     }
-
-    // Debug the rotation angles before symmetry
-    Debug.Log("Initial Rotation Angles: " + string.Join(", ", rotationAngles));
-
-    // Make the list symmetrical
+    
     for (int i = stopPoints - 2; i >= 0; i--)
     {
         rotationAngles.Add(rotationAngles[i]);
     }
 
-    // Debug the rotation angles after symmetry
-    Debug.Log("Symmetrical Rotation Angles: " + string.Join(", ", rotationAngles));
-
     int currentIndex = 0;
     int direction = 1;
-
-    // Debug to check the starting point of the loop
-    Debug.Log($"Starting Rotation Loop. Initial Index: {currentIndex}, Direction: {direction}");
-
-    // Main rotation loop
+    
+    //tutaj główna zasada 
     while (isWaiting)
     {
         if (rotationAngles.Count == 0)
@@ -151,9 +141,6 @@ public class PatrolState : IEnemyState
 
         float targetAngle = rotationAngles[currentIndex];
         Quaternion targetRotation = _originalHeadRotation * Quaternion.Euler(0f, 0f, targetAngle);
-
-        // Debug the current angle and index
-        Debug.Log($"Rotating to angle: {targetAngle}, Index: {currentIndex}, Direction: {direction}");
 
         float elapsedTime = 0f;
         Quaternion startRotation = machineEnemy.head.transform.localRotation;
@@ -169,21 +156,17 @@ public class PatrolState : IEnemyState
 
         machineEnemy.head.transform.localRotation = targetRotation;
         yield return new WaitForSeconds(stopDuration);
-
-        // Log for checking index and direction changes
+        
         if (currentIndex == rotationAngles.Count - 1 && direction == 1)
         {
             direction = -1;
-            Debug.Log("Reached last stop point. Changing direction to -1.");
         }
         else if (currentIndex == 0 && direction == -1)
         {
             direction = 1;
-            Debug.Log("Reached first stop point. Changing direction to 1.");
         }
 
         currentIndex += direction;
-        Debug.Log($"New Index: {currentIndex}, Direction: {direction}");
     }
 
     yield return null;
