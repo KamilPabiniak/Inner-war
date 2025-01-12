@@ -1,22 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.Serialization;
 
 public class MachineEnemy : EnemyBase
 {
-    [Header("Head Rotation Settings")]
+    [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+    [Header("References")]
     public GameObject head;
-    public Quaternion originalHeadRot;
-    public float headRotationSpeed;
-    public int rotationStopPoints;
-    public float rotationStopDuration = 0.5f;
 
+    public GameObject sightTarget;
+    public Vector3 OriginalHeadPos { get; private set; }
+
+    [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+    public float headRotationSpeed;
+    public int stopPoints;
+    public float stopDuration = 0.5f;
 
     private void Start()
     {
+        OriginalHeadPos = sightTarget.transform.localPosition;
         ChangeState(new PatrolState());
-        originalHeadRot = head.transform.localRotation;
+    }
+
+    [ContextMenu("Patrol")]
+    public void ForcePatrol()
+    {
+        ChangeState(new PatrolState());
     }
 }
 

@@ -8,15 +8,13 @@ public class PatrolState : IEnemyState
     private Vector3 patrolPoint;
     private bool isWaiting;
     private float waitTimer;
-    
+
     // Machine-specific
-    private Quaternion _originalHeadRotation; 
-    private Coroutine _headRotationCoroutine; 
-    
+    private Coroutine _headRotationCoroutine;
+
     public void EnterState(EnemyBase enemy)
     {
         Debug.Log($"[{enemy.name}] Wchodzi w stan patrolowania.");
-        SaveOriginalHeadRotation(enemy);
         SetNewPatrolPoint(enemy);
     }
 
@@ -26,7 +24,7 @@ public class PatrolState : IEnemyState
         {
             waitTimer -= Time.deltaTime;
             StartHeadRotation(enemy);
-            
+
             if (!(waitTimer <= 0f)) return;
             isWaiting = false;
             ResetHeadRotation(enemy);
@@ -34,14 +32,15 @@ public class PatrolState : IEnemyState
             return;
         }
 
-        if (!enemy.navMeshAgent.pathPending && enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
+        if (!enemy.navMeshAgent.pathPending &&
+            enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
         {
             isWaiting = true;
             waitTimer = enemy.waitTimeAtPatrolPoint;
             if (patrolPoint != Vector3.zero)
             {
-                EnemyMediator.ReleasePatrolPoint(patrolPoint);
-                patrolPoint = Vector3.zero; 
+                EnemyPatrolMediator.ReleasePatrolPoint(patrolPoint);
+                patrolPoint = Vector3.zero;
             }
         }
     }
@@ -49,37 +48,32 @@ public class PatrolState : IEnemyState
     public void ExitState(EnemyBase enemy)
     {
         if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
-        EnemyMediator.ReleasePatrolPoint(patrolPoint);
+        EnemyPatrolMediator.ReleasePatrolPoint(patrolPoint);
         ResetHeadRotation(enemy);
     }
-    
+
     private void SetNewPatrolPoint(EnemyBase enemy)
     {
-        if (!enemy.navMeshAgent.isOnNavMesh || !enemy.navMeshAgent.enabled) 
+        if (!enemy.navMeshAgent.isOnNavMesh || !enemy.navMeshAgent.enabled)
         {
             Debug.LogError($"[{enemy.name}] Agent nie jest na NavMesh!");
             return;
         }
+
         patrolPoint = enemy.RequestPatrolPoint();
-        
+
         if (NavMesh.SamplePosition(patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {
-            if (enemy.navMeshAgent.pathPending || enemy.navMeshAgent.remainingDistance > enemy.navMeshAgent.stoppingDistance)
-                return; 
+            if (enemy.navMeshAgent.pathPending ||
+                enemy.navMeshAgent.remainingDistance > enemy.navMeshAgent.stoppingDistance)
+                return;
             patrolPoint = hit.position;
+            if (!enemy.canMove) return;
             enemy.navMeshAgent.SetDestination(patrolPoint);
         }
         else
         {
             Debug.LogWarning($"[{enemy.name}] Nie uda�o si� znale�� punktu na NavMesh w okolicy: {patrolPoint}");
-        }
-    }
-    
-     private void SaveOriginalHeadRotation(EnemyBase enemy)
-    {
-        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
-        {
-            _originalHeadRotation = machineEnemy.originalHeadRot;
         }
     }
 
@@ -103,92 +97,88 @@ public class PatrolState : IEnemyState
                 enemy.StopCoroutine(_headRotationCoroutine);
                 _headRotationCoroutine = null;
             }
-            
-            enemy.StartCoroutine(SmoothResetHeadRotation(machineEnemy));
+
+            enemy.StartCoroutine(SmoothResetPosition(machineEnemy));
         }
     }
 
     private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
-{
-    float maxAngle = 45f;
-    int stopPoints = Mathf.Max(2, machineEnemy.rotationStopPoints); 
-    float stopDuration = machineEnemy.rotationStopDuration; 
-    float rotationSpeed = Mathf.Max(0.1f, machineEnemy.headRotationSpeed); 
-
-    List<float> rotationAngles = new List<float>();
-    for (int i = 0; i < stopPoints; i++)
     {
-        float angle = Mathf.Lerp(-maxAngle, maxAngle, i / (float)(stopPoints - 1)); 
-        rotationAngles.Add(angle);
+        float maxDistance = 3f;
+        int stopPoints = Mathf.Max(2, machineEnemy.stopPoints);
+        float stopDuration = machineEnemy.stopDuration;
+        float headRotationSpeed = Mathf.Max(0.1f, machineEnemy.headRotationSpeed);
+
+        List<Vector3> movementOffsets = new List<Vector3>();
+        for (int i = 0; i < stopPoints; i++)
+        {
+            float offset = Mathf.Lerp(-maxDistance, maxDistance, i / (float)(stopPoints - 1));
+            movementOffsets.Add(new Vector3(offset, 0f, 0f)); 
+        }
+
+        for (int i = stopPoints - 2; i >= 0; i--)
+        {
+            movementOffsets.Add(movementOffsets[i]);
+        }
+
+        int currentIndex = 0;
+        int direction = 1;
+
+        //tutaj główna zasada 
+        while (isWaiting)
+        {
+            if (movementOffsets.Count == 0)
+            {
+                Debug.LogWarning("No rotation angles available! Exiting loop.");
+                yield break;
+            }
+
+            Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[currentIndex];
+            float elapsedTime = 0f;
+            Vector3 startLocalPosition = machineEnemy.sightTarget.transform.localPosition;
+            float transitionDuration = headRotationSpeed;
+
+            while (elapsedTime < transitionDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, elapsedTime / transitionDuration);
+                machineEnemy.sightTarget.transform.localPosition =
+                    Vector3.Lerp(startLocalPosition, targetLocalPosition, t);
+                yield return null;
+            }
+
+            machineEnemy.sightTarget.transform.localPosition = targetLocalPosition;
+            yield return new WaitForSeconds(stopDuration);
+
+            if (currentIndex == movementOffsets.Count - 1 && direction == 1)
+            {
+                direction = -1;
+            }
+            else if (currentIndex == 0 && direction == -1)
+            {
+                direction = 1;
+            }
+
+            currentIndex += direction;
+        }
     }
-    
-    for (int i = stopPoints - 2; i >= 0; i--)
+
+    private IEnumerator SmoothResetPosition(MachineEnemy machineEnemy)
     {
-        rotationAngles.Add(rotationAngles[i]);
-    }
-
-    int currentIndex = 0;
-    int direction = 1;
-    
-    //tutaj główna zasada 
-    while (isWaiting)
-    {
-        if (rotationAngles.Count == 0)
-        {
-            Debug.LogWarning("No rotation angles available! Exiting loop.");
-            yield break;
-        }
-
-        float targetAngle = rotationAngles[currentIndex];
-        Quaternion targetRotation = _originalHeadRotation * Quaternion.Euler(0f, 0f, targetAngle);
-
-        float elapsedTime = 0f;
-        Quaternion startRotation = machineEnemy.head.transform.localRotation;
-        float transitionDuration = 1f / rotationSpeed;
-
-        while (elapsedTime < transitionDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsedTime / transitionDuration);
-            machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, targetRotation, t);
-            yield return null;
-        }
-
-        machineEnemy.head.transform.localRotation = targetRotation;
-        yield return new WaitForSeconds(stopDuration);
-        
-        if (currentIndex == rotationAngles.Count - 1 && direction == 1)
-        {
-            direction = -1;
-        }
-        else if (currentIndex == 0 && direction == -1)
-        {
-            direction = 1;
-        }
-
-        currentIndex += direction;
-    }
-
-    yield return null;
-}
-
-
-    private IEnumerator SmoothResetHeadRotation(MachineEnemy machineEnemy)
-    {
-        float duration = 1f; 
-        Quaternion startRotation = machineEnemy.head.transform.localRotation;
+        float duration = 1f;
+        Vector3 startPosition = machineEnemy.sightTarget.transform.localPosition;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.SmoothStep(0f, 1f, elapsedTime / duration);
-            machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, _originalHeadRotation, t);
+            machineEnemy.sightTarget.transform.localPosition =
+                Vector3.Lerp(startPosition, machineEnemy.OriginalHeadPos, t);
             yield return null;
         }
 
-        machineEnemy.head.transform.localRotation = _originalHeadRotation;
+        machineEnemy.sightTarget.transform.localPosition = machineEnemy.OriginalHeadPos;
     }
-
 }
 

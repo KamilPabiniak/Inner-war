@@ -853,11 +853,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7601634890967749561}
+  - component: {fileID: 4062520734321915679}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
   - component: {fileID: 2828769371758908747}
   - component: {fileID: 3505779425706273977}
-  - component: {fileID: 4062520734321915679}
   m_Layer: 0
   m_Name: Machine
   m_TagString: Untagged
@@ -882,6 +882,38 @@ Transform:
   - {fileID: 5659174376061166786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4062520734321915679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa629ccb90a20d44d9fc764dda65b618, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 8826511624185513472}
+  seeTarget: 0
+  canKill: 0
+  canMove: 0
+  patrolRange: 10
+  minPatrolPointDistance: 1
+  waitTimeAtPatrolPoint: 15
+  waitTimeAtInvestigation: 10
+  attackDuration: 5
+  attackSpeedMultiplier: 6
+  enableConsoleDebug: 1
+  patrolDebug: 0
+  debugPatrolPoint: 0
+  investigateDebug: 1
+  chaseDebug: 0
+  head: {fileID: 7780040305857791367}
+  headRotationSpeed: 2
+  rotationStopPoints: 0
+  rotationStopDuration: 0.5
+  maxHeadTurnAngle: 0
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -965,7 +997,6 @@ MonoBehaviour:
   targetMask:
     serializedVersion: 2
     m_Bits: 1024
-  viewRadius: 10
   detectionIncreaseRate: 3
   detectionDecreaseRate: 10
   detectionThreshold: 1
@@ -1002,34 +1033,6 @@ MonoBehaviour:
   debugConsole: 1
   lightComponent: {fileID: 3129667736519373146}
   mEnemy: {fileID: 4062520734321915679}
---- !u!114 &4062520734321915679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa629ccb90a20d44d9fc764dda65b618, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seeTarget: 0
-  patrolRange: 10
-  minPatrolPointDistance: 1
-  waitTimeAtPatrolPoint: 15
-  navMeshAgent: {fileID: 8826511624185513472}
-  waitTimeAtInvestigation: 10
-  attackDuration: 5
-  attackSpeedMultiplier: 6
-  enableConsoleDebug: 1
-  patrolDebug: 0
-  debugPatrolPoint: 0
-  investigateDebug: 1
-  chaseDebug: 0
-  head: {fileID: 7780040305857791367}
-  originalHeadRot: {x: -0.12278781, y: 0.12278781, z: -0.6963642, w: 0.6963642}
-  headRotationSpeed: 2
 --- !u!1 &3607764748430535458
 GameObject:
   m_ObjectHideFlags: 0

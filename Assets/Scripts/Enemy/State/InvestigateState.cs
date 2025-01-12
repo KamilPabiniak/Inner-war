@@ -1,18 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class InvestigateState : IEnemyState
 {
-    private EnemyBase _enemyBase;
+    private readonly EnemyBase _enemyBase;
     private Vector3 _lastKnownPosition;
-    private float _investigationTimer;
-    private bool _isWaiting;
-    private float _waitTime;
     private Coroutine _headRotationCoroutine;
-    private Quaternion _originalHeadRotation;
     private float _lostSightTimer;
-    private readonly float _sightLossDuration = 5f;
 
     public InvestigateState(Vector3 position, EnemyBase enemyBase)
     {
@@ -22,14 +18,10 @@ public class InvestigateState : IEnemyState
 
     public void EnterState(EnemyBase enemy)
     {
-        Debug.Log($"[{enemy.name}] IdÄ™ sprawdziÄ‡ podejrzany ruch.");
-        _waitTime = enemy.waitTimeAtInvestigation;
-        _investigationTimer = 0f;
-        _isWaiting = false;
-        SaveOriginalHeadRotation(enemy);
-
+        enemy.SetStateChangeLock(true);
         if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {
+            if (!enemy.canMove) return;
             enemy.navMeshAgent.SetDestination(hit.position);
         }
         else
@@ -41,7 +33,6 @@ public class InvestigateState : IEnemyState
     public void UpdateState(EnemyBase enemy)
     {
         Transform target = enemy.target;
-
         if (target != null && enemy.CanSeeTarget())
         {
             _lostSightTimer = 0f;
@@ -49,138 +40,90 @@ public class InvestigateState : IEnemyState
 
             if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
             {
-                enemy.navMeshAgent.SetDestination(hit.position);
-                StartHeadRotation(enemy, hit.position);
+                if (enemy.canMove)
+                {
+                    enemy.navMeshAgent.SetDestination(hit.position);
+                }
+                RotateHeadTowards(target);
             }
         }
         else
         {
+            Debug.Log($"[{enemy.name}] Cel zgubiony. Timer: {_lostSightTimer:F2}");
             _lostSightTimer += Time.deltaTime;
-
-            if (_lostSightTimer <= _sightLossDuration)
+            
+            if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
             {
                 if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
                 {
-                    enemy.navMeshAgent.SetDestination(hit.position);
-                    StartHeadRotation(enemy, hit.position);
+                    if (enemy.canMove)
+                    {
+                        enemy.navMeshAgent.SetDestination(hit.position);
+                        ResetHeadRotation();
+                        Debug.Log($"[{enemy.name}] Kontynuujê poszukiwania w ostatniej znanej pozycji: {hit.position}");
+                    }
                 }
             }
             else
             {
-                _lostSightTimer += Time.deltaTime;
-                _enemyBase.ClearTarget();
-                ResetHeadRotation(enemy);
-            }
-        }
-
-        if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return; //enemy.navMeshAgent.pathPending ||
-        if (!_isWaiting)
-        {
-            _isWaiting = true;
-            _investigationTimer = _waitTime;
-            _enemyBase.ClearTarget();
-        }
-        else
-        {
-            _investigationTimer -= Time.deltaTime;
-
-            if (_investigationTimer <= 0f)
-            {
-                _enemyBase.ClearTarget();
+                Debug.LogWarning($"[{enemy.name}] Cel zgubiony na dobre. Powrót do patrolu.");
                 enemy.ChangeState(new PatrolState());
             }
         }
     }
 
-
     public void ExitState(EnemyBase enemy)
     {
-        ResetHeadRotation(enemy);
+        enemy.SetStateChangeLock(false); 
+        ResetHeadRotation();
+        _enemyBase.ClearTarget();
     }
     
+    private void RotateHeadTowards(Transform target)
+{
+    if (_enemyBase is not MachineEnemy machineEnemy || machineEnemy.head == null) return;
     
-    private void SaveOriginalHeadRotation(EnemyBase enemy)
+    Vector3 directionToTarget = target.position - machineEnemy.head.transform.position;
+    
+    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
+    
+
+    if (_headRotationCoroutine != null)
     {
-        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
-        {
-            _originalHeadRotation = machineEnemy.originalHeadRot;
-        }
+        _enemyBase.StopCoroutine(_headRotationCoroutine);
+    }
+    _headRotationCoroutine = _enemyBase.StartCoroutine(SmoothRotateHead(machineEnemy, targetRotation));
+}
+
+private IEnumerator SmoothRotateHead(MachineEnemy machineEnemy, Quaternion targetRotation)
+{
+    float duration = 0.5f; 
+    Quaternion startRotation = machineEnemy.head.transform.localRotation;
+    float elapsedTime = 0f;
+
+    while (elapsedTime < duration)
+    {
+        elapsedTime += Time.deltaTime;
+        float t = Mathf.SmoothStep(0f, 1f, elapsedTime / duration);
+        machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, targetRotation, t);
+        yield return null;
     }
 
-    private void StartHeadRotation(EnemyBase enemy, Vector3 targetPosition)
+    machineEnemy.head.transform.localRotation = targetRotation;
+}
+
+private void ResetHeadRotation()
+{
+    if (_enemyBase is MachineEnemy machineEnemy && machineEnemy.head != null)
     {
-        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
+        if (_headRotationCoroutine != null)
         {
-            targetPosition.y += 1.5f; 
-            
-            if (_headRotationCoroutine != null)
-            {
-                enemy.StopCoroutine(_headRotationCoroutine);
-            }
-            
-            _headRotationCoroutine = enemy.StartCoroutine(RotateHeadTowards(machineEnemy, targetPosition));
+            _enemyBase.StopCoroutine(_headRotationCoroutine);
         }
     }
+}
 
+    
 
-
-    private void ResetHeadRotation(EnemyBase enemy)
-    {
-        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
-        {
-            if (_headRotationCoroutine != null)
-            {
-                enemy.StopCoroutine(_headRotationCoroutine);
-                _headRotationCoroutine = null;
-            }
-            
-            enemy.StartCoroutine(SmoothResetHeadRotation(machineEnemy));
-        }
-    }
-
-
-    private IEnumerator RotateHeadTowards(MachineEnemy machineEnemy, Vector3 targetPosition)
-    {
-        float rotationSpeed = machineEnemy.headRotationSpeed;
-        Transform headTransform = machineEnemy.head.transform;
-
-        while (true)
-        {
-            Vector3 directionToTarget = (targetPosition - headTransform.position).normalized;
-
-            if (directionToTarget.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(Vector3.up, -directionToTarget);
-                
-                headTransform.rotation = Quaternion.Slerp(
-                    headTransform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
-            }
-
-            Debug.DrawRay(directionToTarget,  Vector3.up * 2f, Color.cyan);
-            yield return null;
-        }
-    }
-
-
-    private IEnumerator SmoothResetHeadRotation(MachineEnemy machineEnemy)
-    {
-        float duration = 1f;
-        Quaternion startRotation = machineEnemy.head.transform.localRotation;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;
-            
-            machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, _originalHeadRotation, t);
-            yield return null;
-        }
-
-        machineEnemy.head.transform.localRotation = _originalHeadRotation;
-    }
 
 }

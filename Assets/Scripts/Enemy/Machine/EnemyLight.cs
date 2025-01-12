@@ -1,4 +1,5 @@
 using System;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,7 +7,6 @@ public class EnemyLight : MonoBehaviour
 {
     [Header("Detection Settings")]
     public LayerMask targetMask;
-    public float viewRadius = 10f;
     [Tooltip("Prêdkoœæ wzrostu wykrycia.")]
     public float detectionIncreaseRate = 10f;
     [Tooltip("Prêdkoœæ spadku wykrycia.")]
@@ -30,10 +30,11 @@ public class EnemyLight : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Light lightComponent;
-    private Transform _target;
     [SerializeField] private MachineEnemy mEnemy;
+    private Transform _target;
     private bool _isPlayerInRange;
-    private float _detectionProgress = 0f;
+    [Range(0f, 100f)]
+    private float _detectionProgress;
 
     private void Awake()
     {
@@ -48,15 +49,7 @@ public class EnemyLight : MonoBehaviour
     private void Update()
     {
         Collider[] targetsInRange = Physics.OverlapSphere(transform.position, lightComponent.range, targetMask);
-
-        if (targetsInRange.Length > 0)
-        {
-            _target = targetsInRange[0].transform;
-        }
-        else
-        {
-            _target = null;
-        }
+        _target = targetsInRange.Length > 0 ? targetsInRange[0].transform : null;
 
         if (_target)
         {
@@ -66,55 +59,72 @@ public class EnemyLight : MonoBehaviour
         {
             _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
+
+        switch (mEnemy.CurrentState)
+        {
+            case PatrolState:
+                lightComponent.color = Color.white;
+                break;
+            case InvestigateState:
+                lightComponent.color = Color.yellow;
+                break;
+            case AttackState:
+                lightComponent.color = Color.red;
+                break;
+        }
     }
 
     private void UpdateDetectionState()
     {
         float lightIntensity = CalculateLightIntensity(_target);
-        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
         
-        if (mEnemy.CurrentState is not AttackState)
+        if (lightIntensity > detectionThreshold)
         {
-            if (lightIntensity > detectionThreshold)
-            {
-                _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
-            }
-            else
-            {
-                _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
-                mEnemy.seeTarget = false;
-            }
+            _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
+        }
+        else
+        {
+            mEnemy.seeTarget = false;
+            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+        }
 
-            if (_detectionProgress == 0) 
+        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
+        switch (_detectionProgress)
+        {
+            case  <= 4.00f:
             {
                 if (mEnemy.CurrentState is not PatrolState)
                 {
+                    if (!mEnemy.CanChangeState) return;
+                    lightComponent.color = Color.white;
                     mEnemy.ChangeState(new PatrolState());
                 }
+
+                break;
             }
-            
-            if (_detectionProgress >= 0.01f && _detectionProgress < 100f)
+            case > 4.0f and < 100f:
             {
                 if (mEnemy.CurrentState is not InvestigateState)
                 {
+                    lightComponent.color = Color.yellow;
                     mEnemy.ChangeState(new InvestigateState(_target.transform.position, mEnemy));
                     mEnemy.seeTarget = true;
                     mEnemy.SetTarget(_target);
+                    Debug.LogWarning($"[{mEnemy.name}] Rozpoczêto badanie pozycji celu: {_target.position}");
                 }
-            } 
-        }
-       
-        
-        if (_detectionProgress >= 100f)
-        {
-            if (mEnemy.CurrentState is not AttackState)
+
+                break;
+            }
+            case >= 100f:
             {
+                if (mEnemy.CurrentState is AttackState) return;
+                lightComponent.color = Color.red;
                 mEnemy.SetTarget(_target);
                 mEnemy.ChangeState(new AttackState());
+                Debug.LogError($"[{mEnemy.name}] Cel wykryty w pe³ni! Rozpoczêto atak.");
+                break;
             }
         }
-
-        UpdateLightAppearance();
     }
 
     private float CalculateLightIntensity(Transform target)
@@ -153,29 +163,13 @@ public class EnemyLight : MonoBehaviour
 
         return intensity * distanceMultiplier;
     }
-
-    private void UpdateLightAppearance()
-    {
-        Color newColor = Color.white;
-
-        if (_detectionProgress >= 50f && _detectionProgress < 100f)
-        {
-            newColor = Color.yellow;
-        }
-        else if (_detectionProgress >= 100f)
-        {
-            newColor = Color.red;
-        }
-
-        lightComponent.color = newColor;
-    }
-
+    
     private void DrawDebugRay(Vector3 origin, Vector3 direction, bool hit)
     {
         if (!debugRays) return;
 
         Color color = hit ? rayHitColor : rayMissColor;
-        Debug.DrawLine(origin, origin + direction * 10f, color, 0.1f);
+        Debug.DrawLine(origin, origin + direction * lightComponent.range, color, 0.1f);
     }
     
     private void OnDrawGizmosSelected()

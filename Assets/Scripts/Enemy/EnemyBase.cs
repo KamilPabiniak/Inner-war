@@ -1,33 +1,38 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public abstract class EnemyBase : MonoBehaviour
 {
     private IEnemyState currentState;
     public IEnemyState CurrentState => currentState;
     
-    public  Transform target { get; private set; }
+    [Header("General Settings")]
+    public NavMeshAgent navMeshAgent;
+    public Transform target { get; private set; }
     public bool seeTarget;
-    private bool isChangingState;
+    public bool canKill;
+    public bool canMove;
+    public bool CanChangeState { get; private set; } = true;
+    private bool _isChangingState;
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;
     [Tooltip("Minimalna odległość między punktami patrolowymi.")]
     [SerializeField] private float minPatrolPointDistance = 5f;
     public float waitTimeAtPatrolPoint = 2f;
-    public NavMeshAgent navMeshAgent;
     private Vector3 currentPatrolPoint;
     
+    [FormerlySerializedAs("maxInvestigationTime")]
     [Header("Investigate Settings")]
-    [Tooltip("Czas oczekiwania w ostatniej znanej pozycji gracza.")]
-    public float waitTimeAtInvestigation = 3f;
+    [Tooltip("Maksymalny czas w jakim zostanie w tym trybie po zgubieniu gracza. Musi być na wypadek buga")]
+    public float maxInvestigationTimeAfterLoseSight = 10f;
     
     [Header("Attack Settings")]
     public float attackDuration = 5f;
     public float attackSpeedMultiplier = 1.5f;
 
-
-    [Header("Debug Settings")]
+    [AdvancedHeader("Debug Settings", r:180f, g:1f, b: 180f)]
     [SerializeField] private bool enableConsoleDebug;
     [SerializeField] private bool patrolDebug;
     [SerializeField] private bool debugPatrolPoint;
@@ -36,45 +41,43 @@ public abstract class EnemyBase : MonoBehaviour
     
     private void Awake()
     {
-        EnemyMediator.RegisterEnemy(this);
+        EnemyPatrolMediator.RegisterEnemy(this);
     }
 
     private void OnDestroy()
     {
-        EnemyMediator.ReleasePatrolPoint(currentPatrolPoint);
-        EnemyMediator.UnregisterEnemy(this);
+        EnemyPatrolMediator.ReleasePatrolPoint(currentPatrolPoint);
+        EnemyPatrolMediator.UnregisterEnemy(this);
     }
 
     private void Update()
     {
         currentState?.UpdateState(this);
     }
+    
+    public void SetStateChangeLock(bool locked)
+    {
+        CanChangeState = !locked;
+    }
 
     public void ChangeState(IEnemyState newState)
     {
-        if (isChangingState || currentState == newState) return;
-        isChangingState = true;
+        if (_isChangingState || currentState == newState) return;
+        _isChangingState = true;
         currentState?.ExitState(this);
         currentState = newState;
         currentState.EnterState(this);
-        isChangingState = false;
+        _isChangingState = false;
     }
     
     public Vector3 RequestPatrolPoint()
     {
-        return EnemyMediator.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
+        return EnemyPatrolMediator.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
     }
 
     public bool CanSeeTarget()
     {
-        if (seeTarget)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return seeTarget;
     }
     
     public void SetTarget(Transform targetSet)

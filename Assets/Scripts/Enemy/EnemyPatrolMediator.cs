@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public static class EnemyMediator
+public static class EnemyPatrolMediator
 {
     private static List<EnemyBase> registeredEnemies = new List<EnemyBase>();
     private static List<Vector3> occupiedPatrolPoints = new List<Vector3>();
@@ -35,7 +35,6 @@ public static class EnemyMediator
             Vector3 vertex2 = navMeshData.vertices[navMeshData.indices[triangleIndex + 1]];
             Vector3 vertex3 = navMeshData.vertices[navMeshData.indices[triangleIndex + 2]];
             Vector3 randomPoint = GetRandomPointInTriangle(vertex1, vertex2, vertex3);
-            //Vector3 randomPoint = origin + new Vector3(Random.Range(-range, range), 0, Random.Range(-range, range));
             
             if (Vector3.Distance(origin, randomPoint) <= range && IsPointValid(randomPoint, minDistance))
             {
