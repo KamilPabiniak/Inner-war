@@ -80,7 +80,7 @@ public class PatrolState : IEnemyState
 
     private void StartHeadRotation(EnemyBase enemy)
     {
-        if (enemy is not MachineEnemy machineEnemy || machineEnemy.head == null) return;
+        if (enemy is not MachineEnemy machineEnemy) return;
 
         if (_headRotationCoroutine == null)
         {
@@ -91,7 +91,7 @@ public class PatrolState : IEnemyState
 
     private void ResetHeadRotation(EnemyBase enemy)
     {
-        if (enemy is MachineEnemy machineEnemy && machineEnemy.head != null)
+        if (enemy is MachineEnemy machineEnemy)
         {
             if (_headRotationCoroutine != null)
             {
@@ -105,7 +105,7 @@ public class PatrolState : IEnemyState
 
     private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
     {
-        float maxDistance = 3f;
+        float maxDistance = machineEnemy.maxOffsetDistance;
         int stopPoints = machineEnemy.stopPoints;
         float stopDuration = machineEnemy.stopDuration;
         float headRotationSpeed = machineEnemy.headRotationSpeed;

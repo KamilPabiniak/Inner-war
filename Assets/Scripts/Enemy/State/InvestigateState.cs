@@ -44,7 +44,10 @@ public class InvestigateState : IEnemyState
                 {
                     enemy.navMeshAgent.SetDestination(hit.position);
                 }
-                RotateHeadTowards(target);
+                if (enemy is MachineEnemy machineEnemy)
+                {
+                    TrackTarget(machineEnemy, target);
+                }
             }
         }
         else
@@ -59,7 +62,10 @@ public class InvestigateState : IEnemyState
                     if (enemy.canMove)
                     {
                         enemy.navMeshAgent.SetDestination(hit.position);
-                        ResetHeadRotation();
+                        if (enemy is MachineEnemy machineEnemy)
+                        {
+                            ResetSightTargetPosition(machineEnemy);
+                        }
                         Debug.Log($"[{enemy.name}] Kontynuujê poszukiwania w ostatniej znanej pozycji: {hit.position}");
                     }
                 }
@@ -74,56 +80,71 @@ public class InvestigateState : IEnemyState
 
     public void ExitState(EnemyBase enemy)
     {
-        enemy.SetStateChangeLock(false); 
-        ResetHeadRotation();
+        enemy.SetStateChangeLock(false);
+        if (enemy is MachineEnemy machineEnemy)
+        {
+            ResetSightTargetPosition(machineEnemy);
+        }
         _enemyBase.ClearTarget();
     }
     
-    private void RotateHeadTowards(Transform target)
-{
-    if (_enemyBase is not MachineEnemy machineEnemy || machineEnemy.head == null) return;
-    
-    Vector3 directionToTarget = target.position - machineEnemy.head.transform.position;
-    
-    Quaternion targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
-    
-
-    if (_headRotationCoroutine != null)
-    {
-        _enemyBase.StopCoroutine(_headRotationCoroutine);
-    }
-    _headRotationCoroutine = _enemyBase.StartCoroutine(SmoothRotateHead(machineEnemy, targetRotation));
-}
-
-private IEnumerator SmoothRotateHead(MachineEnemy machineEnemy, Quaternion targetRotation)
-{
-    float duration = 0.5f; 
-    Quaternion startRotation = machineEnemy.head.transform.localRotation;
-    float elapsedTime = 0f;
-
-    while (elapsedTime < duration)
-    {
-        elapsedTime += Time.deltaTime;
-        float t = Mathf.SmoothStep(0f, 1f, elapsedTime / duration);
-        machineEnemy.head.transform.localRotation = Quaternion.Slerp(startRotation, targetRotation, t);
-        yield return null;
-    }
-
-    machineEnemy.head.transform.localRotation = targetRotation;
-}
-
-private void ResetHeadRotation()
-{
-    if (_enemyBase is MachineEnemy machineEnemy && machineEnemy.head != null)
+  private void TrackTarget(MachineEnemy enemy, Transform target)
     {
         if (_headRotationCoroutine != null)
         {
             _enemyBase.StopCoroutine(_headRotationCoroutine);
         }
+
+        _headRotationCoroutine = _enemyBase.StartCoroutine(MoveSightToTarget(enemy, target.position));
     }
-}
 
-    
+    private IEnumerator MoveSightToTarget(MachineEnemy enemy, Vector3 targetPosition)
+    {
+        Vector3 originalLocalPosition = enemy.sightTarget.transform.localPosition;
+        Vector3 targetLocalOffset = enemy.transform.InverseTransformPoint(targetPosition) - originalLocalPosition;
+        
+        targetLocalOffset = Vector3.ClampMagnitude(targetLocalOffset, enemy.maxOffsetDistance);
 
+        float elapsedTime = 0f;
 
+        while (elapsedTime < enemy.headRotationSpeed)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsedTime / enemy.headRotationSpeed);
+            enemy.sightTarget.transform.localPosition =
+                Vector3.Lerp(originalLocalPosition, originalLocalPosition + targetLocalOffset, t);
+            yield return null;
+        }
+
+        enemy.sightTarget.transform.localPosition = originalLocalPosition + targetLocalOffset;
+    }
+
+    private void ResetSightTargetPosition(MachineEnemy enemy)
+    {
+        if (_headRotationCoroutine != null)
+        {
+            _enemyBase.StopCoroutine(_headRotationCoroutine);
+            _headRotationCoroutine = null;
+        }
+
+        enemy.StartCoroutine(SmoothResetSightTarget(enemy));
+    }
+
+    private IEnumerator SmoothResetSightTarget(MachineEnemy enemy)
+    {
+        Vector3 startPosition = enemy.sightTarget.transform.localPosition;
+        Vector3 resetPosition = enemy.OriginalHeadPos; 
+        float duration = 0.5f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsedTime / duration);
+            enemy.sightTarget.transform.localPosition = Vector3.Lerp(startPosition, resetPosition, t);
+            yield return null;
+        }
+
+        enemy.sightTarget.transform.localPosition = resetPosition;
+    }
 }
