@@ -29,7 +29,7 @@ public class EnemyLight : MonoBehaviour
     public bool debugConsole = true;
 
     [Header("References")]
-    [SerializeField] private Light lightComponent;
+    public Light lightComponent;
     [SerializeField] private MachineEnemy mEnemy;
     private Transform _target;
     private bool _isPlayerInRange;

@@ -51,6 +51,7 @@ public class IKFootSolver : MonoBehaviour
             currentPosition = tempPosition;
             currentNormal = Vector3.Lerp(oldNormal, newNormal, lerp);
             lerp += Time.deltaTime * speed;
+            GetComponentInParent<MachineSoundManager>()?.PlayFootStepLeftSound();
         }
         else
         {
@@ -61,18 +62,12 @@ public class IKFootSolver : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(newPosition, 0.5f);
     }
 
-
-
-    public bool IsMoving()
+    private bool IsMoving()
     {
         return lerp < 1;
     }
-
-
-
 }

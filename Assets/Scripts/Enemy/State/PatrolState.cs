@@ -11,6 +11,7 @@ public class PatrolState : IEnemyState
 
     // Machine-specific
     private Coroutine _headRotationCoroutine;
+    private int lastHeadPositionIndex = 0;
 
     public void EnterState(EnemyBase enemy)
     {
@@ -105,9 +106,9 @@ public class PatrolState : IEnemyState
     private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
     {
         float maxDistance = 3f;
-        int stopPoints = Mathf.Max(2, machineEnemy.stopPoints);
+        int stopPoints = machineEnemy.stopPoints;
         float stopDuration = machineEnemy.stopDuration;
-        float headRotationSpeed = Mathf.Max(0.1f, machineEnemy.headRotationSpeed);
+        float headRotationSpeed = machineEnemy.headRotationSpeed;
 
         List<Vector3> movementOffsets = new List<Vector3>();
         for (int i = 0; i < stopPoints; i++)
@@ -121,10 +122,10 @@ public class PatrolState : IEnemyState
             movementOffsets.Add(movementOffsets[i]);
         }
 
-        int currentIndex = 0;
         int direction = 1;
 
-        //tutaj główna zasada 
+        yield return new WaitForSeconds(1f);
+
         while (isWaiting)
         {
             if (movementOffsets.Count == 0)
@@ -133,7 +134,7 @@ public class PatrolState : IEnemyState
                 yield break;
             }
 
-            Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[currentIndex];
+            Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[lastHeadPositionIndex];
             float elapsedTime = 0f;
             Vector3 startLocalPosition = machineEnemy.sightTarget.transform.localPosition;
             float transitionDuration = headRotationSpeed;
@@ -150,22 +151,22 @@ public class PatrolState : IEnemyState
             machineEnemy.sightTarget.transform.localPosition = targetLocalPosition;
             yield return new WaitForSeconds(stopDuration);
 
-            if (currentIndex == movementOffsets.Count - 1 && direction == 1)
+            if (lastHeadPositionIndex == movementOffsets.Count - 1 && direction == 1)
             {
                 direction = -1;
             }
-            else if (currentIndex == 0 && direction == -1)
+            else if (lastHeadPositionIndex == 0 && direction == -1)
             {
                 direction = 1;
             }
 
-            currentIndex += direction;
+            lastHeadPositionIndex += direction;
         }
     }
 
     private IEnumerator SmoothResetPosition(MachineEnemy machineEnemy)
     {
-        float duration = 1f;
+        float duration = machineEnemy.headRotationSpeed;
         Vector3 startPosition = machineEnemy.sightTarget.transform.localPosition;
         float elapsedTime = 0f;
 
