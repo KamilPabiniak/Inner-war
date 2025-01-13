@@ -39,6 +39,9 @@ public abstract class EnemyBase : MonoBehaviour
     [SerializeField] private bool investigateDebug;
     [SerializeField] private bool chaseDebug;
     
+    [Header("References")]
+    public EnemySoundManager soundManager;
+    
     private void Awake()
     {
         EnemyPatrolMediator.RegisterEnemy(this);
@@ -97,5 +100,11 @@ public abstract class EnemyBase : MonoBehaviour
             Debug.Log($"[{name}] Otrzymano alarm! Ruszam do: {alertPosition}.");
         }
         //ChangeState(new InvestigateState(alertPosition));
+    }
+
+    [ContextMenu("CurrentState")]
+    public void TellCurrentState()
+    {
+        Debug.Log(currentState);
     }
 }

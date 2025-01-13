@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations.Rigging;
 
 public class InvestigateState : IEnemyState
 {
@@ -18,6 +17,7 @@ public class InvestigateState : IEnemyState
 
     public void EnterState(EnemyBase enemy)
     {
+        enemy.soundManager.PlayInvestigateSound();
         enemy.SetStateChangeLock(true);
         if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {
@@ -52,7 +52,7 @@ public class InvestigateState : IEnemyState
         }
         else
         {
-            Debug.Log($"[{enemy.name}] Cel zgubiony. Timer: {_lostSightTimer:F2}");
+            //Debug.Log($"[{enemy.name}] Cel zgubiony. Timer: {_lostSightTimer:F2}");
             _lostSightTimer += Time.deltaTime;
             
             if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
@@ -66,13 +66,13 @@ public class InvestigateState : IEnemyState
                         {
                             ResetSightTargetPosition(machineEnemy);
                         }
-                        Debug.Log($"[{enemy.name}] Kontynuujê poszukiwania w ostatniej znanej pozycji: {hit.position}");
+                        //Debug.Log($"[{enemy.name}] Kontynuujê poszukiwania w ostatniej znanej pozycji: {hit.position}");
                     }
                 }
             }
             else
             {
-                Debug.LogWarning($"[{enemy.name}] Cel zgubiony na dobre. Powrót do patrolu.");
+                //Debug.LogWarning($"[{enemy.name}] Cel zgubiony na dobre. Powrót do patrolu.");
                 enemy.ChangeState(new PatrolState());
             }
         }

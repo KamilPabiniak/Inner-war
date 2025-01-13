@@ -5,29 +5,30 @@ using UnityEngine.AI;
 
 public class PatrolState : IEnemyState
 {
-    private Vector3 patrolPoint;
-    private bool isWaiting;
-    private float waitTimer;
+    private Vector3 _patrolPoint;
+    private bool _isWaiting;
+    private float _waitTimer;
 
     // Machine-specific
     private Coroutine _headRotationCoroutine;
-    private int lastHeadPositionIndex = 0;
+    private int _lastHeadPositionIndex;
 
     public void EnterState(EnemyBase enemy)
     {
-        Debug.Log($"[{enemy.name}] Wchodzi w stan patrolowania.");
+        enemy.soundManager.PlayPatrolSound();
+        enemy.navMeshAgent.isStopped = false;
         SetNewPatrolPoint(enemy);
     }
 
     public void UpdateState(EnemyBase enemy)
     {
-        if (isWaiting)
+        if (_isWaiting)
         {
-            waitTimer -= Time.deltaTime;
+            _waitTimer -= Time.deltaTime;
             StartHeadRotation(enemy);
 
-            if (!(waitTimer <= 0f)) return;
-            isWaiting = false;
+            if (!(_waitTimer <= 0f)) return;
+            _isWaiting = false;
             ResetHeadRotation(enemy);
             SetNewPatrolPoint(enemy);
             return;
@@ -36,12 +37,12 @@ public class PatrolState : IEnemyState
         if (!enemy.navMeshAgent.pathPending &&
             enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
         {
-            isWaiting = true;
-            waitTimer = enemy.waitTimeAtPatrolPoint;
-            if (patrolPoint != Vector3.zero)
+            _isWaiting = true;
+            _waitTimer = enemy.waitTimeAtPatrolPoint;
+            if (_patrolPoint != Vector3.zero)
             {
-                EnemyPatrolMediator.ReleasePatrolPoint(patrolPoint);
-                patrolPoint = Vector3.zero;
+                EnemyPatrolMediator.ReleasePatrolPoint(_patrolPoint);
+                _patrolPoint = Vector3.zero;
             }
         }
     }
@@ -49,7 +50,7 @@ public class PatrolState : IEnemyState
     public void ExitState(EnemyBase enemy)
     {
         if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
-        EnemyPatrolMediator.ReleasePatrolPoint(patrolPoint);
+        EnemyPatrolMediator.ReleasePatrolPoint(_patrolPoint);
         ResetHeadRotation(enemy);
     }
 
@@ -61,20 +62,21 @@ public class PatrolState : IEnemyState
             return;
         }
 
-        patrolPoint = enemy.RequestPatrolPoint();
+        _patrolPoint = enemy.RequestPatrolPoint();
 
-        if (NavMesh.SamplePosition(patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {
             if (enemy.navMeshAgent.pathPending ||
                 enemy.navMeshAgent.remainingDistance > enemy.navMeshAgent.stoppingDistance)
                 return;
-            patrolPoint = hit.position;
+            _patrolPoint = hit.position;
             if (!enemy.canMove) return;
-            enemy.navMeshAgent.SetDestination(patrolPoint);
+            enemy.navMeshAgent.SetDestination(_patrolPoint);
+            Debug.Log($"[{enemy.name}] Poszukuje nowego punktu.");
         }
         else
         {
-            Debug.LogWarning($"[{enemy.name}] Nie uda�o si� znale�� punktu na NavMesh w okolicy: {patrolPoint}");
+            Debug.LogWarning($"[{enemy.name}] Nie uda�o si� znale�� punktu na NavMesh w okolicy: {_patrolPoint}");
         }
     }
 
@@ -126,7 +128,7 @@ public class PatrolState : IEnemyState
 
         yield return new WaitForSeconds(1f);
 
-        while (isWaiting)
+        while (_isWaiting)
         {
             if (movementOffsets.Count == 0)
             {
@@ -134,7 +136,7 @@ public class PatrolState : IEnemyState
                 yield break;
             }
 
-            Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[lastHeadPositionIndex];
+            Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[_lastHeadPositionIndex];
             float elapsedTime = 0f;
             Vector3 startLocalPosition = machineEnemy.sightTarget.transform.localPosition;
             float transitionDuration = headRotationSpeed;
@@ -151,16 +153,16 @@ public class PatrolState : IEnemyState
             machineEnemy.sightTarget.transform.localPosition = targetLocalPosition;
             yield return new WaitForSeconds(stopDuration);
 
-            if (lastHeadPositionIndex == movementOffsets.Count - 1 && direction == 1)
+            if (_lastHeadPositionIndex == movementOffsets.Count - 1 && direction == 1)
             {
                 direction = -1;
             }
-            else if (lastHeadPositionIndex == 0 && direction == -1)
+            else if (_lastHeadPositionIndex == 0 && direction == -1)
             {
                 direction = 1;
             }
 
-            lastHeadPositionIndex += direction;
+            _lastHeadPositionIndex += direction;
         }
     }
 

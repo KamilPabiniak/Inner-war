@@ -6,7 +6,6 @@ public class MachineEnemy : EnemyBase
 {
     [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
     [Header("References")]
-
     public GameObject sightTarget;
     public Vector3 OriginalHeadPos { get; private set; }
 
@@ -15,6 +14,9 @@ public class MachineEnemy : EnemyBase
     public int stopPoints;
     public float stopDuration = 0.5f;
     public float maxOffsetDistance = 3f; 
+    [AdvancedHeader("Attack", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+    public float overloadTimer = 6f; 
+ 
 
     private void Start()
     {

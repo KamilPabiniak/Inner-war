@@ -40,6 +40,8 @@ public class IKFootSolver : MonoBehaviour
                 int direction = body.InverseTransformPoint(info.point).z > body.InverseTransformPoint(newPosition).z ? 1 : -1;
                 newPosition = info.point + (body.forward * stepLength * direction) + footOffset;
                 newNormal = info.normal;
+                //sound bool here
+                GetComponentInParent<EnemySoundManager>()?.ResetFootStepFlag();
             }
         }
 
@@ -51,7 +53,11 @@ public class IKFootSolver : MonoBehaviour
             currentPosition = tempPosition;
             currentNormal = Vector3.Lerp(oldNormal, newNormal, lerp);
             lerp += Time.deltaTime * speed;
-            GetComponentInParent<MachineSoundManager>()?.PlayFootStepLeftSound();
+            //sound trigger here
+            if (lerp > 0.8f)
+            {
+                GetComponentInParent<EnemySoundManager>()?.PlayFootStepSound();
+            }
         }
         else
         {

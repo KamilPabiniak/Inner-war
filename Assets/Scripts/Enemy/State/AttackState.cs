@@ -1,8 +1,5 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Animations;
-using UnityEngine.Animations.Rigging;
 
 public class AttackState : IEnemyState
 {
@@ -11,23 +8,45 @@ public class AttackState : IEnemyState
     private float _attackTimer;
     private float _originalSpeed;
     private Transform _target;
+    
+    //Machine specific
+    private MachineEnemy _machineEnemy;
+    private float _overloadTimer; 
+    private bool _isOverloading = false;
 
     public void EnterState(EnemyBase enemy)
     {
+        if (enemy is MachineEnemy machineEnemy)
+        {
+            _machineEnemy = machineEnemy;
+        }
+        enemy.soundManager.PlayAttackSound();
         enemy.SetStateChangeLock(true); 
         _target = enemy.target;
         _enemyBase = enemy;
         _attackDuration = enemy.attackDuration; 
         _attackTimer = _attackDuration;
         _originalSpeed = enemy.navMeshAgent.speed;
-        enemy.navMeshAgent.speed *= enemy.attackSpeedMultiplier; 
+        enemy.navMeshAgent.speed *= enemy.attackSpeedMultiplier;
+        _overloadTimer = _machineEnemy.overloadTimer;
     }
 
     public void UpdateState(EnemyBase enemy)
     {
+        if (_isOverloading)
+        {
+            _machineEnemy.overloadTimer -= Time.deltaTime;
+            if (_machineEnemy.overloadTimer <= 0f)
+            {
+                Debug.Log($"[{enemy.name}] Przeciążenie zakończone. Wracam do patrolowania.");
+                enemy.ChangeState(new PatrolState());
+            }
+            return;
+        }
+        
         if (_target == null)
         {
-            Debug.LogWarning($"[{enemy.name}] Utracono cel jakimś cudem. Wracam do patrolowania.");
+            enemy.soundManager.PlayTargetLostSound();
             enemy.ChangeState(new PatrolState());
             return;
         }
@@ -71,8 +90,9 @@ public class AttackState : IEnemyState
         
         _attackTimer -= Time.deltaTime;
         if (!(_attackTimer <= 0f)) return;
-        Debug.Log($"[{enemy.name}] Przeciążenie ogniw. Resetuje.");
-        enemy.ChangeState(new PatrolState());
+        enemy.soundManager.PlayOverloadSound();
+        enemy.navMeshAgent.isStopped = true; 
+        _isOverloading = true;
     }
 
     public void ExitState(EnemyBase enemy)
