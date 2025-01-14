@@ -9,7 +9,9 @@ public abstract class EnemyBase : MonoBehaviour
     
     [Header("General Settings")]
     public NavMeshAgent navMeshAgent;
-    public Transform target { get; private set; }
+    public Transform Target { get; private set; }
+    [Range(0f, 100f)]
+    public float detectionProgress;
     public bool seeTarget;
     public bool canKill;
     public bool canMove;
@@ -44,13 +46,13 @@ public abstract class EnemyBase : MonoBehaviour
     
     private void Awake()
     {
-        EnemyPatrolMediator.RegisterEnemy(this);
+        EnemyPatrolM.RegisterEnemy(this);
     }
 
     private void OnDestroy()
     {
-        EnemyPatrolMediator.ReleasePatrolPoint(currentPatrolPoint);
-        EnemyPatrolMediator.UnregisterEnemy(this);
+        EnemyPatrolM.ReleasePatrolPoint(currentPatrolPoint);
+        EnemyPatrolM.UnregisterEnemy(this);
     }
 
     private void Update()
@@ -75,7 +77,7 @@ public abstract class EnemyBase : MonoBehaviour
     
     public Vector3 RequestPatrolPoint()
     {
-        return EnemyPatrolMediator.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
+        return EnemyPatrolM.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
     }
 
     public bool CanSeeTarget()
@@ -85,21 +87,26 @@ public abstract class EnemyBase : MonoBehaviour
     
     public void SetTarget(Transform targetSet)
     {
-        target = targetSet;
+        Target = targetSet;
     }
 
     public void ClearTarget()
     {
-        target = null;
+        Target = null;
     }
 
     public void OnAlertReceived(Vector3 alertPosition)
     {
-        if (enableConsoleDebug)
-        {
-            Debug.Log($"[{name}] Otrzymano alarm! Ruszam do: {alertPosition}.");
-        }
-        //ChangeState(new InvestigateState(alertPosition));
+        if (currentState is AttackState) return;
+        ChangeState(new InvestigateState(alertPosition));
+    }
+    
+    public void OnAttackCommandReceived(Transform player)
+    {
+        if (currentState is AttackState) return;
+        SetTarget(player);
+        ChangeState(new AttackState());
+        detectionProgress = 100;
     }
 
     [ContextMenu("CurrentState")]

@@ -4,19 +4,19 @@ using UnityEngine.AI;
 
 public class InvestigateState : IEnemyState
 {
-    private readonly EnemyBase _enemyBase;
+    private EnemyBase _enemyBase;
     private Vector3 _lastKnownPosition;
     private Coroutine _headRotationCoroutine;
     private float _lostSightTimer;
 
-    public InvestigateState(Vector3 position, EnemyBase enemyBase)
+    public InvestigateState(Vector3 position)
     {
         _lastKnownPosition  = position;
-        _enemyBase = enemyBase;
     }
 
     public void EnterState(EnemyBase enemy)
     {
+        _enemyBase = enemy;
         enemy.soundManager.PlayInvestigateSound();
         enemy.SetStateChangeLock(true);
         if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
@@ -32,7 +32,7 @@ public class InvestigateState : IEnemyState
 
     public void UpdateState(EnemyBase enemy)
     {
-        Transform target = enemy.target;
+        Transform target = enemy.Target;
         if (target != null && enemy.CanSeeTarget())
         {
             _lostSightTimer = 0f;
@@ -85,7 +85,6 @@ public class InvestigateState : IEnemyState
         {
             ResetSightTargetPosition(machineEnemy);
         }
-        _enemyBase.ClearTarget();
     }
     
   private void TrackTarget(MachineEnemy enemy, Transform target)

@@ -13,6 +13,7 @@ public class AttackState : IEnemyState
     private MachineEnemy _machineEnemy;
     private float _overloadTimer; 
     private bool _isOverloading = false;
+    private float _lostSightTimer;
 
     public void EnterState(EnemyBase enemy)
     {
@@ -22,7 +23,7 @@ public class AttackState : IEnemyState
         }
         enemy.soundManager.PlayAttackSound();
         enemy.SetStateChangeLock(true); 
-        _target = enemy.target;
+        _target = enemy.Target;
         _enemyBase = enemy;
         _attackDuration = enemy.attackDuration; 
         _attackTimer = _attackDuration;
@@ -46,23 +47,25 @@ public class AttackState : IEnemyState
         
         if (_target == null)
         {
-            enemy.soundManager.PlayTargetLostSound();
-            enemy.ChangeState(new PatrolState());
-            return;
-        }
-        
-        if (enemy is MachineEnemy)
-        {
-            if (_target != null)
+            Debug.LogWarning(_target);
+            _lostSightTimer += Time.deltaTime;
+            if (_lostSightTimer >= enemy.maxInvestigationTimeAfterLoseSight / 2)
             {
-                //EnemyMediator.SendAlert(_target.position);
+                enemy.soundManager.PlayTargetLostSound();
+                enemy.ChangeState(new PatrolState());
+                return;
             }
         }
-
+        else
+        {
+            _lostSightTimer = 0f; 
+        }
+        
         NavMeshPath path = new NavMeshPath();
         if (!enemy.navMeshAgent.CalculatePath(_target.position, path) || path.status != NavMeshPathStatus.PathComplete)
         {
             Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
+            enemy.SetStateChangeLock(false); 
             enemy.ChangeState(new PatrolState());
             return;
         }
@@ -101,6 +104,4 @@ public class AttackState : IEnemyState
         _enemyBase.ClearTarget();
         enemy.navMeshAgent.speed = _originalSpeed;
     }
-
-   
 }

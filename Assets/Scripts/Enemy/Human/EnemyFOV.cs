@@ -53,7 +53,7 @@ public class EnemyFOV : MonoBehaviour
                     
                     if (detectionProgress >= 50f && detectionProgress < 100f)
                     {
-                        enemy.ChangeState(new InvestigateState(transform.position, enemy));
+                        enemy.ChangeState(new InvestigateState(transform.position));
                     }
                     
                     if (detectionProgress >= 100f)

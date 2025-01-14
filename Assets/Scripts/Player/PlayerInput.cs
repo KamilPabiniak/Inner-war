@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static PlayerInputActions;
 
 public class PlayerInput : PlayerModule
 {
@@ -12,6 +13,7 @@ public class PlayerInput : PlayerModule
     public bool IsInteractPressed { get; private set; }
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }
+    public bool IsWhistlePressed { get; private set; }
 
     private void Awake()
     {
@@ -65,6 +67,11 @@ public class PlayerInput : PlayerModule
         public void OnLeanRight(InputAction.CallbackContext context)
         {
             _playerInput.IsLeanRightPressed = context.performed;
+        }
+        
+        public void OnWhistling(InputAction.CallbackContext context)
+        {
+            _playerInput.IsWhistlePressed = context.performed;
         }
     }
 }

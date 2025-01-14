@@ -41,7 +41,7 @@ public class PatrolState : IEnemyState
             _waitTimer = enemy.waitTimeAtPatrolPoint;
             if (_patrolPoint != Vector3.zero)
             {
-                EnemyPatrolMediator.ReleasePatrolPoint(_patrolPoint);
+                EnemyPatrolM.ReleasePatrolPoint(_patrolPoint);
                 _patrolPoint = Vector3.zero;
             }
         }
@@ -50,7 +50,7 @@ public class PatrolState : IEnemyState
     public void ExitState(EnemyBase enemy)
     {
         if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
-        EnemyPatrolMediator.ReleasePatrolPoint(_patrolPoint);
+        EnemyPatrolM.ReleasePatrolPoint(_patrolPoint);
         ResetHeadRotation(enemy);
     }
 
@@ -72,7 +72,6 @@ public class PatrolState : IEnemyState
             _patrolPoint = hit.position;
             if (!enemy.canMove) return;
             enemy.navMeshAgent.SetDestination(_patrolPoint);
-            Debug.Log($"[{enemy.name}] Poszukuje nowego punktu.");
         }
         else
         {

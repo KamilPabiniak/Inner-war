@@ -61,8 +61,8 @@ public class PlayerMovement : PlayerModule
     
     private void HandleCrouch()
     {
-        Player.characterController.height = _input.IsCrouchPressed ? Player.crouchHeight : Player.standingHeight;
         _isCrouch = _input.IsCrouchPressed;
+        Player.characterController.height = _input.IsCrouchPressed ? Player.crouchHeight : Player.standingHeight;
     }
 
     private void HandleClimbing(Vector2 moveInput)

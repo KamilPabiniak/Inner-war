@@ -26,15 +26,12 @@ public class EnemyLight : MonoBehaviour
     public Color rayHitColor = Color.green;
     [Tooltip("Kolor linii Raycastów, które nie trafiaj¹ w gracza.")]
     public Color rayMissColor = Color.red;
-    public bool debugConsole = true;
 
     [Header("References")]
     public Light lightComponent;
     [SerializeField] private MachineEnemy mEnemy;
     private Transform _target;
     private bool _isPlayerInRange;
-    [Range(0f, 100f)]
-    private float _detectionProgress;
 
     private void Awake()
     {
@@ -57,7 +54,7 @@ public class EnemyLight : MonoBehaviour
         }
         else
         {
-            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+            mEnemy.detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
 
         switch (mEnemy.CurrentState)
@@ -80,16 +77,16 @@ public class EnemyLight : MonoBehaviour
         
         if (lightIntensity > detectionThreshold)
         {
-            _detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
+            mEnemy.detectionProgress += lightIntensity * detectionIncreaseRate * Time.deltaTime;
         }
         else
         {
             mEnemy.seeTarget = false;
-            _detectionProgress -= detectionDecreaseRate * Time.deltaTime;
+            mEnemy.detectionProgress -= detectionDecreaseRate * Time.deltaTime;
         }
 
-        _detectionProgress = Mathf.Clamp(_detectionProgress, 0f, 100f);
-        switch (_detectionProgress)
+        mEnemy.detectionProgress = Mathf.Clamp(mEnemy.detectionProgress, 0f, 100f);
+        switch (mEnemy.detectionProgress)
         {
             case  <= 4.00f:
             {
@@ -106,8 +103,9 @@ public class EnemyLight : MonoBehaviour
             {
                 if (mEnemy.CurrentState is not InvestigateState)
                 {
+                    if (!mEnemy.CanChangeState) return;
                     lightComponent.color = Color.yellow;
-                    mEnemy.ChangeState(new InvestigateState(_target.transform.position, mEnemy));
+                    mEnemy.ChangeState(new InvestigateState(_target.transform.position));
                     mEnemy.seeTarget = true;
                     mEnemy.SetTarget(_target);
                     Debug.LogWarning($"[{mEnemy.name}] Rozpoczêto badanie pozycji celu: {_target.position}");
