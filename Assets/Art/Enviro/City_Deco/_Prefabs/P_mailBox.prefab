@@ -51,13 +51,42 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 90d7e070572817348b270e111f16422a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: d2989947a373a57469824e7b2d837616, type: 2}
+      objectReference: {fileID: 2100000, guid: 4be2ca2304696e345aa6eac98eb90ce5, type: 2}
     - target: {fileID: 919132149155446097, guid: 90d7e070572817348b270e111f16422a, type: 3}
       propertyPath: m_Name
-      value: mailBox
+      value: P_mailBox
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d7e070572817348b270e111f16422a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4351934316546041325}
   m_SourcePrefab: {fileID: 100100000, guid: 90d7e070572817348b270e111f16422a, type: 3}
+--- !u!1 &1956940218829454451 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d7e070572817348b270e111f16422a, type: 3}
+  m_PrefabInstance: {fileID: 1722938102374990114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4351934316546041325
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956940218829454451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5231108, y: 0.4231109, z: 1.0116726}
+  m_Center: {x: 0, y: 0, z: 0.5058363}
