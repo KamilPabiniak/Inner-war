@@ -16,8 +16,7 @@ public class InteractionHighlight : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRadius);
 
         HashSet<GameObject> detectedObjects = new HashSet<GameObject>();
-
-        // List to store objects to add or remove after iteration
+        
         List<GameObject> objectsToAdd = new List<GameObject>();
         List<GameObject> objectsToRemove = new List<GameObject>();
 
@@ -31,16 +30,14 @@ public class InteractionHighlight : MonoBehaviour
                 if (obj.TryGetComponent(out Renderer renderer))
                 {
                     detectedObjects.Add(obj);
-                    // Check if the object is not already in the activeHighlights dictionary
                     if (!activeHighlights.ContainsKey(obj) && renderer.material.HasProperty(RimRange))
                     {
-                        objectsToAdd.Add(obj); // Add to objects to add later
+                        objectsToAdd.Add(obj);
                     }
                 }
             }
         }
-
-        // Process objects to be added
+        
         foreach (var obj in objectsToAdd)
         {
             if (obj.TryGetComponent(out Renderer renderer))
@@ -49,17 +46,15 @@ public class InteractionHighlight : MonoBehaviour
                 activeHighlights[obj] = highlightCoroutine;
             }
         }
-
-        // Process objects to be removed
+        
         foreach (var obj in activeHighlights.Keys)
         {
             if (!detectedObjects.Contains(obj))
             {
-                objectsToRemove.Add(obj); // Add to objects to remove later
+                objectsToRemove.Add(obj); 
             }
         }
-
-        // Remove objects from the activeHighlights after iteration
+        
         foreach (var obj in objectsToRemove)
         {
             StopCoroutine(activeHighlights[obj]);

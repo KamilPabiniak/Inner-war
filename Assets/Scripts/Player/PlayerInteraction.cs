@@ -5,11 +5,11 @@ public interface IInteractable
 {
     void Interact(Player player);
 }
+
 public class PlayerInteraction : PlayerModule
 {
-    [Header("Interaction Settings")]
-    public float interactionDistance = 3f;
-    
+    [Header("Interaction Settings")] public float interactionDistance = 3f;
+
     private PlayerInput _input;
 
     private void Start()
@@ -24,15 +24,30 @@ public class PlayerInteraction : PlayerModule
 
     private void HandleInteraction()
     {
-        if (_input.IsInteractPressed)
+        Ray ray = new Ray(Player.cameraTransform.position, Player.cameraTransform.forward);
+        Debug.DrawRay(Player.cameraTransform.position, Player.cameraTransform.forward * interactionDistance,
+            Color.blue);
+        if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
-            Ray ray = new Ray(Player.cameraTransform.position, Player.cameraTransform.forward);
-            Debug.DrawRay(Player.cameraTransform.position, Player.cameraTransform.forward * interactionDistance, Color.blue);
-            if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
+            var interactable = hit.collider.GetComponent<IInteractable>();
+            if (interactable != null)
             {
-                var interactable = hit.collider.GetComponent<IInteractable>();
-                interactable?.Interact(Player);
+                string objectTag = hit.collider.tag;
+                InteractionEventMessenger.ShowInteractionText(objectTag);
+
+                if (_input.IsInteractPressed)
+                {
+                    interactable.Interact(Player);
+                }
             }
+            else
+            {
+                InteractionEventMessenger.HideInteractionText();
+            }
+        }
+        else
+        {
+            InteractionEventMessenger.HideInteractionText();
         }
     }
 }
