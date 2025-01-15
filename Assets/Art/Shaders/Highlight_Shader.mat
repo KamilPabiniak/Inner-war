@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Highlight_Shader
   m_Shader: {fileID: -6465566751694194690, guid: aa7f31e3f14fc41419697a42cccb932b, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
+  m_Parent: {fileID: -876546973899608171, guid: aa7f31e3f14fc41419697a42cccb932b, type: 3}
+  m_ModifiedSerializedProperties: 2
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -23,29 +23,17 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - unity_Lightmaps:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_LightmapsInd:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - unity_ShadowMasks:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _Metallic: 0
     - _QueueControl: 0
-    - _QueueOffset: 0
-    - _Rim_Blend: 1.26
-    - _Rim_Power: 3.69
-    - _Rim_Range: 0.79
+    - _Rim_Range: 0
+    - _Smoothness: 0.5
     m_Colors:
-    - _Base_Color: {r: 0, g: 0, b: 0, a: 0}
-    - _Rim_Color: {r: 0.764151, g: 0.27386186, b: 0.19824673, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2721330967888023702
