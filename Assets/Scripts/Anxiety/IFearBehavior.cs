@@ -4,3 +4,9 @@ public interface IFearBehavior
     void UpdateEffects();
     void Exit();
 }
+
+public interface IFearEffect
+{
+    void Activate();
+    void Deactivate();
+}

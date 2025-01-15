@@ -15,4 +15,3 @@ public static class AnxietyBehaviorFactory
         return new FaintBehavior();
     }
 }
-
