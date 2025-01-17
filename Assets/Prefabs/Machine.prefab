@@ -1264,11 +1264,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7601634890967749561}
   - component: {fileID: 4062520734321915679}
+  - component: {fileID: 3505779425706273977}
+  - component: {fileID: 4366536721842437855}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
   - component: {fileID: 2828769371758908747}
-  - component: {fileID: 3505779425706273977}
-  - component: {fileID: 4366536721842437855}
   - component: {fileID: 9124101608833822746}
   m_Layer: 11
   m_Name: Machine
@@ -1319,18 +1319,82 @@ MonoBehaviour:
   maxInvestigationTimeAfterLoseSight: 8
   attackDuration: 12
   attackSpeedMultiplier: 8
-  enableConsoleDebug: 1
-  patrolDebug: 0
-  debugPatrolPoint: 0
-  investigateDebug: 0
-  chaseDebug: 0
-  soundManager: {fileID: 4366536721842437855}
+  sound: {fileID: 4366536721842437855}
   sightTarget: {fileID: 3243088900989205589}
   headRotationSpeed: 0.2
   stopPoints: 3
   stopDuration: 1
   maxOffsetDistance: 3
   overloadTimer: 9
+--- !u!114 &3505779425706273977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c342a3d4cd93047a29af4adcad859c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  detectionIncreaseRate: 3
+  detectionDecreaseRate: 30
+  detectionThreshold: 1
+  distanceEffectMultiplier:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 10
+      value: 0.5
+      inSlope: -0.09
+      outSlope: -0.09
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  debugFOV: 1
+  fovColor: {r: 1, g: 0.88550186, b: 0, a: 1}
+  detectionColor: {r: 1, g: 0, b: 0, a: 1}
+  debugRays: 1
+  rayHitColor: {r: 0, g: 1, b: 0, a: 1}
+  rayMissColor: {r: 1, g: 0, b: 0, a: 1}
+  lightComponent: {fileID: 3129667736519373146}
+  mEnemy: {fileID: 4062520734321915679}
+--- !u!114 &4366536721842437855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef26de0bc5f1eba4ebb89e6996ceb16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateSource: {fileID: 8927008254040613029}
+  footStepClips: []
+  patrolStateSound: {fileID: 8300000, guid: df17519ca2a6c7a43adc12f38e6d8213, type: 3}
+  investigateStateSound: {fileID: 8300000, guid: ea2a1aee373e97c498485b458f5a71ef, type: 3}
+  attackStateSound: {fileID: 8300000, guid: 296f3855d6d9f5747b00e9f1098f3b98, type: 3}
+  targetLostSound: {fileID: 8300000, guid: b16ed96a8e0179c49aaaec625cc2de27, type: 3}
+  overload: {fileID: 8300000, guid: f3179ba3ac1bf1c42a6e5551f3207742, type: 3}
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1407,81 +1471,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!114 &3505779425706273977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c342a3d4cd93047a29af4adcad859c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  detectionIncreaseRate: 3
-  detectionDecreaseRate: 30
-  detectionThreshold: 1
-  distanceEffectMultiplier:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 10
-      value: 0.5
-      inSlope: -0.09
-      outSlope: -0.09
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  debugFOV: 1
-  fovColor: {r: 1, g: 0.88550186, b: 0, a: 1}
-  detectionColor: {r: 1, g: 0, b: 0, a: 1}
-  debugRays: 1
-  rayHitColor: {r: 0, g: 1, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 0, b: 0, a: 1}
-  lightComponent: {fileID: 3129667736519373146}
-  mEnemy: {fileID: 4062520734321915679}
---- !u!114 &4366536721842437855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef26de0bc5f1eba4ebb89e6996ceb16e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  footStepLeftSource: {fileID: 953603809070717540}
-  footStepRightSource: {fileID: 1813089319293354628}
-  detectionSource: {fileID: 0}
-  stateSource: {fileID: 8927008254040613029}
-  footStepClip: {fileID: 8300000, guid: 37cdbcb02c3324849ac457dfc5b1058e, type: 3}
-  lightDetectionWhiteClip: {fileID: 0}
-  lightDetectionYellowClip: {fileID: 0}
-  lightDetectionRedClip: {fileID: 0}
-  patrolStateSound: {fileID: 8300000, guid: df17519ca2a6c7a43adc12f38e6d8213, type: 3}
-  investigateStateSound: {fileID: 8300000, guid: ea2a1aee373e97c498485b458f5a71ef, type: 3}
-  attackStateSound: {fileID: 8300000, guid: 296f3855d6d9f5747b00e9f1098f3b98, type: 3}
-  targetLostSound: {fileID: 8300000, guid: b16ed96a8e0179c49aaaec625cc2de27, type: 3}
-  overload: {fileID: 8300000, guid: f3179ba3ac1bf1c42a6e5551f3207742, type: 3}
 --- !u!136 &9124101608833822746
 CapsuleCollider:
   m_ObjectHideFlags: 0

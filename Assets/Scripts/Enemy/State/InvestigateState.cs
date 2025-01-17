@@ -17,7 +17,7 @@ public class InvestigateState : IEnemyState
     public void EnterState(EnemyBase enemy)
     {
         _enemyBase = enemy;
-        enemy.soundManager.PlayInvestigateSound();
+        enemy.sound.PlayInvestigateSound();
         enemy.SetStateChangeLock(true);
         if (NavMesh.SamplePosition(_lastKnownPosition, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
         {

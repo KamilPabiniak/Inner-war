@@ -15,7 +15,7 @@ public class PatrolState : IEnemyState
 
     public void EnterState(EnemyBase enemy)
     {
-        enemy.soundManager.PlayPatrolSound();
+        enemy.sound.PlayPatrolSound();
         enemy.navMeshAgent.isStopped = false;
         SetNewPatrolPoint(enemy);
     }

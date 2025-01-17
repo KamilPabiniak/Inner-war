@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-7593343036394811911
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LowPass
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: ba9ac2a7d09b59b448605b4a0b24af49
+  m_Children: []
+  m_Volume: 770bdb2c6d4bf06409a715b50f09adcf
+  m_Pitch: 4fd23ff1bb7b6eb458f88dc9af9179cd
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 4996781438889626124}
+  - {fileID: 9056509749768255390}
+  - {fileID: 3331301203209814068}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &-5079371516273337262
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -29,12 +50,15 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 133fb38214db3534e80989b505a06412
+    name: Cutoff freq
   m_AudioMixerGroupViews:
   - guids:
     - 68a35ffb8333e9c4f8b89cadcce10217
     - f7887b6f90435dc4ba3647510b819ab5
     - c2def3f3e75a443458c2f3cd1ca2725a
+    - ba9ac2a7d09b59b448605b4a0b24af49
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -82,8 +106,51 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 51c2862cf378bd346a28533fa9f095d8
-  m_FloatValues: {}
+  m_FloatValues:
+    133fb38214db3534e80989b505a06412: 22000
   m_TransitionOverrides: {}
+--- !u!244 &1739164607168692074
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 9606d45843e7d9c4188403befbeff8c3
+  m_EffectName: Send
+  m_MixLevel: 42b9bd64107f7b94f9c3f721bdd7d99f
+  m_Parameters: []
+  m_SendTarget: {fileID: 3331301203209814068}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &3331301203209814068
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 5fd3267a728941c469bc9a72c3d99713
+  m_EffectName: Receive
+  m_MixLevel: 08c5dadd094bd044380d8ce80ee4e7c9
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &4996781438889626124
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: acfbdc08944862446be74c96647be38b
+  m_EffectName: Attenuation
+  m_MixLevel: d24349f81972a8d4d8cfd171b58a1002
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &7018945476497831721
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -93,7 +160,8 @@ AudioMixerGroupController:
   m_Name: SFX
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: f7887b6f90435dc4ba3647510b819ab5
-  m_Children: []
+  m_Children:
+  - {fileID: -7593343036394811911}
   m_Volume: 0ccc976a0cf72684fadc08965d76a562
   m_Pitch: 1d6f4b2b241d74f4b983d824ae2180c6
   m_Send: 00000000000000000000000000000000
@@ -118,10 +186,29 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 9205315377511709792}
+  - {fileID: 1739164607168692074}
   m_UserColorIndex: 4
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &9056509749768255390
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 24c4826ff38f10f4b80c68839c0d6feb
+  m_EffectName: Lowpass
+  m_MixLevel: e6868e273399fd247a186069d6643977
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: 133fb38214db3534e80989b505a06412
+  - m_ParameterName: Resonance
+    m_GUID: 0bdb952d89116ce4fbccb7e9673bf54f
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &9205315377511709792
 AudioMixerEffectController:
   m_ObjectHideFlags: 3

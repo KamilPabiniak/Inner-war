@@ -21,7 +21,7 @@ public class AttackState : IEnemyState
         {
             _machineEnemy = machineEnemy;
         }
-        enemy.soundManager.PlayAttackSound();
+        enemy.sound.PlayAttackSound();
         enemy.SetStateChangeLock(true); 
         _target = enemy.Target;
         _enemyBase = enemy;
@@ -51,7 +51,7 @@ public class AttackState : IEnemyState
             _lostSightTimer += Time.deltaTime;
             if (_lostSightTimer >= enemy.maxInvestigationTimeAfterLoseSight / 2)
             {
-                enemy.soundManager.PlayTargetLostSound();
+                enemy.sound.PlayTargetLostSound();
                 enemy.ChangeState(new PatrolState());
                 return;
             }
@@ -93,7 +93,7 @@ public class AttackState : IEnemyState
         
         _attackTimer -= Time.deltaTime;
         if (!(_attackTimer <= 0f)) return;
-        enemy.soundManager.PlayOverloadSound();
+        enemy.sound.PlayOverloadSound();
         enemy.navMeshAgent.isStopped = true; 
         _isOverloading = true;
     }

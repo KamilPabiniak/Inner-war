@@ -18,9 +18,14 @@ public static class SceneShelfCreator
 
     private static string FormatShelfName(string name)
     {
-        int dashCount = Mathf.Clamp((MaxNameLength - name.Length) / 2, 3, MaxNameLength / 2);
-        string dashes = new string('-', dashCount);
-        return $"{dashes}{name}{dashes}";
+        int totalLength = MaxNameLength;
+        int dashCount = Mathf.Max(0, totalLength - name.Length);
+        int leftDashCount = dashCount / 2;
+        int rightDashCount = dashCount - leftDashCount;
+
+        string leftDashes = new string('-', leftDashCount);
+        string rightDashes = new string('-', rightDashCount);
+        return leftDashes + name + rightDashes;
     }
 
     private static void MonitorNameChange(GameObject obj)

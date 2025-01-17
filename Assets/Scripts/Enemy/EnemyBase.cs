@@ -33,16 +33,10 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("Attack Settings")]
     public float attackDuration = 5f;
     public float attackSpeedMultiplier = 1.5f;
-
-    [AdvancedHeader("Debug Settings", r:180f, g:1f, b: 180f)]
-    [SerializeField] private bool enableConsoleDebug;
-    [SerializeField] private bool patrolDebug;
-    [SerializeField] private bool debugPatrolPoint;
-    [SerializeField] private bool investigateDebug;
-    [SerializeField] private bool chaseDebug;
+  
     
-    [Header("References")]
-    public EnemySoundManager soundManager;
+    [FormerlySerializedAs("soundManager")] [Header("References")]
+    public EnemySound sound;
     
     private void Awake()
     {
