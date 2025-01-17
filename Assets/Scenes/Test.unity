@@ -85081,42 +85081,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4207699200032671085, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+    - {fileID: 2674868457581953589, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1873817845}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
---- !u!82 &1873817843 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-  m_PrefabInstance: {fileID: 1873817842}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1873817844 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-  m_PrefabInstance: {fileID: 1873817842}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1873817845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1873817844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef26de0bc5f1eba4ebb89e6996ceb16e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateSource: {fileID: 1873817843}
-  footStepClips: []
-  patrolStateSound: {fileID: 8300000, guid: df17519ca2a6c7a43adc12f38e6d8213, type: 3}
-  investigateStateSound: {fileID: 8300000, guid: ea2a1aee373e97c498485b458f5a71ef, type: 3}
-  attackStateSound: {fileID: 8300000, guid: 296f3855d6d9f5747b00e9f1098f3b98, type: 3}
-  targetLostSound: {fileID: 8300000, guid: b16ed96a8e0179c49aaaec625cc2de27, type: 3}
-  overload: {fileID: 8300000, guid: f3179ba3ac1bf1c42a6e5551f3207742, type: 3}
 --- !u!4 &1875992955 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6962394373732057701, guid: 11081d81a97344a4d8e2e76ec0fc6e6e, type: 3}
