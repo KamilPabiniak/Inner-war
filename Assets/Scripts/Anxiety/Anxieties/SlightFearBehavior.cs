@@ -3,43 +3,65 @@ using UnityEngine;
 public class SlightFearBehavior : IFearBehavior
 {
     private AnxietyManager _manager;
-    private float _blurTimer;
-    private float _blurEffectDuration;
-    private PostProcessingManager _postProcessingManager;
+    private TimerHandle _blurTimerHandle;
+    private TimerHandle _audioTimerHandle;
 
     public void Enter(AnxietyManager manager)
     {
         _manager = manager;
-        _postProcessingManager = _manager.GetVolume();
-        ResetTimers();
-        Debug.Log("Entering Slight Fear Behavior");
-    }
-
-    public void UpdateEffects()
-    {
-        _blurTimer += Time.deltaTime;
-
-        if (_blurTimer >= _blurEffectDuration)
-        {
-            TriggerBlurEffect();
-            ResetTimers();
-        }
+        Debug.Log("Entering Level 1 Fear Behavior");
+        StartBlurEffect();
+        StartAudioEffect();
     }
 
     public void Exit()
     {
-        Debug.Log("Exiting Slight Fear Behavior");
+        CancelBlurEffect();
+        CancelAudioEffect();
+        Debug.Log("Exiting Level 1 Fear Behavior");
     }
 
-    private void ResetTimers()
+    private void StartBlurEffect()
     {
-        _blurTimer = 0f;
-        _blurEffectDuration = Random.Range(25f, 35f);
+        CancelBlurEffect();
+        float blurDelay = Random.Range(25f, 35f);
+        _blurTimerHandle = TimerManager.Schedule(() =>
+        {
+            _manager.postProcEffect.ApplyEdgeBlur();
+            float blurDuration = Random.Range(10f, 20f);
+            _blurTimerHandle = TimerManager.Schedule(CancelBlurEffect, blurDuration);
+        }, blurDelay);
     }
 
-    private void TriggerBlurEffect()
+    private void CancelBlurEffect()
     {
-        Debug.Log("Triggering blur effect (handled via post-processing)");
-        // Post-processing changes are handled via PostProcessingManager.
+        if (_blurTimerHandle != null)
+        {
+            TimerManager.Cancel(_blurTimerHandle);
+            _blurTimerHandle = null;
+        }
+        _manager.postProcEffect.ResetEffects();
+    }
+
+    private void StartAudioEffect()
+    {
+        CancelAudioEffect();
+        float audioDelay = Random.Range(20f, 40f);
+        _audioTimerHandle = TimerManager.Schedule(() =>
+        {
+            _manager.audioEffect.ApplyAudioMuffle();
+            float audioDuration = Random.Range(15f, 20f);
+            _audioTimerHandle = TimerManager.Schedule(CancelAudioEffect, audioDuration);
+        }, audioDelay);
+    }
+
+    private void CancelAudioEffect()
+    {
+        if (_audioTimerHandle != null)
+        {
+            TimerManager.Cancel(_audioTimerHandle);
+            _audioTimerHandle = null;
+        }
+        _manager.audioEffect.ResetAudioEffects();
     }
 }

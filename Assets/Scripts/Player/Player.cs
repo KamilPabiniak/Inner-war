@@ -21,9 +21,8 @@ using UnityEngine.Serialization;
     }
 
     [Header("References")]
-    public Transform cameraTransform;
     public CharacterController characterController;
-    public Transform CameraTransform => cameraTransform;
+    public Transform cameraTransform;
     public CharacterController CharacterController => characterController;
 
     [Header("Modules")]
@@ -39,14 +38,14 @@ using UnityEngine.Serialization;
     private void Awake()
     {
         modules = GetComponents<PlayerModule>();
-    }
-
-    private void Start()
-    {
         foreach (var module in modules)
         {
             module.Initialize(this);
         }
+    }
+
+    private void Start()
+    {
         Input = GetModule<PlayerInput>();
     }
 

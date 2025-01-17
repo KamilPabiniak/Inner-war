@@ -68,7 +68,7 @@ public class PlayerLook : PlayerModule
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -verticalClamp, verticalClamp);
         
-        Player.CameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0) * leanRotation;
+        Player.cameraTransform.localRotation = Quaternion.Euler(xRotation, 0, 0) * leanRotation;
         Player.CharacterController.transform.Rotate(Vector3.up * mouseX);
     }
 
@@ -85,14 +85,14 @@ public class PlayerLook : PlayerModule
             bobbingOffset = Mathf.Lerp(bobbingOffset, 0, Time.deltaTime * bobbingSpeed);
         }
 
-        Vector3 cameraPosition = Player.CameraTransform.localPosition;
+        Vector3 cameraPosition = Player.cameraTransform.localPosition;
         cameraPosition.y = bobbingOffset;
-        Player.CameraTransform.localPosition = cameraPosition;
+        Player.cameraTransform.localPosition = cameraPosition;
     }
     
     private void HandleClimbingLook()
     {
-        Player.CameraTransform.localRotation = Quaternion.identity;
+        Player.cameraTransform.localRotation = Quaternion.identity;
         xRotation = 0;
     }
 

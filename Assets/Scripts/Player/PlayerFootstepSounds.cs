@@ -5,6 +5,7 @@ public class PlayerFootstepSounds : PlayerModule
 {
     [Header("Audio Settings")]
     public float footstepInterval = 0.5f;
+    public GameObject footstepSource;
 
     [System.Serializable]
     public class SurfaceSounds
@@ -15,7 +16,6 @@ public class PlayerFootstepSounds : PlayerModule
     }
 
     public List<SurfaceSounds> surfaceSoundMappings = new List<SurfaceSounds>();
-    [SerializeField] private AudioSource audioSource;
     private Transform footPosition;
     private PlayerMovement _movement;
     private float nextFootstepTime;
@@ -46,7 +46,7 @@ public class PlayerFootstepSounds : PlayerModule
                 if (surface.footstepSounds.Count > 0)
                 {
                     AudioClip clip = surface.footstepSounds[Random.Range(0, surface.footstepSounds.Count)];
-                    audioSource.PlayOneShot(clip);
+                    SoundFXManager.Instance.PlaySoundFXClip(clip, footstepSource.transform, 1f);
                 }
                 return;
             }

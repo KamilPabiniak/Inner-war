@@ -1,16 +1,20 @@
+using System;
 using UnityEngine;
 
 public class AnxietyManager : MonoBehaviour
 {
-    [Range(0, 100)]
-    private float FearLevel { get; set;}
-    private IFearBehavior _currentBehavior;
-    public PostProcessingManager postProcessingManager;
+    [Range(0, 100)] public float FearLevel { get; private set; }
 
     [SerializeField] private float passiveFearIncreaseInterval = 15f;
     [SerializeField] private float passiveFearIncreaseAmount = 1f;
 
-    private float _passiveTimer;
+    [Header("Effect")]
+    public PostProcessingManager postProcEffect;
+    public AudioEffectsManager audioEffect;
+
+    private float _timer;
+    private IFearBehavior _currentBehavior;
+    private float _lastFearLevelThreshold;
 
     private void Start()
     {
@@ -19,15 +23,13 @@ public class AnxietyManager : MonoBehaviour
 
     private void Update()
     {
-        _passiveTimer += Time.deltaTime;
-
-        if (_passiveTimer >= passiveFearIncreaseInterval)
+        // Pasive fear increase over time
+        _timer += Time.deltaTime;
+        if (_timer >= passiveFearIncreaseInterval)
         {
             IncreaseFear(passiveFearIncreaseAmount);
-            _passiveTimer = 0f;
+            _timer = 0f;
         }
-
-        _currentBehavior?.UpdateEffects();
     }
 
     public void IncreaseFear(float amount)
@@ -42,21 +44,23 @@ public class AnxietyManager : MonoBehaviour
         UpdateBehavior();
     }
 
-    private void UpdateBehavior()
+    private void UpdateBehavior(bool forceUpdate = false)
     {
-        IFearBehavior newBehavior = AnxietyBehaviorFactory.GetBehavior(FearLevel);
-        
-        if (_currentBehavior?.GetType() != newBehavior?.GetType())
+        float newThreshold = AnxietyBehaviorFactory.GetThreshold(FearLevel);
+
+        if (forceUpdate || newThreshold != _lastFearLevelThreshold)
         {
-            _currentBehavior?.Exit();
-            _currentBehavior = newBehavior; 
-            _currentBehavior.Enter(this); 
+            IFearBehavior newBehavior = AnxietyBehaviorFactory.GetBehavior(newThreshold);
+            postProcEffect.UpdatePostProcessingProfile(FearLevel);
+
+            if (_currentBehavior != newBehavior)
+            {
+                _currentBehavior?.Exit();
+                _currentBehavior = newBehavior;
+                _currentBehavior?.Enter(this);
+            }
+
+            _lastFearLevelThreshold = newThreshold;
         }
-        
-        postProcessingManager.UpdatePostProcessingProfile(FearLevel);
     }
-
-
-
-    public PostProcessingManager GetVolume() => postProcessingManager;
 }

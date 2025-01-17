@@ -3,9 +3,9 @@ using UnityEngine.Serialization;
 
 public class EnemySound : MonoBehaviour
 {
-    [Header("Audio Sources")]
-    [SerializeField] private AudioSource stateSource;
-    
+    [Header("Audio References")]
+    [SerializeField] private GameObject audioSources;
+
     [Header("Audio Clips - Footsteps")]
     [SerializeField] private AudioClip[] footStepClips;
     
@@ -16,27 +16,15 @@ public class EnemySound : MonoBehaviour
     [SerializeField] private AudioClip targetLostSound;
     [SerializeField] private AudioClip overload;
 
-    private EnemyLight enemyLight;
     private bool footStepPlayed = false;
     
-
-    private void Awake()
-    {
-        enemyLight = GetComponent<EnemyLight>();
-    }
-
-    private void Update()
-    {
-        //HandleLightDetectionSounds();
-    }
-
     public void ResetFootStepFlag() => footStepPlayed = false;
 
     public void PlayFootStepSound()
     {
         if (footStepClips == null || footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
-        SoundFXManager.Instance.PlaySoundFXClip(footStepClips[rand], transform, 1f);
+        SoundFXManager.Instance.PlaySoundFXClip(footStepClips[rand], audioSources.transform, 1f);
         footStepPlayed = true;
     }
     
@@ -51,8 +39,7 @@ public class EnemySound : MonoBehaviour
 
     private void PlayStateSound(AudioClip clip)
     {
-        if (clip == null || stateSource.isPlaying) return;
-        stateSource.clip = clip;
-        stateSource.Play();
+        if (clip == null) return;
+        SoundFXManager.Instance.PlaySoundFXClip(clip, audioSources.transform, 1f);
     }
 }
