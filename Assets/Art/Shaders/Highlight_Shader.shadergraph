@@ -64,9 +64,6 @@
             "m_Id": "66a4c294f86847d28a5f275200050900"
         },
         {
-            "m_Id": "844368d3e2324b53bc830e82e65b1bbc"
-        },
-        {
             "m_Id": "9d722011f9804e488bc4482c91517b0c"
         },
         {
@@ -297,9 +294,6 @@
         "m_Blocks": [
             {
                 "m_Id": "e648dfb92a3c49f087d2a3c3c1b4a5d4"
-            },
-            {
-                "m_Id": "844368d3e2324b53bc830e82e65b1bbc"
             },
             {
                 "m_Id": "9d722011f9804e488bc4482c91517b0c"
@@ -900,21 +894,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "3ba98509c03349ca8c04c422e69e9e00",
-    "m_Id": 0,
-    "m_DisplayName": "Alpha",
-    "m_SlotType": 0,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Alpha",
-    "m_StageCapability": 2,
-    "m_Value": 1.0,
-    "m_DefaultValue": 1.0,
-    "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Texture2DMaterialSlot",
     "m_ObjectId": "420737965a0e4715ba5e18c5d3fd6733",
     "m_Id": 0,
@@ -1276,40 +1255,6 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
-    "m_ObjectId": "844368d3e2324b53bc830e82e65b1bbc",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "SurfaceDescription.Alpha",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 0.0,
-            "height": 0.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "3ba98509c03349ca8c04c422e69e9e00"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_SerializedDescriptor": "SurfaceDescription.Alpha"
 }
 
 {
@@ -2300,7 +2245,7 @@
         "m_Id": "217d586a755141ba861e87562ce2992b"
     },
     "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 1,
+    "m_SurfaceType": 0,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
