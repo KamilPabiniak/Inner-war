@@ -33,7 +33,7 @@ public class PlayerLean : PlayerModule
 
     private void Start()
     {
-        originalPosition = Player.CameraTransform.localPosition;
+        originalPosition = Player.cameraTransform.localPosition;
         targetPosition = originalPosition;
         currentPosition = originalPosition;
     }
@@ -46,7 +46,7 @@ public class PlayerLean : PlayerModule
         currentPosition = Vector3.Lerp(currentPosition, targetPosition, leanSpeed * Time.deltaTime);
         
         playerLook.ApplyLeanRotation(currentRotation);
-        Player.CameraTransform.localPosition = currentPosition;
+        Player.cameraTransform.localPosition = currentPosition;
     }
 
     private void HandleLeanInput()

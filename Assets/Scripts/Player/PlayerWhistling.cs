@@ -9,8 +9,8 @@ public class PlayerWhistling : PlayerModule
     public float whistlingCooldown;
     public float alertCooldownTime = 5f;  
     [Header("References")] 
-    public AudioSource source;
-    public AudioClip whistlingSound;
+    public GameObject source;
+    public AudioClip whistlingSoundClip;
     
     private bool _whistle;
     private bool _whistleTriggered;
@@ -58,7 +58,7 @@ public class PlayerWhistling : PlayerModule
     
     private void Whistle()
     {
-        source.PlayOneShot(whistlingSound);
+        SoundFXManager.Instance.PlaySoundFXClip(whistlingSoundClip, source.transform, 1f);
         var targetsInRange = Physics.OverlapSphereNonAlloc(transform.position, whistlingRange, results, targetMask);
         
         for (int i = 0; i < targetsInRange; i++)
