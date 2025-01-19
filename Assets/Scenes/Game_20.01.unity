@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.103773594, g: 0.019090427, b: 0.019090427, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 1
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.35177112, g: 0.38838267, b: 0.4811321, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 01a65cffd361a9842b13d14348c7f924, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -1080,8 +1080,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Color: {r: 0.9245283, g: 0.8852795, b: 0.8852795, a: 1}
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2818,14 +2818,16 @@ MonoBehaviour:
   detectionProgress: 0
   seeTarget: 0
   canKill: 0
+  killRadius: 1.4
   canMove: 0
+  sound: {fileID: 0}
+  collider: {fileID: 0}
   patrolRange: 5
   minPatrolPointDistance: 2
   waitTimeAtPatrolPoint: 2
   maxInvestigationTimeAfterLoseSight: 5
   attackDuration: 5
   attackSpeedMultiplier: 1.5
-  sound: {fileID: 0}
 --- !u!114 &1051031199
 MonoBehaviour:
   m_ObjectHideFlags: 0
