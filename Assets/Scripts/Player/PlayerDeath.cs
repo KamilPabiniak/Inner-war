@@ -8,34 +8,25 @@ public class PlayerDeath : PlayerModule
     public Transform checkpoint;
     private Vector3 backupPos;
     private bool isDead;
-
     private void Start()
     {
         backupPos = transform.position;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        CheckIfIsRespawnedProperly();
+        EnsureCorrectPositionAfterDeath();
     }
     
-    private void CheckIfIsRespawnedProperly()
+    private void EnsureCorrectPositionAfterDeath()
     {
         if (!isDead) return;
 
-        if (checkpoint == null)
+        Vector3 targetPosition = checkpoint != null ? checkpoint.position : backupPos;
+
+        if (transform.position != targetPosition)
         {
-            if (transform.position != backupPos)
-            {
-                transform.position = backupPos;
-            }
-        }
-        else
-        {
-            if (transform.position != checkpoint.position)
-            {
-                transform.position = checkpoint.position;
-            }
+            transform.position = targetPosition;
         }
     }
     
@@ -44,32 +35,25 @@ public class PlayerDeath : PlayerModule
     public void Kill()
     {
         if (isDead) return;
-        isDead = true;
-        StartCoroutine(DeathState());
+        isDead = true; 
+        GameEvents.OnPlayerDied?.Invoke();
+        StartCoroutine(HandleDeathState());
     }
 
-    private IEnumerator DeathState()
+    private IEnumerator HandleDeathState()
     {
         Player.ToggleInput();
-        var loadOperation = SceneManager.LoadSceneAsync(sceneBuildIndex:1 , LoadSceneMode.Additive);
-        yield return new WaitUntil(() => loadOperation.isDone);
-        
         Respawn();
         yield return new WaitForSeconds(3f);
-        
-        var unloadOperation = SceneManager.UnloadSceneAsync(sceneBuildIndex: 1);
-        yield return new WaitUntil(() => unloadOperation.isDone);
+
         Player.ToggleInput();
         isDead = false;
+        GameEvents.OnPlayerRespawned?.Invoke();
     }
     
     private void Respawn()
     {
-        if (checkpoint == null)
-        {
-            transform.position = backupPos;
-            return;
-        }
-        transform.position = checkpoint.position;
+        Vector3 targetPosition = checkpoint != null ? checkpoint.position : backupPos;
+        transform.position = targetPosition;
     }
 }

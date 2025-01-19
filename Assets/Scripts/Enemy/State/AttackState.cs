@@ -30,6 +30,7 @@ public class AttackState : IEnemyState
         _originalSpeed = enemy.navMeshAgent.speed;
         enemy.navMeshAgent.speed *= enemy.attackSpeedMultiplier;
         _overloadTimer = _machineEnemy.overloadTimer;
+        enemy.OnPlayerKilled += HandlePlayerKilled;
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -74,22 +75,6 @@ public class AttackState : IEnemyState
         {
             enemy.navMeshAgent.SetDestination(_target.position);
         }
-
-        if (Vector3.Distance(_target.position, enemy.transform.position) <= enemy.navMeshAgent.stoppingDistance)
-        {
-            if (enemy.canKill)
-            {
-                PlayerDeath playerDeath = _target.GetComponent<PlayerDeath>();
-                if (playerDeath != null)
-                {
-                    playerDeath.Kill();
-                }
-            }
-
-            enemy.ChangeState(new PatrolState());
-            return;
-        }
-        
         
         _attackTimer -= Time.deltaTime;
         if (!(_attackTimer <= 0f)) return;
@@ -103,5 +88,12 @@ public class AttackState : IEnemyState
         enemy.SetStateChangeLock(false); 
         _enemyBase.ClearTarget();
         enemy.navMeshAgent.speed = _originalSpeed;
+        enemy.OnPlayerKilled -= HandlePlayerKilled;
+    }
+    
+    
+    private void HandlePlayerKilled()
+    {
+        _enemyBase.ChangeState(new PatrolState());
     }
 }

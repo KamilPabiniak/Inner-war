@@ -6,6 +6,7 @@ public abstract class EnemyBase : MonoBehaviour
 {
     private IEnemyState currentState;
     public IEnemyState CurrentState => currentState;
+    public event System.Action OnPlayerKilled;
     
     [Header("General Settings")]
     public NavMeshAgent navMeshAgent;
@@ -14,9 +15,15 @@ public abstract class EnemyBase : MonoBehaviour
     public float detectionProgress;
     public bool seeTarget;
     public bool canKill;
+    public float killRadius = 1.4f;
     public bool canMove;
     public bool CanChangeState { get; private set; } = true;
     private bool _isChangingState;
+    
+    [Header("References")]
+    public EnemySound sound;
+
+    public CapsuleCollider collider;
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;
@@ -35,12 +42,10 @@ public abstract class EnemyBase : MonoBehaviour
     public float attackSpeedMultiplier = 1.5f;
   
     
-    [FormerlySerializedAs("soundManager")] [Header("References")]
-    public EnemySound sound;
-    
     private void Awake()
     {
         EnemyPatrolM.RegisterEnemy(this);
+        collider.radius = killRadius;
     }
 
     private void OnDestroy()
@@ -87,6 +92,26 @@ public abstract class EnemyBase : MonoBehaviour
     public void ClearTarget()
     {
         Target = null;
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!canKill) return;
+        if (other.CompareTag("Player"))
+        {
+            AttemptKill(other);
+        }
+    }
+
+    private void AttemptKill(Collider target)
+    {
+        PlayerDeath playerDeath = target.GetComponent<PlayerDeath>();
+        if (playerDeath != null)
+        {
+            playerDeath.Kill();
+            Debug.Log($"[{name}] Gracz został zabity.");
+            OnPlayerKilled?.Invoke();
+        }
     }
 
     public void OnAlertReceived(Vector3 alertPosition)
