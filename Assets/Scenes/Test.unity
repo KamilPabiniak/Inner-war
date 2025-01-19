@@ -716,7 +716,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
-  - {fileID: 2100000, guid: 7aba7ac177048b2449e2805939676a8e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -64386,7 +64385,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
-  - {fileID: 2100000, guid: e0af6fd533692d44cb4b42e8488e756c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114085,8 +114083,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd1f1441fb6ccd45a1283923dffa91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  passiveFearIncreaseInterval: 4
-  passiveFearIncreaseAmount: 20
+  passiveFearIncreaseInterval: 15
+  passiveFearIncreaseAmount: 1
   postProcEffect: {fileID: 326914331}
   audioEffect: {fileID: 1187514810}
 --- !u!65 &1382245675363125605
@@ -158728,7 +158726,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2738562365221515070}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c14981f37003c14bbe2cf0defa4cd3d, type: 3}
   m_Name: 
