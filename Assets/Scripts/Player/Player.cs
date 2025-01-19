@@ -1,5 +1,5 @@
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(CharacterController))]
  public class Player : MonoBehaviour
@@ -62,33 +62,25 @@ using UnityEngine.Serialization;
 
     public T GetModule<T>() where T : PlayerModule
     {
-        foreach (var module in modules)
-        {
-            if (module is T foundModule)
-            {
-                return foundModule;
-            }
-        }
-        return null;
+        T module = modules.OfType<T>().FirstOrDefault();
+        if (module == null)
+            Debug.LogError($"Module of type {typeof(T).Name} not found!");
+        return module;
     }
 
     private void ApplyGround()
     {
+        if (!GravityEnabled) return;
+
         if (!characterController.isGrounded)
         {
             _verticalVelocity -= gravity * Time.deltaTime;
         }
-        else if (_verticalVelocity < 0)
+        else
         {
-            _verticalVelocity = 0f;
+            _verticalVelocity = Mathf.Max(_verticalVelocity, 0f);
         }
 
-        if (!GravityEnabled) return;
-        Gravity();
-    }
-
-    private void Gravity()
-    {
         Vector3 gravityMovement = Vector3.up * (_verticalVelocity * Time.deltaTime);
         characterController.Move(gravityMovement);
     }

@@ -70,7 +70,8 @@ public class PlayerMovement : PlayerModule
         if (!Player.characterController.enabled) return;
 
         Vector3 climbDirection = Vector3.up * (moveInput.y * climbSpeed);
-        Vector3 fixedHorizontalPosition = new Vector3(transform.position.x, Player.characterController.transform.position.y, transform.position.z);
+        Vector3 fixedHorizontalPosition = transform.position;
+        fixedHorizontalPosition.y = Player.characterController.transform.position.y;
         Player.characterController.transform.position = fixedHorizontalPosition;
 
         Player.characterController.Move(climbDirection * Time.deltaTime);

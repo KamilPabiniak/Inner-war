@@ -25,11 +25,9 @@ public class PlayerParkour : PlayerModule
 
     private void Update()
     {
-        if (!_isClimbing && _inputHandler.IsVaultPressed)
-        {
-            TryVault();
-            _inputHandler.ResetVaultRequest();
-        }
+        if (_isClimbing || !_inputHandler.IsVaultPressed) return;
+        TryVault();
+        _inputHandler.ResetVaultRequest();
     }
 
     /// <summary>

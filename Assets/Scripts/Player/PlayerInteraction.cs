@@ -17,7 +17,7 @@ public class PlayerInteraction : PlayerModule
         _input = GetComponent<PlayerInput>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         HandleInteraction();
     }

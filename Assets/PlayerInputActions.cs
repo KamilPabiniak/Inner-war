@@ -98,6 +98,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CheatSheet"",
+                    ""type"": ""Button"",
+                    ""id"": ""e872fc4a-9460-42af-ac72-4fa55c96cdc8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Whistling"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4e7c5259-a5a5-4939-9b08-081eee98c01e"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CheatSheet"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,6 +268,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_LeanLeft = m_Player.FindAction("LeanLeft", throwIfNotFound: true);
         m_Player_LeanRight = m_Player.FindAction("LeanRight", throwIfNotFound: true);
         m_Player_Whistling = m_Player.FindAction("Whistling", throwIfNotFound: true);
+        m_Player_CheatSheet = m_Player.FindAction("CheatSheet", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -322,6 +343,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LeanLeft;
     private readonly InputAction m_Player_LeanRight;
     private readonly InputAction m_Player_Whistling;
+    private readonly InputAction m_Player_CheatSheet;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -334,6 +356,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @LeanLeft => m_Wrapper.m_Player_LeanLeft;
         public InputAction @LeanRight => m_Wrapper.m_Player_LeanRight;
         public InputAction @Whistling => m_Wrapper.m_Player_Whistling;
+        public InputAction @CheatSheet => m_Wrapper.m_Player_CheatSheet;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -367,6 +390,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Whistling.started += instance.OnWhistling;
             @Whistling.performed += instance.OnWhistling;
             @Whistling.canceled += instance.OnWhistling;
+            @CheatSheet.started += instance.OnCheatSheet;
+            @CheatSheet.performed += instance.OnCheatSheet;
+            @CheatSheet.canceled += instance.OnCheatSheet;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -395,6 +421,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Whistling.started -= instance.OnWhistling;
             @Whistling.performed -= instance.OnWhistling;
             @Whistling.canceled -= instance.OnWhistling;
+            @CheatSheet.started -= instance.OnCheatSheet;
+            @CheatSheet.performed -= instance.OnCheatSheet;
+            @CheatSheet.canceled -= instance.OnCheatSheet;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -422,5 +451,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLeanLeft(InputAction.CallbackContext context);
         void OnLeanRight(InputAction.CallbackContext context);
         void OnWhistling(InputAction.CallbackContext context);
+        void OnCheatSheet(InputAction.CallbackContext context);
     }
 }

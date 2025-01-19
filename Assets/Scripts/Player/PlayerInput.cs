@@ -14,6 +14,7 @@ public class PlayerInput : PlayerModule
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }
     public bool IsWhistlePressed { get; private set; }
+    public bool IsEscapePressed { get; private set; }
 
     private void Awake()
     {
@@ -26,52 +27,37 @@ public class PlayerInput : PlayerModule
     private void OnDisable() => inputActions.Player.Disable();
     
     public void ResetVaultRequest() => IsVaultPressed = false;
+    public void ResetEscapePressed() => IsEscapePressed = false;
 
 
-    private class PlayerActions : PlayerInputActions.IPlayerActions
+    private class PlayerActions : IPlayerActions
     {
         private readonly PlayerInput _playerInput;
 
         public PlayerActions(PlayerInput input) => _playerInput = input;
 
-        public void OnMove(InputAction.CallbackContext context)
-        {
-            _playerInput.MoveInput = context.ReadValue<Vector2>();
-        }
+        public void OnMove(InputAction.CallbackContext context) => _playerInput.MoveInput = context.ReadValue<Vector2>();
 
-        public void OnLook(InputAction.CallbackContext context)
-        {
-            _playerInput.LookInput = context.ReadValue<Vector2>();
-        }
+        public void OnLook(InputAction.CallbackContext context) => _playerInput.LookInput = context.ReadValue<Vector2>();
 
-        public void OnVault(InputAction.CallbackContext context)
-        {
-            _playerInput.IsVaultPressed = context.performed;
-        }
+        public void OnVault(InputAction.CallbackContext context) => _playerInput.IsVaultPressed = context.performed;
 
-        public void OnCrouch(InputAction.CallbackContext context)
-        {
-            _playerInput.IsCrouchPressed = context.performed;
-        }
+        public void OnCrouch(InputAction.CallbackContext context) => _playerInput.IsCrouchPressed = context.performed;
 
-        public void OnInteract(InputAction.CallbackContext context)
-        {
-            _playerInput.IsInteractPressed = context.performed;
-        }
+        public void OnInteract(InputAction.CallbackContext context) => _playerInput.IsInteractPressed = context.performed;
 
-        public void OnLeanLeft(InputAction.CallbackContext context)
-        {
-            _playerInput.IsLeanLeftPressed = context.performed;
-        }
+        public void OnLeanLeft(InputAction.CallbackContext context) => _playerInput.IsLeanLeftPressed = context.performed;
 
-        public void OnLeanRight(InputAction.CallbackContext context)
+        public void OnLeanRight(InputAction.CallbackContext context) => _playerInput.IsLeanRightPressed = context.performed;
+
+        public void OnWhistling(InputAction.CallbackContext context) => _playerInput.IsWhistlePressed = context.performed;
+
+        public void OnCheatSheet(InputAction.CallbackContext context)
         {
-            _playerInput.IsLeanRightPressed = context.performed;
-        }
-        
-        public void OnWhistling(InputAction.CallbackContext context)
-        {
-            _playerInput.IsWhistlePressed = context.performed;
+            if (context.performed) 
+            {
+                _playerInput.IsEscapePressed = true;
+            }
         }
     }
 }
