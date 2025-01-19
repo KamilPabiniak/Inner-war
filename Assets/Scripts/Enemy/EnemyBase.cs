@@ -109,7 +109,6 @@ public abstract class EnemyBase : MonoBehaviour
         if (playerDeath != null)
         {
             playerDeath.Kill();
-            Debug.Log($"[{name}] Gracz został zabity.");
             OnPlayerKilled?.Invoke();
         }
     }
