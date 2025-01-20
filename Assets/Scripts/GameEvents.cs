@@ -2,8 +2,10 @@ using System;
 
 public static class GameEvents
 {
-    public static Action OnTogglePanel;
+    //CheatSheet
+    public static Action onTogglePanel;
     
-    public static Action OnPlayerDied;
-    public static Action OnPlayerRespawned;
+    //Death
+    public static Action onPlayerDied;
+    public static Action onPlayerRespawned;
 }

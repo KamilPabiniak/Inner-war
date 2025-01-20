@@ -1,7 +1,4 @@
-using System;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class EnemyLight : MonoBehaviour
 {
@@ -108,7 +105,6 @@ public class EnemyLight : MonoBehaviour
                     mEnemy.ChangeState(new InvestigateState(_target.transform.position));
                     mEnemy.seeTarget = true;
                     mEnemy.SetTarget(_target);
-                    Debug.LogWarning($"[{mEnemy.name}] Rozpoczêto badanie pozycji celu: {_target.position}");
                 }
 
                 break;
@@ -119,7 +115,6 @@ public class EnemyLight : MonoBehaviour
                 lightComponent.color = Color.red;
                 mEnemy.SetTarget(_target);
                 mEnemy.ChangeState(new AttackState());
-                Debug.LogError($"[{mEnemy.name}] Cel wykryty w pe³ni! Rozpoczêto atak.");
                 break;
             }
         }

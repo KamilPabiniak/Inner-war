@@ -23,7 +23,7 @@ public abstract class EnemyBase : MonoBehaviour
     [Header("References")]
     public EnemySound sound;
 
-    public CapsuleCollider collider;
+    public new CapsuleCollider collider;
     
     [Header("Patrol Settings")]
     public float patrolRange = 10f;

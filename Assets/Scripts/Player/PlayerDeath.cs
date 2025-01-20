@@ -36,7 +36,7 @@ public class PlayerDeath : PlayerModule
     {
         if (isDead) return;
         isDead = true; 
-        GameEvents.OnPlayerDied?.Invoke();
+        GameEvents.onPlayerDied?.Invoke();
         StartCoroutine(HandleDeathState());
     }
 
@@ -48,7 +48,7 @@ public class PlayerDeath : PlayerModule
 
         Player.ToggleInput();
         isDead = false;
-        GameEvents.OnPlayerRespawned?.Invoke();
+        GameEvents.onPlayerRespawned?.Invoke();
     }
     
     private void Respawn()

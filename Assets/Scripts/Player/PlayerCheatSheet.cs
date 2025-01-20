@@ -14,7 +14,7 @@ public class PlayerCheatSheet : PlayerModule
     {
         if (_input.IsEscapePressed)
         {
-            GameEvents.OnTogglePanel.Invoke();
+            GameEvents.onTogglePanel.Invoke();
             _input.ResetEscapePressed();
         }
     }

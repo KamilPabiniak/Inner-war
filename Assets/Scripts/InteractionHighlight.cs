@@ -10,6 +10,7 @@ public class InteractionHighlight : MonoBehaviour
 
     private Dictionary<GameObject, Coroutine> activeHighlights = new Dictionary<GameObject, Coroutine>();
     private static readonly int RimRange = Shader.PropertyToID("_Rim_Range");
+    private static readonly int RimBlend = Shader.PropertyToID("_Rim_Blend");
 
     private void Update()
     {
@@ -30,7 +31,7 @@ public class InteractionHighlight : MonoBehaviour
                 if (obj.TryGetComponent(out Renderer renderer))
                 {
                     detectedObjects.Add(obj);
-                    if (!activeHighlights.ContainsKey(obj) && renderer.material.HasProperty(RimRange))
+                    if (!activeHighlights.ContainsKey(obj) && renderer.material.HasProperty(RimRange) && renderer.material.HasProperty(RimBlend))
                     {
                         objectsToAdd.Add(obj);
                     }
@@ -42,7 +43,7 @@ public class InteractionHighlight : MonoBehaviour
         {
             if (obj.TryGetComponent(out Renderer renderer))
             {
-                Coroutine highlightCoroutine = StartCoroutine(AnimateRimRange(renderer.material, 1.5f));
+                Coroutine highlightCoroutine = StartCoroutine(AnimateRimEffects(renderer.material, 1.5f, 0.5f));
                 activeHighlights[obj] = highlightCoroutine;
             }
         }
@@ -62,7 +63,7 @@ public class InteractionHighlight : MonoBehaviour
 
             if (obj.TryGetComponent(out Renderer renderer))
             {
-                ResetRimRange(renderer.material);
+                ResetRimEffects(renderer.material);
             }
         }
     }
@@ -79,33 +80,44 @@ public class InteractionHighlight : MonoBehaviour
         return false;
     }
 
-    private IEnumerator AnimateRimRange(Material material, float targetValue)
+    private IEnumerator AnimateRimEffects(Material material, float targetRimRange, float targetRimBlend)
     {
         float rimRange = material.GetFloat(RimRange);
+        float rimBlend = material.GetFloat(RimBlend);
         bool increasing = true;
 
         while (true)
         {
             rimRange = increasing
-                ? Mathf.MoveTowards(rimRange, targetValue, Time.deltaTime)
+                ? Mathf.MoveTowards(rimRange, targetRimRange, Time.deltaTime)
                 : Mathf.MoveTowards(rimRange, 0, Time.deltaTime);
 
-            material.SetFloat(RimRange, rimRange);
+            rimBlend = increasing
+                ? Mathf.MoveTowards(rimBlend, targetRimBlend, Time.deltaTime)
+                : Mathf.MoveTowards(rimBlend, 0, Time.deltaTime);
 
-            if (increasing && Mathf.Approximately(rimRange, targetValue))
+            material.SetFloat(RimRange, rimRange);
+            material.SetFloat(RimBlend, rimBlend);
+
+            if (increasing && Mathf.Approximately(rimRange, targetRimRange) && Mathf.Approximately(rimBlend, targetRimBlend))
                 increasing = false;
-            else if (!increasing && Mathf.Approximately(rimRange, 0))
+            else if (!increasing && Mathf.Approximately(rimRange, 0) && Mathf.Approximately(rimBlend, 0))
                 increasing = true;
 
             yield return null;
         }
     }
 
-    private void ResetRimRange(Material material)
+    private void ResetRimEffects(Material material)
     {
         if (material.HasProperty(RimRange))
         {
             material.SetFloat(RimRange, 0);
+        }
+
+        if (material.HasProperty(RimBlend))
+        {
+            material.SetFloat(RimBlend, 0);
         }
     }
 

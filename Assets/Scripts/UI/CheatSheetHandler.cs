@@ -6,12 +6,12 @@ public class CheatSheetHandler : MonoBehaviour
     
         private void OnEnable()
         {
-            GameEvents.OnTogglePanel += TogglePanel;
+            GameEvents.onTogglePanel += TogglePanel;
         }
     
         private void OnDisable()
         {
-            GameEvents.OnTogglePanel -= TogglePanel;
+            GameEvents.onTogglePanel -= TogglePanel;
         }
 
         private void TogglePanel()
