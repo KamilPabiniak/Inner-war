@@ -1213,6 +1213,7 @@ Transform:
   - {fileID: 918457222}
   - {fileID: 1324807685}
   - {fileID: 2029520314}
+  - {fileID: 786901020}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &419822785
@@ -1725,12 +1726,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -1895,6 +1900,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &786901019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 786901020}
+  - component: {fileID: 786901021}
+  m_Layer: 0
+  m_Name: Blockade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &786901020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786901019}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.25, y: 0, z: 14.73}
+  m_LocalScale: {x: 1, y: 1, z: 0.47505}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 417546781}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &786901021
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786901019}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 5, y: 0.5, z: 10}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &788317718
 GameObject:
   m_ObjectHideFlags: 0
@@ -2343,12 +2396,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 4
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -2742,12 +2799,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -35232,12 +35293,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 4
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -36014,12 +36079,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 4
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -36197,12 +36266,16 @@ PrefabInstance:
       value: 1.0018845
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: killRadius
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: waitTimeAtPatrolPoint
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: minPatrolPointDistance
-      value: 4
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: audioSources
@@ -36749,7 +36822,7 @@ GameObject:
   - component: {fileID: 2029520314}
   - component: {fileID: 2029520315}
   m_Layer: 0
-  m_Name: d
+  m_Name: Blockade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36875,7 +36948,7 @@ MonoBehaviour:
   m_SerializedVersion: 0
   m_AgentTypeID: 0
   m_CollectObjects: 1
-  m_Size: {x: 20, y: 10, z: 24}
+  m_Size: {x: 20, y: 1, z: 24}
   m_Center: {x: 0, y: 0, z: 6.1}
   m_LayerMask:
     serializedVersion: 2
@@ -37156,7 +37229,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.74
+      value: 1.93
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.y
@@ -37164,11 +37237,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -91.74
+      value: -96.33
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.965926
+      value: 0.9238796
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.x
@@ -37176,7 +37249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.2588186
+      value: 0.38268322
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.z
@@ -37188,7 +37261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -30
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
