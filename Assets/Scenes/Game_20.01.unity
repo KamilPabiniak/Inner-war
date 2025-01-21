@@ -1448,7 +1448,7 @@ GameObject:
   - component: {fileID: 486656582}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: Bomb
+  m_TagString: Ladder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37241,9 +37241,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6640203587097879996, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6640203587097879996, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: interactableTags.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6640203587097879996, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: 'interactableTags.Array.data[2]'
+      value: Bomb
+      objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.93
+      value: -7.2
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.y
@@ -37251,7 +37263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -96.33
+      value: -32.1
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w
