@@ -1445,6 +1445,7 @@ GameObject:
   - component: {fileID: 486656578}
   - component: {fileID: 486656577}
   - component: {fileID: 486656581}
+  - component: {fileID: 486656582}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Bomb
@@ -1496,7 +1497,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
+  - {fileID: 2100000, guid: 6ca2df09f59fd3947925130fd83a0ed1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1553,6 +1554,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede3222067d004d4fb5e85fab03357f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &486656582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486656576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9dd8d12ce25f945831bdecb0ef8213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newShaderMaterial: {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
 --- !u!1 &499250275
 GameObject:
   m_ObjectHideFlags: 0
