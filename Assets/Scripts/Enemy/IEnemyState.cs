@@ -1,3 +1,5 @@
+using Enemy;
+
 public interface IEnemyState
 {
     void EnterState(EnemyBase enemy);

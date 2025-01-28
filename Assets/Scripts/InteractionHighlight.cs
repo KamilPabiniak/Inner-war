@@ -29,7 +29,7 @@ public class InteractionHighlight : MonoBehaviour
 
             if (isInteractable)
             {
-                Debug.Log("is Interactable");
+                //Debug.Log("is Interactable");
 
                 if (obj.TryGetComponent(out Renderer renderer))
                 {

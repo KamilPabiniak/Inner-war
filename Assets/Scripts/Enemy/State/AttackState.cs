@@ -1,3 +1,5 @@
+using Enemy;
+using Enemy.Type;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,11 +9,9 @@ public class AttackState : IEnemyState
     private float _attackDuration;
     private float _attackTimer;
     private float _originalSpeed;
-    private Transform _target;
     
     //Machine specific
     private MachineEnemy _machineEnemy;
-    private float _overloadTimer; 
     private bool _isOverloading = false;
     private float _lostSightTimer;
 
@@ -21,16 +21,19 @@ public class AttackState : IEnemyState
         {
             _machineEnemy = machineEnemy;
         }
+        
+        _enemyBase = enemy;
         enemy.sound.PlayAttackSound();
         enemy.SetStateChangeLock(true); 
-        _target = enemy.Target;
-        _enemyBase = enemy;
+        
         _attackDuration = enemy.attackDuration; 
         _attackTimer = _attackDuration;
-        _originalSpeed = enemy.navMeshAgent.speed;
-        enemy.navMeshAgent.speed *= enemy.attackSpeedMultiplier;
-        _overloadTimer = _machineEnemy.overloadTimer;
-        enemy.OnPlayerKilled += HandlePlayerKilled;
+        
+        var speed = enemy.navMeshAgent.speed;
+        _originalSpeed = speed;
+        speed *= enemy.attackSpeedMultiplier;
+        enemy.navMeshAgent.speed = speed;
+        GameEvents.onPlayerKilled += HandlePlayerKilled;
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -46,9 +49,8 @@ public class AttackState : IEnemyState
             return;
         }
         
-        if (_target == null)
+        if (enemy.Target == null)
         {
-            Debug.LogWarning(_target);
             _lostSightTimer += Time.deltaTime;
             if (_lostSightTimer >= enemy.maxInvestigationTimeAfterLoseSight / 2)
             {
@@ -63,7 +65,7 @@ public class AttackState : IEnemyState
         }
         
         NavMeshPath path = new NavMeshPath();
-        if (!enemy.navMeshAgent.CalculatePath(_target.position, path) || path.status != NavMeshPathStatus.PathComplete)
+        if (!enemy.navMeshAgent.CalculatePath(enemy.Target.position, path) || path.status != NavMeshPathStatus.PathComplete)
         {
             Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
             enemy.SetStateChangeLock(false); 
@@ -73,7 +75,7 @@ public class AttackState : IEnemyState
     
         if (enemy.canMove)
         {
-            enemy.navMeshAgent.SetDestination(_target.position);
+            enemy.navMeshAgent.SetDestination(enemy.Target.position);
         }
         
         _attackTimer -= Time.deltaTime;
@@ -86,11 +88,9 @@ public class AttackState : IEnemyState
     public void ExitState(EnemyBase enemy)
     {
         enemy.SetStateChangeLock(false); 
-        _enemyBase.ClearTarget();
         enemy.navMeshAgent.speed = _originalSpeed;
-        enemy.OnPlayerKilled -= HandlePlayerKilled;
+        GameEvents.onPlayerKilled -= HandlePlayerKilled;
     }
-    
     
     private void HandlePlayerKilled()
     {

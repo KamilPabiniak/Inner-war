@@ -1683,101 +1683,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2106214211}
     m_Modifications:
-    - target: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: AudioSources
-      objectReference: {fileID: 0}
-    - target: {fileID: 953603809070717540, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -5672090116085560528, guid: 886b5812cd614da4b8377ca689e0afb7, type: 2}
-    - target: {fileID: 953603809070717540, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
-      value: 0.16666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 953603809070717540, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1813089319293354628, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -5672090116085560528, guid: 886b5812cd614da4b8377ca689e0afb7, type: 2}
-    - target: {fileID: 1813089319293354628, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: spreadCustomCurve.m_Curve.Array.data[0].value
-      value: 0.16666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 1813089319293354628, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Lightmapping
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Shadows.m_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3243088900989205589, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: SightTarget
-      objectReference: {fileID: 0}
     - target: {fileID: 3247145216075624242, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Name
       value: Machine (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: detectionIncreaseRate
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: distanceEffectMultiplier.m_Curve.Array.data[0].time
-      value: 1.0999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: distanceEffectMultiplier.m_Curve.Array.data[0].value
-      value: 1.0018845
-      objectReference: {fileID: 0}
-    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: killRadius
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: waitTimeAtPatrolPoint
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: minPatrolPointDistance
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: audioSources
-      value: 
-      objectReference: {fileID: 2104898444}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: footStepClips.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 37cdbcb02c3324849ac457dfc5b1058e, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 8a7a8ee0447e4b5469bce225745d9f42, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[2]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 7e629da20f6fdee418e5e60ba9efc23c, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[3]'
-      value: 
-      objectReference: {fileID: 8300000, guid: a04e8112fb4cca944baabc0048ff839d, type: 3}
-    - target: {fileID: 4525737948322402847, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: Root
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1819,36 +1727,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Speed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: MaxDistance
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: rolloffMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: OutputAudioMixerGroup
-      value: 
-      objectReference: {fileID: -5672090116085560528, guid: 886b5812cd614da4b8377ca689e0afb7, type: 2}
-    - target: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8934268390000059380, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: Rig
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 4207699200032671085, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-    - {fileID: 2674868457581953589, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-    - {fileID: 2956329963123117810, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-    - {fileID: 7100139508857320110, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
@@ -3053,11 +2933,14 @@ MonoBehaviour:
   canKill: 0
   killRadius: 1.4
   canMove: 0
+  rotationMultiplier: 5
   sound: {fileID: 0}
-  collider: {fileID: 0}
+  killTrigger: {fileID: 0}
+  detectionMark: {fileID: 0}
   patrolRange: 5
   minPatrolPointDistance: 2
   waitTimeAtPatrolPoint: 2
+  detectionValueNeededToMoveToTarget: 25
   maxInvestigationTimeAfterLoseSight: 5
   attackDuration: 5
   attackSpeedMultiplier: 1.5
@@ -36223,10 +36106,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 417546781}
     m_Modifications:
-    - target: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: AudioSources
-      objectReference: {fileID: 0}
     - target: {fileID: 953603809070717540, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
@@ -36250,78 +36129,18 @@ PrefabInstance:
     - target: {fileID: 1813089319293354628, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Lightmapping
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3129667736519373146, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Shadows.m_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3243088900989205589, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: SightTarget
       objectReference: {fileID: 0}
     - target: {fileID: 3247145216075624242, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Name
       value: Machine (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: detectionIncreaseRate
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: distanceEffectMultiplier.m_Curve.Array.data[0].time
-      value: 1.0999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 3505779425706273977, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: distanceEffectMultiplier.m_Curve.Array.data[0].value
-      value: 1.0018845
-      objectReference: {fileID: 0}
     - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: killRadius
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: waitTimeAtPatrolPoint
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4062520734321915679, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: minPatrolPointDistance
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: audioSources
+      propertyPath: sightArea
       value: 
-      objectReference: {fileID: 1764070774}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: footStepClips.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[0]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 37cdbcb02c3324849ac457dfc5b1058e, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 8a7a8ee0447e4b5469bce225745d9f42, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[2]'
-      value: 
-      objectReference: {fileID: 8300000, guid: 7e629da20f6fdee418e5e60ba9efc23c, type: 3}
-    - target: {fileID: 4366536721842437855, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: 'footStepClips.Array.data[3]'
-      value: 
-      objectReference: {fileID: 8300000, guid: a04e8112fb4cca944baabc0048ff839d, type: 3}
-    - target: {fileID: 4525737948322402847, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: Root
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.91
+      value: -1.627
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -36329,7 +36148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.32
+      value: 10.788
       objectReference: {fileID: 0}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -36359,10 +36178,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8826511624185513472, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Speed
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 8927008254040613029, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: MaxDistance
       value: 14
@@ -36379,10 +36194,6 @@ PrefabInstance:
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8934268390000059380, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-      propertyPath: m_Name
-      value: Rig
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4207699200032671085, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
@@ -36395,11 +36206,6 @@ PrefabInstance:
 --- !u!4 &1764070773 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-  m_PrefabInstance: {fileID: 1764070772}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1764070774 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
   m_PrefabInstance: {fileID: 1764070772}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1873817842
@@ -36873,11 +36679,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!1 &2104898444 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 145489726162541674, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
-  m_PrefabInstance: {fileID: 577460369}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2106214210
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
-public static class EnemyPatrolM
+public static class EnemyPatrolHandler
 {
     private static List<EnemyBase> registeredEnemies = new List<EnemyBase>();
     private static List<Vector3> occupiedPatrolPoints = new List<Vector3>();

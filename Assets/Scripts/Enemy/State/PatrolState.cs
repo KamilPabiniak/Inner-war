@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
+using Enemy.Type;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -41,16 +43,22 @@ public class PatrolState : IEnemyState
             _waitTimer = enemy.waitTimeAtPatrolPoint;
             if (_patrolPoint != Vector3.zero)
             {
-                EnemyPatrolM.ReleasePatrolPoint(_patrolPoint);
+                EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
                 _patrolPoint = Vector3.zero;
             }
+        }
+        
+        //In test
+        if (IsObjectInFront(enemy))
+        {
+            TurnAwayFromEdge(enemy);
         }
     }
 
     public void ExitState(EnemyBase enemy)
     {
         if (!(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)) return;
-        EnemyPatrolM.ReleasePatrolPoint(_patrolPoint);
+        EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
         ResetHeadRotation(enemy);
     }
 
@@ -78,6 +86,31 @@ public class PatrolState : IEnemyState
             Debug.LogWarning($"[{enemy.name}] Nie uda�o si� znale�� punktu na NavMesh w okolicy: {_patrolPoint}");
         }
     }
+    
+    private bool IsObjectInFront(EnemyBase enemy)
+    {
+        RaycastHit hit;
+        Vector3 startPosition = enemy.transform.position;
+        Vector3 direction = enemy.transform.rotation * Vector3.forward; 
+        
+        Debug.DrawLine(startPosition, startPosition + direction * 2f, Color.magenta, 1f);
+        if (Physics.Raycast(startPosition, direction, out hit, 2f))
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private void TurnAwayFromEdge(EnemyBase enemy)
+    {
+        Vector3 currentForward = enemy.transform.forward;
+        Vector3 oppositeDirection = -currentForward;
+
+        // Ustawiamy nowy kierunek dla agenta
+        Quaternion targetRotation = Quaternion.LookRotation(oppositeDirection);
+        enemy.transform.rotation = Quaternion.RotateTowards(enemy.transform.rotation, targetRotation, enemy.rotationMultiplier * Time.deltaTime);
+    }
 
     private void StartHeadRotation(EnemyBase enemy)
     {
@@ -88,22 +121,7 @@ public class PatrolState : IEnemyState
             _headRotationCoroutine = enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
         }
     }
-
-
-    private void ResetHeadRotation(EnemyBase enemy)
-    {
-        if (enemy is MachineEnemy machineEnemy)
-        {
-            if (_headRotationCoroutine != null)
-            {
-                enemy.StopCoroutine(_headRotationCoroutine);
-                _headRotationCoroutine = null;
-            }
-
-            enemy.StartCoroutine(SmoothResetPosition(machineEnemy));
-        }
-    }
-
+    
     private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
     {
         float maxDistance = machineEnemy.maxOffsetDistance;
@@ -162,6 +180,21 @@ public class PatrolState : IEnemyState
             }
 
             _lastHeadPositionIndex += direction;
+        }
+    }
+
+
+    private void ResetHeadRotation(EnemyBase enemy)
+    {
+        if (enemy is MachineEnemy machineEnemy)
+        {
+            if (_headRotationCoroutine != null)
+            {
+                enemy.StopCoroutine(_headRotationCoroutine);
+                _headRotationCoroutine = null;
+            }
+
+            enemy.StartCoroutine(SmoothResetPosition(machineEnemy));
         }
     }
 

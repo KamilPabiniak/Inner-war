@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Enemy.Type;
 using UnityEngine;
 
 public class PlayerWhistling : PlayerModule

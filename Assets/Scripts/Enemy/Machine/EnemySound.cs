@@ -16,16 +16,16 @@ public class EnemySound : MonoBehaviour
     [SerializeField] private AudioClip targetLostSound;
     [SerializeField] private AudioClip overload;
 
-    private bool footStepPlayed = false;
+    private bool _footStepPlayed;
     
-    public void ResetFootStepFlag() => footStepPlayed = false;
+    public void ResetFootStepFlag() => _footStepPlayed = false;
 
     public void PlayFootStepSound()
     {
-        if (footStepClips == null || footStepPlayed) return;
+        if (footStepClips == null || _footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
         SoundFXManager.Instance.PlaySoundFXClip(footStepClips[rand], audioSources.transform, 1f);
-        footStepPlayed = true;
+        _footStepPlayed = true;
     }
     
     public void PlayPatrolSound() => PlayStateSound(patrolStateSound);
