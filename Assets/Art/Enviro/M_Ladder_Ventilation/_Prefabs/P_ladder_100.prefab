@@ -52,8 +52,81 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_ladder_100
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+      propertyPath: m_TagString
+      value: Ladder
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 641265767102791985}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6801949808367486909}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6404650837159053800}
   m_SourcePrefab: {fileID: 100100000, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+--- !u!1 &7840778886983628886 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0260a6936a59f464dae566eac7d836a7, type: 3}
+  m_PrefabInstance: {fileID: 6922423000688461063}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &641265767102791985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840778886983628886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottomRaycastDistance: 0.5
+  topRaycastAngle: 15
+  topRaycastDistance: 2
+  alignmentSpeed: 0
+  offsetFromLadder: 1
+--- !u!65 &6801949808367486909
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840778886983628886}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.59999996, y: 0.71594614, z: 0.9987768}
+  m_Center: {x: 0, y: 0.3341966, z: 0.49938846}
+--- !u!114 &6404650837159053800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840778886983628886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e9dd8d12ce25f945831bdecb0ef8213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newShaderMaterial: {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
