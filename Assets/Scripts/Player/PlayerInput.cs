@@ -15,6 +15,12 @@ public class PlayerInput : PlayerModule
     public bool IsLeanRightPressed { get; private set; }
     public bool IsWhistlePressed { get; private set; }
     public bool IsEscapePressed { get; private set; }
+    public bool IsAiming { get; private set; } // Trzymanie PPM
+    public bool IsThrowing { get; private set; } // Rzut LPM
+
+    public event System.Action OnStartAiming;
+    public event System.Action OnStopAiming;
+    public event System.Action OnThrowStone;
 
     private void Awake()
     {
@@ -25,10 +31,10 @@ public class PlayerInput : PlayerModule
     private void OnEnable() => inputActions.Player.Enable();
 
     private void OnDisable() => inputActions.Player.Disable();
-    
-    public void ResetVaultRequest() => IsVaultPressed = false;
-    public void ResetEscapePressed() => IsEscapePressed = false;
 
+    public void ResetVaultRequest() => IsVaultPressed = false;
+
+    public void ResetEscapePressed() => IsEscapePressed = false;
 
     private class PlayerActions : IPlayerActions
     {
@@ -54,9 +60,32 @@ public class PlayerInput : PlayerModule
 
         public void OnCheatSheet(InputAction.CallbackContext context)
         {
-            if (context.performed) 
+            if (context.performed)
             {
                 _playerInput.IsEscapePressed = true;
+            }
+        }
+
+        public void OnThrow(InputAction.CallbackContext context)
+        {
+            _playerInput.IsThrowing = context.performed;
+            if (context.performed)
+            {
+                _playerInput.OnThrowStone?.Invoke(); // Wywo³anie akcji rzutu
+            }
+        }
+
+        public void OnAim(InputAction.CallbackContext context)
+        {
+            _playerInput.IsAiming = context.performed;
+
+            if (context.performed)
+            {
+                _playerInput.OnStartAiming?.Invoke(); // Wywo³anie pocz¹tku celowania
+            }
+            else if (context.canceled)
+            {
+                _playerInput.OnStopAiming?.Invoke(); // Wywo³anie koñca celowania
             }
         }
     }

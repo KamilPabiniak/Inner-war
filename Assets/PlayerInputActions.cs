@@ -107,6 +107,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""44f890d8-47b4-443f-b7a8-36b01d0aaa9a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""07e0fee8-e03a-45fe-882b-a2738ef87e24"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -296,6 +314,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""CheatSheet"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b108fdd3-58a6-404e-94ce-e90feb6da8a7"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c3998f3-32e8-4e61-84d6-45edbde77fe0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -313,6 +353,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_LeanRight = m_Player.FindAction("LeanRight", throwIfNotFound: true);
         m_Player_Whistling = m_Player.FindAction("Whistling", throwIfNotFound: true);
         m_Player_CheatSheet = m_Player.FindAction("CheatSheet", throwIfNotFound: true);
+        m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
+        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -388,6 +430,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LeanRight;
     private readonly InputAction m_Player_Whistling;
     private readonly InputAction m_Player_CheatSheet;
+    private readonly InputAction m_Player_Throw;
+    private readonly InputAction m_Player_Aim;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -401,6 +445,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @LeanRight => m_Wrapper.m_Player_LeanRight;
         public InputAction @Whistling => m_Wrapper.m_Player_Whistling;
         public InputAction @CheatSheet => m_Wrapper.m_Player_CheatSheet;
+        public InputAction @Throw => m_Wrapper.m_Player_Throw;
+        public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -437,6 +483,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CheatSheet.started += instance.OnCheatSheet;
             @CheatSheet.performed += instance.OnCheatSheet;
             @CheatSheet.canceled += instance.OnCheatSheet;
+            @Throw.started += instance.OnThrow;
+            @Throw.performed += instance.OnThrow;
+            @Throw.canceled += instance.OnThrow;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -468,6 +520,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CheatSheet.started -= instance.OnCheatSheet;
             @CheatSheet.performed -= instance.OnCheatSheet;
             @CheatSheet.canceled -= instance.OnCheatSheet;
+            @Throw.started -= instance.OnThrow;
+            @Throw.performed -= instance.OnThrow;
+            @Throw.canceled -= instance.OnThrow;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -496,5 +554,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLeanRight(InputAction.CallbackContext context);
         void OnWhistling(InputAction.CallbackContext context);
         void OnCheatSheet(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

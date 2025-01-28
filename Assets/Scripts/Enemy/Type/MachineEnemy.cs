@@ -59,21 +59,6 @@ namespace Enemy.Type
         {
             ChangeState(new PatrolState());
         }
-    
-        [ContextMenu("Investigate")]
-        public void ForceInvestigate()
-        {
-            Transform target = FindAnyObjectByType(typeof(Player)).GameObject().gameObject.transform;
-            SetTarget(target);
-            OnAlertReceived(target.position);
-        }
-    
-        [ContextMenu("Attack")]
-        public void ForceAttack()
-        {
-            Transform target = FindAnyObjectByType(typeof(Player)).GameObject().gameObject.transform;
-            OnAttackCommandReceived(target);
-        }
     }
 }
 
