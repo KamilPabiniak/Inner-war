@@ -5,12 +5,12 @@ namespace Enemy.Type
 {
     public class MachineEnemy : EnemyBase
     {
-        [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+        [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldable: true)]
         [Header("References")]
         public GameObject sightTarget;
         public Vector3 OriginalHeadPos { get; private set; }
 
-        [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+        [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldable: false , hideMe: true)]
         public float headRotationSpeed;
         public int stopPoints;
         public float stopDuration = 0.5f;
@@ -43,7 +43,7 @@ namespace Enemy.Type
             else if (detectionProgress > 0.1f && detectionProgress < 100f && CurrentState is not InvestigateState)
             {
                 if (!CanChangeState) return;
-                ChangeState(new InvestigateState(Target != null ? Target.position : transform.position));
+                ChangeState(new InvestigateState(Player != null ? Player.position : transform.position));
             }
             else if (detectionProgress >= 100f && CurrentState is not AttackState)
             {

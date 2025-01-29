@@ -1147,7 +1147,6 @@ GameObject:
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
   - component: {fileID: 2828769371758908747}
-  - component: {fileID: 9124101608833822746}
   - component: {fileID: 8332329985919692524}
   m_Layer: 11
   m_Name: Machine
@@ -1360,29 +1359,6 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
---- !u!136 &9124101608833822746
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Height: 0.1
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.4, z: 0}
 --- !u!54 &8332329985919692524
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1879,6 +1855,7 @@ GameObject:
   - component: {fileID: 9075837456557689756}
   - component: {fileID: 439114135201743943}
   - component: {fileID: 6867367900992796774}
+  - component: {fileID: 7722752493301349764}
   m_Layer: 11
   m_Name: spine
   m_TagString: Untagged
@@ -1955,6 +1932,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &7722752493301349764
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4719301255609536734}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: -0.0000000037252903, z: 0}
 --- !u!1 &5152513564798959741
 GameObject:
   m_ObjectHideFlags: 0

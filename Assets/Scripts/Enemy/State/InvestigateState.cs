@@ -10,6 +10,8 @@ public class InvestigateState : IEnemyState
     private Coroutine _headRotationCoroutine;
     private float _lostSightTimer;
 
+    private float _initialRotationTime = 1.5f; 
+    private bool _finishedLookingAtAlert;
     public InvestigateState(Vector3 position)
     {
         _lastKnownPosition  = position;
@@ -18,14 +20,15 @@ public class InvestigateState : IEnemyState
     public void EnterState(EnemyBase enemy)
     {
         enemy.SetStateChangeLock(true);
+        enemy.StartCoroutine(LookAtAlert(enemy));
     }
 
     public void UpdateState(EnemyBase enemy)
     {
-        if (enemy.Target != null && enemy.seeTarget)
+        if (enemy.Player != null && enemy.seeTarget)
         {
             _lostSightTimer = 0f;
-            _lastKnownPosition = enemy.Target.position;
+            _lastKnownPosition = enemy.Player.position;
 
             if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
             {
@@ -35,13 +38,13 @@ public class InvestigateState : IEnemyState
                     {
                         enemy.sound.PlayInvestigateSound();
                     }
-                    enemy.FaceTarget();
+                    enemy.FacePlayer();
                     enemy.navMeshAgent.SetDestination(hit.position);
                 }
             }
             else
             {
-                enemy.FaceTarget();
+                enemy.FacePlayer();
                 Debug.LogWarning($"[{enemy.name}] Gracz po za obszarem strze¿onym.");
             }
         }
@@ -52,7 +55,6 @@ public class InvestigateState : IEnemyState
             if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
             {
                 if (!enemy.IsTargetInNavMesh(out NavMeshHit hit)) return;
-                enemy.FaceTarget();
                 if (enemy.canMove && enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)
                 {
                     enemy.navMeshAgent.SetDestination(_lastKnownPosition);
@@ -68,5 +70,24 @@ public class InvestigateState : IEnemyState
     public void ExitState(EnemyBase enemy)
     {
         enemy.SetStateChangeLock(false);
+    }
+    
+    private IEnumerator LookAtAlert(EnemyBase enemy)
+    {
+        float timer = 0f;
+        while (timer < _initialRotationTime)
+        {
+            RotateToAlert(enemy);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _finishedLookingAtAlert = true;
+    }
+    
+    private void RotateToAlert(EnemyBase enemy)
+    {
+        Vector3 direction = (_lastKnownPosition - enemy.transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, lookRotation, Time.deltaTime * enemy.rotationMultiplier);
     }
 }

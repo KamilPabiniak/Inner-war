@@ -65,7 +65,7 @@ public class PlayerWhistling : PlayerModule
         for (int i = 0; i < targetsInRange; i++)
         {
             var targetCollider = results[i];
-            var machineEnemy = targetCollider.GetComponent<MachineEnemy>();
+            var machineEnemy = targetCollider.GetComponentInParent<MachineEnemy>();
             
             if (machineEnemy != null)
             {

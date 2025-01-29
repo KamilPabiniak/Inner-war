@@ -37,7 +37,7 @@ namespace Enemy.Machine
             Transform potentialTarget = targetsInRange.Length > 0 ? targetsInRange[0].transform : null;
             mEnemy.SetTarget(potentialTarget);
 
-            if (mEnemy.Target)
+            if (mEnemy.Player)
             {
                 UpdateDetection();
             }
@@ -57,7 +57,7 @@ namespace Enemy.Machine
 
         private void UpdateDetection()
         {
-            float lightIntensity = CalculateLightIntensity(mEnemy.Target);
+            float lightIntensity = CalculateLightIntensity(mEnemy.Player);
         
             if (lightIntensity > detectionThreshold)
             {

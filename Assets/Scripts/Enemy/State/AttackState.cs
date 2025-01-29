@@ -49,7 +49,7 @@ public class AttackState : IEnemyState
             return;
         }
         
-        if (enemy.Target == null)
+        if (enemy.Player == null)
         {
             _lostSightTimer += Time.deltaTime;
             if (_lostSightTimer >= enemy.maxInvestigationTimeAfterLoseSight / 2)
@@ -65,7 +65,7 @@ public class AttackState : IEnemyState
         }
         
         NavMeshPath path = new NavMeshPath();
-        if (!enemy.navMeshAgent.CalculatePath(enemy.Target.position, path) || path.status != NavMeshPathStatus.PathComplete)
+        if (!enemy.navMeshAgent.CalculatePath(enemy.Player.position, path) || path.status != NavMeshPathStatus.PathComplete)
         {
             Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
             enemy.SetStateChangeLock(false); 
@@ -75,7 +75,7 @@ public class AttackState : IEnemyState
     
         if (enemy.canMove)
         {
-            enemy.navMeshAgent.SetDestination(enemy.Target.position);
+            enemy.navMeshAgent.SetDestination(enemy.Player.position);
         }
         
         _attackTimer -= Time.deltaTime;

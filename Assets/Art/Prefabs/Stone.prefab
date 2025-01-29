@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3708799139214368791}
   - component: {fileID: 4545406083891296714}
   - component: {fileID: -592631788790429367}
+  - component: {fileID: 4100698150202004565}
   m_Layer: 0
   m_Name: Stone
   m_TagString: Untagged
@@ -150,3 +151,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newShaderMaterial: {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
+--- !u!114 &4100698150202004565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8859659887717033183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f83b46c0d4e24c4084bea5f69358ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 5
+  rockSound: {fileID: 8300000, guid: e847c60cf6b1a4d4b9c630c8d2c69810, type: 3}
