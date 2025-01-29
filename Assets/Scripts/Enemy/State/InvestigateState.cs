@@ -52,7 +52,8 @@ public class InvestigateState : IEnemyState
             if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
             {
                 if (!enemy.IsTargetInNavMesh(out NavMeshHit hit)) return;
-                if (enemy.canMove)
+                enemy.FaceTarget();
+                if (enemy.canMove && enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)
                 {
                     enemy.navMeshAgent.SetDestination(_lastKnownPosition);
                 }

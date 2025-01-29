@@ -41,17 +41,15 @@ public class PatrolState : IEnemyState
         {
             _isWaiting = true;
             _waitTimer = enemy.waitTimeAtPatrolPoint;
+            if (IsObjectInFront(enemy))
+            {
+                TurnAwayFromEdge(enemy);
+            }
             if (_patrolPoint != Vector3.zero)
             {
                 EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
                 _patrolPoint = Vector3.zero;
             }
-        }
-        
-        //In test
-        if (IsObjectInFront(enemy))
-        {
-            TurnAwayFromEdge(enemy);
         }
     }
 
@@ -90,12 +88,13 @@ public class PatrolState : IEnemyState
     private bool IsObjectInFront(EnemyBase enemy)
     {
         RaycastHit hit;
-        Vector3 startPosition = enemy.transform.position;
+        Vector3 startPosition = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 1.5f, enemy.transform.position.z);
         Vector3 direction = enemy.transform.rotation * Vector3.forward; 
         
-        Debug.DrawLine(startPosition, startPosition + direction * 2f, Color.magenta, 1f);
-        if (Physics.Raycast(startPosition, direction, out hit, 2f))
+        if (Physics.Raycast(startPosition, direction, out hit, 6f))
         {
+            //Debug.DrawRay(startPosition, enemy.transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow, 8f); 
+            //Debug.Log("Did Hit"); 
             return true;
         }
         
@@ -106,20 +105,15 @@ public class PatrolState : IEnemyState
     {
         Vector3 currentForward = enemy.transform.forward;
         Vector3 oppositeDirection = -currentForward;
-
-        // Ustawiamy nowy kierunek dla agenta
-        Quaternion targetRotation = Quaternion.LookRotation(oppositeDirection);
-        enemy.transform.rotation = Quaternion.RotateTowards(enemy.transform.rotation, targetRotation, enemy.rotationMultiplier * Time.deltaTime);
+        
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(oppositeDirection.x, 0, oppositeDirection.z));
+        enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, lookRotation, Time.deltaTime * enemy.rotationMultiplier);
     }
 
     private void StartHeadRotation(EnemyBase enemy)
     {
         if (enemy is not MachineEnemy machineEnemy) return;
-
-        if (_headRotationCoroutine == null)
-        {
-            _headRotationCoroutine = enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
-        }
+        _headRotationCoroutine ??= enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
     }
     
     private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
