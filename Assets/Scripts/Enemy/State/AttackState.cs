@@ -69,7 +69,7 @@ public class AttackState : IEnemyState
         {
             Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
             enemy.SetStateChangeLock(false); 
-            enemy.ChangeState(new PatrolState());
+            enemy.FacePlayer();
             return;
         }
     

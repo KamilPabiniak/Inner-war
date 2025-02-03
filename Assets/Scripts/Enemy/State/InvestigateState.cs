@@ -1,6 +1,6 @@
 using System.Collections;
+using Anxiety;
 using Enemy;
-using Enemy.Type;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,6 +21,8 @@ public class InvestigateState : IEnemyState
     {
         enemy.SetStateChangeLock(true);
         enemy.StartCoroutine(LookAtAlert(enemy));
+        enemy.sound.PlayInvestigateSound();
+        AnxietyManager.Instance.IncreaseFear(5f);
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -29,23 +31,18 @@ public class InvestigateState : IEnemyState
         {
             _lostSightTimer = 0f;
             _lastKnownPosition = enemy.Player.position;
+            AnxietyManager.Instance.ExeciuteActiveLevel();
 
             if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
             {
-                if (enemy.canMove && enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)
-                {
-                    if (enemy.detectionProgress == enemy.detectionValueNeededToMoveToTarget)
-                    {
-                        enemy.sound.PlayInvestigateSound();
-                    }
-                    enemy.FacePlayer();
-                    enemy.navMeshAgent.SetDestination(hit.position);
-                }
+                if (!enemy.canMove || !(enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)) return;
+                enemy.FacePlayer();
+                enemy.navMeshAgent.SetDestination(hit.position);
             }
             else
             {
                 enemy.FacePlayer();
-                Debug.LogWarning($"[{enemy.name}] Gracz po za obszarem strze¿onym.");
+                //Debug.LogWarning($"[{enemy.name}] Gracz po za obszarem strze¿onym.");
             }
         }
         else

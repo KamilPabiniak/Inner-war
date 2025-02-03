@@ -1,63 +1,41 @@
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 
-[CustomPropertyDrawer(typeof(AdvancedHeader))]
-public class AdvancedHeaderDrawer : DecoratorDrawer
+namespace Header_Upgrade
 {
-    private static Dictionary<string, bool> foldoutStates = new Dictionary<string, bool>();
-    private static string lastFoldableHeader = null;
-    private static bool lastFoldoutState = true;
-
-    public override void OnGUI(Rect position)
+    [CustomPropertyDrawer(typeof(AdvancedHeader))]
+    public class AdvancedHeaderDrawer : DecoratorDrawer
     {
-        AdvancedHeader styledHeader = (AdvancedHeader)attribute;
-        string key = styledHeader.header;
-
-        if (!foldoutStates.ContainsKey(key))
-            foldoutStates[key] = true;
-
-        Color originalColor = GUI.contentColor;
-        GUI.contentColor = styledHeader.color;
-
-        GUIStyle foldoutStyle = new GUIStyle(EditorStyles.foldout)
+        public override void OnGUI(Rect position)
         {
-            fontSize = styledHeader.fontSize,
-            fontStyle = styledHeader.fontStyle,
-            alignment = styledHeader.alignment
-        };
+            AdvancedHeader styledHeader = (AdvancedHeader)attribute;
+            string prefsKey = $"AdvancedHeader_{styledHeader.header}";
 
-        GUIStyle labelStyle = new GUIStyle(EditorStyles.label)
-        {
-            fontSize = styledHeader.fontSize,
-            fontStyle = styledHeader.fontStyle,
-            alignment = styledHeader.alignment
-        };
+            if (!EditorPrefs.HasKey(prefsKey))
+                EditorPrefs.SetBool(prefsKey, true);
 
-        position.y += styledHeader.topSpace;
+            ColorUtility.TryParseHtmlString(styledHeader.colorHex, out Color headerColor);
+            Color originalColor = GUI.contentColor;
+            GUI.contentColor = headerColor;
 
-        if (styledHeader.foldable)
-        {
-            foldoutStates[key] = EditorGUI.Foldout(position, foldoutStates[key], styledHeader.header, true, foldoutStyle);
-            lastFoldableHeader = key;
-            lastFoldoutState = foldoutStates[key];
-        }
-        else
-        {
-            EditorGUI.LabelField(position, styledHeader.header, labelStyle);
+            GUIStyle style = new GUIStyle(EditorStyles.boldLabel)
+            {
+                fontSize = styledHeader.fontSize,
+                fontStyle = styledHeader.fontStyle,
+                alignment = styledHeader.alignment
+            };
+
+            position.y += styledHeader.topSpace;
+            
+            EditorGUI.LabelField(position, styledHeader.header, style);
+            
+            GUI.contentColor = originalColor;
         }
 
-        GUI.contentColor = originalColor;
-    }
-
-    public override float GetHeight()
-    {
-        AdvancedHeader styledHeader = (AdvancedHeader)attribute;
-        return EditorGUIUtility.singleLineHeight + styledHeader.topSpace + styledHeader.bottomSpace;
-    }
-
-    public static bool ShouldHideMe(string header)
-    {
-        return lastFoldableHeader != null && !lastFoldoutState;
+        public override float GetHeight()
+        {
+            AdvancedHeader styledHeader = (AdvancedHeader)attribute;
+            return EditorGUIUtility.singleLineHeight + styledHeader.topSpace + styledHeader.bottomSpace;
+        }
     }
 }

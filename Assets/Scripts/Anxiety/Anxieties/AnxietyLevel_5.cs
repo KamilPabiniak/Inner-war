@@ -1,18 +1,19 @@
+using Anxiety;
 using UnityEngine;
 
-public class FaintBehavior : IFearBehavior
+public class AnxietyLevel_5 : IFearBehavior
 {
     public void Enter(AnxietyManager manager)
     {
         throw new System.NotImplementedException();
     }
 
-    public void UpdateEffects()
+    public void Exit()
     {
         throw new System.NotImplementedException();
     }
 
-    public void Exit()
+    public void Execute()
     {
         throw new System.NotImplementedException();
     }

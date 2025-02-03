@@ -39,7 +39,6 @@ public class Rock : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        // Display the explosion radius when selected
         Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }

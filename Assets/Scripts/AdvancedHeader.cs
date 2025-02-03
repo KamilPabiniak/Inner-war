@@ -9,31 +9,29 @@ public class AdvancedHeader : PropertyAttribute
     public readonly float bottomSpace; 
     public readonly TextAnchor alignment;
     public readonly FontStyle fontStyle;
-    public readonly bool foldable;
-    public readonly bool hideMe;
-    public Color color; 
+    public readonly bool isFoldable;
+    public readonly bool foldEverything;
+    public readonly string colorHex;
 
     public AdvancedHeader(
         string header,
         int fontSize = 12,
         float topSpace = 5f,
         float bottomSpace = 5f,
-        float r = 192f,
-        float g = 192f,
-        float b = 192f,
+        string colorHex = "#FFFFFF",
         TextAnchor alignment = TextAnchor.MiddleLeft,
         FontStyle fontStyle = FontStyle.Normal,
-        bool foldable = false,
-        bool hideMe = false)
+        bool isFoldable = false,
+        bool foldEverything = false)
     {
         this.header = header;
         this.fontSize = fontSize;
         this.topSpace = topSpace;
         this.bottomSpace = bottomSpace;
-        color = new Color(r, g, b);
+        this.colorHex = colorHex;
         this.alignment = alignment;
         this.fontStyle = fontStyle;
-        this.foldable = foldable;
-        this.hideMe = hideMe;
+        this.isFoldable = isFoldable;
+        this.foldEverything = foldEverything;
     }
 }

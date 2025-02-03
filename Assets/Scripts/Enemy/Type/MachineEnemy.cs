@@ -5,12 +5,12 @@ namespace Enemy.Type
 {
     public class MachineEnemy : EnemyBase
     {
-        [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldable: true)]
+        [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, fontStyle: FontStyle.Bold, isFoldable: true ,foldEverything: true)]
         [Header("References")]
         public GameObject sightTarget;
         public Vector3 OriginalHeadPos { get; private set; }
 
-        [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldable: false , hideMe: true)]
+        [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldEverything: false)]
         public float headRotationSpeed;
         public int stopPoints;
         public float stopDuration = 0.5f;

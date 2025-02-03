@@ -1,42 +1,84 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;
 
-public class PostProcessingManager : MonoBehaviour
+namespace Anxiety.Effects
 {
-    [SerializeField] private VolumeProfile slight;
-    [SerializeField] private VolumeProfile moderate;
-    [SerializeField] private Volume volume;
-
-    public void ApplyEdgeBlur()
+    public class PostProcessingManager : MonoBehaviour
     {
-        volume.weight = 1;
-    }
+        [Header("Profiles")]
+        [SerializeField] private VolumeProfile slight;
+        [SerializeField] private VolumeProfile moderate;
+        [SerializeField] private VolumeProfile high;
+        [SerializeField] private VolumeProfile extreme;
+        [SerializeField] private VolumeProfile faint;
+    
+        [Header("Volume")]
+        [SerializeField] private Volume volume;
+        
+        private Coroutine transitionCoroutine = null;
 
-    public void ResetEffects()
-    {
-        volume.weight = 0;
-    }
-
-    public void UpdatePostProcessingProfile(float fearLevel)
-    {
-        VolumeProfile selectedProfile = null;
-
-        if (fearLevel <= 20) return;
-        else if (fearLevel <= 40)
-            selectedProfile = slight;
-        else if (fearLevel <= 60)
-            selectedProfile = moderate;
-        else if (fearLevel <= 80)
-            selectedProfile = null;
-        else if (fearLevel <= 99)
-            selectedProfile = null;
-        else
-            selectedProfile = null;
-
-        if (selectedProfile != null && volume.profile != selectedProfile)
+        public void TurnOnEffects(float applyDuration)
         {
-            volume.profile = selectedProfile;
+            UpdatePostProcessingProfile(AnxietyManager.Instance.FearLevel);
+            if (transitionCoroutine != null)
+                StopCoroutine(transitionCoroutine);
+
+            // P³ynnie zwiêkszamy wagê volume do 1
+            transitionCoroutine = StartCoroutine(TransitionVolumeWeight(1f, applyDuration));
+        }
+
+        public void DisableEffects(float applyDuration)
+        {
+            if (transitionCoroutine != null)
+                StopCoroutine(transitionCoroutine);
+
+            // P³ynnie zmniejszamy wagê volume do 0
+            transitionCoroutine = StartCoroutine(TransitionVolumeWeight(0f, applyDuration));
+        }
+        
+        private IEnumerator TransitionVolumeWeight(float targetWeight, float duration)
+        {
+            float startWeight = volume.weight;
+            float timeElapsed = 0f;
+            while (timeElapsed < duration)
+            {
+                volume.weight = Mathf.Lerp(startWeight, targetWeight, timeElapsed / duration);
+                timeElapsed += Time.deltaTime;
+                yield return null;
+            }
+            volume.weight = targetWeight;
+        }
+
+        private void UpdatePostProcessingProfile(float fearLevel)
+        {
+            VolumeProfile selectedProfile;
+
+            switch (fearLevel)
+            {
+                case <= 20:
+                    return;
+                case <= 40:
+                    selectedProfile = slight != null ? slight : null;
+                    break;
+                case <= 60:
+                    selectedProfile = moderate != null ? moderate : null;
+                    break;
+                case <= 80:
+                    selectedProfile = high != null ? high : null;
+                    break;
+                case <= 99:
+                    selectedProfile = extreme != null ? extreme : null;
+                    break;
+                default:
+                    selectedProfile = faint != null ? faint : null;
+                    break;
+            }
+
+            if (selectedProfile != null && volume.profile != selectedProfile)
+            {
+                volume.profile = selectedProfile;
+            }
         }
     }
 }
