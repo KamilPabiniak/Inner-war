@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Anxiety.Effects
 {
@@ -23,8 +24,7 @@ namespace Anxiety.Effects
             UpdatePostProcessingProfile(AnxietyManager.Instance.FearLevel);
             if (transitionCoroutine != null)
                 StopCoroutine(transitionCoroutine);
-
-            // P³ynnie zwiêkszamy wagê volume do 1
+            
             transitionCoroutine = StartCoroutine(TransitionVolumeWeight(1f, applyDuration));
         }
 
@@ -32,8 +32,7 @@ namespace Anxiety.Effects
         {
             if (transitionCoroutine != null)
                 StopCoroutine(transitionCoroutine);
-
-            // P³ynnie zmniejszamy wagê volume do 0
+            
             transitionCoroutine = StartCoroutine(TransitionVolumeWeight(0f, applyDuration));
         }
         

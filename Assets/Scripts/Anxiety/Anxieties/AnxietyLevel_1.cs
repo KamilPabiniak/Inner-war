@@ -1,9 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Anxiety;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnxietyLevel_1 : IFearBehavior
 {
     private AnxietyManager _manager;
+    //private List<AnxietyEffects> _effects;
     
     private TimerHandle _blurTimerHandle;
     private TimerHandle _audioTimerHandle;
@@ -21,8 +25,7 @@ public class AnxietyLevel_1 : IFearBehavior
 
     public void Execute()
     {
-        StartBlurEffect();
-        StartAudioEffect();
+
     }
 
     private void StartBlurEffect()
@@ -70,4 +73,10 @@ public class AnxietyLevel_1 : IFearBehavior
         }
         _manager.audioEffect.ResetAudioEffects(3f);
     }
+}
+
+[Serializable]
+public class EketySiema
+{
+    public string effect;
 }

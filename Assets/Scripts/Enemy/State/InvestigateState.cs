@@ -11,7 +11,6 @@ public class InvestigateState : IEnemyState
     private float _lostSightTimer;
 
     private float _initialRotationTime = 1.5f; 
-    private bool _finishedLookingAtAlert;
     public InvestigateState(Vector3 position)
     {
         _lastKnownPosition  = position;
@@ -22,7 +21,8 @@ public class InvestigateState : IEnemyState
         enemy.SetStateChangeLock(true);
         enemy.StartCoroutine(LookAtAlert(enemy));
         enemy.sound.PlayInvestigateSound();
-        AnxietyManager.Instance.IncreaseFear(5f);
+        if (enemy.seeTarget)
+            AnxietyManager.Instance.IncreaseFear(5f);
     }
 
     public void UpdateState(EnemyBase enemy)
@@ -78,7 +78,6 @@ public class InvestigateState : IEnemyState
             timer += Time.deltaTime;
             yield return null;
         }
-        _finishedLookingAtAlert = true;
     }
     
     private void RotateToAlert(EnemyBase enemy)

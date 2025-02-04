@@ -1,6 +1,7 @@
+using System.Collections.Generic;
+using System.Globalization;
 using Anxiety.Effects;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Anxiety
 {
@@ -20,6 +21,24 @@ namespace Anxiety
         [Header("Debug (tylko do podgl¹du)")]
         [SerializeField] private string currentBehaviorName = "None";
         [SerializeField] private string currentFearLevelText = "None";
+        
+
+        [SerializeField] private List<EketySiema> Lvl1Effects = new List<EketySiema>(6);
+
+        private void OnValidate()
+        {
+            while (Lvl1Effects.Count > 6)
+            {
+                Lvl1Effects.RemoveAt(Lvl1Effects.Count - 1);
+            }
+            
+            while (Lvl1Effects.Count < 6)
+            {
+                Lvl1Effects.Add(default);
+            }
+        }
+        
+
 
         private float _timer;
         private IFearBehavior _currentBehavior;
@@ -50,7 +69,7 @@ namespace Anxiety
                 _timer = 0f;
             }
 
-            currentFearLevelText = FearLevel.ToString();
+            currentFearLevelText = FearLevel.ToString(CultureInfo.CurrentCulture);
         }
 
         public void ExeciuteActiveLevel()
@@ -89,22 +108,22 @@ namespace Anxiety
                 _currentLevel = newLevel;
                 _currentBehavior = CreateBehaviorForLevel(newLevel);
                 _currentBehavior?.Enter(this);
-                currentBehaviorName = _currentBehavior.GetType().Name;
+                currentBehaviorName = _currentBehavior?.GetType().Name;
             }
         }
         
         private IFearBehavior CreateBehaviorForLevel(int level)
         {
-            switch (level)
+            return level switch
             {
-                case 0: return new AnxietyLevel_0();
-                case 1: return new AnxietyLevel_1();
-                case 2: return new AnxietyLevel_1(); //AnxietyLevel_2
-                case 3: return new AnxietyLevel_1(); //AnxietyLevel_3
-                case 4: return new AnxietyLevel_1(); // AnxietyLevel_4
-                case 5: return new AnxietyLevel_1(); //AnxietyLevel_5
-                default: return null;
-            }
+                0 => new AnxietyLevel_0(),
+                1 => new AnxietyLevel_1(),
+                2 => new AnxietyLevel_1(), //AnxietyLevel_2
+                3 => new AnxietyLevel_1(), //AnxietyLevel_3
+                4 => new AnxietyLevel_1(), // AnxietyLevel_4
+                5 => new AnxietyLevel_1(), //AnxietyLevel_5
+                _ => null
+            };
         }
     }
 }
