@@ -1912,6 +1912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slight: {fileID: 0}
   moderate: {fileID: 0}
+  high: {fileID: 0}
+  extreme: {fileID: 0}
+  faint: {fileID: 0}
   volume: {fileID: 0}
 --- !u!114 &1056546635
 MonoBehaviour:
@@ -1929,6 +1932,8 @@ MonoBehaviour:
   passiveFearIncreaseAmount: 1
   postProcEffect: {fileID: 0}
   audioEffect: {fileID: 0}
+  currentBehaviorName: None
+  currentFearLevelText: None
 --- !u!1 &1102601454
 GameObject:
   m_ObjectHideFlags: 0
@@ -3696,7 +3701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914536465200885024, guid: 23d05854b0257c348b5ac9d75188c499, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 49.814243
+      value: 49.122
       objectReference: {fileID: 0}
     - target: {fileID: 1914536465200885024, guid: 23d05854b0257c348b5ac9d75188c499, type: 3}
       propertyPath: m_LocalPosition.y
