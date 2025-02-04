@@ -11,6 +11,10 @@ public class PlayerLook : PlayerModule
     public float bobbingSpeed = 10f;
     public float bobbingStrength = 0.05f;
     
+    [Header("Camera Settings")]
+    [Tooltip("Podstawowa wysokość kamery względem punktu gracza")]
+    public float cameraHeight = 1.6f;
+    
     private PlayerInput input;
     private float xRotation;
     private float bobbingOffset;
@@ -86,7 +90,7 @@ public class PlayerLook : PlayerModule
         }
 
         Vector3 cameraPosition = Player.cameraTransform.localPosition;
-        cameraPosition.y = bobbingOffset;
+        cameraPosition.y = cameraHeight + bobbingOffset;
         Player.cameraTransform.localPosition = cameraPosition;
     }
     
