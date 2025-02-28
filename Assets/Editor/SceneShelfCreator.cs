@@ -218,9 +218,9 @@ public static class SceneShelfCreator
 
         return new string(ShelfSymbol[0], leftCount) + baseName + new string(ShelfSymbol[0], rightCount);
     }
-    catch (System.Exception ex)
+    catch (System.Exception)
     {
-        Debug.LogWarning("B³¹d w FormatShelfName: " + ex.Message + "\nZwracam bazow¹ nazwê.");
+       
         return baseName;
     }
 }

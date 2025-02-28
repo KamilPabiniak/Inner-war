@@ -11,7 +11,6 @@ public class InvestigateState : IEnemyState
     private float _lostSightTimer;
 
     private float _initialRotationTime = 1.5f; 
-    private bool _finishedLookingAtAlert;
     public InvestigateState(Vector3 position)
     {
         _lastKnownPosition  = position;
@@ -78,7 +77,6 @@ public class InvestigateState : IEnemyState
             timer += Time.deltaTime;
             yield return null;
         }
-        _finishedLookingAtAlert = true;
     }
     
     private void RotateToAlert(EnemyBase enemy)
