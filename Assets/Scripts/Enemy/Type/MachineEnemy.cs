@@ -21,6 +21,7 @@ namespace Enemy.Type
         public float overloadTimer = 6f;
         
         private void Start()
+        
         {
             OriginalHeadPos = sightTarget.transform.localPosition;
             ChangeState(new PatrolState());
