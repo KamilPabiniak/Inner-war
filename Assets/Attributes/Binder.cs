@@ -1,19 +1,19 @@
-using UnityEditor;
 using UnityEngine;
+using System;
 
-public class AdvancedHeader : PropertyAttribute
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
+public class Binder : PropertyAttribute
 {
     public readonly string header;
     public readonly int fontSize; 
     public readonly float topSpace; 
     public readonly float bottomSpace; 
+    public readonly string colorHex;
     public readonly TextAnchor alignment;
     public readonly FontStyle fontStyle;
-    public readonly bool isFoldable;
-    public readonly bool foldEverything;
-    public readonly string colorHex;
+    public readonly bool foldAll;
 
-    public AdvancedHeader(
+    public Binder(
         string header,
         int fontSize = 12,
         float topSpace = 5f,
@@ -21,8 +21,7 @@ public class AdvancedHeader : PropertyAttribute
         string colorHex = "#FFFFFF",
         TextAnchor alignment = TextAnchor.MiddleLeft,
         FontStyle fontStyle = FontStyle.Normal,
-        bool isFoldable = false,
-        bool foldEverything = false)
+        bool foldAll = false)
     {
         this.header = header;
         this.fontSize = fontSize;
@@ -31,7 +30,9 @@ public class AdvancedHeader : PropertyAttribute
         this.colorHex = colorHex;
         this.alignment = alignment;
         this.fontStyle = fontStyle;
-        this.isFoldable = isFoldable;
-        this.foldEverything = foldEverything;
+        this.foldAll = foldAll;
     }
 }
+
+
+public class StopFold : PropertyAttribute { }

@@ -52,8 +52,6 @@ public static class SceneShelfCreator
         // Add the ShelfIdentifier component
         ShelfIdentifier identifier = shelfObject.AddComponent<ShelfIdentifier>();
         identifier.baseName = DefaultShelfName;
-        if (string.IsNullOrEmpty(identifier.uniqueID))
-            identifier.uniqueID = System.Guid.NewGuid().ToString();
 
         // Register the operation with the Undo system
         Undo.RegisterCreatedObjectUndo(shelfObject, "Create Shelf");

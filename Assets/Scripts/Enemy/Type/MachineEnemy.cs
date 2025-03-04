@@ -5,19 +5,21 @@ namespace Enemy.Type
 {
     public class MachineEnemy : EnemyBase
     {
-        [AdvancedHeader("Machine Specification", fontSize: 16, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, fontStyle: FontStyle.Bold, isFoldable: true ,foldEverything: true)]
-        [Header("References")]
+        [Binder("Machine Specification", fontSize: 16, bottomSpace: 5f, topSpace: 40f, alignment: TextAnchor.MiddleLeft, fontStyle: FontStyle.Bold, foldAll: true)]
+        
+        [Binder("EASY", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#f5e342")]
         public GameObject sightTarget;
         public Vector3 OriginalHeadPos { get; private set; }
 
-        [AdvancedHeader("Patrol Head Specification", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft, foldEverything: false)]
+        [Header("Patrol Head Specification")]
         public float headRotationSpeed;
         public int stopPoints;
         public float stopDuration = 0.5f;
         [Range(1,5)]
         [Tooltip("Maksymalna odleg³oœc punktu SightTarget")]
         public int maxOffsetDistance = 3; 
-        [AdvancedHeader("Attack", fontSize: 11, bottomSpace: 15f, alignment: TextAnchor.MiddleLeft)]
+        
+        [Binder("Attack", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#32a852", foldAll: false)]
         public float overloadTimer = 6f;
         
         private void Start()
