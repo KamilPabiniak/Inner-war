@@ -5,9 +5,9 @@ namespace Enemy.Type
 {
     public class MachineEnemy : EnemyBase
     {
-        [Binder("Machine Specification", fontSize: 16, bottomSpace: 5f, topSpace: 40f, alignment: TextAnchor.MiddleLeft, fontStyle: FontStyle.Bold, foldAll: true)]
+        [Binder("Machine Specification", fontSize: 16, bottomSpace: 5f, topSpace: 40f, alignment: TextAnchor.MiddleLeft, fontStyle: FontStyle.Bold, foldAll: true, colorHex:"#ff9900")]
         
-        [Binder("EASY", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#f5e342")]
+        [Binder("Reference", bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#f5e342")]
         public GameObject sightTarget;
         public Vector3 OriginalHeadPos { get; private set; }
         
@@ -19,7 +19,8 @@ namespace Enemy.Type
         [Tooltip("Maksymalna odleg³oœc punktu SightTarget")]
         public int maxOffsetDistance = 3; 
         
-        [Binder("Attack", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#32a852", foldAll: false)]
+        [StopFold]
+        [Binder("Attack", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#ff001e", foldAll: false)]
         public float overloadTimer = 6f;
         
         private void Start()

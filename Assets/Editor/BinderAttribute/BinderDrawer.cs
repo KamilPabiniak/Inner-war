@@ -8,21 +8,18 @@ namespace BinderAttribute
     {
         public override void OnGUI(Rect position)
         {
-            Binder binder = (Binder)attribute;
-            // Jeœli Binder jest przeznaczony do grupowania (foldAll), nie rysujemy nag³ówka w polu.
+            var binder = (Binder)attribute;
             if (binder.foldAll)
                 return;
 
             ColorUtility.TryParseHtmlString(binder.colorHex, out Color headerColor);
-            Color originalColor = GUI.contentColor;
+            var originalColor = GUI.contentColor;
             GUI.contentColor = headerColor;
 
-            GUIStyle style = GetStyle(binder);
+            var style = GetStyle(binder);
 
             position.y += binder.topSpace;
-
-            // Rysujemy etykietê przy polu (nie ma foldout, bo nie jest grupowany)
-            Rect rect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+            var rect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(rect, binder.header, style);
 
             GUI.contentColor = originalColor;
@@ -36,15 +33,18 @@ namespace BinderAttribute
                 fontStyle = binder.fontStyle,
                 alignment = binder.alignment
             };
+            if (ColorUtility.TryParseHtmlString(binder.colorHex, out Color headerColor))
+            {
+                style.normal.textColor = headerColor;
+            }
             return style;
         }
 
         public override float GetHeight()
         {
-            Binder binder = (Binder)attribute;
+            var binder = (Binder)attribute;
             if (binder.foldAll)
             {
-                // Jeœli pole jest przeznaczone tylko do grupowania, zwracamy 0 – nie rysujemy nag³ówka.
                 return 0f;
             }
             return EditorGUIUtility.singleLineHeight + binder.topSpace + binder.bottomSpace;
