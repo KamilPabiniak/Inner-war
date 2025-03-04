@@ -10,7 +10,7 @@ namespace Enemy.Type
         [Binder("EASY", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#f5e342")]
         public GameObject sightTarget;
         public Vector3 OriginalHeadPos { get; private set; }
-
+        
         [Header("Patrol Head Specification")]
         public float headRotationSpeed;
         public int stopPoints;

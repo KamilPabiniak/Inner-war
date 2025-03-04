@@ -19,22 +19,18 @@ namespace BinderAttribute
         {
             serializedObject.Update();
             Setup();
-
-            // Rysujemy zawsze m_Script (jeœli istnieje)
             DrawScriptField();
-
+            
             // Rysujemy niezgrupowane w³aœciwoœci
             foreach (var prop in ungroupedProps)
             {
                 EditorGUILayout.PropertyField(prop, true);
             }
-
-            // Rysujemy grupy (nag³ówek oraz zawartoœæ)
             foreach (var group in cacheGroups)
             {
                 DrawGroup(group);
             }
-
+            
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -49,13 +45,13 @@ namespace BinderAttribute
 
         void DrawGroup(FoldGroupCache group)
         {
-            // U¿ywamy stylu z BinderDrawer (nawet jeœli sam BinderDrawer nie rysuje nag³ówka przy foldAll)
+            // U¿ywamy stylu z BinderDrawer (zgodnie z danymi z atrybutu Binder)
             GUIStyle style = BinderDrawer.GetStyle(group.headerBinder);
 
             string prefsKey = "Binder_" + group.headerBinder.header + "_" + target.GetInstanceID();
             bool isExpanded = EditorPrefs.GetBool(prefsKey, group.headerBinder.foldAll ? true : false);
 
-            // Rysujemy nag³ówek grupy – korzystamy z danych z BinderDrawer
+            // Rysujemy nag³ówek grupy
             GUILayout.Space(group.headerBinder.topSpace);
             isExpanded = EditorGUILayout.Foldout(isExpanded, group.headerBinder.header, true, style);
             EditorPrefs.SetBool(prefsKey, isExpanded);
@@ -66,18 +62,8 @@ namespace BinderAttribute
                 EditorGUI.indentLevel++;
                 foreach (var prop in group.groupProps)
                 {
-                    // Jeœli dana w³aœciwoœæ to ta, która mia³a oba atrybuty (u¿ywana jako nag³ówek),
-                    // to rysujemy j¹ z etykiet¹ pobran¹ z fieldBinder – zapobiegamy duplikacji nag³ówka.
-                    GUIContent label = null;
-                    if (group.fieldBinder != null && prop.propertyPath == group.headerProp.propertyPath)
-                    {
-                        label = new GUIContent(group.fieldBinder.header);
-                    }
-                    else
-                    {
-                        label = new GUIContent(prop.displayName);
-                    }
-                    EditorGUILayout.PropertyField(prop, label, true);
+                    // U¿ywamy domyœlnej nazwy w³aœciwoœci (prop.displayName)
+                    EditorGUILayout.PropertyField(prop, new GUIContent(prop.displayName), true);
                 }
                 EditorGUI.indentLevel--;
             }
@@ -116,26 +102,26 @@ namespace BinderAttribute
                     Binder[] binders = fi.GetCustomAttributes(typeof(Binder), false) as Binder[];
                     if (binders != null && binders.Length > 0)
                     {
-                        // Jeœli pierwszy Binder ma foldAll = true, traktujemy to pole jako nag³ówek grupy.
+                        // Jeœli pierwszy Binder ma foldAll = true – traktujemy to pole jako nag³ówek grupy
                         if (binders[0].foldAll)
                         {
                             FoldGroupCache groupCache = new FoldGroupCache();
                             groupCache.headerBinder = binders[0];
                             groupCache.headerProp = currentProp.Copy();
                             
-                            // Jeœli na tym polu jest drugi Binder (przeznaczony do rysowania w³aœciwoœci),
-                            // zapisujemy go i dodajemy w³aœciwoœæ do grupy.
+                            // Jeœli istnieje drugi Binder (przeznaczony do rysowania pola), zapisujemy go,
+                            // ale przy rysowaniu w³aœciwoœci u¿yjemy zawsze domyœlnej nazwy (displayName)
                             if (binders.Length > 1)
                             {
                                 groupCache.fieldBinder = binders[1];
                                 groupCache.groupProps.Add(currentProp.Copy());
                             }
-                            // W przeciwnym razie, pole s³u¿y wy³¹cznie jako nag³ówek – nie dodajemy go do listy.
+                            // W przeciwnym razie, pole s³u¿y tylko jako nag³ówek – nie dodajemy go do listy w³aœciwoœci
                             
                             cacheGroups.Add(groupCache);
-                            i++; // Pomijamy aktualne pole (nag³ówek)
-                            
-                            // Dodajemy kolejne pola do grupy a¿ do napotkania StopFold lub kolejnego Binder z foldAll = true.
+                            i++; // Pomijamy nag³ówek
+
+                            // Dodajemy kolejne pola do grupy a¿ do napotkania StopFold lub kolejnego Binder z foldAll = true
                             while (i < allProps.Count)
                             {
                                 FieldInfo nextFi = GetFieldInfo(allProps[i]);
