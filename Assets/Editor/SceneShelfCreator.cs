@@ -123,12 +123,18 @@ public static class SceneShelfCreator
     private static string FormatShelfName(ShelfIdentifier shelf)
     {
         string baseName = shelf.baseName;
+        // Safely retrieve a label style.
         GUIStyle style = EditorStyles.label;
         if (style == null)
         {
-            Debug.LogWarning("EditorStyles.label is null, initializing a new GUIStyle.");
+            style = GUI.skin.label;
+        }
+        if (style == null)
+        {
+            Debug.LogWarning("Both EditorStyles.label and GUI.skin.label are null. Initializing new GUIStyle.");
             style = new GUIStyle();
         }
+
         float hierarchyWidth = GetHierarchyWindowWidth();
         float availableWidth = Mathf.Max(hierarchyWidth - Margin, 0f);
         float baseWidth = style.CalcSize(new GUIContent(baseName)).x;
@@ -136,10 +142,10 @@ public static class SceneShelfCreator
         // If available width is less than or equal to the base text width, return the base text (with gradient or color if enabled)
         if (availableWidth <= baseWidth)
         {
-            return shelf.useTextGradient 
+            return shelf.useTextGradient
                 ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
-                : (shelf.useTextColor 
-                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>" 
+                : (shelf.useTextColor
+                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
                     : baseName);
         }
 
@@ -260,10 +266,10 @@ public static class SceneShelfCreator
         }
         else
         {
-            return shelf.useTextGradient 
+            return shelf.useTextGradient
                 ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
-                : (shelf.useTextColor 
-                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>" 
+                : (shelf.useTextColor
+                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
                     : baseName);
         }
 

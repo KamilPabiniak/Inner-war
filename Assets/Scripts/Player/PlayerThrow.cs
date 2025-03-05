@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerThrow : MonoBehaviour
+public class PlayerThrow : PlayerModule
 {
-    [Header("Rzucanie Kamieniem")]
+    [Header("Rock throw")]
     public Transform handPosition;
     public GameObject stonePrefab;
     public LayerMask groundMask;
     public float throwForce = 10f;
     private bool canThrow = false;
 
-    [Header("Trajektoria")]
+    [Header("Trajectory")]
     public LineRenderer trajectoryLine;
     public int trajectoryResolution = 30;
     public Color trajectoryColor = Color.yellow;
