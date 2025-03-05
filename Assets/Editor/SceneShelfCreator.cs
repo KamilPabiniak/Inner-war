@@ -36,6 +36,7 @@ public static class SceneShelfCreator
     private static void CreateShelfFromMenu()
     {
         ShelfIdentifier identifier = CreateShelfWithDefaultValues();
+        // Format the shelf name right after creation.
         string formattedName = FormatShelfName(identifier);
         _lastHierarchyWidth = GetHierarchyWindowWidth();
         EnsureEventsSubscribed();
@@ -132,6 +133,7 @@ public static class SceneShelfCreator
         float availableWidth = Mathf.Max(hierarchyWidth - Margin, 0f);
         float baseWidth = style.CalcSize(new GUIContent(baseName)).x;
 
+        // If available width is less than or equal to the base text width, return the base text (with gradient or color if enabled)
         if (availableWidth <= baseWidth)
         {
             return shelf.useTextGradient 
@@ -141,7 +143,7 @@ public static class SceneShelfCreator
                     : baseName);
         }
 
-        // Determine special symbols.
+        // Determine special symbols based on the type.
         char leftSymbol, rightSymbol;
         switch (shelf.specialSymbolType)
         {
@@ -190,10 +192,12 @@ public static class SceneShelfCreator
         int leftCount, rightCount;
         if (shelf.displayLeftSymbols && shelf.displayRightSymbols)
         {
-            leftCount = totalSymbols / 2;
+            // Ensure that the initial leftCount is not negative.
+            leftCount = Mathf.Max((totalSymbols / 2) - 2, 0);
             rightCount = totalSymbols - leftCount;
             bool added = true;
             float resultWidth = style.CalcSize(new GUIContent(new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount))).x;
+            // Increase symbols while the result width is less than the available width.
             while (added)
             {
                 added = false;
@@ -218,6 +222,7 @@ public static class SceneShelfCreator
                     }
                 }
             }
+            // Decrease symbols if the result width exceeds available width.
             while (resultWidth > availableWidth && (leftCount > 0 || rightCount > 0))
             {
                 if (shelf.displayLeftSymbols && leftCount >= rightCount && leftCount > 0)
@@ -262,6 +267,7 @@ public static class SceneShelfCreator
                     : baseName);
         }
 
+        // Apply text color or gradient to the base name.
         string coloredBaseName;
         if (shelf.useTextGradient)
             coloredBaseName = ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection);
@@ -270,6 +276,7 @@ public static class SceneShelfCreator
         else
             coloredBaseName = baseName;
 
+        // Format left symbols.
         string leftSymbolsStr = "";
         if (shelf.displayLeftSymbols)
         {
@@ -292,6 +299,7 @@ public static class SceneShelfCreator
             }
         }
 
+        // Format right symbols.
         string rightSymbolsStr = "";
         if (shelf.displayRightSymbols)
         {
@@ -317,7 +325,9 @@ public static class SceneShelfCreator
         return leftSymbolsStr + coloredBaseName + rightSymbolsStr;
     }
 
-    // Applies a gradient to each character of the input string.
+    /// <summary>
+    /// Applies a gradient to each character of the input string.
+    /// </summary>
     private static string ApplyGradientToString(string input, Color[] gradientColors, ShelfIdentifier.GradientDirection gradientDirection)
     {
         if (input.Length == 0)
@@ -343,7 +353,9 @@ public static class SceneShelfCreator
         return result;
     }
 
-    // Evaluates a multi-stop gradient given an array of colors and a normalized t (0-1).
+    /// <summary>
+    /// Evaluates a multi-stop gradient given an array of colors and a normalized t (0-1).
+    /// </summary>
     private static Color EvaluateGradient(Color[] colors, float t)
     {
         if (colors == null || colors.Length == 0)
@@ -359,6 +371,9 @@ public static class SceneShelfCreator
         return Color.Lerp(colors[index], colors[index + 1], localT);
     }
 
+    /// <summary>
+    /// Retrieves the width of the hierarchy window.
+    /// </summary>
     private static float GetHierarchyWindowWidth()
     {
         System.Type hierarchyType = System.Type.GetType("UnityEditor.SceneHierarchyWindow,UnityEditor");
