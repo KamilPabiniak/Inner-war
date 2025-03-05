@@ -3,19 +3,12 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Tool for creating and updating shelf names based on the width of the Hierarchy window.
-/// Each shelf has a ShelfIdentifier component that stores its unique identifier and base name.
-/// This ensures that the data persists between scene changes or editor restarts.
-/// </summary>
 [InitializeOnLoad]
 public static class SceneShelfCreator
 {
-    // Configurable settings
     private const float Margin = 50f;
-    private const string ShelfSymbol = "-"; // Symbol used for formatting the names
     private const string DefaultShelfName = "New Shelf";
-    private const double DebounceThreshold = 0.1; // Debounce delay threshold (in seconds) for updates
+    private const double DebounceThreshold = 0.1; // Delay threshold (in seconds)
     private static double _lastUpdateCallTime;
     private static float _lastHierarchyWidth = -1f;
     private static bool _eventsSubscribed;
@@ -42,23 +35,25 @@ public static class SceneShelfCreator
     [MenuItem("GameObject/Create Shelf", false, 0)]
     private static void CreateShelfFromMenu()
     {
-        // Format the name based on the base name
-        string formattedName = FormatShelfName(DefaultShelfName);
-        GameObject shelfObject = new GameObject(formattedName)
+        ShelfIdentifier identifier = CreateShelfWithDefaultValues();
+        string formattedName = FormatShelfName(identifier);
+        _lastHierarchyWidth = GetHierarchyWindowWidth();
+        EnsureEventsSubscribed();
+    }
+
+    private static ShelfIdentifier CreateShelfWithDefaultValues()
+    {
+        GameObject shelfObject = new GameObject(DefaultShelfName)
         {
             transform = { hideFlags = HideFlags.HideInInspector }
         };
-
-        // Add the ShelfIdentifier component
         ShelfIdentifier identifier = shelfObject.AddComponent<ShelfIdentifier>();
         identifier.baseName = DefaultShelfName;
-
-        // Register the operation with the Undo system
+        identifier.useTextColor = false;
+        identifier.useBackgroundColor = false;
         Undo.RegisterCreatedObjectUndo(shelfObject, "Create Shelf");
         Selection.activeGameObject = shelfObject;
-        _lastHierarchyWidth = GetHierarchyWindowWidth();
-
-        EnsureEventsSubscribed();
+        return identifier;
     }
 
     [MenuItem("GameObject/Create Shelf", true)]
@@ -67,9 +62,6 @@ public static class SceneShelfCreator
         return !Application.isPlaying;
     }
 
-    /// <summary>
-    /// Subscribes to events if they have not been added yet and if at least one shelf exists.
-    /// </summary>
     private static void EnsureEventsSubscribed()
     {
         if (!_eventsSubscribed && Object.FindObjectsByType<ShelfIdentifier>(FindObjectsSortMode.None).Length > 0)
@@ -80,10 +72,6 @@ public static class SceneShelfCreator
         }
     }
 
-    /// <summary>
-    /// Updates shelf names when the Hierarchy window size changes.
-    /// The debounce mechanism prevents excessive calls.
-    /// </summary>
     private static void UpdateShelvesOnResize()
     {
         double currentTime = EditorApplication.timeSinceStartup;
@@ -99,18 +87,11 @@ public static class SceneShelfCreator
         }
     }
 
-    /// <summary>
-    /// Reacts to changes in the hierarchy (e.g. manual name changes) and updates all shelf names.
-    /// </summary>
     private static void OnHierarchyChanged()
     {
         UpdateAllShelves();
     }
 
-    /// <summary>
-    /// Scans the scene for objects with the ShelfIdentifier component and updates their names.
-    /// If no shelves are found, it unsubscribes from the events.
-    /// </summary>
     private static void UpdateAllShelves()
     {
         ShelfIdentifier[] shelfIdentifiers = Object.FindObjectsByType<ShelfIdentifier>(FindObjectsSortMode.None);
@@ -129,105 +110,255 @@ public static class SceneShelfCreator
         {
             if (identifier != null)
             {
-                // Use the stored base name
-                identifier.gameObject.name = FormatShelfName(identifier.baseName);
+                identifier.gameObject.name = FormatShelfName(identifier);
             }
         }
     }
 
     /// <summary>
-    /// Formats the shelf name by adding a number of symbols on both sides,
-    /// based on the available width of the Hierarchy window.
+    /// Formats the shelf name by adding special symbols on both sides (depending on settings)
+    /// and wrapping text/symbols with rich text tags.
     /// </summary>
-   private static string FormatShelfName(string baseName)
-{
-    try
+    private static string FormatShelfName(ShelfIdentifier shelf)
     {
+        string baseName = shelf.baseName;
         GUIStyle style = EditorStyles.label;
         if (style == null)
         {
-            Debug.LogWarning("EditorStyles.label is null, set new GUIStyle.");
+            Debug.LogWarning("EditorStyles.label is null, initializing a new GUIStyle.");
             style = new GUIStyle();
         }
-        
         float hierarchyWidth = GetHierarchyWindowWidth();
         float availableWidth = Mathf.Max(hierarchyWidth - Margin, 0f);
-
         float baseWidth = style.CalcSize(new GUIContent(baseName)).x;
-        float symbolWidth = style.CalcSize(new GUIContent(ShelfSymbol)).x;
-        
+
+        if (availableWidth <= baseWidth)
+        {
+            return shelf.useTextGradient 
+                ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
+                : (shelf.useTextColor 
+                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>" 
+                    : baseName);
+        }
+
+        // Determine special symbols.
+        char leftSymbol, rightSymbol;
+        switch (shelf.specialSymbolType)
+        {
+            case ShelfIdentifier.SpecialSymbolType.Default:
+                leftSymbol = '-'; rightSymbol = '-';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.Percent:
+                leftSymbol = '%'; rightSymbol = '%';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.Ampersand:
+                leftSymbol = '&'; rightSymbol = '&';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.At:
+                leftSymbol = '@'; rightSymbol = '@';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.Parentheses:
+                leftSymbol = '('; rightSymbol = ')';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.Tilde:
+                leftSymbol = '~'; rightSymbol = '~';
+                break;
+            case ShelfIdentifier.SpecialSymbolType.Custom:
+                if (!string.IsNullOrEmpty(shelf.customSymbol))
+                {
+                    leftSymbol = shelf.customSymbol[0];
+                    rightSymbol = leftSymbol;
+                }
+                else
+                {
+                    leftSymbol = '-'; rightSymbol = '-';
+                }
+                break;
+            default:
+                leftSymbol = '-'; rightSymbol = '-';
+                break;
+        }
+
+        string symbolForCalc = new string(leftSymbol, 1);
+        float symbolWidth = style.CalcSize(new GUIContent(symbolForCalc)).x;
         if (symbolWidth <= 0 || availableWidth <= baseWidth)
             return baseName;
 
         float remainingWidth = availableWidth - baseWidth;
         int totalSymbols = Mathf.FloorToInt(remainingWidth / symbolWidth);
-        
-        int leftCount = totalSymbols / 2;
-        int rightCount = totalSymbols - leftCount;
-        
-        string result = new string(ShelfSymbol[0], leftCount) + baseName + new string(ShelfSymbol[0], rightCount);
-        float resultWidth = style.CalcSize(new GUIContent(result)).x;
-        
-        bool added = true;
-        while (added)
-        {
-            added = false;
-            string testLeft = new string(ShelfSymbol[0], leftCount + 1) + baseName + new string(ShelfSymbol[0], rightCount);
-            if (style.CalcSize(new GUIContent(testLeft)).x <= availableWidth)
-            {
-                leftCount++;
-                resultWidth = style.CalcSize(new GUIContent(testLeft)).x;
-                added = true;
-            }
 
-            string testRight = new string(ShelfSymbol[0], leftCount) + baseName + new string(ShelfSymbol[0], rightCount + 1);
-            if (style.CalcSize(new GUIContent(testRight)).x <= availableWidth)
-            {
-                rightCount++;
-                resultWidth = style.CalcSize(new GUIContent(testRight)).x;
-                added = true;
-            }
-        }
-        
-        while (resultWidth > availableWidth && (leftCount > 0 || rightCount > 0))
+        int leftCount, rightCount;
+        if (shelf.displayLeftSymbols && shelf.displayRightSymbols)
         {
-            if (leftCount >= rightCount && leftCount > 0)
+            leftCount = totalSymbols / 2;
+            rightCount = totalSymbols - leftCount;
+            bool added = true;
+            float resultWidth = style.CalcSize(new GUIContent(new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount))).x;
+            while (added)
             {
-                string test = new string(ShelfSymbol[0], leftCount - 1) + baseName + new string(ShelfSymbol[0], rightCount);
-                if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                added = false;
+                if (shelf.displayLeftSymbols)
                 {
-                    leftCount--;
-                    resultWidth = style.CalcSize(new GUIContent(test)).x;
-                    continue;
+                    string testLeft = new string(leftSymbol, leftCount + 1) + baseName + new string(rightSymbol, rightCount);
+                    if (style.CalcSize(new GUIContent(testLeft)).x <= availableWidth)
+                    {
+                        leftCount++;
+                        resultWidth = style.CalcSize(new GUIContent(testLeft)).x;
+                        added = true;
+                    }
+                }
+                if (shelf.displayRightSymbols)
+                {
+                    string testRight = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount + 1);
+                    if (style.CalcSize(new GUIContent(testRight)).x <= availableWidth)
+                    {
+                        rightCount++;
+                        resultWidth = style.CalcSize(new GUIContent(testRight)).x;
+                        added = true;
+                    }
                 }
             }
-            if (rightCount > 0)
+            while (resultWidth > availableWidth && (leftCount > 0 || rightCount > 0))
             {
-                string test = new string(ShelfSymbol[0], leftCount) + baseName + new string(ShelfSymbol[0], rightCount - 1);
-                if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                if (shelf.displayLeftSymbols && leftCount >= rightCount && leftCount > 0)
                 {
-                    rightCount--;
-                    resultWidth = style.CalcSize(new GUIContent(test)).x;
-                    continue;
+                    string test = new string(leftSymbol, leftCount - 1) + baseName + new string(rightSymbol, rightCount);
+                    if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                    {
+                        leftCount--;
+                        resultWidth = style.CalcSize(new GUIContent(test)).x;
+                        continue;
+                    }
                 }
+                if (shelf.displayRightSymbols && rightCount > 0)
+                {
+                    string test = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount - 1);
+                    if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                    {
+                        rightCount--;
+                        resultWidth = style.CalcSize(new GUIContent(test)).x;
+                        continue;
+                    }
+                }
+                break;
             }
-            break;
+        }
+        else if (shelf.displayLeftSymbols && !shelf.displayRightSymbols)
+        {
+            rightCount = 0;
+            leftCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceLeftSymbolsPercent / 100f));
+        }
+        else if (!shelf.displayLeftSymbols && shelf.displayRightSymbols)
+        {
+            leftCount = 0;
+            rightCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceRightSymbolsPercent / 100f));
+        }
+        else
+        {
+            return shelf.useTextGradient 
+                ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
+                : (shelf.useTextColor 
+                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>" 
+                    : baseName);
         }
 
-        return new string(ShelfSymbol[0], leftCount) + baseName + new string(ShelfSymbol[0], rightCount);
+        string coloredBaseName;
+        if (shelf.useTextGradient)
+            coloredBaseName = ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection);
+        else if (shelf.useTextColor)
+            coloredBaseName = $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>";
+        else
+            coloredBaseName = baseName;
+
+        string leftSymbolsStr = "";
+        if (shelf.displayLeftSymbols)
+        {
+            string temp = new string(leftSymbol, leftCount);
+            if (shelf.useSymbolsGradient)
+                leftSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
+            else if (shelf.colorSymbolsSame && shelf.useTextColor)
+            {
+                string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
+                leftSymbolsStr = $"<color=#{hexText}>{temp}</color>";
+            }
+            else if (shelf.colorSymbolsDifferent)
+            {
+                string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
+                leftSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
+            }
+            else
+            {
+                leftSymbolsStr = temp;
+            }
+        }
+
+        string rightSymbolsStr = "";
+        if (shelf.displayRightSymbols)
+        {
+            string temp = new string(rightSymbol, rightCount);
+            if (shelf.useSymbolsGradient)
+                rightSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
+            else if (shelf.colorSymbolsSame && shelf.useTextColor)
+            {
+                string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
+                rightSymbolsStr = $"<color=#{hexText}>{temp}</color>";
+            }
+            else if (shelf.colorSymbolsDifferent)
+            {
+                string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
+                rightSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
+            }
+            else
+            {
+                rightSymbolsStr = temp;
+            }
+        }
+
+        return leftSymbolsStr + coloredBaseName + rightSymbolsStr;
     }
-    catch (System.Exception)
+
+    // Applies a gradient to each character of the input string.
+    private static string ApplyGradientToString(string input, Color[] gradientColors, ShelfIdentifier.GradientDirection gradientDirection)
     {
-       
-        return baseName;
+        if (input.Length == 0)
+            return input;
+
+        string result = "";
+        for (int i = 0; i < input.Length; i++)
+        {
+            float t;
+            if (gradientDirection == ShelfIdentifier.GradientDirection.CenterOutward)
+            {
+                float center = (input.Length - 1) / 2f;
+                t = (center > 0f) ? Mathf.Abs(i - center) / center : 0f;
+            }
+            else // LeftToRight
+            {
+                t = (input.Length > 1) ? (float)i / (input.Length - 1) : 0f;
+            }
+            Color col = EvaluateGradient(gradientColors, t);
+            string hex = ColorUtility.ToHtmlStringRGBA(col);
+            result += $"<color=#{hex}>{input[i]}</color>";
+        }
+        return result;
     }
-}
 
+    // Evaluates a multi-stop gradient given an array of colors and a normalized t (0-1).
+    private static Color EvaluateGradient(Color[] colors, float t)
+    {
+        if (colors == null || colors.Length == 0)
+            return Color.white;
+        if (colors.Length == 1)
+            return colors[0];
+        t = Mathf.Clamp01(t);
+        float scaledT = t * (colors.Length - 1);
+        int index = Mathf.FloorToInt(scaledT);
+        if (index >= colors.Length - 1)
+            return colors[colors.Length - 1];
+        float localT = scaledT - index;
+        return Color.Lerp(colors[index], colors[index + 1], localT);
+    }
 
-    /// <summary>
-    /// Gets the width of the Hierarchy window – tries to find the active (focused) window,
-    /// and if that fails, returns the width of the first found window.
-    /// </summary>
     private static float GetHierarchyWindowWidth()
     {
         System.Type hierarchyType = System.Type.GetType("UnityEditor.SceneHierarchyWindow,UnityEditor");
@@ -236,17 +367,15 @@ public static class SceneShelfCreator
             var windows = Resources.FindObjectsOfTypeAll(hierarchyType);
             if (windows is { Length: > 0 })
             {
-                // Look for the active (focused) Hierarchy window
                 foreach (var win in windows)
                 {
                     if (win is EditorWindow window && window == EditorWindow.focusedWindow)
                         return window.position.width;
                 }
-                // If no active window is found, return the first one found
                 if (windows[0] is EditorWindow first)
                     return first.position.width;
             }
         }
-        return 400f; // Default value if the window cannot be obtained
+        return 400f;
     }
 }

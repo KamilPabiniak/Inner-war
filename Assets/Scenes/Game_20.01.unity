@@ -2832,7 +2832,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ------------ENVIROMENT------------
+  m_Name: -----------------------------------------------ENVIROMENT----------------------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2851,6 +2851,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseName: ENVIROMENT
+  useTextColor: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  useBackgroundColor: 0
+  backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 0
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  specialSymbolType: 0
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 1
+  reduceLeftSymbolsPercent: 100
+  reduceRightSymbolsPercent: 100
+  textAlignment: 0
+  useTextGradient: 0
+  textGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 0
+  backgroundGradientColors:
+  - {r: 0.9150943, g: 0, b: 0, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 0
+  symbolsGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  symbolsGradientDirection: 0
 --- !u!4 &695772515
 Transform:
   m_ObjectHideFlags: 2
@@ -3583,7 +3613,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: -------------MANAGERS-------------
+  m_Name: '@@@@MANAGERS'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3602,6 +3632,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseName: MANAGERS
+  useTextColor: 0
+  textColor: {r: 1, g: 0, b: 0, a: 1}
+  useBackgroundColor: 1
+  backgroundColor: {r: 0.23584908, g: 0, b: 0, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 0
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  specialSymbolType: 3
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 0
+  reduceLeftSymbolsPercent: 11
+  reduceRightSymbolsPercent: 96
+  textAlignment: 0
+  useTextGradient: 0
+  textGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 0
+  backgroundGradientColors:
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 0
+  symbolsGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  symbolsGradientDirection: 0
 --- !u!4 &920049564
 Transform:
   m_ObjectHideFlags: 2
@@ -36835,7 +36895,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ------------CHARACTERS------------
+  m_Name: -----------------------------------------------<color=#610082FF>C</color><color=#5A0578FF>H</color><color=#54096EFF>A</color><color=#4E0E64FF>R</color><color=#48125AFF>A</color><color=#421750FF>C</color><color=#3B1B47FF>T</color><color=#35203DFF>E</color><color=#2F2433FF>R</color><color=#292929FF>S</color>----------------------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36854,6 +36914,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseName: CHARACTERS
+  useTextColor: 0
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  useBackgroundColor: 0
+  backgroundColor: {r: 0.2830189, g: 0.17010264, b: 0.089444645, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 0
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  specialSymbolType: 0
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 1
+  reduceLeftSymbolsPercent: 100
+  reduceRightSymbolsPercent: 30
+  textAlignment: 0
+  useTextGradient: 1
+  textGradientColors:
+  - {r: 0.37851796, g: 0, b: 0.509434, a: 1}
+  - {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 1
+  backgroundGradientColors:
+  - {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  - {r: 0.24552108, g: 0.079832695, b: 0.4339623, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 0
+  symbolsGradientColors: []
+  symbolsGradientDirection: 0
 --- !u!4 &1243767705
 Transform:
   m_ObjectHideFlags: 2
@@ -37847,7 +37935,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: ---------POSTPROCESSING---------
+  m_Name: --------------------------------------------POSTPROCESSING--------------------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37866,6 +37954,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseName: POSTPROCESSING
+  useTextColor: 0
+  textColor: {r: 0.70922697, g: 0.4009434, b: 1, a: 1}
+  useBackgroundColor: 1
+  backgroundColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 0
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  specialSymbolType: 0
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 1
+  reduceLeftSymbolsPercent: 100
+  reduceRightSymbolsPercent: 100
+  textAlignment: 0
+  useTextGradient: 0
+  textGradientColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 0
+  backgroundGradientColors:
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 0
+  symbolsGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  symbolsGradientDirection: 0
 --- !u!4 &1510743468
 Transform:
   m_ObjectHideFlags: 2
@@ -37892,7 +38010,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: ----------------LIGHT----------------
+  m_Name: <color=#FFBC00FF>-</color><color=#F5B500FF>-</color><color=#EBAD00FF>-</color><color=#E0A600FF>-</color><color=#D69E00FF>-</color><color=#CC9700FF>-</color><color=#C28F00FF>-</color><color=#B88800FF>-</color><color=#AD8000FF>-</color><color=#A37900FF>-</color><color=#997100FF>-</color><color=#8F6A00FF>-</color><color=#856200FF>-</color><color=#7A5A00FF>-</color><color=#705300FF>-</color><color=#664B00FF>-</color><color=#5C4400FF>-</color><color=#523C00FF>-</color><color=#473500FF>-</color><color=#3D2D00FF>-</color><color=#332600FF>-</color><color=#291E00FF>-</color><color=#1F1700FF>-</color><color=#140F00FF>-</color><color=#0A0800FF>-</color><color=#000000FF>-</color><color=#0A0800FF>-</color><color=#140F00FF>-</color><color=#1F1700FF>-</color><color=#291E00FF>-</color><color=#332600FF>-</color><color=#3D2D00FF>-</color><color=#473500FF>-</color><color=#523C00FF>-</color><color=#5C4400FF>-</color><color=#664B00FF>-</color><color=#705300FF>-</color><color=#7A5A00FF>-</color><color=#856200FF>-</color><color=#8F6A00FF>-</color><color=#997100FF>-</color><color=#A37900FF>-</color><color=#AD8000FF>-</color><color=#B88800FF>-</color><color=#C28F00FF>-</color><color=#CC9700FF>-</color><color=#D69E00FF>-</color><color=#E0A600FF>-</color><color=#EBAD00FF>-</color><color=#F5B500FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#F5B500FF>-</color><color=#EAAD00FF>-</color><color=#E0A500FF>-</color><color=#D59E00FF>-</color><color=#CB9600FF>-</color><color=#C18E00FF>-</color><color=#B68700FF>-</color><color=#AC7F00FF>-</color><color=#A17700FF>-</color><color=#977000FF>-</color><color=#8D6800FF>-</color><color=#826000FF>-</color><color=#785800FF>-</color><color=#6D5100FF>-</color><color=#634900FF>-</color><color=#584100FF>-</color><color=#4E3A00FF>-</color><color=#443200FF>-</color><color=#392A00FF>-</color><color=#2F2300FF>-</color><color=#241B00FF>-</color><color=#1A1300FF>-</color><color=#100C00FF>-</color><color=#050400FF>-</color><color=#050400FF>-</color><color=#100C00FF>-</color><color=#1A1300FF>-</color><color=#241B00FF>-</color><color=#2F2300FF>-</color><color=#392A00FF>-</color><color=#443200FF>-</color><color=#4E3A00FF>-</color><color=#584100FF>-</color><color=#634900FF>-</color><color=#6D5100FF>-</color><color=#785800FF>-</color><color=#826000FF>-</color><color=#8D6800FF>-</color><color=#977000FF>-</color><color=#A17700FF>-</color><color=#AC7F00FF>-</color><color=#B68700FF>-</color><color=#C18E00FF>-</color><color=#CB9600FF>-</color><color=#D59E00FF>-</color><color=#E0A500FF>-</color><color=#EAAD00FF>-</color><color=#F5B500FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37911,6 +38029,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseName: LIGHT
+  useTextColor: 1
+  textColor: {r: 1, g: 1, b: 0, a: 1}
+  useBackgroundColor: 0
+  backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 0
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  specialSymbolType: 0
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 1
+  reduceLeftSymbolsPercent: 100
+  reduceRightSymbolsPercent: 100
+  textAlignment: 0
+  useTextGradient: 0
+  textGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 0
+  backgroundGradientColors:
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 1
+  symbolsGradientColors:
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0.73893946, b: 0, a: 1}
+  symbolsGradientDirection: 1
 --- !u!4 &1525228045
 Transform:
   m_ObjectHideFlags: 2
@@ -38584,6 +38732,83 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
   m_PrefabInstance: {fileID: 1731574821}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1731588894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1731588896}
+  - component: {fileID: 1731588895}
+  m_Layer: 0
+  m_Name: "<color=#FF0808FF>(((((((((((((((((((((((((((((</color><color=#FF0808FF>JAKBY
+    TO KTO\u015A CHCIA\u0141 U\u0141O\u017BY\u0106 TO SI\u0118 NIE POGNIEWAMY</color><color=#FF0808FF>)))))))))))))))))))))))))))))</color>"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1731588895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731588894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb0456d589e67a4897538466bc3100e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseName: "JAKBY TO KTO\u015A CHCIA\u0141 U\u0141O\u017BY\u0106 TO SI\u0118 NIE
+    POGNIEWAMY"
+  useTextColor: 1
+  textColor: {r: 1, g: 0.033018887, b: 0.033018887, a: 1}
+  useBackgroundColor: 1
+  backgroundColor: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
+  backgroundCornerRadius: 4
+  colorSymbolsSame: 1
+  colorSymbolsDifferent: 0
+  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  specialSymbolType: 4
+  customSymbol: 
+  displayLeftSymbols: 1
+  displayRightSymbols: 1
+  reduceLeftSymbolsPercent: 100
+  reduceRightSymbolsPercent: 100
+  textAlignment: 0
+  useTextGradient: 0
+  textGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  textGradientDirection: 0
+  useBackgroundGradient: 0
+  backgroundGradientColors:
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  - {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  backgroundGradientDirection: 1
+  useSymbolsGradient: 0
+  symbolsGradientColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 1, b: 1, a: 1}
+  symbolsGradientDirection: 0
+--- !u!4 &1731588896
+Transform:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731588894}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1737466519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40459,6 +40684,7 @@ BoxCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1731588896}
   - {fileID: 920049564}
   - {fileID: 1574631212}
   - {fileID: 939598142}
