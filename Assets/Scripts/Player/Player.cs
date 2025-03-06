@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
  public class Player : MonoBehaviour
  { 
+     public static Player Instance { get; private set; }
      [Header("Settings")] 
      [Tooltip("Wysokość gracza podczas stania.")]
      public float standingHeight = 2f;
@@ -37,6 +38,12 @@ using UnityEngine;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         modules = GetComponents<PlayerModule>();
         foreach (var module in modules)
         {

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SoundFXManager : MonoBehaviour
 {
@@ -7,6 +6,7 @@ public class SoundFXManager : MonoBehaviour
 
     [SerializeField] private AudioSource soundFXObject;
     [SerializeField] private AudioSource soundGlobalFXObject;
+    [SerializeField] private AudioSource soundGlobalNoEffectFXObject;
 
     private void Awake()
     {
@@ -15,9 +15,7 @@ public class SoundFXManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     
     public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume)

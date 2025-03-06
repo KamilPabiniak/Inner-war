@@ -124,14 +124,19 @@ public static class SceneShelfCreator
     {
         string baseName = shelf.baseName;
         // Safely retrieve a label style.
-        GUIStyle style = EditorStyles.label;
-        if (style == null)
+        GUIStyle style = null;
+        try
         {
-            style = GUI.skin.label;
+            style = EditorStyles.label;
         }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning("Nie uda³o siê pobraæ EditorStyles.label: " + ex);
+        }
+        style ??= GUI.skin.label;
         if (style == null)
         {
-            Debug.LogWarning("Both EditorStyles.label and GUI.skin.label are null. Initializing new GUIStyle.");
+            Debug.LogWarning("Zarówno EditorStyles.label, jak i GUI.skin.label s¹ null. Inicjalizujê nowy GUIStyle.");
             style = new GUIStyle();
         }
 

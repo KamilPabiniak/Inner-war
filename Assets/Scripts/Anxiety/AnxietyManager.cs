@@ -1,30 +1,37 @@
+using System.Linq;
+using Anxiety.Controllers;
 using Anxiety.Effects;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Anxiety
 {
     public class AnxietyManager : MonoBehaviour
     {
         public static AnxietyManager Instance { get; private set; }
-        [Range(0, 100)] public float FearLevel { get; set; }
+        [Range(0, 100)] public float FearLevel { get; private set; }
 
-        [Header("Passive Anxiety Increase Settings")]
+        public string FearLevelText;
+
+        [Header("Ustawienia Pasywnego Wzrostu Lêku")]
         [SerializeField] private float passiveFearIncreaseInterval = 15f;
         [SerializeField] private float passiveFearIncreaseAmount = 1f;
 
-        [Header("Effects Managers")]
-        public PostProcessingManager postProcEffect;
-        public AudioEffectsManager audioEffect;
-        
-        [Header("Debug (tylko do podgl¹du)")]
-        [SerializeField] private string currentBehaviorName = "None";
-        [SerializeField] private string currentFearLevelText = "None";
+        [Header("Controllers")] 
+        public PostProcessingController postProcessingController;
+        public MovementEffectController movementEffectController;
+        public AudioEffectsController audioEffectsController;
 
-        private float _timer;
-        private IFearBehavior _currentBehavior;
-        private int _currentLevel;
+        [Header("Profile Poziomów Lêku")]
+        public FearLevelProfile level0Profile;
+        public FearLevelProfile level1Profile;
+        public FearLevelProfile level2Profile;
+        public FearLevelProfile level3Profile;
+        public FearLevelProfile level4Profile;
+        public FearLevelProfile level5Profile;
         
+        private FearLevelProfile _currentProfile;
+        private float _timer;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -37,12 +44,11 @@ namespace Anxiety
 
         private void Start()
         {
-            UpdateFearBehavior();
+            UpdateProfileForLevel(DetermineFearLevel());
         }
 
         private void Update()
         {
-            // Pasive fear increase over time
             _timer += Time.deltaTime;
             if (_timer >= passiveFearIncreaseInterval)
             {
@@ -50,61 +56,67 @@ namespace Anxiety
                 _timer = 0f;
             }
 
-            currentFearLevelText = FearLevel.ToString();
-        }
-
-        public void ExeciuteActiveLevel()
-        {
-            _currentBehavior?.Execute();
+            FearLevelText = FearLevel.ToString();
         }
 
         public void IncreaseFear(float amount)
         {
             FearLevel = Mathf.Clamp(FearLevel + amount, 0, 100);
-            UpdateFearBehavior();
+            int level = DetermineFearLevel();
+            UpdateProfileForLevel(level);
         }
 
         public void DecreaseFear(float amount)
         {
             FearLevel = Mathf.Clamp(FearLevel - amount, 0, 100);
-            UpdateFearBehavior();
-        }
-        
-        private int DetermineFearLevel()
-        {
-            if (FearLevel <= 20) return 0;
-            if (FearLevel <= 40) return 1;
-            if (FearLevel <= 60) return 2;
-            if (FearLevel <= 80) return 3;
-            if (FearLevel < 100) return 4;
-            return 5;
+            int level = DetermineFearLevel();
+            UpdateProfileForLevel(level);
         }
 
-        private void UpdateFearBehavior()
+        public int DetermineFearLevel()
         {
-            int newLevel = DetermineFearLevel();
-            if (newLevel != _currentLevel)
+            return FearLevel switch
             {
-                _currentBehavior?.Exit();
-                _currentLevel = newLevel;
-                _currentBehavior = CreateBehaviorForLevel(newLevel);
-                _currentBehavior?.Enter(this);
-                currentBehaviorName = _currentBehavior.GetType().Name;
+                <= 20 => 0,
+                <= 40 => 1,
+                <= 60 => 2,
+                <= 80 => 3,
+                _ => FearLevel < 100 ? 4 : 5
+            };
+        }
+
+        private void UpdateProfileForLevel(int level)
+        {
+            _currentProfile = level switch
+            {
+                0 => level0Profile,
+                1 => level1Profile,
+                2 => level2Profile,
+                3 => level3Profile,
+                4 => level4Profile,
+                5 => level5Profile,
+                _ => null
+            };
+            if (_currentProfile == null) return;
+            foreach (var effect in _currentProfile.effects.Where(effect => effect != null).Where(effect => effect.autoTrigger))
+            {
+                effect.TriggerEffect();
+            }
+        }
+
+       [ContextMenu("TriggerEfects")]
+        public void TriggerProfileEffects()
+        {
+            if (_currentProfile == null) return;
+            foreach (var effect in _currentProfile.effects.Where(effect => effect != null))
+            {
+                effect.TriggerEffect();
             }
         }
         
-        private IFearBehavior CreateBehaviorForLevel(int level)
+        public bool CurrentProfileContains(BaseFearEffect effect)
         {
-            switch (level)
-            {
-                case 0: return new AnxietyLevel_0();
-                case 1: return new AnxietyLevel_1();
-                case 2: return new AnxietyLevel_1(); //AnxietyLevel_2
-                case 3: return new AnxietyLevel_1(); //AnxietyLevel_3
-                case 4: return new AnxietyLevel_1(); // AnxietyLevel_4
-                case 5: return new AnxietyLevel_1(); //AnxietyLevel_5
-                default: return null;
-            }
+            return _currentProfile != null && _currentProfile.effects.Contains(effect);
         }
     }
 }

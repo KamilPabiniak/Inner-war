@@ -30,7 +30,6 @@ public class InvestigateState : IEnemyState
         {
             _lostSightTimer = 0f;
             _lastKnownPosition = enemy.Player.position;
-            AnxietyManager.Instance.ExeciuteActiveLevel();
 
             if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
             {
@@ -41,7 +40,6 @@ public class InvestigateState : IEnemyState
             else
             {
                 enemy.FacePlayer();
-                //Debug.LogWarning($"[{enemy.name}] Gracz po za obszarem strze¿onym.");
             }
         }
         else

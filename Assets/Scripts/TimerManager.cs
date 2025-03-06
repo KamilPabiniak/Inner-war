@@ -4,55 +4,52 @@ using UnityEngine;
 
 public class TimerManager : MonoBehaviour
 {
-    private static readonly List<Timer> _timers = new List<Timer>();
-    private static readonly Queue<Timer> _timersToAdd = new Queue<Timer>();
-    private static readonly Queue<Timer> _timersToRemove = new Queue<Timer>();
+    private static readonly List<Timer> Timers = new List<Timer>();
+    private static readonly Queue<Timer> TimersToAdd = new Queue<Timer>();
+    private static readonly Queue<Timer> TimersToRemove = new Queue<Timer>();
 
-    public static TimerHandle Schedule(Action action, float delay)
+    public static void Schedule(Action action, float delay)
     {
         if (delay <= 0)
         {
             action?.Invoke();
-            return null;
+            return;
         }
 
         Timer timer = new Timer(action, delay);
-        _timersToAdd.Enqueue(timer);
-        return new TimerHandle(timer);
+        TimersToAdd.Enqueue(timer);
     }
 
     public static void Cancel(TimerHandle handle)
     {
-        if (handle?.Timer != null)
-        {
-            _timersToRemove.Enqueue(handle.Timer);
-            handle.Timer = null;
-        }
+        if (handle?.Timer == null) return;
+        TimersToRemove.Enqueue(handle.Timer);
+        handle.Timer = null;
     }
     
     private void Update()
     {
-        while (_timersToAdd.Count > 0)
+        while (TimersToAdd.Count > 0)
         {
-            _timers.Add(_timersToAdd.Dequeue());
+            Timers.Add(TimersToAdd.Dequeue());
         }
         
-        while (_timersToRemove.Count > 0)
+        while (TimersToRemove.Count > 0)
         {
-            Timer timerToRemove = _timersToRemove.Dequeue();
-            if (_timers.Contains(timerToRemove))
+            Timer timerToRemove = TimersToRemove.Dequeue();
+            if (Timers.Contains(timerToRemove))
             {
                 timerToRemove.Cancel();
-                _timers.Remove(timerToRemove);
+                Timers.Remove(timerToRemove);
             }
         }
 
         float deltaTime = Time.deltaTime;
-        for (int i = _timers.Count - 1; i >= 0; i--)
+        for (int i = Timers.Count - 1; i >= 0; i--)
         {
-            if (_timers[i].Tick(deltaTime))
+            if (Timers[i].Tick(deltaTime))
             {
-                _timers.RemoveAt(i);
+                Timers.RemoveAt(i);
             }
         }
     }
@@ -76,13 +73,10 @@ public class Timer
         if (_isCanceled) return true;
 
         _timeRemaining -= deltaTime;
-        if (_timeRemaining <= 0)
-        {
-            _action?.Invoke();
-            Handle?.Invalidate();
-            return true;
-        }
-        return false;
+        if (!(_timeRemaining <= 0)) return false;
+        _action?.Invoke();
+        Handle?.Invalidate();
+        return true;
     }
 
     public void Cancel()
@@ -92,11 +86,11 @@ public class Timer
     }
 }
 
-public class TimerHandle
+public abstract class TimerHandle
 {
     internal Timer Timer { get; set; }
 
-    public TimerHandle(Timer timer)
+    protected TimerHandle(Timer timer)
     {
         Timer = timer;
         Timer.Handle = this;
