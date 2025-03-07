@@ -15,9 +15,24 @@ namespace Anxiety.Effects
         public bool disableWhenTrigger;
 
         private bool _isActive;
+        private bool _isBlocked;
+
+        private void OnEnable()
+        {
+            _isBlocked = false;
+            _isActive = false;
+        }
+
+        public void SetBlocked(bool blocked)
+        {
+            _isBlocked = blocked;
+        }
 
         public void TriggerEffect()
         {
+            if (_isBlocked)
+                return;
+
             float delay = Random.Range(minInterval, maxInterval);
             TimerManager.Schedule(() =>
             {
@@ -29,7 +44,12 @@ namespace Anxiety.Effects
                 {
                     EndEffect();
                     _isActive = false;
-                    
+
+                    if (disableWhenTrigger && AnxietyManager.Instance != null)
+                    {
+                        AnxietyManager.Instance.UnblockAutoTriggeredEffects();
+                    }
+
                     if (autoTrigger && AnxietyManager.Instance != null && AnxietyManager.Instance.CurrentProfileContains(this))
                     {
                         TriggerEffect();
@@ -37,17 +57,15 @@ namespace Anxiety.Effects
                 }, duration);
             }, delay);
         }
-    
+
         protected abstract void ExecuteEffect();
         protected abstract void EndEffect();
-    
+
         public void ForceEndEffect()
         {
-            if (_isActive)
-            {
-                EndEffect();
-                _isActive = false;
-            }
+            if (!_isActive) return;
+            EndEffect();
+            _isActive = false;
         }
     }
 }

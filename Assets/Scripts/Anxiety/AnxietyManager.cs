@@ -106,19 +106,47 @@ namespace Anxiety
             }
         }
 
-       [ContextMenu("TriggerEfects")]
+        [ContextMenu("TriggerEfects")]
         public void TriggerProfileEffects()
         {
             if (_currentProfile == null) return;
-            foreach (var effect in _currentProfile.effects.Where(effect => effect != null))
+
+            bool shouldBlock = _currentProfile.effects.Any(e => e != null && e.disableWhenTrigger);
+    
+            foreach (var effect in _currentProfile.effects.Where(e => e != null))
             {
                 effect.TriggerEffect();
             }
+    
+            if (shouldBlock && Instance != null)
+            {
+                BlockAutoTriggeredEffects();
+            }
         }
+
         
         public bool CurrentProfileContains(BaseFearEffect effect)
         {
             return _currentProfile != null && _currentProfile.effects.Contains(effect);
+        }
+
+        private void BlockAutoTriggeredEffects()
+        {
+            if (_currentProfile == null) return;
+            foreach (var effect in _currentProfile.effects.Where(e => e != null && e.autoTrigger))
+            {
+                effect.ForceEndEffect();
+                effect.SetBlocked(true);
+            }
+        }
+
+        public void UnblockAutoTriggeredEffects()
+        {
+            if (_currentProfile == null) return;
+            foreach (var effect in _currentProfile.effects.Where(e => e != null && e.autoTrigger))
+            {
+                effect.SetBlocked(false);
+            }
         }
     }
 }

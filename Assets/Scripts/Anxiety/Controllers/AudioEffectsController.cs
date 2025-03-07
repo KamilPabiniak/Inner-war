@@ -84,6 +84,7 @@ public class AudioEffectsController : MonoBehaviour
     /// <param name="voicesFadeOutDuration">Fade-out duration (seconds).</param>
     public void StopVoices(float voicesFadeOutDuration)
     {
+        Debug.LogError("StopVoices wywo³ane.");
         if (currentVoices != null)
         {
             StartCoroutine(FadeOutAndStop(currentVoices, voicesFadeOutDuration, () =>
@@ -92,6 +93,7 @@ public class AudioEffectsController : MonoBehaviour
             }));
         }
     }
+
 
     #endregion
 
@@ -161,6 +163,7 @@ public class AudioEffectsController : MonoBehaviour
     
     private IEnumerator FadeOutAndStop(AudioSource source, float duration, System.Action onComplete)
     {
+        Debug.LogError("FadeOutAndStop rozpoczête.");
         float startVolume = source.volume;
         float timeElapsed = 0f;
         while (timeElapsed < duration)
@@ -173,6 +176,7 @@ public class AudioEffectsController : MonoBehaviour
         source.volume = 0f;
         source.Stop();
         Destroy(source.gameObject);
+        Debug.LogError("FadeOutAndStop – dŸwiêk zatrzymany i obiekt zniszczony.");
         onComplete?.Invoke();
     }
     
@@ -202,6 +206,7 @@ public class AudioEffectsController : MonoBehaviour
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
+            if (heartSource == null) yield return null;
             heartSource.volume = Mathf.Lerp(startVolume, 0f, Mathf.SmoothStep(0f, 1f, t));
             float newEcho = Mathf.Lerp(startEcho, 0f, Mathf.SmoothStep(0f, 1f, t));
             audioMixer.SetFloat("drymixEcho", newEcho);
