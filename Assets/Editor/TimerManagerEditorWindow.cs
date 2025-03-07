@@ -1,17 +1,34 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 using System.Reflection;
 
 public class TimerManagerEditorWindow : EditorWindow
 {
-    private Vector2 scrollPos;
+    private Vector2 _scrollPos;
 
     [MenuItem("Window/Debug/Timer Manager")]
     public static void ShowWindow()
     {
         GetWindow<TimerManagerEditorWindow>("Timer Manager Debug");
+    }
+
+    private void OnEnable()
+    {
+        // Subscribe to the editor update event for continuous refresh.
+        EditorApplication.update += UpdateWindow;
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.update -= UpdateWindow;
+    }
+
+    private void UpdateWindow()
+    {
+        Repaint();
     }
 
     private void OnGUI()
@@ -20,11 +37,11 @@ public class TimerManagerEditorWindow : EditorWindow
 
         if (!Application.isPlaying)
         {
-            EditorGUILayout.HelpBox("Uruchom tryb Play, aby debugowaæ TimerManager.", MessageType.Info);
+            EditorGUILayout.HelpBox("Enter Play mode to debug TimerManager.", MessageType.Info);
             return;
         }
 
-        // U¿ywamy refleksji, aby pobraæ prywatne pola TimerManagera.
+        // Using reflection to retrieve the private fields of TimerManager.
         Type timerManagerType = typeof(TimerManager);
         FieldInfo timersField = timerManagerType.GetField("Timers", BindingFlags.Static | BindingFlags.NonPublic);
         FieldInfo timersToAddField = timerManagerType.GetField("TimersToAdd", BindingFlags.Static | BindingFlags.NonPublic);
@@ -32,59 +49,82 @@ public class TimerManagerEditorWindow : EditorWindow
 
         if (timersField == null || timersToAddField == null || timersToRemoveField == null)
         {
-            EditorGUILayout.HelpBox("Nie uda³o siê odnaleŸæ pól TimerManagera.", MessageType.Error);
+            EditorGUILayout.HelpBox("Could not find TimerManager fields.", MessageType.Error);
             return;
         }
 
-        List<object> timers = timersField.GetValue(null) as List<object>;
-        Queue<object> timersToAdd = timersToAddField.GetValue(null) as Queue<object>;
-        Queue<object> timersToRemove = timersToRemoveField.GetValue(null) as Queue<object>;
+        // Cast to System.Collections.IList for List<Timer>
+        IList timers = timersField.GetValue(null) as IList;
+        // Cast to System.Collections.IEnumerable for Queue<Timer>
+        IEnumerable timersToAdd = timersToAddField.GetValue(null) as IEnumerable;
+        IEnumerable timersToRemove = timersToRemoveField.GetValue(null) as IEnumerable;
 
-        EditorGUILayout.LabelField("Liczba aktywnych timerów: " + (timers != null ? timers.Count.ToString() : "0"));
-        EditorGUILayout.LabelField("Liczba timerów do dodania: " + (timersToAdd != null ? timersToAdd.Count.ToString() : "0"));
-        EditorGUILayout.LabelField("Liczba timerów do usuniêcia: " + (timersToRemove != null ? timersToRemove.Count.ToString() : "0"));
+        int timersCount = timers?.Count ?? 0;
+        int timersToAddCount = 0;
+        int timersToRemoveCount = 0;
 
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-
-        if (timers != null)
+        if (timersToAdd != null)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Aktywne Timery", EditorStyles.boldLabel);
-            foreach (object timer in timers)
-            {
-                if (timer == null) continue;
-                DrawTimerInfo(timer);
-            }
-        }
+            IEnumerable toAdd = timersToAdd.Cast<object>().ToList();
+            foreach (object _ in toAdd)
+                timersToAddCount++;
 
-        if (timersToAdd != null && timersToAdd.Count > 0)
-        {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Timery oczekuj¹ce na dodanie", EditorStyles.boldLabel);
-            foreach (object timer in timersToAdd)
+            if (timersToRemove != null)
             {
-                if (timer == null) continue;
-                DrawTimerInfo(timer);
-            }
-        }
+                IEnumerable toRemove = timersToRemove.Cast<object>().ToList();
+                foreach (object _ in toRemove)
+                    timersToRemoveCount++;
 
-        if (timersToRemove != null && timersToRemove.Count > 0)
-        {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Timery oczekuj¹ce na usuniêcie", EditorStyles.boldLabel);
-            foreach (object timer in timersToRemove)
-            {
-                if (timer == null) continue;
-                DrawTimerInfo(timer);
+                EditorGUILayout.LabelField("Active Timers: " + timersCount);
+                EditorGUILayout.LabelField("Timers to Add: " + timersToAddCount);
+                EditorGUILayout.LabelField("Timers to Remove: " + timersToRemoveCount);
+
+                _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+
+                if (timers != null && timersCount > 0)
+                {
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("Active Timers", EditorStyles.boldLabel);
+                    foreach (object timer in timers)
+                    {
+                        if (timer == null) continue;
+                        DrawTimerInfo(timer);
+                    }
+                }
+
+                {
+                    bool headerDrawn = false;
+                    foreach (object timer in toAdd)
+                    {
+                        if (timer == null) continue;
+                        if (!headerDrawn)
+                        {
+                            EditorGUILayout.Space();
+                            EditorGUILayout.LabelField("Timers Pending Addition", EditorStyles.boldLabel);
+                            headerDrawn = true;
+                        }
+                        DrawTimerInfo(timer);
+                    }
+                }
+
+                {
+                    bool headerDrawn = false;
+                    foreach (object timer in toRemove)
+                    {
+                        if (timer == null) continue;
+                        if (!headerDrawn)
+                        {
+                            EditorGUILayout.Space();
+                            EditorGUILayout.LabelField("Timers Pending Removal", EditorStyles.boldLabel);
+                            headerDrawn = true;
+                        }
+                        DrawTimerInfo(timer);
+                    }
+                }
             }
         }
 
         EditorGUILayout.EndScrollView();
-
-        if (GUILayout.Button("Odœwie¿"))
-        {
-            Repaint();
-        }
     }
 
     private void DrawTimerInfo(object timer)
@@ -93,23 +133,26 @@ public class TimerManagerEditorWindow : EditorWindow
             return;
 
         Type timerType = timer.GetType();
-        // Pobieramy prywatne pola _timeRemaining, _isCanceled oraz _action
+        // Retrieve private fields: _timeRemaining, _isCanceled, _action and the new _callerInfo.
         FieldInfo timeRemainingField = timerType.GetField("_timeRemaining", BindingFlags.Instance | BindingFlags.NonPublic);
         FieldInfo isCanceledField = timerType.GetField("_isCanceled", BindingFlags.Instance | BindingFlags.NonPublic);
         FieldInfo actionField = timerType.GetField("_action", BindingFlags.Instance | BindingFlags.NonPublic);
+        FieldInfo callerInfoField = timerType.GetField("_callerInfo", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        float timeRemaining = timeRemainingField != null ? (float)timeRemainingField.GetValue(timer) : 0f;
-        bool isCanceled = isCanceledField != null ? (bool)isCanceledField.GetValue(timer) : false;
+        float timeRemaining = timeRemainingField != null ? Convert.ToSingle(timeRemainingField.GetValue(timer)) : 0f;
+        bool isCanceled = isCanceledField != null && Convert.ToBoolean(isCanceledField.GetValue(timer));
         Delegate actionDel = actionField != null ? actionField.GetValue(timer) as Delegate : null;
-        string actionName = actionDel != null && actionDel.Method != null ? actionDel.Method.Name : "brak";
+        string actionName = actionDel != null ? actionDel.Method.Name : "none";
+        string callerInfo = callerInfoField != null ? callerInfoField.GetValue(timer) as string : "unknown";
 
         EditorGUILayout.BeginVertical("box");
         EditorGUILayout.LabelField("Timer", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Pozosta³y czas: " + timeRemaining.ToString("F2") + " s");
-        EditorGUILayout.LabelField("Anulowany: " + isCanceled);
-        EditorGUILayout.LabelField("Akcja: " + actionName);
+        EditorGUILayout.LabelField("Time Remaining: " + timeRemaining.ToString("F2") + " s");
+        EditorGUILayout.LabelField("Canceled: " + isCanceled);
+        EditorGUILayout.LabelField("Action: " + actionName);
+        EditorGUILayout.LabelField("Caller Info: " + callerInfo);
 
-        // Pobieramy TimerHandle (jeœli jest dostêpny)
+        // Retrieve TimerHandle (if available)
         PropertyInfo handleProperty = timerType.GetProperty("Handle", BindingFlags.Instance | BindingFlags.Public);
         object handleValue = handleProperty != null ? handleProperty.GetValue(timer) : null;
         EditorGUILayout.LabelField("TimerHandle: " + (handleValue != null ? handleValue.GetType().Name : "null"));

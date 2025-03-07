@@ -4,14 +4,15 @@ namespace Anxiety.Effects
 {
     public abstract class BaseFearEffect : ScriptableObject
     {
-        [Header("Ustawienia czasu")]
+        [Header("Base time set")]
         public float minInterval = 1f;
         public float maxInterval = 2f; 
         public float minDuration = 4f;
         public float maxDuration = 8f; 
 
-        [Header("Opcje wywo³ywania")]
+        [Header("Call option")]
         public bool autoTrigger;
+        public bool disableWhenTrigger;
 
         private bool _isActive;
 
@@ -23,17 +24,17 @@ namespace Anxiety.Effects
                 float duration = Random.Range(minDuration, maxDuration);
                 _isActive = true;
                 ExecuteEffect();
-            
+
                 TimerManager.Schedule(() =>
                 {
                     EndEffect();
                     _isActive = false;
+                    
+                    if (autoTrigger && AnxietyManager.Instance != null && AnxietyManager.Instance.CurrentProfileContains(this))
+                    {
+                        TriggerEffect();
+                    }
                 }, duration);
-            
-                if(autoTrigger && AnxietyManager.Instance != null && AnxietyManager.Instance.CurrentProfileContains(this))
-                {
-                    TriggerEffect();
-                }
             }, delay);
         }
     

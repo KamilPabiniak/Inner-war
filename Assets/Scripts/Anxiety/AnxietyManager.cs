@@ -10,18 +10,20 @@ namespace Anxiety
         public static AnxietyManager Instance { get; private set; }
         [Range(0, 100)] public float FearLevel { get; private set; }
 
+        [Header("DEBUG ONLY")]
         public string FearLevelText;
 
-        [Header("Ustawienia Pasywnego Wzrostu Lêku")]
+        [Header("Passive fear")]
         [SerializeField] private float passiveFearIncreaseInterval = 15f;
         [SerializeField] private float passiveFearIncreaseAmount = 1f;
 
         [Header("Controllers")] 
-        public PostProcessingController postProcessingController;
-        public MovementEffectController movementEffectController;
         public AudioEffectsController audioEffectsController;
+        public CameraEffectsController cameraEffectsController;
+        public MovementEffectController movementEffectController;
+        public PostProcessingController postProcessingController;
 
-        [Header("Profile Poziomów Lêku")]
+        [Header("Fear profile levels")]
         public FearLevelProfile level0Profile;
         public FearLevelProfile level1Profile;
         public FearLevelProfile level2Profile;

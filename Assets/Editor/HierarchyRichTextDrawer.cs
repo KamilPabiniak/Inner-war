@@ -98,6 +98,7 @@ public static class HierarchyRichTextDrawer
                 }
                 Texture2D bgTexture = CreateRoundedRectTexture((int)textRect.width, (int)textRect.height, bgColors, shelf.backgroundCornerRadius, shelf.backgroundGradientDirection);
                 GUI.DrawTexture(textRect, bgTexture);
+                Object.DestroyImmediate(bgTexture);
             }
 
             // Finally, draw the label (rich text) within the textRect.

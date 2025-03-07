@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.CompilerServices;
 
 public class TimerManager : MonoBehaviour
 {
@@ -8,15 +9,26 @@ public class TimerManager : MonoBehaviour
     private static readonly Queue<Timer> TimersToAdd = new Queue<Timer>();
     private static readonly Queue<Timer> TimersToRemove = new Queue<Timer>();
 
-    public static void Schedule(Action action, float delay)
+    /// <summary>
+    /// Schedules a new timer.
+    /// </summary>
+    /// <param name="action">The action to invoke when the delay expires.</param>
+    /// <param name="delay">The delay in seconds.</param>
+    /// <param name="callerName">Automatically filled caller member name.</param>
+    /// <param name="callerFile">Automatically filled caller file path.</param>
+    /// <param name="callerLine">Automatically filled caller line number.</param>
+    public static void Schedule(Action action, float delay,
+        [CallerMemberName] string callerName = "",
+        [CallerFilePath] string callerFile = "",
+        [CallerLineNumber] int callerLine = 0)
     {
         if (delay <= 0)
         {
-            action?.Invoke();
-            return;
+            delay = 0.001f;
         }
 
-        Timer timer = new Timer(action, delay);
+        string callerInfo = $"{callerName} in {callerFile}:{callerLine}";
+        Timer timer = new Timer(action, delay, callerInfo);
         TimersToAdd.Enqueue(timer);
     }
 
@@ -58,14 +70,22 @@ public class TimerManager : MonoBehaviour
 public class Timer
 {
     private readonly Action _action;
+    private readonly string _callerInfo;
     private float _timeRemaining;
     private bool _isCanceled;
 
     public TimerHandle Handle { get; set; }
-    public Timer(Action action, float delay)
+    
+    /// <summary>
+    /// Exposes caller information.
+    /// </summary>
+    public string CallerInfo => _callerInfo;
+
+    public Timer(Action action, float delay, string callerInfo)
     {
         _action = action;
         _timeRemaining = delay;
+        _callerInfo = callerInfo;
     }
 
     public bool Tick(float deltaTime)
@@ -73,7 +93,7 @@ public class Timer
         if (_isCanceled) return true;
 
         _timeRemaining -= deltaTime;
-        if (!(_timeRemaining <= 0)) return false;
+        if (_timeRemaining > 0) return false;
         _action?.Invoke();
         Handle?.Invalidate();
         return true;
