@@ -84,7 +84,6 @@ public class AudioEffectsController : MonoBehaviour
     /// <param name="voicesFadeOutDuration">Fade-out duration (seconds).</param>
     public void StopVoices(float voicesFadeOutDuration)
     {
-        Debug.LogError("StopVoices wywo³ane.");
         if (currentVoices != null)
         {
             StartCoroutine(FadeOutAndStop(currentVoices, voicesFadeOutDuration, () =>
@@ -118,7 +117,6 @@ public class AudioEffectsController : MonoBehaviour
         currentHeart = instance.GetComponent<AudioSource>();
         if (currentHeart == null)
         {
-            Debug.LogError("The instantiated heart prefab does not have an AudioSource component.");
             return;
         }
         currentHeart.volume = 0f;
@@ -163,7 +161,6 @@ public class AudioEffectsController : MonoBehaviour
     
     private IEnumerator FadeOutAndStop(AudioSource source, float duration, System.Action onComplete)
     {
-        Debug.LogError("FadeOutAndStop rozpoczête.");
         float startVolume = source.volume;
         float timeElapsed = 0f;
         while (timeElapsed < duration)
@@ -176,7 +173,6 @@ public class AudioEffectsController : MonoBehaviour
         source.volume = 0f;
         source.Stop();
         Destroy(source.gameObject);
-        Debug.LogError("FadeOutAndStop – dŸwiêk zatrzymany i obiekt zniszczony.");
         onComplete?.Invoke();
     }
     

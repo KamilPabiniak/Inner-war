@@ -30,20 +30,22 @@ namespace Anxiety.Effects
 
         public void TriggerEffect()
         {
-            if (_isBlocked)
+            if (_isBlocked || _isActive)
                 return;
+
+            // Ustawiamy flagę, aby zapobiec kolejnym wywołaniom, zanim obecny efekt się zakończy
+            _isActive = true;
 
             float delay = Random.Range(minInterval, maxInterval);
             TimerManager.Schedule(() =>
             {
                 float duration = Random.Range(minDuration, maxDuration);
-                _isActive = true;
                 ExecuteEffect();
 
                 TimerManager.Schedule(() =>
                 {
                     EndEffect();
-                    _isActive = false;
+                    _isActive = false; // Reset flagi, dzięki czemu można ponownie wywołać efekt
 
                     if (disableWhenTrigger && AnxietyManager.Instance != null)
                     {
@@ -57,6 +59,7 @@ namespace Anxiety.Effects
                 }, duration);
             }, delay);
         }
+
 
         protected abstract void ExecuteEffect();
         protected abstract void EndEffect();

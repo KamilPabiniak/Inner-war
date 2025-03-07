@@ -1,49 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4075929801862576482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
-  m_Name: HeartEffect
-  m_EditorClassIdentifier: 
-  minInterval: 0
-  maxInterval: 0
-  minDuration: 8
-  maxDuration: 8
-  autoTrigger: 0
-  disableWhenTrigger: 0
-  heartFadeInDuration: 0
-  heartFadeOutDuration: 3
-  heartTargetVolume: 1
-  heartDrymixEchoOnValue: 60
-  heartDrymixEchoOffValue: 0
---- !u!114 &-2352648503093005082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
-  m_Name: AudioEffects
-  m_EditorClassIdentifier: 
-  minInterval: 1
-  maxInterval: 2
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 0
-  disableWhenTrigger: 0
-  cutOffOn: 350
-  transitionTimeApply: 3
-  transitionTimeCancel: 3
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,21 +13,19 @@ MonoBehaviour:
   m_Name: FearLevelProfile0
   m_EditorClassIdentifier: 
   effects:
-  - {fileID: 345168715682110190}
-  - {fileID: -2352648503093005082}
-  - {fileID: -4075929801862576482}
   - {fileID: 5026356746484836627}
---- !u!114 &345168715682110190
+  - {fileID: 4170106639678302612}
+--- !u!114 &4170106639678302612
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
-  m_Name: PostProcessingEffect
+  m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
+  m_Name: HeartEffect
   m_EditorClassIdentifier: 
   minInterval: 1
   maxInterval: 2
@@ -79,8 +33,11 @@ MonoBehaviour:
   maxDuration: 8
   autoTrigger: 0
   disableWhenTrigger: 0
-  startTransitionDuration: 2
-  endTransitionDuration: 4
+  heartFadeInDuration: 1
+  heartFadeOutDuration: 1
+  heartTargetVolume: 1
+  heartDrymixEchoOnValue: 60
+  heartDrymixEchoOffValue: 0
 --- !u!114 &5026356746484836627
 MonoBehaviour:
   m_ObjectHideFlags: 0

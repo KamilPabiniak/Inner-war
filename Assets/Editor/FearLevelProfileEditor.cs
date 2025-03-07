@@ -13,6 +13,12 @@ public class FearLevelProfileEditor : Editor
     private void OnEnable()
     {
         _profile = (FearLevelProfile)target;
+
+        // Zapewniamy, ¿e lista efektów nie jest null
+        if (_profile.effects == null)
+        {
+            _profile.effects = new System.Collections.Generic.List<BaseFearEffect>();
+        }
     }
 
     public override void OnInspectorGUI()
@@ -25,9 +31,10 @@ public class FearLevelProfileEditor : Editor
         if (_profile.effects != null && _profile.effects.Count > 0)
         {
             EditorGUILayout.LabelField("Current Effects:");
-            // Iterujemy od koñca, by bezpiecznie usuwaæ elementy z listy
             for (int i = _profile.effects.Count - 1; i >= 0; i--)
             {
+                if (_profile.effects[i] == null) continue; // Unikamy NullReferenceException
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(_profile.effects[i].name);
                 if (GUILayout.Button("Remove"))
@@ -57,26 +64,39 @@ public class FearLevelProfileEditor : Editor
 
     private void AddEffect(Type type)
     {
+        if (_profile == null || _profile.effects == null) return;
+
         BaseFearEffect newEffect = (BaseFearEffect)CreateInstance(type);
         newEffect.name = type.Name;
+        newEffect.hideFlags = HideFlags.HideInHierarchy; // Ukrywa efekt w Hierarchy
 
         AssetDatabase.AddObjectToAsset(newEffect, _profile);
         _profile.effects.Add(newEffect);
 
         EditorUtility.SetDirty(_profile);
         AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     private void RemoveEffect(int index)
     {
-        BaseFearEffect effectToRemove = _profile.effects[index];
-        _profile.effects.RemoveAt(index);
+        if (_profile == null || _profile.effects == null || index < 0 || index >= _profile.effects.Count)
+            return;
 
-        AssetDatabase.RemoveObjectFromAsset(effectToRemove);
-        DestroyImmediate(effectToRemove, true);
+        BaseFearEffect effectToRemove = _profile.effects[index];
+
+        if (effectToRemove != null)
+        {
+            AssetDatabase.RemoveObjectFromAsset(effectToRemove);
+            DestroyImmediate(effectToRemove, true);
+        }
+
+        _profile.effects.RemoveAt(index);
 
         EditorUtility.SetDirty(_profile);
         AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }
 #endif
+

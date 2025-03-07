@@ -19,7 +19,6 @@ namespace Anxiety.Effects
 
         protected override void EndEffect()
         {
-            Debug.LogError("Wy³¹cz siê kurwa");
             AnxietyManager.Instance.audioEffectsController.StopVoices(voicesFadeOutDuration);
         }
     }

@@ -121,220 +121,207 @@ public static class SceneShelfCreator
     /// and wrapping text/symbols with rich text tags.
     /// </summary>
     private static string FormatShelfName(ShelfIdentifier shelf)
+{
+    string baseName = shelf.baseName;
+    
+    // Pobieramy styl z wbudowanej skórki Inspektora – jest to bezpieczne do u¿ycia poza OnGUI.
+    GUIStyle style = new GUIStyle(EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).label);
+
+    float hierarchyWidth = GetHierarchyWindowWidth();
+    float availableWidth = Mathf.Max(hierarchyWidth - Margin, 0f);
+    float baseWidth = style.CalcSize(new GUIContent(baseName)).x;
+
+    // Jeœli dostêpna szerokoœæ jest mniejsza lub równa szerokoœci bazowego tekstu, zwracamy tekst bazowy (z ewentualnym gradientem lub kolorem)
+    if (availableWidth <= baseWidth)
     {
-        string baseName = shelf.baseName;
-        // Safely retrieve a label style.
-        GUIStyle style = null;
-        try
-        {
-            style = EditorStyles.label;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning("Nie uda³o siê pobraæ EditorStyles.label: " + ex);
-        }
-        style ??= GUI.skin.label;
-        if (style == null)
-        {
-            Debug.LogWarning("Zarówno EditorStyles.label, jak i GUI.skin.label s¹ null. Inicjalizujê nowy GUIStyle.");
-            style = new GUIStyle();
-        }
-
-        float hierarchyWidth = GetHierarchyWindowWidth();
-        float availableWidth = Mathf.Max(hierarchyWidth - Margin, 0f);
-        float baseWidth = style.CalcSize(new GUIContent(baseName)).x;
-
-        // If available width is less than or equal to the base text width, return the base text (with gradient or color if enabled)
-        if (availableWidth <= baseWidth)
-        {
-            return shelf.useTextGradient
-                ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
-                : (shelf.useTextColor
-                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
-                    : baseName);
-        }
-
-        // Determine special symbols based on the type.
-        char leftSymbol, rightSymbol;
-        switch (shelf.specialSymbolType)
-        {
-            case ShelfIdentifier.SpecialSymbolType.Default:
-                leftSymbol = '-'; rightSymbol = '-';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.Percent:
-                leftSymbol = '%'; rightSymbol = '%';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.Ampersand:
-                leftSymbol = '&'; rightSymbol = '&';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.At:
-                leftSymbol = '@'; rightSymbol = '@';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.Parentheses:
-                leftSymbol = '('; rightSymbol = ')';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.Tilde:
-                leftSymbol = '~'; rightSymbol = '~';
-                break;
-            case ShelfIdentifier.SpecialSymbolType.Custom:
-                if (!string.IsNullOrEmpty(shelf.customSymbol))
-                {
-                    leftSymbol = shelf.customSymbol[0];
-                    rightSymbol = leftSymbol;
-                }
-                else
-                {
-                    leftSymbol = '-'; rightSymbol = '-';
-                }
-                break;
-            default:
-                leftSymbol = '-'; rightSymbol = '-';
-                break;
-        }
-
-        string symbolForCalc = new string(leftSymbol, 1);
-        float symbolWidth = style.CalcSize(new GUIContent(symbolForCalc)).x;
-        if (symbolWidth <= 0 || availableWidth <= baseWidth)
-            return baseName;
-
-        float remainingWidth = availableWidth - baseWidth;
-        int totalSymbols = Mathf.FloorToInt(remainingWidth / symbolWidth);
-
-        int leftCount, rightCount;
-        if (shelf.displayLeftSymbols && shelf.displayRightSymbols)
-        {
-            // Ensure that the initial leftCount is not negative.
-            leftCount = Mathf.Max((totalSymbols / 2) - 2, 0);
-            rightCount = totalSymbols - leftCount;
-            bool added = true;
-            float resultWidth = style.CalcSize(new GUIContent(new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount))).x;
-            // Increase symbols while the result width is less than the available width.
-            while (added)
-            {
-                added = false;
-                if (shelf.displayLeftSymbols)
-                {
-                    string testLeft = new string(leftSymbol, leftCount + 1) + baseName + new string(rightSymbol, rightCount);
-                    if (style.CalcSize(new GUIContent(testLeft)).x <= availableWidth)
-                    {
-                        leftCount++;
-                        resultWidth = style.CalcSize(new GUIContent(testLeft)).x;
-                        added = true;
-                    }
-                }
-                if (shelf.displayRightSymbols)
-                {
-                    string testRight = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount + 1);
-                    if (style.CalcSize(new GUIContent(testRight)).x <= availableWidth)
-                    {
-                        rightCount++;
-                        resultWidth = style.CalcSize(new GUIContent(testRight)).x;
-                        added = true;
-                    }
-                }
-            }
-            // Decrease symbols if the result width exceeds available width.
-            while (resultWidth > availableWidth && (leftCount > 0 || rightCount > 0))
-            {
-                if (shelf.displayLeftSymbols && leftCount >= rightCount && leftCount > 0)
-                {
-                    string test = new string(leftSymbol, leftCount - 1) + baseName + new string(rightSymbol, rightCount);
-                    if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
-                    {
-                        leftCount--;
-                        resultWidth = style.CalcSize(new GUIContent(test)).x;
-                        continue;
-                    }
-                }
-                if (shelf.displayRightSymbols && rightCount > 0)
-                {
-                    string test = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount - 1);
-                    if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
-                    {
-                        rightCount--;
-                        resultWidth = style.CalcSize(new GUIContent(test)).x;
-                        continue;
-                    }
-                }
-                break;
-            }
-        }
-        else if (shelf.displayLeftSymbols && !shelf.displayRightSymbols)
-        {
-            rightCount = 0;
-            leftCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceLeftSymbolsPercent / 100f));
-        }
-        else if (!shelf.displayLeftSymbols && shelf.displayRightSymbols)
-        {
-            leftCount = 0;
-            rightCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceRightSymbolsPercent / 100f));
-        }
-        else
-        {
-            return shelf.useTextGradient
-                ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
-                : (shelf.useTextColor
-                    ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
-                    : baseName);
-        }
-
-        // Apply text color or gradient to the base name.
-        string coloredBaseName;
-        if (shelf.useTextGradient)
-            coloredBaseName = ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection);
-        else if (shelf.useTextColor)
-            coloredBaseName = $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>";
-        else
-            coloredBaseName = baseName;
-
-        // Format left symbols.
-        string leftSymbolsStr = "";
-        if (shelf.displayLeftSymbols)
-        {
-            string temp = new string(leftSymbol, leftCount);
-            if (shelf.useSymbolsGradient)
-                leftSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
-            else if (shelf.colorSymbolsSame && shelf.useTextColor)
-            {
-                string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
-                leftSymbolsStr = $"<color=#{hexText}>{temp}</color>";
-            }
-            else if (shelf.colorSymbolsDifferent)
-            {
-                string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
-                leftSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
-            }
-            else
-            {
-                leftSymbolsStr = temp;
-            }
-        }
-
-        // Format right symbols.
-        string rightSymbolsStr = "";
-        if (shelf.displayRightSymbols)
-        {
-            string temp = new string(rightSymbol, rightCount);
-            if (shelf.useSymbolsGradient)
-                rightSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
-            else if (shelf.colorSymbolsSame && shelf.useTextColor)
-            {
-                string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
-                rightSymbolsStr = $"<color=#{hexText}>{temp}</color>";
-            }
-            else if (shelf.colorSymbolsDifferent)
-            {
-                string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
-                rightSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
-            }
-            else
-            {
-                rightSymbolsStr = temp;
-            }
-        }
-
-        return leftSymbolsStr + coloredBaseName + rightSymbolsStr;
+        return shelf.useTextGradient
+            ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
+            : (shelf.useTextColor
+                ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
+                : baseName);
     }
+
+    // Ustalenie symboli specjalnych na podstawie typu
+    char leftSymbol, rightSymbol;
+    switch (shelf.specialSymbolType)
+    {
+        case ShelfIdentifier.SpecialSymbolType.Default:
+            leftSymbol = '-'; rightSymbol = '-';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.Percent:
+            leftSymbol = '%'; rightSymbol = '%';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.Ampersand:
+            leftSymbol = '&'; rightSymbol = '&';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.At:
+            leftSymbol = '@'; rightSymbol = '@';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.Parentheses:
+            leftSymbol = '('; rightSymbol = ')';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.Tilde:
+            leftSymbol = '~'; rightSymbol = '~';
+            break;
+        case ShelfIdentifier.SpecialSymbolType.Custom:
+            if (!string.IsNullOrEmpty(shelf.customSymbol))
+            {
+                leftSymbol = shelf.customSymbol[0];
+                rightSymbol = leftSymbol;
+            }
+            else
+            {
+                leftSymbol = '-'; rightSymbol = '-';
+            }
+            break;
+        default:
+            leftSymbol = '-'; rightSymbol = '-';
+            break;
+    }
+
+    string symbolForCalc = new string(leftSymbol, 1);
+    float symbolWidth = style.CalcSize(new GUIContent(symbolForCalc)).x;
+    if (symbolWidth <= 0 || availableWidth <= baseWidth)
+        return baseName;
+
+    float remainingWidth = availableWidth - baseWidth;
+    int totalSymbols = Mathf.FloorToInt(remainingWidth / symbolWidth);
+
+    int leftCount, rightCount;
+    if (shelf.displayLeftSymbols && shelf.displayRightSymbols)
+    {
+        leftCount = Mathf.Max((totalSymbols / 2) - 2, 0);
+        rightCount = totalSymbols - leftCount;
+        bool added = true;
+        float resultWidth = style.CalcSize(new GUIContent(new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount))).x;
+        // Zwiêkszamy liczbê symboli, o ile wynikowa szerokoœæ nie przekracza dostêpnej szerokoœci.
+        while (added)
+        {
+            added = false;
+            if (shelf.displayLeftSymbols)
+            {
+                string testLeft = new string(leftSymbol, leftCount + 1) + baseName + new string(rightSymbol, rightCount);
+                if (style.CalcSize(new GUIContent(testLeft)).x <= availableWidth)
+                {
+                    leftCount++;
+                    resultWidth = style.CalcSize(new GUIContent(testLeft)).x;
+                    added = true;
+                }
+            }
+            if (shelf.displayRightSymbols)
+            {
+                string testRight = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount + 1);
+                if (style.CalcSize(new GUIContent(testRight)).x <= availableWidth)
+                {
+                    rightCount++;
+                    resultWidth = style.CalcSize(new GUIContent(testRight)).x;
+                    added = true;
+                }
+            }
+        }
+        // Zmniejszamy liczbê symboli, jeœli wynikowa szerokoœæ przekracza dostêpn¹ szerokoœæ.
+        while (resultWidth > availableWidth && (leftCount > 0 || rightCount > 0))
+        {
+            if (shelf.displayLeftSymbols && leftCount >= rightCount && leftCount > 0)
+            {
+                string test = new string(leftSymbol, leftCount - 1) + baseName + new string(rightSymbol, rightCount);
+                if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                {
+                    leftCount--;
+                    resultWidth = style.CalcSize(new GUIContent(test)).x;
+                    continue;
+                }
+            }
+            if (shelf.displayRightSymbols && rightCount > 0)
+            {
+                string test = new string(leftSymbol, leftCount) + baseName + new string(rightSymbol, rightCount - 1);
+                if (style.CalcSize(new GUIContent(test)).x <= availableWidth)
+                {
+                    rightCount--;
+                    resultWidth = style.CalcSize(new GUIContent(test)).x;
+                    continue;
+                }
+            }
+            break;
+        }
+    }
+    else if (shelf.displayLeftSymbols && !shelf.displayRightSymbols)
+    {
+        rightCount = 0;
+        leftCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceLeftSymbolsPercent / 100f));
+    }
+    else if (!shelf.displayLeftSymbols && shelf.displayRightSymbols)
+    {
+        leftCount = 0;
+        rightCount = Mathf.FloorToInt(totalSymbols * (shelf.reduceRightSymbolsPercent / 100f));
+    }
+    else
+    {
+        return shelf.useTextGradient
+            ? ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection)
+            : (shelf.useTextColor
+                ? $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>"
+                : baseName);
+    }
+
+    // Zastosowanie koloru lub gradientu do tekstu bazowego.
+    string coloredBaseName;
+    if (shelf.useTextGradient)
+        coloredBaseName = ApplyGradientToString(baseName, shelf.textGradientColors, shelf.textGradientDirection);
+    else if (shelf.useTextColor)
+        coloredBaseName = $"<color=#{ColorUtility.ToHtmlStringRGBA(shelf.textColor)}>{baseName}</color>";
+    else
+        coloredBaseName = baseName;
+
+    // Formatowanie symboli po lewej stronie.
+    string leftSymbolsStr = "";
+    if (shelf.displayLeftSymbols)
+    {
+        string temp = new string(leftSymbol, leftCount);
+        if (shelf.useSymbolsGradient)
+            leftSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
+        else if (shelf.colorSymbolsSame && shelf.useTextColor)
+        {
+            string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
+            leftSymbolsStr = $"<color=#{hexText}>{temp}</color>";
+        }
+        else if (shelf.colorSymbolsDifferent)
+        {
+            string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
+            leftSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
+        }
+        else
+        {
+            leftSymbolsStr = temp;
+        }
+    }
+
+    // Formatowanie symboli po prawej stronie.
+    string rightSymbolsStr = "";
+    if (shelf.displayRightSymbols)
+    {
+        string temp = new string(rightSymbol, rightCount);
+        if (shelf.useSymbolsGradient)
+            rightSymbolsStr = ApplyGradientToString(temp, shelf.symbolsGradientColors, shelf.symbolsGradientDirection);
+        else if (shelf.colorSymbolsSame && shelf.useTextColor)
+        {
+            string hexText = ColorUtility.ToHtmlStringRGBA(shelf.textColor);
+            rightSymbolsStr = $"<color=#{hexText}>{temp}</color>";
+        }
+        else if (shelf.colorSymbolsDifferent)
+        {
+            string hexSymbols = ColorUtility.ToHtmlStringRGBA(shelf.symbolsColor);
+            rightSymbolsStr = $"<color=#{hexSymbols}>{temp}</color>";
+        }
+        else
+        {
+            rightSymbolsStr = temp;
+        }
+    }
+
+    return leftSymbolsStr + coloredBaseName + rightSymbolsStr;
+}
+
 
     /// <summary>
     /// Applies a gradient to each character of the input string.
