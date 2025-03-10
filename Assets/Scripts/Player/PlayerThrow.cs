@@ -54,7 +54,6 @@ public class PlayerThrow : PlayerModule
     {
         trajectoryLine.startWidth = trajectoryWidth;
         trajectoryLine.endWidth = trajectoryWidth;
-        trajectoryLine.material = new Material(Shader.Find("Sprites/Default"));
         trajectoryLine.startColor = trajectoryColor;
         trajectoryLine.endColor = trajectoryColor;
         trajectoryLine.positionCount = 0;
