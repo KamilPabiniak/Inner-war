@@ -11,13 +11,13 @@ GameObject:
   - component: {fileID: 2857639759455179432}
   - component: {fileID: 7089116462411077907}
   - component: {fileID: 409771112457142312}
-  - component: {fileID: 3708799139214368791}
+  - component: {fileID: 17976477609538533}
   - component: {fileID: 4545406083891296714}
   - component: {fileID: -592631788790429367}
   - component: {fileID: 4100698150202004565}
   m_Layer: 0
   m_Name: Stone
-  m_TagString: Untagged
+  m_TagString: Stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,8 +90,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3708799139214368791
-SphereCollider:
+--- !u!65 &17976477609538533
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -109,8 +109,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.04202708
-  m_Center: {x: 0.011439502, y: 0.020406313, z: 0}
+  m_Size: {x: 0.06787115, y: 0.06293934, z: 0.06523568}
+  m_Center: {x: 0.0088837845, y: 0.017766623, z: 0}
 --- !u!54 &4545406083891296714
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -135,9 +135,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &-592631788790429367
 MonoBehaviour:
   m_ObjectHideFlags: 0

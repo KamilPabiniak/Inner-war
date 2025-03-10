@@ -12,14 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
+  minInterval: 0
+  maxInterval: 0
   minDuration: 4
   maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
+  autoTrigger: 0
+  disableWhenTrigger: 0
   startTransitionDuration: 1
   endTransitionDuration: 1
+--- !u!114 &-3611569278032807217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
+  m_Name: VoiceThoughtEffect
+  m_EditorClassIdentifier: 
+  minInterval: 0
+  maxInterval: 0
+  minDuration: 6
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  voicesFadeInDuration: 1
+  voicesFadeOutDuration: 1
+  voicesTargetVolume: 0.43
+  voicesSound: {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36,7 +58,28 @@ MonoBehaviour:
   - {fileID: 5364370172527824924}
   - {fileID: 4865753257143466244}
   - {fileID: -6907899789320795137}
-  - {fileID: 5243074844470339626}
+  - {fileID: 4109845136083633793}
+  - {fileID: -3611569278032807217}
+--- !u!114 &4109845136083633793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
+  m_Name: IrregularMovementEffect
+  m_EditorClassIdentifier: 
+  minInterval: 0
+  maxInterval: 0
+  minDuration: 6
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  minSpeedMultiplier: 0.6
+  maxSpeedMultiplier: 0.8
 --- !u!114 &4865753257143466244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,35 +92,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
+  minInterval: 0
+  maxInterval: 0
   minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
-  heartFadeInDuration: 1
+  maxDuration: 6
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  heartFadeInDuration: 0.5
   heartFadeOutDuration: 1
   heartTargetVolume: 1
   heartDrymixEchoOnValue: 60
   heartDrymixEchoOffValue: 0
---- !u!114 &5243074844470339626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
-  m_Name: CrouchEffect
-  m_EditorClassIdentifier: 
-  minInterval: 2
-  maxInterval: 2
-  minDuration: 8
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 0
 --- !u!114 &5364370172527824924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,12 +115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
+  minInterval: 0
+  maxInterval: 0
+  minDuration: 6
+  maxDuration: 6
+  autoTrigger: 0
+  disableWhenTrigger: 0
   shakeAmplitude: 0.5
   shakeFrequency: 3
   shakeFalloffCurve:
