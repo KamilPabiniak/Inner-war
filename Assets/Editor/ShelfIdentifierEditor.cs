@@ -26,7 +26,7 @@ public class ShelfIdentifierEditor : Editor
         {
             shelf.backgroundColor = EditorGUILayout.ColorField("Background Color", shelf.backgroundColor);
         }
-        shelf.backgroundCornerRadius = EditorGUILayout.FloatField("Background Corner Radius", shelf.backgroundCornerRadius);
+        shelf.roundCorner = EditorGUILayout.Toggle("Round Corner", shelf.roundCorner);
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Symbol Coloring Options", EditorStyles.boldLabel);

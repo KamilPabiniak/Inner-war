@@ -5,20 +5,20 @@ public class ShelfIdentifier : MonoBehaviour
     public string baseName;
 
     [Header("Text Coloring Options")]
-    public bool useTextColor = false;
+    public bool useTextColor;
     public Color textColor = Color.white;
 
     [Header("Background Coloring Options")]
-    public bool useBackgroundColor = false;
+    public bool useBackgroundColor;
     public Color backgroundColor = Color.gray;
     [Tooltip("Corner radius for background.")]
-    public float backgroundCornerRadius = 4f;
+    public bool roundCorner;
 
     [Header("Symbol Coloring Options")]
     [Tooltip("Color symbols with the same color as text.")]
-    public bool colorSymbolsSame = false;
+    public bool colorSymbolsSame;
     [Tooltip("Color symbols with a different color.")]
-    public bool colorSymbolsDifferent = false;
+    public bool colorSymbolsDifferent;
     public Color symbolsColor = Color.white;
 
     [Header("Special Symbol Configuration")]
@@ -58,23 +58,23 @@ public class ShelfIdentifier : MonoBehaviour
 
     [Header("Gradient Options")]
     [Tooltip("Use gradient for text instead of a single color.")]
-    public bool useTextGradient = false;
+    public bool useTextGradient;
     [Tooltip("Gradient colors for text.")]
-    public Color[] textGradientColors = new Color[2] { Color.white, Color.white };
+    public Color[] textGradientColors = { Color.white, Color.white };
     [Tooltip("Direction of the text gradient.")]
     public GradientDirection textGradientDirection = GradientDirection.LeftToRight;
 
     [Tooltip("Use gradient for background instead of a single color.")]
-    public bool useBackgroundGradient = false;
+    public bool useBackgroundGradient;
     [Tooltip("Gradient colors for background.")]
-    public Color[] backgroundGradientColors = new Color[2] { Color.gray, Color.gray };
+    public Color[] backgroundGradientColors = { Color.gray, Color.gray };
     [Tooltip("Direction of the background gradient.")]
     public GradientDirection backgroundGradientDirection = GradientDirection.CenterOutward;
 
     [Tooltip("Use gradient for symbols instead of a single color.")]
-    public bool useSymbolsGradient = false;
+    public bool useSymbolsGradient;
     [Tooltip("Gradient colors for symbols.")]
-    public Color[] symbolsGradientColors = new Color[2] { Color.white, Color.white };
+    public Color[] symbolsGradientColors = { Color.white, Color.white };
     [Tooltip("Direction of the symbols gradient.")]
     public GradientDirection symbolsGradientDirection = GradientDirection.LeftToRight;
 

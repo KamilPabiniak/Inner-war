@@ -96,7 +96,8 @@ public static class HierarchyRichTextDrawer
                         ? new Color(0.22f, 0.22f, 0.22f, 1f) 
                         : new Color(0.76f, 0.76f, 0.76f, 1f) };
                 }
-                Texture2D bgTexture = CreateRoundedRectTexture((int)textRect.width, (int)textRect.height, bgColors, shelf.backgroundCornerRadius, shelf.backgroundGradientDirection);
+                float cornerRadius = shelf.roundCorner ? 4f : 0f;
+                Texture2D bgTexture = CreateRoundedRectTexture((int)textRect.width, (int)textRect.height, bgColors, cornerRadius, shelf.backgroundGradientDirection);
                 GUI.DrawTexture(textRect, bgTexture);
                 Object.DestroyImmediate(bgTexture);
             }

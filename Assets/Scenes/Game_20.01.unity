@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: --------Controllers
+  m_Name: ------------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,13 +462,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseName: Controllers
   useTextColor: 0
-  textColor: {r: 1, g: 1, b: 1, a: 1}
+  textColor: {r: 0, g: 0, b: 0, a: 1}
   useBackgroundColor: 0
-  backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  backgroundCornerRadius: 4
+  backgroundColor: {r: 0.13175741, g: 0.6886792, b: 0, a: 1}
+  roundCorner: 0
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
-  symbolsColor: {r: 1, g: 1, b: 1, a: 1}
+  symbolsColor: {r: 0.6228576, g: 0, b: 1, a: 1}
   specialSymbolType: 0
   customSymbol: 
   displayLeftSymbols: 1
@@ -478,8 +478,8 @@ MonoBehaviour:
   textAlignment: 0
   useTextGradient: 0
   textGradientColors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.9887359, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0.34482765, b: 1, a: 1}
   textGradientDirection: 0
   useBackgroundGradient: 0
   backgroundGradientColors:
@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>--------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-----------------</color>
+  m_Name: <color=#842F2FFF>------------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>---------------------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -799,7 +799,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
   useBackgroundColor: 0
   backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 0
   colorSymbolsSame: 0
   colorSymbolsDifferent: 1
   symbolsColor: {r: 0.5188679, g: 0.18356177, b: 0.18356177, a: 1}
@@ -2399,7 +2399,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: --------------ENVIROMENT-----------------
+  m_Name: ------------------------ENVIROMENT----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2422,7 +2422,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 1, b: 1, a: 1}
   useBackgroundColor: 0
   backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 0
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
   symbolsColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2854,7 +2854,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: --------------MANAGERS-------------------
+  m_Name: -------------------------MANAGERS-----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2877,7 +2877,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 0, b: 0, a: 1}
   useBackgroundColor: 1
   backgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 0
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
   symbolsColor: {r: 1, g: 1, b: 1, a: 1}
@@ -35874,7 +35874,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: --------------<color=#610082FF>C</color><color=#5A0578FF>H</color><color=#54096EFF>A</color><color=#4E0E64FF>R</color><color=#48125AFF>A</color><color=#421750FF>C</color><color=#3B1B47FF>T</color><color=#35203DFF>E</color><color=#2F2433FF>R</color><color=#292929FF>S</color>-----------------
+  m_Name: ------------------------<color=#610082FF>C</color><color=#5A0578FF>H</color><color=#54096EFF>A</color><color=#4E0E64FF>R</color><color=#48125AFF>A</color><color=#421750FF>C</color><color=#3B1B47FF>T</color><color=#35203DFF>E</color><color=#2F2433FF>R</color><color=#292929FF>S</color>----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35897,7 +35897,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 1, b: 1, a: 1}
   useBackgroundColor: 0
   backgroundColor: {r: 0.2830189, g: 0.17010264, b: 0.089444645, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 1
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
   symbolsColor: {r: 1, g: 1, b: 1, a: 1}
@@ -36810,7 +36810,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: -----------POSTPROCESSING---------------
+  m_Name: ---------------------POSTPROCESSING--------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36833,7 +36833,7 @@ MonoBehaviour:
   textColor: {r: 0.70922697, g: 0.4009434, b: 1, a: 1}
   useBackgroundColor: 1
   backgroundColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 1
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
   symbolsColor: {r: 1, g: 1, b: 1, a: 1}
@@ -36885,7 +36885,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#DFA500FF>-</color><color=#BF8D00FF>-</color><color=#9F7600FF>-</color><color=#805E00FF>-</color><color=#604700FF>-</color><color=#402F00FF>-</color><color=#201800FF>-</color><color=#000000FF>-</color><color=#201800FF>-</color><color=#402F00FF>-</color><color=#604700FF>-</color><color=#805E00FF>-</color><color=#9F7600FF>-</color><color=#BF8D00FF>-</color><color=#DFA500FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#E7AA00FF>-</color><color=#CE9900FF>-</color><color=#B68700FF>-</color><color=#9E7500FF>-</color><color=#866300FF>-</color><color=#6D5100FF>-</color><color=#553F00FF>-</color><color=#3D2D00FF>-</color><color=#241B00FF>-</color><color=#0C0900FF>-</color><color=#0C0900FF>-</color><color=#241B00FF>-</color><color=#3D2D00FF>-</color><color=#553F00FF>-</color><color=#6D5100FF>-</color><color=#866300FF>-</color><color=#9E7500FF>-</color><color=#B68700FF>-</color><color=#CE9900FF>-</color><color=#E7AA00FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#ECAE00FF>-</color><color=#D9A100FF>-</color><color=#C69300FF>-</color><color=#B38500FF>-</color><color=#A17700FF>-</color><color=#8E6900FF>-</color><color=#7B5B00FF>-</color><color=#684D00FF>-</color><color=#553F00FF>-</color><color=#423100FF>-</color><color=#2F2300FF>-</color><color=#1C1500FF>-</color><color=#090700FF>-</color><color=#090700FF>-</color><color=#1C1500FF>-</color><color=#2F2300FF>-</color><color=#423100FF>-</color><color=#553F00FF>-</color><color=#684D00FF>-</color><color=#7B5B00FF>-</color><color=#8E6900FF>-</color><color=#A17700FF>-</color><color=#B38500FF>-</color><color=#C69300FF>-</color><color=#D9A100FF>-</color><color=#ECAE00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EFB000FF>-</color><color=#DEA400FF>-</color><color=#CE9800FF>-</color><color=#BD8C00FF>-</color><color=#AD8000FF>-</color><color=#9C7300FF>-</color><color=#8C6700FF>-</color><color=#7B5B00FF>-</color><color=#6B4F00FF>-</color><color=#5A4300FF>-</color><color=#4A3700FF>-</color><color=#3A2B00FF>-</color><color=#291E00FF>-</color><color=#191200FF>-</color><color=#080600FF>-</color><color=#080600FF>-</color><color=#191200FF>-</color><color=#291E00FF>-</color><color=#3A2B00FF>-</color><color=#4A3700FF>-</color><color=#5A4300FF>-</color><color=#6B4F00FF>-</color><color=#7B5B00FF>-</color><color=#8C6700FF>-</color><color=#9C7300FF>-</color><color=#AD8000FF>-</color><color=#BD8C00FF>-</color><color=#CE9800FF>-</color><color=#DEA400FF>-</color><color=#EFB000FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36908,7 +36908,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 1, b: 0, a: 1}
   useBackgroundColor: 0
   backgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 0
   colorSymbolsSame: 0
   colorSymbolsDifferent: 0
   symbolsColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
@@ -37445,8 +37445,8 @@ GameObject:
   - component: {fileID: 1731588896}
   - component: {fileID: 1731588895}
   m_Layer: 0
-  m_Name: "<color=#FF0808FF>JAKBY TO KTO\u015A CHCIA\u0141 U\u0141O\u017BY\u0106
-    TO SI\u0118 NIE POGNIEWAMY</color>"
+  m_Name: "<color=#FF0808FF>((</color><color=#FF0808FF>JAKBY TO KTO\u015A CHCIA\u0141
+    U\u0141O\u017BY\u0106 TO SI\u0118 NIE POGNIEWAMY</color><color=#FF0808FF>)))</color>"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37470,7 +37470,7 @@ MonoBehaviour:
   textColor: {r: 1, g: 0.033018887, b: 0.033018887, a: 1}
   useBackgroundColor: 1
   backgroundColor: {r: 0.066037714, g: 0.066037714, b: 0.066037714, a: 1}
-  backgroundCornerRadius: 4
+  roundCorner: 0
   colorSymbolsSame: 1
   colorSymbolsDifferent: 0
   symbolsColor: {r: 1, g: 1, b: 1, a: 1}
