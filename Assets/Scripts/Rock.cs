@@ -41,7 +41,6 @@ public class Rock : MonoBehaviour, IInteractable
                 EnemyBase enemy = col.GetComponentInParent<EnemyBase>();
                 if (enemy != null && !alertedEnemies.Contains(enemy))
                 {
-                    Debug.LogError("Kurwa alarm!");
                     enemy.OnAlertReceived(impactPosition);
                     alertedEnemies.Add(enemy);
                 }

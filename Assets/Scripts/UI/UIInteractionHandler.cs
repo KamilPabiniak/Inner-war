@@ -1,62 +1,71 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UIInteractionHandler : MonoBehaviour
+namespace UI
 {
-    [Header("UI References")]
-    public GameObject interactionTextPanel; 
-    public TextMeshProUGUI interactionText;
-
-    [Header("Interaction Settings")]
-    public List<TagToTextMapping> interactionMappings;
-
-    private void OnEnable()
+    public class UIInteractionHandler : MonoBehaviour
     {
-        InteractionEventMessenger.OnShowInteractionText += HandleShowInteractionText;
-        InteractionEventMessenger.OnHideInteractionText += HandleHideInteractionText;
-    }
+        [Header("UI References")]
+        public GameObject interactionTextPanel; 
+        public TextMeshProUGUI interactionText;
 
-    private void OnDisable()
-    {
-        InteractionEventMessenger.OnShowInteractionText -= HandleShowInteractionText;
-        InteractionEventMessenger.OnHideInteractionText -= HandleHideInteractionText;
-    }
+        [Header("Interaction Settings")]
+        public List<TagToTextMapping> interactionMappings;
+        private Dictionary<string, string> _tagToTextDictionary;
 
-    private void HandleShowInteractionText(string objectTag)
-    {
-        string description = GetDescriptionForTag(objectTag);
-
-        if (!string.IsNullOrEmpty(description))
+        private void Awake()
         {
-            interactionText.text = description;
-            interactionTextPanel.SetActive(true);
-        }
-    }
-
-    private void HandleHideInteractionText()
-    {
-        interactionTextPanel.SetActive(false);
-    }
-
-    private string GetDescriptionForTag(string objectTag)
-    {
-        foreach (var mapping in interactionMappings)
-        {
-            if (mapping.tagName == objectTag)
+            _tagToTextDictionary = new Dictionary<string, string>();
+            foreach (var mapping in interactionMappings)
             {
-                return mapping.description;
+                if (!_tagToTextDictionary.ContainsKey(mapping.tagName))
+                {
+                    _tagToTextDictionary.Add(mapping.tagName, mapping.description);
+                }
             }
         }
 
-        return string.Empty; 
-    }
-}
+        private void OnEnable()
+        {
+            InteractionEventMessenger.OnShowInteractionText += HandleShowInteractionText;
+            InteractionEventMessenger.OnHideInteractionText += HandleHideInteractionText;
+        }
 
-[System.Serializable]
-public class TagToTextMapping
-{
-    public string tagName;
-    public string description;
+        private void OnDisable()
+        {
+            InteractionEventMessenger.OnShowInteractionText -= HandleShowInteractionText;
+            InteractionEventMessenger.OnHideInteractionText -= HandleHideInteractionText;
+        }
+
+        private void HandleShowInteractionText(string objectTag)
+        {
+            string description = GetDescriptionForTag(objectTag);
+
+            if (!string.IsNullOrEmpty(description))
+            {
+                interactionText.text = description;
+                interactionTextPanel.SetActive(true);
+            }
+        }
+
+        private void HandleHideInteractionText()
+        {
+            interactionTextPanel.SetActive(false);
+        }
+
+        private string GetDescriptionForTag(string objectTag)
+        {
+            if (_tagToTextDictionary.TryGetValue(objectTag, out string description))
+                return description;
+            return string.Empty;
+        }
+    }
+
+    [System.Serializable]
+    public class TagToTextMapping
+    {
+        public string tagName;
+        public string description;
+    }
 }
