@@ -17,6 +17,8 @@ public class PlayerMovement : PlayerModule
 
     public Vector3 currentVelocity { get; private set; } = Vector3.zero;
 
+    private bool _blockCrouchHandler;
+
     private void Start()
     {
         _input = GetComponent<PlayerInput>();
@@ -27,6 +29,7 @@ public class PlayerMovement : PlayerModule
         if (Player.state == Player.State.Walking)
         {
             HandleWalking(_input.MoveInput);
+            if (_blockCrouchHandler) return;
             HandleCrouch();
         }
         else if (Player.state == Player.State.Climbing)
@@ -37,11 +40,13 @@ public class PlayerMovement : PlayerModule
 
     public void ForceCrouch()
     {
+        _blockCrouchHandler = true;
         _isCrouch = true;
     }
 
-    public void DisableCrouch()
+    public void DisableForceCrouch()
     {
+        _blockCrouchHandler = false;
         _isCrouch = false;
     }
 

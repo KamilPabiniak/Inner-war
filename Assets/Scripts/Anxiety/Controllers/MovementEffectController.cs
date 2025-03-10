@@ -62,7 +62,7 @@ namespace Anxiety.Controllers
             Player.Instance.characterController.height = Player.Instance.crouchHeight;
             yield return new WaitForSeconds(duration);
         
-            _playerMovement.DisableCrouch();
+            _playerMovement.DisableForceCrouch();
             Player.Instance.characterController.height = originalHeight;
         }
     }

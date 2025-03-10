@@ -8,7 +8,7 @@ namespace Anxiety
     public class AnxietyManager : MonoBehaviour
     {
         public static AnxietyManager Instance { get; private set; }
-        [Range(0, 100)] public float FearLevel { get; private set; }
+        [Range(0, 100)] private float FearLevel { get; set; }
 
         [Header("DEBUG ONLY")]
         public string FearLevelText;
@@ -32,6 +32,8 @@ namespace Anxiety
         
         private FearLevelProfile _currentProfile;
         private float _timer;
+        private bool _isPlayerAlive = true;
+
 
         private void Awake()
         {
@@ -41,6 +43,18 @@ namespace Anxiety
                 return;
             }
             Instance = this;
+        }
+        
+        private void OnEnable()
+        {
+            GameEvents.onPlayerDied += OnPlayerDied;
+            GameEvents.onPlayerRespawned += OnPlayerRespawned;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.onPlayerDied -= OnPlayerDied;
+            GameEvents.onPlayerRespawned -= OnPlayerRespawned;
         }
 
         private void Start()
@@ -98,7 +112,7 @@ namespace Anxiety
                 5 => level5Profile,
                 _ => null
             };
-            if (_currentProfile == null) return;
+            if (_currentProfile == null || !_isPlayerAlive) return;
             foreach (var effect in _currentProfile.effects.Where(effect => effect != null).Where(effect => effect.autoTrigger))
             {
                 effect.TriggerEffect();
@@ -108,7 +122,7 @@ namespace Anxiety
         [ContextMenu("TriggerEffects")]
         public void TriggerProfileEffects()
         {
-            if (_currentProfile == null) return;
+            if (_currentProfile == null || !_isPlayerAlive) return;
 
             bool shouldBlock = _currentProfile.effects.Any(e => e != null && e.disableWhenTrigger);
             if (shouldBlock && Instance != null)
@@ -144,6 +158,18 @@ namespace Anxiety
             {
                 effect.SetBlocked(false);
             }
+        }
+        
+        private void OnPlayerDied()
+        {
+            _isPlayerAlive = false;
+            BlockAutoTriggeredEffects();
+        }
+        
+        private void OnPlayerRespawned()
+        {
+            _isPlayerAlive = true;
+            UnblockAutoTriggeredEffects();
         }
     }
 }

@@ -1,46 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7722367676381869335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
-  m_Name: VoiceThoughtEffect
-  m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
-  voicesFadeInDuration: 1
-  voicesFadeOutDuration: 1
-  voicesTargetVolume: 0.47
-  voicesSound: {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
---- !u!114 &-7308074525945903579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
-  m_Name: HallucinationEffect
-  m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
-  particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}
 --- !u!114 &-6907899789320795137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,26 +20,6 @@ MonoBehaviour:
   disableWhenTrigger: 1
   startTransitionDuration: 1
   endTransitionDuration: 1
---- !u!114 &-6710944197289229619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
-  m_Name: IrregularMovementEffect
-  m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 1
-  minSpeedMultiplier: 0.2
-  maxSpeedMultiplier: 0.7
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,31 +35,8 @@ MonoBehaviour:
   effects:
   - {fileID: 5364370172527824924}
   - {fileID: 4865753257143466244}
-  - {fileID: -7722367676381869335}
   - {fileID: -6907899789320795137}
-  - {fileID: -6710944197289229619}
-  - {fileID: -7308074525945903579}
-  - {fileID: 4627041124168242634}
---- !u!114 &4627041124168242634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5210592d65a443febaf571a0af583370, type: 3}
-  m_Name: DeathDoorEffect
-  m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 3
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  chanceToKill: 0.2
-  addDeathChancesEverySuccess: 0.2
+  - {fileID: 5243074844470339626}
 --- !u!114 &4865753257143466244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +60,24 @@ MonoBehaviour:
   heartTargetVolume: 1
   heartDrymixEchoOnValue: 60
   heartDrymixEchoOffValue: 0
+--- !u!114 &5243074844470339626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
+  m_Name: CrouchEffect
+  m_EditorClassIdentifier: 
+  minInterval: 2
+  maxInterval: 2
+  minDuration: 8
+  maxDuration: 8
+  autoTrigger: 1
+  disableWhenTrigger: 0
 --- !u!114 &5364370172527824924
 MonoBehaviour:
   m_ObjectHideFlags: 0

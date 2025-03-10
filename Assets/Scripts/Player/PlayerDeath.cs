@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlayerDeath : PlayerModule
 {
     public Transform checkpoint;
+    [SerializeField] private float respawnTime = 3f;
     private Vector3 _backupPos;
     private bool _isDead;
     private void Start()
@@ -44,7 +45,7 @@ public class PlayerDeath : PlayerModule
     {
         Player.ToggleInput();
         Respawn();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(respawnTime);
 
         Player.ToggleInput();
         _isDead = false;
