@@ -68,8 +68,7 @@ public class FearLevelProfileEditor : Editor
 
         BaseFearEffect newEffect = (BaseFearEffect)CreateInstance(type);
         newEffect.name = type.Name;
-        newEffect.hideFlags = HideFlags.HideInHierarchy; // Ukrywa efekt w Hierarchy
-
+      
         AssetDatabase.AddObjectToAsset(newEffect, _profile);
         _profile.effects.Add(newEffect);
 

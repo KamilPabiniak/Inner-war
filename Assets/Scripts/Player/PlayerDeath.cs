@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 public class PlayerDeath : PlayerModule
 {
     public Transform checkpoint;
-    private Vector3 backupPos;
-    private bool isDead;
+    private Vector3 _backupPos;
+    private bool _isDead;
     private void Start()
     {
-        backupPos = transform.position;
+        _backupPos = transform.position;
     }
 
     private void LateUpdate()
@@ -20,9 +20,9 @@ public class PlayerDeath : PlayerModule
     
     private void EnsureCorrectPositionAfterDeath()
     {
-        if (!isDead) return;
+        if (!_isDead) return;
 
-        Vector3 targetPosition = checkpoint != null ? checkpoint.position : backupPos;
+        Vector3 targetPosition = checkpoint != null ? checkpoint.position : _backupPos;
 
         if (transform.position != targetPosition)
         {
@@ -34,8 +34,8 @@ public class PlayerDeath : PlayerModule
     [ContextMenu("TryKill")]
     public void Kill()
     {
-        if (isDead) return;
-        isDead = true; 
+        if (_isDead) return;
+        _isDead = true; 
         GameEvents.onPlayerDied?.Invoke();
         StartCoroutine(HandleDeathState());
     }
@@ -47,13 +47,13 @@ public class PlayerDeath : PlayerModule
         yield return new WaitForSeconds(3f);
 
         Player.ToggleInput();
-        isDead = false;
+        _isDead = false;
         GameEvents.onPlayerRespawned?.Invoke();
     }
     
     private void Respawn()
     {
-        Vector3 targetPosition = checkpoint != null ? checkpoint.position : backupPos;
+        Vector3 targetPosition = checkpoint != null ? checkpoint.position : _backupPos;
         transform.position = targetPosition;
     }
 }

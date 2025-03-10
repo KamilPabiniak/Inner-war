@@ -14,7 +14,7 @@ namespace Anxiety.Effects
         [Tooltip("If u want faster Heartbeat use heartDrymixEchoOnValue on 60")]
         [Range(0f, 60f)]
         [SerializeField] private float heartDrymixEchoOnValue = 60f;
-        [SerializeField] private float heartDrymixEchoOffValue = 0f;
+        [SerializeField] private float heartDrymixEchoOffValue;
         protected override void ExecuteEffect()
         {
             AnxietyManager.Instance.audioEffectsController.PlayHeart(heartDrymixEchoOnValue, heartFadeInDuration, heartTargetVolume);

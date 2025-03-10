@@ -35,6 +35,16 @@ public class PlayerMovement : PlayerModule
         }
     }
 
+    public void ForceCrouch()
+    {
+        _isCrouch = true;
+    }
+
+    public void DisableCrouch()
+    {
+        _isCrouch = false;
+    }
+
     private void HandleWalking(Vector2 moveInput)
     {
         if (!Player.characterController.enabled) return;

@@ -19,7 +19,6 @@ namespace Anxiety
 
         [Header("Controllers")] 
         public AudioEffectsController audioEffectsController;
-        public CameraEffectsController cameraEffectsController;
         public MovementEffectController movementEffectController;
         public PostProcessingController postProcessingController;
 

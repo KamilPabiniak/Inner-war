@@ -184,12 +184,14 @@ public class AudioEffectsController : MonoBehaviour
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
+            if (!heartSource) break;
             heartSource.volume = Mathf.Lerp(startVolume, targetVolume, Mathf.SmoothStep(0f, 1f, t));
             float newEcho = Mathf.Lerp(startEcho, targetDrymixEchoOnValue, Mathf.SmoothStep(0f, 1f, t));
             audioMixer.SetFloat("drymixEcho", newEcho);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
+        if (!heartSource) yield return null;
         heartSource.volume = targetVolume;
         audioMixer.SetFloat("drymixEcho", targetDrymixEchoOnValue);
     }

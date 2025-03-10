@@ -369,50 +369,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 29854324}
   m_Mesh: {fileID: 3868671361854562809, guid: 6b038beae2dffad4bb67eb9b7ca0de4f, type: 3}
---- !u!1 &43209480
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 43209482}
-  - component: {fileID: 43209481}
-  m_Layer: 0
-  m_Name: CameraEffectsController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &43209481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 43209480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f55742b4fb85b44eaae902473482fad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &43209482
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 43209480}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.1460414, y: 3.074731, z: 1.9000359}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &50787425
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -486,7 +442,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: ----------------Controllers
+  m_Name: --------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -820,7 +776,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>-------------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-----------------------------</color>
+  m_Name: <color=#842F2FFF>--------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-----------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1375,7 +1331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5bbb9b49b7e114e89653ec90fae949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level0: {fileID: 11400000, guid: f4e7d29b649f8004fac8b24a13cfa8ff, type: 2}
+  level0: {fileID: 11400000, guid: 8fee820ab444a394dad6108d404a4a0b, type: 2}
   level1: {fileID: 11400000, guid: f4e7d29b649f8004fac8b24a13cfa8ff, type: 2}
   level2: {fileID: 11400000, guid: f4e7d29b649f8004fac8b24a13cfa8ff, type: 2}
   level3: {fileID: 11400000, guid: f4e7d29b649f8004fac8b24a13cfa8ff, type: 2}
@@ -2443,7 +2399,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: --------------------------ENVIROMENT-----------------------------
+  m_Name: --------------ENVIROMENT-----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2898,7 +2854,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: --------------------------MANAGERS-------------------------------
+  m_Name: --------------MANAGERS-------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3413,8 +3369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab8598020f11134cad6d9135bf46daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeedMultiplier: 0.6
-  maxSpeedMultiplier: 1.2
 --- !u!1 &1012015211
 GameObject:
   m_ObjectHideFlags: 0
@@ -35920,7 +35874,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: -------------------------<color=#610082FF>C</color><color=#5A0578FF>H</color><color=#54096EFF>A</color><color=#4E0E64FF>R</color><color=#48125AFF>A</color><color=#421750FF>C</color><color=#3B1B47FF>T</color><color=#35203DFF>E</color><color=#2F2433FF>R</color><color=#292929FF>S</color>-----------------------------
+  m_Name: --------------<color=#610082FF>C</color><color=#5A0578FF>H</color><color=#54096EFF>A</color><color=#4E0E64FF>R</color><color=#48125AFF>A</color><color=#421750FF>C</color><color=#3B1B47FF>T</color><color=#35203DFF>E</color><color=#2F2433FF>R</color><color=#292929FF>S</color>-----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36856,7 +36810,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: -----------------------POSTPROCESSING--------------------------
+  m_Name: -----------POSTPROCESSING---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36931,7 +36885,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#EDAF00FF>-</color><color=#DBA200FF>-</color><color=#C89400FF>-</color><color=#B68700FF>-</color><color=#A47900FF>-</color><color=#926C00FF>-</color><color=#805E00FF>-</color><color=#6D5100FF>-</color><color=#5B4300FF>-</color><color=#493600FF>-</color><color=#372800FF>-</color><color=#241B00FF>-</color><color=#120D00FF>-</color><color=#000000FF>-</color><color=#120D00FF>-</color><color=#241B00FF>-</color><color=#372800FF>-</color><color=#493600FF>-</color><color=#5B4300FF>-</color><color=#6D5100FF>-</color><color=#805E00FF>-</color><color=#926C00FF>-</color><color=#A47900FF>-</color><color=#B68700FF>-</color><color=#C89400FF>-</color><color=#DBA200FF>-</color><color=#EDAF00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EFB100FF>-</color><color=#DFA500FF>-</color><color=#CF9900FF>-</color><color=#BF8D00FF>-</color><color=#AF8200FF>-</color><color=#9F7600FF>-</color><color=#8F6A00FF>-</color><color=#805E00FF>-</color><color=#705200FF>-</color><color=#604700FF>-</color><color=#503B00FF>-</color><color=#402F00FF>-</color><color=#302300FF>-</color><color=#201800FF>-</color><color=#100C00FF>-</color><color=#000000FF>-</color><color=#100C00FF>-</color><color=#201800FF>-</color><color=#302300FF>-</color><color=#402F00FF>-</color><color=#503B00FF>-</color><color=#604700FF>-</color><color=#705200FF>-</color><color=#805E00FF>-</color><color=#8F6A00FF>-</color><color=#9F7600FF>-</color><color=#AF8200FF>-</color><color=#BF8D00FF>-</color><color=#CF9900FF>-</color><color=#DFA500FF>-</color><color=#EFB100FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#DFA500FF>-</color><color=#BF8D00FF>-</color><color=#9F7600FF>-</color><color=#805E00FF>-</color><color=#604700FF>-</color><color=#402F00FF>-</color><color=#201800FF>-</color><color=#000000FF>-</color><color=#201800FF>-</color><color=#402F00FF>-</color><color=#604700FF>-</color><color=#805E00FF>-</color><color=#9F7600FF>-</color><color=#BF8D00FF>-</color><color=#DFA500FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#E7AA00FF>-</color><color=#CE9900FF>-</color><color=#B68700FF>-</color><color=#9E7500FF>-</color><color=#866300FF>-</color><color=#6D5100FF>-</color><color=#553F00FF>-</color><color=#3D2D00FF>-</color><color=#241B00FF>-</color><color=#0C0900FF>-</color><color=#0C0900FF>-</color><color=#241B00FF>-</color><color=#3D2D00FF>-</color><color=#553F00FF>-</color><color=#6D5100FF>-</color><color=#866300FF>-</color><color=#9E7500FF>-</color><color=#B68700FF>-</color><color=#CE9900FF>-</color><color=#E7AA00FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37491,8 +37445,8 @@ GameObject:
   - component: {fileID: 1731588896}
   - component: {fileID: 1731588895}
   m_Layer: 0
-  m_Name: "<color=#FF0808FF>((</color><color=#FF0808FF>JAKBY TO KTO\u015A CHCIA\u0141
-    U\u0141O\u017BY\u0106 TO SI\u0118 NIE POGNIEWAMY</color><color=#FF0808FF>))))))</color>"
+  m_Name: "<color=#FF0808FF>JAKBY TO KTO\u015A CHCIA\u0141 U\u0141O\u017BY\u0106
+    TO SI\u0118 NIE POGNIEWAMY</color>"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38947,7 +38901,6 @@ MonoBehaviour:
   passiveFearIncreaseInterval: 40
   passiveFearIncreaseAmount: 1
   audioEffectsController: {fileID: 1187514810}
-  cameraEffectsController: {fileID: 43209481}
   movementEffectController: {fileID: 1006559624}
   postProcessingController: {fileID: 326914331}
   level0Profile: {fileID: 11400000, guid: 1f0cc8f52392e5747abf12e9a4018d70, type: 2}
@@ -39173,8 +39126,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: shakeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: cameraHeight
-      value: 0.6
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: shakeDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: useSmoothShake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: bobbingStrength
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: 676459983098533764, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: mouseSensitivity
@@ -39210,19 +39179,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9238796
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38268322
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -39230,7 +39199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 45
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -39343,7 +39312,6 @@ SceneRoots:
   - {fileID: 80719676324968209}
   - {fileID: 58214150}
   - {fileID: 1187514806}
-  - {fileID: 43209482}
   - {fileID: 1006559623}
   - {fileID: 326914332}
   - {fileID: 1525228045}
