@@ -726,6 +726,7 @@ MonoBehaviour:
   enableBobbing: 1
   bobbingSpeed: 10
   bobbingStrength: 0.05
+  cameraHeight: 1.6
 --- !u!114 &395878047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1749,7 +1750,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 932d0d0008df1fb429caf051894647dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1910,11 +1911,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f5bbb9b49b7e114e89653ec90fae949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slight: {fileID: 0}
-  moderate: {fileID: 0}
-  high: {fileID: 0}
-  extreme: {fileID: 0}
-  faint: {fileID: 0}
+  level0: {fileID: 0}
+  level1: {fileID: 0}
+  level2: {fileID: 0}
+  level3: {fileID: 0}
+  level4: {fileID: 0}
+  level5: {fileID: 0}
   volume: {fileID: 0}
 --- !u!114 &1056546635
 MonoBehaviour:
@@ -1928,12 +1930,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd1f1441fb6ccd45a1283923dffa91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FearLevelText: 
   passiveFearIncreaseInterval: 2
   passiveFearIncreaseAmount: 1
-  postProcEffect: {fileID: 0}
-  audioEffect: {fileID: 0}
-  currentBehaviorName: None
-  currentFearLevelText: None
+  audioEffectsController: {fileID: 0}
+  cameraEffectsController: {fileID: 0}
+  movementEffectController: {fileID: 0}
+  postProcessingController: {fileID: 0}
+  level0Profile: {fileID: 0}
+  level1Profile: {fileID: 0}
+  level2Profile: {fileID: 0}
+  level3Profile: {fileID: 0}
+  level4Profile: {fileID: 0}
+  level5Profile: {fileID: 0}
 --- !u!1 &1102601454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2854,6 +2863,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 801069082749560911, guid: 7cc4e0173be9d874aabb0fdc9e3fa2d3, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: eb8747cdd41410e469fd824efc74e080, type: 2}
     - target: {fileID: 919132149155446097, guid: 7cc4e0173be9d874aabb0fdc9e3fa2d3, type: 3}
       propertyPath: m_Name
       value: plan miasta
@@ -3111,7 +3124,7 @@ PrefabInstance:
     - target: {fileID: -365214088895894957, guid: e5f37a9d8cd70ef4ba256000cb3c9abf, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: d0456859c8820fe4cb5eaefac2d421ce, type: 2}
+      objectReference: {fileID: 2100000, guid: eb8747cdd41410e469fd824efc74e080, type: 2}
     - target: {fileID: -365214088895894957, guid: e5f37a9d8cd70ef4ba256000cb3c9abf, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
