@@ -18,7 +18,6 @@ namespace Enemy
         public bool canKill;
         public float killRadius = 1.4f;
         public bool canMove;
-        [Tooltip("Gdy przeciwnik ma obserwować lub obracać się szybko do celu. Np. Investigate ma moment gdy gracz jest po za obszarem to do niego sie odwróć")]
         public float rotationMultiplier = 5f;
         protected bool CanChangeState { get; private set; } = true;
         private bool _isChangingState;
@@ -35,6 +34,9 @@ namespace Enemy
         [SerializeField] private float minPatrolPointDistance = 5f;
         public float waitTimeAtPatrolPoint = 2f;
         private Vector3 _currentPatrolPoint;
+        // Public properties to expose patrol settings to the handler.
+        public float PatrolRange => patrolRange;
+        public float MinPatrolPointDistance => minPatrolPointDistance;
     
         [Header("Investigate Settings")]
         [Tooltip("Wartość wykrycia jaka musi być przy wykryciu by przeciwnik zaczął iść do celu")]
@@ -45,6 +47,7 @@ namespace Enemy
         [Header("Attack Settings")]
         public float attackDuration = 5f;
         public float attackSpeedMultiplier = 1.5f;
+        public float waitingAfterAttack = 6f;
     
         private void Awake()
         {
@@ -99,9 +102,18 @@ namespace Enemy
             CurrentState.EnterState(this);
             _isChangingState = false;
         }
-    
-        public Vector3 RequestPatrolPoint() => EnemyPatrolHandler.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
-
+        
+        /// <summary>
+        /// Returns a patrol point based on the enemy's current position.
+        /// If the enemy is within a PatrolZone, that zone is used.
+        /// Otherwise, a random point on the global NavMesh is generated.
+        /// </summary>
+        public Vector3 RequestPatrolPoint()
+        {
+            _currentPatrolPoint = EnemyPatrolHandler.GetPatrolPoint(this);
+            return _currentPatrolPoint;
+        }
+        
         public void SetTarget(Transform target)
         {
             Player = target;
@@ -160,14 +172,14 @@ namespace Enemy
         public void FacePlayer()
         {
             if (Player == null) return;
-
-            // Określamy kierunek do gracza, ignorując oś Y
+            
             Vector3 direction = (Player.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
         }
     
-        /*//For IsTargetInNavMesh
+        //For IsTargetInNavMesh
+        /*
         private void OnDrawGizmos()
         {
             // if (Target != null)
@@ -189,7 +201,7 @@ namespace Enemy
         [ContextMenu("Investigate")]
         public void ForceInvestigate()
         {
-            Transform target = FindAnyObjectByType(typeof(Player)).GameObject().gameObject.transform;
+            Transform target = Player.GameObject().gameObject.transform;
             SetTarget(target);
             OnAlertReceived(target.position);
         }
@@ -197,7 +209,7 @@ namespace Enemy
         [ContextMenu("Attack")]
         public void ForceAttack()
         {
-            Transform target = FindAnyObjectByType(typeof(Player)).GameObject().gameObject.transform;
+            Transform target = Player.GameObject().gameObject.transform;
             OnAttackCommandReceived(target);
         }
     }

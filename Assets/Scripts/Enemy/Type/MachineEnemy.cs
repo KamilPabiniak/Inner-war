@@ -19,10 +19,7 @@ namespace Enemy.Type
         [Range(1,5)]
         [Tooltip("Max distance from SightTarget")]
         public int maxOffsetDistance = 3; 
-        
-        [StopFold]
-        [Binder("Attack", fontSize: 15, bottomSpace: 1f, alignment: TextAnchor.MiddleLeft , fontStyle: FontStyle.BoldAndItalic, colorHex: "#ff001e", foldAll: false)]
-        public float overloadTimer = 6f;
+      
         
         private void Start()
         
