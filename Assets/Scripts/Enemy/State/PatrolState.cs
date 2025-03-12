@@ -8,13 +8,13 @@ namespace Enemy.State
 {
     public class PatrolState : IEnemyState
     {
-        private Vector3 patrolPoint;
-        private bool isWaiting;
-        private float waitTimer;
+        private Vector3 _patrolPoint;
+        private bool _isWaiting;
+        private float _waitTimer;
 
         // Machine-specific head rotation
-        private Coroutine headRotationCoroutine;
-        private int lastHeadPositionIndex;
+        private Coroutine _headRotationCoroutine;
+        private int _lastHeadPositionIndex;
 
         public void EnterState(EnemyBase enemy)
         {
@@ -25,9 +25,9 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBase enemy)
         {
-            if (isWaiting)
+            if (_isWaiting)
             {
-                waitTimer -= Time.deltaTime;
+                _waitTimer -= Time.deltaTime;
                 StartHeadRotation(enemy);
                 
                 if (IsObjectInFront(enemy))
@@ -35,11 +35,11 @@ namespace Enemy.State
                     TurnTowardsFreeSpace(enemy);
                 }
 
-                if (waitTimer <= 0f)
+                if (_waitTimer <= 0f)
                 {
-                    isWaiting = false;
+                    _isWaiting = false;
                     ResetHeadRotation(enemy);
-                    EnemyPatrolHandler.ReleasePatrolPoint(patrolPoint);
+                    EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
                     SetNewPatrolPoint(enemy);
                 }
                 return;
@@ -50,13 +50,13 @@ namespace Enemy.State
                 enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
             {
                 // Start waiting and release current patrol point
-                isWaiting = true;
-                waitTimer = enemy.waitTimeAtPatrolPoint;
+                _isWaiting = true;
+                _waitTimer = enemy.waitTimeAtPatrolPoint;
 
-                if (patrolPoint != Vector3.zero)
+                if (_patrolPoint != Vector3.zero)
                 {
-                    EnemyPatrolHandler.ReleasePatrolPoint(patrolPoint);
-                    patrolPoint = Vector3.zero;
+                    EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                    _patrolPoint = Vector3.zero;
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace Enemy.State
             if (!enemy.navMeshAgent.pathPending &&
                 enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
             {
-                EnemyPatrolHandler.ReleasePatrolPoint(patrolPoint);
+                EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
                 ResetHeadRotation(enemy);
             }
         }
@@ -79,15 +79,15 @@ namespace Enemy.State
                 return;
             }
 
-            patrolPoint = enemy.RequestPatrolPoint();
+            _patrolPoint = enemy.RequestPatrolPoint();
 
-            if (NavMesh.SamplePosition(patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
             {
-                patrolPoint = hit.position;
-                Debug.Log($"New patrol point set at: {patrolPoint}");
+                _patrolPoint = hit.position;
+                Debug.Log($"New patrol point set at: {_patrolPoint}");
                 if (enemy.canMove)
                 {
-                    enemy.navMeshAgent.SetDestination(patrolPoint);
+                    enemy.navMeshAgent.SetDestination(_patrolPoint);
                 }
             }
         }
@@ -102,8 +102,7 @@ namespace Enemy.State
             float sideDetectionDistance = 4f;
             float rayOriginHeight = 1.5f;
             float sideRayAngleOffset = 30f;
-
-            // Jeśli enemy jest MachineEnemy, pobieramy ustawienia z jego zmiennych
+            
             if (enemy is MachineEnemy machineEnemy)
             {
                 mainDetectionDistance = machineEnemy.mainDetectionDistance;
@@ -112,30 +111,30 @@ namespace Enemy.State
                 sideRayAngleOffset = machineEnemy.sideRayAngleOffset;
             }
 
-            Vector3 origin = enemy.transform.position + Vector3.up * rayOriginHeight;
-            Vector3 mainDirection = enemy.transform.forward;
+            var transform = enemy.transform;
+            Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
+            Vector3 mainDirection = transform.forward;
 
-            // Główny raycast
+         
             bool mainHit = Physics.Raycast(origin, mainDirection, mainDetectionDistance);
             Debug.DrawRay(origin, mainDirection * mainDetectionDistance, mainHit ? Color.red : Color.green, 0.0f);
 
-            // Raycasty boczne
-            Vector3 leftDirection = Quaternion.Euler(0, -sideRayAngleOffset, 0) * enemy.transform.forward;
-            Vector3 rightDirection = Quaternion.Euler(0, sideRayAngleOffset, 0) * enemy.transform.forward;
+         
+            var forward = enemy.transform.forward;
+            Vector3 leftDirection = Quaternion.Euler(0, -sideRayAngleOffset, 0) * forward;
+            Vector3 rightDirection = Quaternion.Euler(0, sideRayAngleOffset, 0) * forward;
             bool leftHit = Physics.Raycast(origin, leftDirection, sideDetectionDistance);
             bool rightHit = Physics.Raycast(origin, rightDirection, sideDetectionDistance);
 
             Debug.DrawRay(origin, leftDirection * sideDetectionDistance, leftHit ? Color.red : Color.green, 0.0f);
             Debug.DrawRay(origin, rightDirection * sideDetectionDistance, rightHit ? Color.red : Color.green, 0.0f);
-
-            // Logujemy informację, jeżeli którykolwiek raycast trafił przeszkodę
+            
             if (mainHit || leftHit || rightHit)
             {
                 Debug.Log($"Obstacle detected in front or at the sides of {enemy.name}: " +
                           $"Main hit: {mainHit}, Left hit: {leftHit}, Right hit: {rightHit}");
             }
-
-            // Zwracamy true, jeśli choć jeden raycast wykrył przeszkodę
+            
             return mainHit || leftHit || rightHit;
         }
 
@@ -167,11 +166,13 @@ namespace Enemy.State
                 sideRayAngleOffset = machineEnemy.sideRayAngleOffset;
             }
 
-            Vector3 origin = enemy.transform.position + Vector3.up * rayOriginHeight;
+            var transform = enemy.transform;
+            Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
             
             // --- Check side rays continuously ---
-            Vector3 leftSideDir = Quaternion.Euler(0, sideRayAngleOffset, 0) * enemy.transform.forward;
-            Vector3 rightSideDir = Quaternion.Euler(0, -sideRayAngleOffset, 0) * enemy.transform.forward;
+            var forward = transform.forward;
+            Vector3 leftSideDir = Quaternion.Euler(0, sideRayAngleOffset, 0) * forward;
+            Vector3 rightSideDir = Quaternion.Euler(0, -sideRayAngleOffset, 0) * forward;
             bool leftSideHit = Physics.Raycast(origin, leftSideDir, sideDetectionDistance);
             bool rightSideHit = Physics.Raycast(origin, rightSideDir, sideDetectionDistance);
             
@@ -197,7 +198,7 @@ namespace Enemy.State
                 Debug.Log($"{enemy.name} turning left due to right side obstacle.");
                 return;
             }
-            else if (leftSideHit && rightSideHit)
+            else if (leftSideHit)
             {
                 // Both sides are blocked – try turning backward.
                 Vector3 backwardDir = -enemy.transform.forward;
@@ -231,8 +232,9 @@ namespace Enemy.State
             // For MachineEnemy add additional candidate directions.
             if (machineEnemy != null)
             {
-                Vector3 extraRightDir = Quaternion.Euler(0, machineEnemy.additionalRaycastAngleOffset, 0) * enemy.transform.forward;
-                Vector3 extraLeftDir = Quaternion.Euler(0, -machineEnemy.additionalRaycastAngleOffset, 0) * enemy.transform.forward;
+                var forward1 = enemy.transform.forward;
+                Vector3 extraRightDir = Quaternion.Euler(0, machineEnemy.additionalRaycastAngleOffset, 0) * forward1;
+                Vector3 extraLeftDir = Quaternion.Euler(0, -machineEnemy.additionalRaycastAngleOffset, 0) * forward1;
                 candidateDirections.Add(extraRightDir);
                 candidateDirections.Add(extraLeftDir);
                 Debug.DrawRay(origin, extraRightDir * mainDetectionDistance, Color.cyan, 0.0f);
@@ -294,10 +296,7 @@ namespace Enemy.State
         private void StartHeadRotation(EnemyBase enemy)
         {
             if (enemy is not MachineEnemy machineEnemy) return;
-            if (headRotationCoroutine == null)
-            {
-                headRotationCoroutine = enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
-            }
+            _headRotationCoroutine ??= enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
         }
 
         private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
@@ -322,7 +321,7 @@ namespace Enemy.State
             int direction = 1;
             yield return new WaitForSeconds(1f);
 
-            while (isWaiting)
+            while (_isWaiting)
             {
                 if (movementOffsets.Count == 0)
                 {
@@ -330,7 +329,7 @@ namespace Enemy.State
                     yield break;
                 }
 
-                Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[lastHeadPositionIndex];
+                Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[_lastHeadPositionIndex];
                 float elapsedTime = 0f;
                 Vector3 startLocalPosition = machineEnemy.sightTarget.transform.localPosition;
                 float transitionDuration = headRotationSpeed;
@@ -353,15 +352,15 @@ namespace Enemy.State
                 
                 yield return new WaitForSeconds(stopDuration);
                 
-                if (lastHeadPositionIndex == movementOffsets.Count - 1 && direction == 1)
+                if (_lastHeadPositionIndex == movementOffsets.Count - 1 && direction == 1)
                 {
                     direction = -1;
                 }
-                else if (lastHeadPositionIndex == 0 && direction == -1)
+                else if (_lastHeadPositionIndex == 0 && direction == -1)
                 {
                     direction = 1;
                 }
-                lastHeadPositionIndex += direction;
+                _lastHeadPositionIndex += direction;
             }
         }
 
@@ -369,10 +368,10 @@ namespace Enemy.State
         {
             if (enemy is MachineEnemy machineEnemy)
             {
-                if (headRotationCoroutine != null)
+                if (_headRotationCoroutine != null)
                 {
-                    enemy.StopCoroutine(headRotationCoroutine);
-                    headRotationCoroutine = null;
+                    enemy.StopCoroutine(_headRotationCoroutine);
+                    _headRotationCoroutine = null;
                 }
                 enemy.StartCoroutine(SmoothResetPosition(machineEnemy));
             }
