@@ -43,8 +43,8 @@ namespace Enemy.State
         {
             if (_isOverloading)
             {
-                _machineEnemy.overloadTimer -= Time.deltaTime;
-                if (_machineEnemy.overloadTimer <= 0f)
+                _machineEnemy.waitingAfterAttack -= Time.deltaTime;
+                if (_machineEnemy.waitingAfterAttack <= 0f)
                 {
                     Debug.Log($"[{enemy.name}] Przeciążenie zakończone. Wracam do patrolowania.");
                     enemy.ChangeState(new PatrolState());
