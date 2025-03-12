@@ -1,6 +1,5 @@
 using Enemy.State;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Enemy.Type
 {
@@ -18,11 +17,19 @@ namespace Enemy.Type
         public float stopDuration = 0.5f;
         [Range(1,5)]
         [Tooltip("Max distance from SightTarget")]
-        public int maxOffsetDistance = 3; 
+        public int maxOffsetDistance = 3;
+        public float headDetectionDistance = 5f;
+        
+        [Header("Raycast Settings")]
+        public float mainDetectionDistance = 6f;
+        public float sideDetectionDistance = 4f;
+        public float rayOriginHeight = 1.5f;
+        public float sideRayAngleOffset = 30f;
+        public float additionalRaycastAngleOffset = 20f;
+
       
         
         private void Start()
-        
         {
             OriginalHeadPos = sightTarget.transform.localPosition;
             ChangeState(new PatrolState());
@@ -49,7 +56,7 @@ namespace Enemy.Type
             }
             else if (detectionProgress >= 100f && CurrentState is not AttackState)
             {
-                if (!IsTargetInNavMesh(out NavMeshHit hit)) return;
+                if (!IsTargetInNavMesh(out _)) return;
                 ChangeState(new AttackState());
             }
         }
