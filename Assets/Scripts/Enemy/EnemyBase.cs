@@ -66,7 +66,6 @@ namespace Enemy
         {
             CurrentState?.UpdateState(this);
             
-            // Smoothly interpolate between white (at progress 0) and yellow (at progress 1)
             float progress = Mathf.Clamp01(detectionProgress / 100f);
             
             switch (CurrentState)
