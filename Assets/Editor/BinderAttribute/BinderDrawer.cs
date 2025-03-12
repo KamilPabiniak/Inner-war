@@ -17,9 +17,14 @@ namespace BinderAttribute
             GUI.contentColor = headerColor;
 
             var style = GetStyle(binder);
+            style.wordWrap = true; // Enable word wrapping
 
+            // Apply top spacing
             position.y += binder.topSpace;
-            var rect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+
+            // Calculate dynamic height for the header text based on available width.
+            float headerHeight = style.CalcHeight(new GUIContent(binder.header), position.width);
+            var rect = new Rect(position.x, position.y, position.width, headerHeight);
             EditorGUI.LabelField(rect, binder.header, style);
 
             GUI.contentColor = originalColor;
@@ -47,7 +52,14 @@ namespace BinderAttribute
             {
                 return 0f;
             }
-            return EditorGUIUtility.singleLineHeight + binder.topSpace + binder.bottomSpace;
+            
+            var style = GetStyle(binder);
+            style.wordWrap = true; // Ensure word wrap is enabled for height calculation
+            
+            // Use current view width as an approximation for available width.
+            float availableWidth = EditorGUIUtility.currentViewWidth;
+            float headerHeight = style.CalcHeight(new GUIContent(binder.header), availableWidth);
+            return binder.topSpace + headerHeight + binder.bottomSpace;
         }
     }
 }

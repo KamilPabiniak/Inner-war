@@ -34,5 +34,5 @@ public class Binder : PropertyAttribute
     }
 }
 
-
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
 public class StopFold : PropertyAttribute { }
