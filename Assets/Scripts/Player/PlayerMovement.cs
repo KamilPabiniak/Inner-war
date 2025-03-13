@@ -38,6 +38,11 @@ public class PlayerMovement : PlayerModule
         }
     }
 
+    public bool GetCrouch()
+    {
+        return _isCrouch;
+    }
+
     public void ForceCrouch()
     {
         _blockCrouchHandler = true;

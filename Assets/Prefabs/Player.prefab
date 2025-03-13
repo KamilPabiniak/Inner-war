@@ -87,7 +87,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: cd3fb3f2b457b874fb7008078c960697, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 5179479191362634091}
   - component: {fileID: 6669172894757761160}
   - component: {fileID: 1185043122535811385}
+  - component: {fileID: 1271999008627739933}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -364,8 +365,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe508885ae12fd4ab2b847a4e9d38f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  standingHeight: 1.8
-  crouchHeight: 1.2
+  standingHeight: 2
+  crouchHeight: 0
   gravity: 12
   state: 0
   characterController: {fileID: 6392378293654077410}
@@ -463,11 +464,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b37a04e70b61646b696e44fff6bd20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 25
+  mouseSensitivity: 20
   verticalClamp: 80
   enableBobbing: 1
   bobbingSpeed: 10
-  bobbingStrength: 0.05
+  bobbingStrength: 0.04
+  cameraHeight: 0.55
 --- !u!114 &7090547106640871701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpoint: {fileID: 0}
+  respawnTime: 3
 --- !u!114 &5179479191362634091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,11 +528,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   whistlingRange: 10
-  drawSphere: 1
   whistlingCooldown: 2
   alertCooldownTime: 5
+  volume: 1
   source: {fileID: 2715986301959049074}
   whistlingSoundClip: {fileID: 8300000, guid: dc65d45363c254854ab9e3c0f9bb75bd, type: 3}
+  drawSphere: 1
 --- !u!114 &6669172894757761160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +568,25 @@ MonoBehaviour:
   trajectoryResolution: 30
   trajectoryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   trajectoryWidth: 0.05
+--- !u!114 &1271999008627739933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528023716618402936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db5d2ed9c599e4d498059dbaaa9a39b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  noiseRange: 8
+  noiseCooldown: 0.8
+  alertCooldownTime: 1
+  drawSphere: 1
 --- !u!1 &8591563394090021686
 GameObject:
   m_ObjectHideFlags: 0

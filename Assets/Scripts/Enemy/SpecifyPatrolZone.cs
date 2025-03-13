@@ -114,6 +114,7 @@ public class SpecifyPatrolZone : MonoBehaviour
         Gizmos.color = Color.yellow;
         foreach (var col in patrolAreas)
         {
+            if (!col) return;
             if (col is BoxCollider box)
             {
                 Gizmos.DrawWireCube(box.bounds.center, box.bounds.size);

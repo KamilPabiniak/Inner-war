@@ -1,31 +1,35 @@
 using System.Collections.Generic;
-using Enemy.Type;
+using System.Linq;
+using Enemy;
 using UnityEngine;
 
 public class PlayerWhistling : PlayerModule
 {
     public LayerMask targetMask;
     public float whistlingRange;
-    public bool drawSphere;
     public float whistlingCooldown;
     public float alertCooldownTime = 5f;  
+    public float volume = 1f;  
     [Header("References")] 
     public GameObject source;
     public AudioClip whistlingSoundClip;
     
+    [Header("Debugging")]
+    public bool drawSphere = true;
+    
     private bool _whistle;
     private bool _whistleTriggered;
     private PlayerInput _input;
-    private Collider[] results;
-    private Dictionary<Collider, float> alertedTargets;
+    private Collider[] _results;
+    private Dictionary<Collider, float> _alertedTargets;
     private float _lastWhistleTime;
 
     
     private void Start()
     {
         _input = GetComponent<PlayerInput>();
-        results = new Collider[10];
-        alertedTargets = new Dictionary<Collider, float>();
+        _results = new Collider[10];
+        _alertedTargets = new Dictionary<Collider, float>();
         _lastWhistleTime = -whistlingCooldown;
     }
     
@@ -37,18 +41,22 @@ public class PlayerWhistling : PlayerModule
 
         HandleWhistling();
 
-        if (_whistle && !_whistleTriggered)
+        switch (_whistle)
         {
-            if (Time.time >= _lastWhistleTime + whistlingCooldown)
+            case true when !_whistleTriggered:
             {
-                Whistle();
-                _whistleTriggered = true;  
-                _lastWhistleTime = Time.time;
+                if (Time.time >= _lastWhistleTime + whistlingCooldown)
+                {
+                    Whistle();
+                    _whistleTriggered = true;  
+                    _lastWhistleTime = Time.time;
+                }
+
+                break;
             }
-        }
-        else if (!_whistle) 
-        {
-            _whistleTriggered = false;
+            case false:
+                _whistleTriggered = false;
+                break;
         }
     }
 
@@ -59,30 +67,23 @@ public class PlayerWhistling : PlayerModule
     
     private void Whistle()
     {
-        SoundFXManager.Instance.PlaySoundFXClip(whistlingSoundClip, source.transform, 1f);
-        var targetsInRange = Physics.OverlapSphereNonAlloc(transform.position, whistlingRange, results, targetMask);
+        SoundFXManager.Instance.PlaySoundFXClip(whistlingSoundClip, source.transform, volume);
+        var targetsInRange = Physics.OverlapSphereNonAlloc(transform.position, whistlingRange, _results, targetMask);
         
         for (int i = 0; i < targetsInRange; i++)
         {
-            var targetCollider = results[i];
-            var machineEnemy = targetCollider.GetComponentInParent<MachineEnemy>();
-            
-            if (machineEnemy != null)
+            var targetCollider = _results[i];
+            var enemy = targetCollider.GetComponentInParent<EnemyBase>();
+
+            if (enemy == null) continue;
+            if (_alertedTargets.ContainsKey(targetCollider) && _alertedTargets[targetCollider] + alertCooldownTime > Time.time)
             {
-                if (alertedTargets.ContainsKey(targetCollider))
-                {
-                    Debug.Log($"Target {targetCollider.name} already alerted. Last alerted at: {alertedTargets[targetCollider]}");
-                }
-                
-                if (alertedTargets.ContainsKey(targetCollider) && alertedTargets[targetCollider] + alertCooldownTime > Time.time)
-                {
-                    machineEnemy.OnAttackCommandReceived(transform);  
-                }
-                else
-                {
-                    machineEnemy.OnAlertReceived(transform.position);
-                    alertedTargets[targetCollider] = Time.time; 
-                }
+                enemy.OnAttackCommandReceived(transform);  
+            }
+            else
+            {
+                enemy.OnAlertReceived(transform.position);
+                _alertedTargets[targetCollider] = Time.time; 
             }
         }
     }
@@ -91,18 +92,15 @@ public class PlayerWhistling : PlayerModule
     {
         List<Collider> targetsToRemove = new List<Collider>();
         
-        foreach (var entry in alertedTargets)
+        foreach (var entry in _alertedTargets.Where(entry => entry.Value + alertCooldownTime <= Time.time))
         {
-            if (entry.Value + alertCooldownTime <= Time.time)
-            {
-                Debug.Log($"Resetting alert for {entry.Key.name}");
-                targetsToRemove.Add(entry.Key); 
-            }
+            Debug.Log($"Resetting alert for {entry.Key.name}");
+            targetsToRemove.Add(entry.Key);
         }
         
         foreach (var target in targetsToRemove)
         {
-            alertedTargets.Remove(target);
+            _alertedTargets.Remove(target);
         }
     }
     
