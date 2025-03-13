@@ -9,11 +9,10 @@ namespace Checkpoint
         [SerializeField] private Collider col;
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "Player")
-            {
-                Player.Instance.GetModule<PlayerDeath>().checkpoint = spawnPoint;
-                gameObject.SetActive(false);
-            }
+            if (!other.gameObject.CompareTag("Player")) return;
+            Player.Instance.GetModule<PlayerDeath>().checkpoint = spawnPoint;
+            GameEvents.onSaveCheckpoint.Invoke();
+            gameObject.SetActive(false);
         }
 
         private void OnDrawGizmos()

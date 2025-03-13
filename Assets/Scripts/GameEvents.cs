@@ -8,6 +8,9 @@ public static class GameEvents
     //Kill
     public static Action onPlayerKilled;
     
+    //Save
+    public static Action onSaveCheckpoint;
+    
     //Death
     public static Action onPlayerDied;
     public static Action onPlayerRespawned;

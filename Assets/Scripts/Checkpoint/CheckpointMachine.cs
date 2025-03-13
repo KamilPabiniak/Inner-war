@@ -8,6 +8,7 @@ namespace Checkpoint
         public void Interact(Player player)
         {
             player.GetModule<PlayerDeath>().checkpoint = spawnPoint;
+            GameEvents.onSaveCheckpoint.Invoke();
         }
     }
 }
