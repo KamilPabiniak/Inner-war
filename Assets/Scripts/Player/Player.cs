@@ -35,6 +35,7 @@ using UnityEngine;
     private bool CharacterControllerEnabled { get; set; } = true;
 
     private float _verticalVelocity;
+    private bool _isSettingsPanelActive;
 
     private void Awake()
     {
@@ -54,6 +55,18 @@ using UnityEngine;
     private void Start()
     {
         Input = GetModule<PlayerInput>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+    
+    private void OnEnable()
+    {
+        GameEvents.onTogglePanel += ToggleSettingsPanel;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.onTogglePanel -= ToggleSettingsPanel;
     }
 
     private void OnValidate()
@@ -148,5 +161,34 @@ using UnityEngine;
         
         Debug.Log($"Gravity is now {(isEnabled ? "Enabled" : "Disabled")}");
     }
+     
+    private void ToggleSettingsPanel()
+    {
+        _isSettingsPanelActive = !_isSettingsPanelActive;
+        
+        BlockPlayerInputExceptSettingsPanel(_isSettingsPanelActive);
+        
+        if (_isSettingsPanelActive)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        
+        Debug.Log("Settings panel toggled. Input " + (_isSettingsPanelActive ? "blocked" : "unblocked") + " except SettingsPanel.");
+    }
+    
+    public void BlockPlayerInputExceptSettingsPanel(bool block)
+    {
+        if (Input != null)
+        {
+            Input.BlockAllInputsExceptSettingsPanel(block);
+        }
+    }
+
 }
 

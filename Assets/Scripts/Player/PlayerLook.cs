@@ -48,14 +48,12 @@ public class PlayerLook : PlayerModule
     private void Start()
     {
         _input = GetComponent<PlayerInput>();
-        LockCursor();
     }
-
+    
     private void Update()
     {
         if (Player.state == Player.State.Walking)
         {
-            HandleCursor();
             HandleLook(_input.LookInput);
 
             if (enableBobbing)
@@ -70,26 +68,6 @@ public class PlayerLook : PlayerModule
         {
             HandleCameraShake();
         }
-    }
-
-    private void HandleCursor()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            UnlockCursor();
-        else if (Input.GetMouseButtonDown(0) && Cursor.lockState != CursorLockMode.Locked)
-            LockCursor();
-    }
-
-    private void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
-    private void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
 
     private void HandleLook(Vector2 lookInput)

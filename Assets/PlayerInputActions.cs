@@ -100,7 +100,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CheatSheet"",
+                    ""name"": ""SettingsPanel"",
                     ""type"": ""Button"",
                     ""id"": ""e872fc4a-9460-42af-ac72-4fa55c96cdc8"",
                     ""expectedControlType"": """",
@@ -311,7 +311,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CheatSheet"",
+                    ""action"": ""SettingsPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -352,7 +352,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_LeanLeft = m_Player.FindAction("LeanLeft", throwIfNotFound: true);
         m_Player_LeanRight = m_Player.FindAction("LeanRight", throwIfNotFound: true);
         m_Player_Whistling = m_Player.FindAction("Whistling", throwIfNotFound: true);
-        m_Player_CheatSheet = m_Player.FindAction("CheatSheet", throwIfNotFound: true);
+        m_Player_SettingsPanel = m_Player.FindAction("SettingsPanel", throwIfNotFound: true);
         m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
     }
@@ -429,7 +429,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LeanLeft;
     private readonly InputAction m_Player_LeanRight;
     private readonly InputAction m_Player_Whistling;
-    private readonly InputAction m_Player_CheatSheet;
+    private readonly InputAction m_Player_SettingsPanel;
     private readonly InputAction m_Player_Throw;
     private readonly InputAction m_Player_Aim;
     public struct PlayerActions
@@ -444,7 +444,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @LeanLeft => m_Wrapper.m_Player_LeanLeft;
         public InputAction @LeanRight => m_Wrapper.m_Player_LeanRight;
         public InputAction @Whistling => m_Wrapper.m_Player_Whistling;
-        public InputAction @CheatSheet => m_Wrapper.m_Player_CheatSheet;
+        public InputAction @SettingsPanel => m_Wrapper.m_Player_SettingsPanel;
         public InputAction @Throw => m_Wrapper.m_Player_Throw;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -480,9 +480,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Whistling.started += instance.OnWhistling;
             @Whistling.performed += instance.OnWhistling;
             @Whistling.canceled += instance.OnWhistling;
-            @CheatSheet.started += instance.OnCheatSheet;
-            @CheatSheet.performed += instance.OnCheatSheet;
-            @CheatSheet.canceled += instance.OnCheatSheet;
+            @SettingsPanel.started += instance.OnSettingsPanel;
+            @SettingsPanel.performed += instance.OnSettingsPanel;
+            @SettingsPanel.canceled += instance.OnSettingsPanel;
             @Throw.started += instance.OnThrow;
             @Throw.performed += instance.OnThrow;
             @Throw.canceled += instance.OnThrow;
@@ -517,9 +517,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Whistling.started -= instance.OnWhistling;
             @Whistling.performed -= instance.OnWhistling;
             @Whistling.canceled -= instance.OnWhistling;
-            @CheatSheet.started -= instance.OnCheatSheet;
-            @CheatSheet.performed -= instance.OnCheatSheet;
-            @CheatSheet.canceled -= instance.OnCheatSheet;
+            @SettingsPanel.started -= instance.OnSettingsPanel;
+            @SettingsPanel.performed -= instance.OnSettingsPanel;
+            @SettingsPanel.canceled -= instance.OnSettingsPanel;
             @Throw.started -= instance.OnThrow;
             @Throw.performed -= instance.OnThrow;
             @Throw.canceled -= instance.OnThrow;
@@ -553,7 +553,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnLeanLeft(InputAction.CallbackContext context);
         void OnLeanRight(InputAction.CallbackContext context);
         void OnWhistling(InputAction.CallbackContext context);
-        void OnCheatSheet(InputAction.CallbackContext context);
+        void OnSettingsPanel(InputAction.CallbackContext context);
         void OnThrow(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
     }
