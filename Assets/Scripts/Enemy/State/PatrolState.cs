@@ -186,7 +186,6 @@ namespace Enemy.State
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(rightSideDir.x, 0, rightSideDir.z));
                 enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, Time.deltaTime * enemy.rotationMultiplier);
                 Debug.DrawRay(origin, rightSideDir * mainDetectionDistance, Color.blue, 0.0f);
-                Debug.Log($"{enemy.name} turning right due to left side obstacle.");
                 return;
             }
             else if (rightSideHit && !leftSideHit)
@@ -195,7 +194,6 @@ namespace Enemy.State
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(leftSideDir.x, 0, leftSideDir.z));
                 enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, Time.deltaTime * enemy.rotationMultiplier);
                 Debug.DrawRay(origin, leftSideDir * mainDetectionDistance, Color.blue, 0.0f);
-                Debug.Log($"{enemy.name} turning left due to right side obstacle.");
                 return;
             }
             else if (leftSideHit)
@@ -208,7 +206,6 @@ namespace Enemy.State
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(new Vector3(backwardDir.x, 0, backwardDir.z));
                     enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, Time.deltaTime * enemy.rotationMultiplier);
-                    Debug.Log($"{enemy.name} turning backwards due to ambiguous side obstacles.");
                     return;
                 }
                 else
@@ -216,7 +213,6 @@ namespace Enemy.State
                     // If backward is also blocked, fallback to turning left.
                     Quaternion targetRotation = Quaternion.LookRotation(new Vector3(leftSideDir.x, 0, leftSideDir.z));
                     enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, Time.deltaTime * enemy.rotationMultiplier);
-                    Debug.Log($"{enemy.name} turning left as fallback when backward is blocked.");
                     return;
                 }
             }
@@ -288,7 +284,6 @@ namespace Enemy.State
             Quaternion finalRotation = Quaternion.LookRotation(new Vector3(bestDirection.x, 0, bestDirection.z));
             enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, finalRotation, Time.deltaTime * enemy.rotationMultiplier);
             Debug.DrawRay(origin, bestDirection * mainDetectionDistance, Color.blue, 0.0f);
-            Debug.Log($"{enemy.name} rotated towards free space with direction: {bestDirection}");
         }
 
 

@@ -3829,6 +3829,7 @@ GameObject:
   - component: {fileID: 486656577}
   - component: {fileID: 486656581}
   - component: {fileID: 486656582}
+  - component: {fileID: 486656583}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Bomb
@@ -3919,7 +3920,7 @@ Transform:
   m_GameObject: {fileID: 486656576}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.629, y: 0.355, z: -27.738518}
+  m_LocalPosition: {x: 19.54, y: 0.355, z: -96.39}
   m_LocalScale: {x: 0.7, y: 0.4, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3950,6 +3951,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   newShaderMaterial: {fileID: 2100000, guid: d1386f1e4e64d3f46ad2be4217ef310e, type: 2}
+--- !u!114 &486656583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486656576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7408038ff154e1045ad3ae3d37491728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedQuestID: QQ - 1 podaj co chcesz
 --- !u!1 &496292193
 GameObject:
   m_ObjectHideFlags: 0
@@ -5142,6 +5156,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710841798}
   m_Mesh: {fileID: 3868671361854562809, guid: 6b038beae2dffad4bb67eb9b7ca0de4f, type: 3}
+--- !u!1 &724193246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 724193248}
+  - component: {fileID: 724193247}
+  m_Layer: 10
+  m_Name: QuestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &724193247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724193246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd0a8a9c5199a334d900f25cb35d34fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quests:
+  - {fileID: 11400000, guid: 2945e3c8eeaecca479be930ac1d1bafc, type: 2}
+  currentQuestIndex: 0
+--- !u!4 &724193248
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724193246}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.01, y: 1.382, z: -1.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &752504637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40908,7 +40969,7 @@ AudioSource:
   m_GameObject: {fileID: 1317607162}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8042136931339797774, guid: fd699d82a1561c14cad6e03376577c27, type: 2}
   m_audioClip: {fileID: 8300000, guid: 81934c3e3dabbaf42a2c491d37023b6d, type: 3}
   m_Resource: {fileID: 8300000, guid: 81934c3e3dabbaf42a2c491d37023b6d, type: 3}
   m_PlayOnAwake: 1
@@ -46924,6 +46985,7 @@ SceneRoots:
   - {fileID: 1574631212}
   - {fileID: 939598142}
   - {fileID: 80719676324968209}
+  - {fileID: 724193248}
   - {fileID: 58214150}
   - {fileID: 1187514806}
   - {fileID: 1006559623}
