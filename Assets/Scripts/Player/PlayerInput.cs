@@ -18,7 +18,7 @@ public class PlayerInput : PlayerModule
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }
     public bool IsWhistlePressed { get; private set; }
-    public bool IsEscapePressed { get; private set; }
+    public bool IsSettingsPanelButtonPressed { get; private set; }
     public bool IsAiming { get; private set; }
 
     // Events for actions that require immediate reaction
@@ -37,7 +37,30 @@ public class PlayerInput : PlayerModule
 
     // Reset methods if needed
     public void ResetVaultRequest() => IsVaultPressed = false;
-    public void ResetEscapePressed() => IsEscapePressed = false;
+    public void ResetSettingsButtonPressed() => IsSettingsPanelButtonPressed = false;
+    
+    private void LateUpdate()
+    {
+        if (!IsSettingsPanelButtonPressed) return;
+        GameEvents.onTogglePanel?.Invoke();
+        ResetSettingsButtonPressed();
+    }
+    
+    public void BlockAllInputsExceptSettingsPanel(bool block)
+    {
+        var actionMap = _inputActions.Player.Get();
+        foreach (var action in actionMap.actions)
+        {
+            if (action.name != "SettingsPanel")
+            {
+                if (block)
+                    action.Disable();
+                else
+                    action.Enable();
+            }
+        }
+    }
+
 
     private class PlayerActions : IPlayerActions
     {
@@ -84,9 +107,9 @@ public class PlayerInput : PlayerModule
             _playerInput.IsWhistlePressed = context.ReadValueAsButton();
         }
 
-        public void OnCheatSheet(InputAction.CallbackContext context)
+        public void OnSettingsPanel(InputAction.CallbackContext context)
         {
-            _playerInput.IsEscapePressed = context.ReadValueAsButton();
+            _playerInput.IsSettingsPanelButtonPressed = context.ReadValueAsButton();
         }
 
         public void OnAim(InputAction.CallbackContext context)

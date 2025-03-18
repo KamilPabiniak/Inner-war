@@ -75,7 +75,7 @@ namespace Enemy.State
         {
             if (!enemy.navMeshAgent.isOnNavMesh || !enemy.navMeshAgent.enabled)
             {
-                Debug.LogError($"[{enemy.name}] Agent is not on NavMesh!");
+                //Debug.LogError($"[{enemy.name}] Agent is not on NavMesh!");
                 return;
             }
 
@@ -84,7 +84,7 @@ namespace Enemy.State
             if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
             {
                 _patrolPoint = hit.position;
-                Debug.Log($"New patrol point set at: {_patrolPoint}");
+                //Debug.Log($"New patrol point set at: {_patrolPoint}");
                 if (enemy.canMove)
                 {
                     enemy.navMeshAgent.SetDestination(_patrolPoint);
@@ -131,8 +131,8 @@ namespace Enemy.State
             
             if (mainHit || leftHit || rightHit)
             {
-                Debug.Log($"Obstacle detected in front or at the sides of {enemy.name}: " +
-                          $"Main hit: {mainHit}, Left hit: {leftHit}, Right hit: {rightHit}");
+                // Debug.Log($"Obstacle detected in front or at the sides of {enemy.name}: " +
+                //           $"Main hit: {mainHit}, Left hit: {leftHit}, Right hit: {rightHit}");
             }
             
             return mainHit || leftHit || rightHit;
@@ -325,7 +325,7 @@ namespace Enemy.State
             {
                 if (movementOffsets.Count == 0)
                 {
-                    Debug.LogWarning("No available head rotation offsets! Exiting head rotation loop.");
+                    //Debug.LogWarning("No available head rotation offsets! Exiting head rotation loop.");
                     yield break;
                 }
 

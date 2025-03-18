@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CheatSheetHandler : MonoBehaviour
+public class SettingsPanelHandler : MonoBehaviour
 {
     [SerializeField] private GameObject panel;
     
@@ -22,4 +22,8 @@ public class CheatSheetHandler : MonoBehaviour
             }
         }
 
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
 }
