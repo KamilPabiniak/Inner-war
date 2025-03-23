@@ -1,10 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class QuestUI : MonoBehaviour
 {
-    public Text questTitleText;
-    public Text questDescriptionText;
+    public TextMeshProUGUI questTitleText;
+    public TextMeshProUGUI questDescriptionText;
 
     private void Start()
     {

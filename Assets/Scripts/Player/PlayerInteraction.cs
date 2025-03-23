@@ -28,14 +28,14 @@ public class PlayerInteraction : PlayerModule
     {
         Ray ray = new Ray(Player.cameraTransform.position, Player.cameraTransform.forward);
         Debug.DrawRay(Player.cameraTransform.position, Player.cameraTransform.forward * interactionDistance, Color.blue);
-        
+    
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
             var interactable = hit.collider.GetComponent<IInteractable>();
             if (interactable != null)
             {
                 string objectTag = hit.collider.tag;
-                if(objectTag != _lastObjectTag)
+                if (objectTag != _lastObjectTag)
                 {
                     _lastObjectTag = objectTag;
                     InteractionEventMessenger.ShowInteractionText(objectTag);
@@ -44,11 +44,13 @@ public class PlayerInteraction : PlayerModule
                 if (_input.IsInteractPressed)
                 {
                     interactable.Interact(Player);
+                    // Resetujemy flagê, ¿eby interakcja zosta³a wykonana tylko raz
+                    _input.IsInteractPressed = false;
                 }
             }
             else
             {
-                if(!string.IsNullOrEmpty(_lastObjectTag))
+                if (!string.IsNullOrEmpty(_lastObjectTag))
                 {
                     _lastObjectTag = "";
                     InteractionEventMessenger.HideInteractionText();
@@ -57,11 +59,12 @@ public class PlayerInteraction : PlayerModule
         }
         else
         {
-            if(!string.IsNullOrEmpty(_lastObjectTag))
+            if (!string.IsNullOrEmpty(_lastObjectTag))
             {
                 _lastObjectTag = "";
                 InteractionEventMessenger.HideInteractionText();
             }
         }
     }
+
 }

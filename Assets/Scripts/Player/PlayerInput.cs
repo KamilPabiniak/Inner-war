@@ -14,12 +14,12 @@ public class PlayerInput : PlayerModule
     // Button states (polled)
     public bool IsVaultPressed { get; private set; }
     public bool IsCrouchPressed { get; private set; }
-    public bool IsInteractPressed { get; private set; }
+    public bool IsInteractPressed { get; internal set; }
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }
     public bool IsWhistlePressed { get; private set; }
-    public bool IsSettingsPanelButtonPressed { get; private set; }
     public bool IsAiming { get; private set; }
+    private bool IsSettingsPanelButtonPressed { get; set; }
 
     // Events for actions that require immediate reaction
     public event Action OnStartAiming;
@@ -89,8 +89,16 @@ public class PlayerInput : PlayerModule
 
         public void OnInteract(InputAction.CallbackContext context)
         {
-            _playerInput.IsInteractPressed = context.ReadValueAsButton();
+            if (context.phase == InputActionPhase.Started)
+            {
+                _playerInput.IsInteractPressed = true;
+            }
+            else if(context.phase == InputActionPhase.Canceled)
+            {
+                _playerInput.IsInteractPressed = false;
+            }
         }
+
 
         public void OnLeanLeft(InputAction.CallbackContext context)
         {
