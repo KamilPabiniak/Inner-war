@@ -51,7 +51,11 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4be2ca2304696e345aa6eac98eb90ce5, type: 2}
+      objectReference: {fileID: 2100000, guid: 984b14fb575853b4d92dc8b436fa6e9d, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -1238218227891777710, guid: f1faabdc3ec1b6f429773fbae353e241, type: 3}
     - target: {fileID: 919132149155446097, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
       propertyPath: m_Name
       value: P_chair
@@ -62,14 +66,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3752975687228137347}
+      addedObject: {fileID: 7424480473798508955}
   m_SourcePrefab: {fileID: 100100000, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
 --- !u!1 &4739804268301948678 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 378b809dc5548804985f245e8cf9dfcd, type: 3}
   m_PrefabInstance: {fileID: 5550197324380744279}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &3752975687228137347
+--- !u!65 &7424480473798508955
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,5 +92,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.50827676, y: 0.43315655, z: 0.91786814}
-  m_Center: {x: -0.007132971, y: 0.000000054095423, z: 0.45876673}
+  m_Size: {x: 0.4330687, y: 0.5080714, z: 0.9178088}
+  m_Center: {x: 0.000000052154064, y: 0.0070818607, z: 0.45873708}
