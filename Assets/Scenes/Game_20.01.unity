@@ -794,7 +794,7 @@ GameObject:
   - component: {fileID: 55620415}
   - component: {fileID: 55620414}
   m_Layer: 0
-  m_Name: ---------------------------------------------<color=#FFC058FF>Ambinet</color>------------------------------------------------
+  m_Name: ----------------------<color=#FFC058FF>Ambinet</color>--------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,7 +869,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: --------------------Controllers
+  m_Name: ----------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1742,7 +1742,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>------------------------------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>---------------------------------------------</color>
+  m_Name: <color=#842F2FFF>-------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-----------------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2852,11 +2852,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1001 &194636943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6082,11 +6085,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1001 &465113307
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7832,11 +7838,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1001 &567730714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9971,7 +9980,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ------------------------------------------ENVIROMENT---------------------------------------------
+  m_Name: --------------------ENVIROMENT-----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11946,11 +11955,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1001 &791145319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14280,7 +14292,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: -------------------------------------------MANAGERS----------------------------------------------
+  m_Name: ---------------------MANAGERS------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -94062,11 +94074,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1 &1242560729
 GameObject:
   m_ObjectHideFlags: 0
@@ -94203,7 +94218,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ------------------------------------------<color=#3D0080FF>CHARACTERS</color>---------------------------------------------
+  m_Name: -------------------<color=#3D0080FF>CHARACTERS</color>-----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98040,11 +98055,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1001 &1493323476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98209,7 +98227,7 @@ GameObject:
   - component: {fileID: 1494555223}
   - component: {fileID: 1494555222}
   m_Layer: 0
-  m_Name: -----------------------------------------Pipes&Ladders---------------------------------------------
+  m_Name: -------------------Pipes&Ladders-----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98415,7 +98433,7 @@ Transform:
   m_GameObject: {fileID: 1505108567}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 16.89, y: 8.22, z: -62.9}
+  m_LocalPosition: {x: 16.89, y: 8.3, z: -62.9}
   m_LocalScale: {x: 1, y: 12.5, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -98455,8 +98473,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.7, z: 3.786745}
-  m_Center: {x: 0, y: -0.3, z: 2.5511742}
+  m_Size: {x: 1, y: 0.82, z: 2}
+  m_Center: {x: 0, y: -0.41, z: 0}
 --- !u!114 &1505108570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98469,11 +98487,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.76
+  topExitAngle: -7.54
+  topExitDistance: 1.45
+  alignSpeed: 15
+  ladderOffset: -1.05
+  climbStartOffset: -6.64
+  climbEndOffset: -0.13
+  climbSpeed: 3
 --- !u!1 &1510743466
 GameObject:
   m_ObjectHideFlags: 0
@@ -98485,7 +98506,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: ---------------------------------------POSTPROCESSING-------------------------------------------
+  m_Name: ----------------POSTPROCESSING---------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98622,7 +98643,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#F3B400FF>-</color><color=#E8AB00FF>-</color><color=#DCA300FF>-</color><color=#D19A00FF>-</color><color=#C59200FF>-</color><color=#B98900FF>-</color><color=#AE8000FF>-</color><color=#A27800FF>-</color><color=#976F00FF>-</color><color=#8B6700FF>-</color><color=#805E00FF>-</color><color=#745600FF>-</color><color=#684D00FF>-</color><color=#5D4500FF>-</color><color=#513C00FF>-</color><color=#463300FF>-</color><color=#3A2B00FF>-</color><color=#2E2200FF>-</color><color=#231A00FF>-</color><color=#171100FF>-</color><color=#0C0900FF>-</color><color=#000000FF>-</color><color=#0C0900FF>-</color><color=#171100FF>-</color><color=#231A00FF>-</color><color=#2E2200FF>-</color><color=#3A2B00FF>-</color><color=#463300FF>-</color><color=#513C00FF>-</color><color=#5D4500FF>-</color><color=#684D00FF>-</color><color=#745600FF>-</color><color=#805E00FF>-</color><color=#8B6700FF>-</color><color=#976F00FF>-</color><color=#A27800FF>-</color><color=#AE8000FF>-</color><color=#B98900FF>-</color><color=#C59200FF>-</color><color=#D19A00FF>-</color><color=#DCA300FF>-</color><color=#E8AB00FF>-</color><color=#F3B400FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#F5B500FF>-</color><color=#EAAD00FF>-</color><color=#E0A500FF>-</color><color=#D59E00FF>-</color><color=#CB9600FF>-</color><color=#C18E00FF>-</color><color=#B68700FF>-</color><color=#AC7F00FF>-</color><color=#A17700FF>-</color><color=#977000FF>-</color><color=#8D6800FF>-</color><color=#826000FF>-</color><color=#785800FF>-</color><color=#6D5100FF>-</color><color=#634900FF>-</color><color=#584100FF>-</color><color=#4E3A00FF>-</color><color=#443200FF>-</color><color=#392A00FF>-</color><color=#2F2300FF>-</color><color=#241B00FF>-</color><color=#1A1300FF>-</color><color=#100C00FF>-</color><color=#050400FF>-</color><color=#050400FF>-</color><color=#100C00FF>-</color><color=#1A1300FF>-</color><color=#241B00FF>-</color><color=#2F2300FF>-</color><color=#392A00FF>-</color><color=#443200FF>-</color><color=#4E3A00FF>-</color><color=#584100FF>-</color><color=#634900FF>-</color><color=#6D5100FF>-</color><color=#785800FF>-</color><color=#826000FF>-</color><color=#8D6800FF>-</color><color=#977000FF>-</color><color=#A17700FF>-</color><color=#AC7F00FF>-</color><color=#B68700FF>-</color><color=#C18E00FF>-</color><color=#CB9600FF>-</color><color=#D59E00FF>-</color><color=#E0A500FF>-</color><color=#EAAD00FF>-</color><color=#F5B500FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#E8AB00FF>-</color><color=#D19A00FF>-</color><color=#B98900FF>-</color><color=#A27800FF>-</color><color=#8B6700FF>-</color><color=#745600FF>-</color><color=#5D4500FF>-</color><color=#463300FF>-</color><color=#2E2200FF>-</color><color=#171100FF>-</color><color=#000000FF>-</color><color=#171100FF>-</color><color=#2E2200FF>-</color><color=#463300FF>-</color><color=#5D4500FF>-</color><color=#745600FF>-</color><color=#8B6700FF>-</color><color=#A27800FF>-</color><color=#B98900FF>-</color><color=#D19A00FF>-</color><color=#E8AB00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EBAE00FF>-</color><color=#D89F00FF>-</color><color=#C49100FF>-</color><color=#B18200FF>-</color><color=#9D7400FF>-</color><color=#896500FF>-</color><color=#765700FF>-</color><color=#624800FF>-</color><color=#4E3A00FF>-</color><color=#3B2B00FF>-</color><color=#271D00FF>-</color><color=#140E00FF>-</color><color=#000000FF>-</color><color=#140E00FF>-</color><color=#271D00FF>-</color><color=#3B2B00FF>-</color><color=#4E3A00FF>-</color><color=#624800FF>-</color><color=#765700FF>-</color><color=#896500FF>-</color><color=#9D7400FF>-</color><color=#B18200FF>-</color><color=#C49100FF>-</color><color=#D89F00FF>-</color><color=#EBAE00FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100659,8 +100680,8 @@ GameObject:
   - component: {fileID: 1659726293}
   - component: {fileID: 1659726292}
   m_Layer: 0
-  m_Name: ~~~~~~~~~~~~~~~~~~~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
-    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  m_Name: ~~~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
+    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~~~
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103751,11 +103772,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3234d909aa8401d42a50ea03f527bdf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomRaycastDistance: 1
-  topRaycastAngle: 30
-  topRaycastDistance: 2
-  alignmentSpeed: 12
-  offsetFromLadder: -0.5
+  bottomExitDistance: 0.5
+  topExitAngle: 15
+  topExitDistance: 2
+  alignSpeed: 5
+  ladderOffset: 1
+  climbStartOffset: 0
+  climbEndOffset: 2
+  climbSpeed: 3
 --- !u!1 &1906577095
 GameObject:
   m_ObjectHideFlags: 0
@@ -106167,7 +106191,7 @@ GameObject:
   - component: {fileID: 2037040358}
   - component: {fileID: 2037040357}
   m_Layer: 0
-  m_Name: -----------------------------------------<color=#FFFFFFFF>CHECKPOINTS</color>---------------------------------------------
+  m_Name: -------------------<color=#FFFFFFFF>CHECKPOINTS</color>----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108309,7 +108333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 25.1
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.y
@@ -108317,7 +108341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -98.67
+      value: -88.1
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w

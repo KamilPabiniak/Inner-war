@@ -1,109 +1,282 @@
 using System.Collections;
 using UnityEngine;
 
-public class Climbable : MonoBehaviour, IInteractable
+public class LadderClimb : MonoBehaviour, IInteractable
 {
-    private Player _player;
+    private Player player;
+
+    #region Designer Settings
+
+    public enum ExitType { Top, Bottom }
 
     [Header("Raycast Settings")]
-    public float bottomRaycastDistance = 0.5f;
-    public float topRaycastAngle = 15f;
-    public float topRaycastDistance = 2f;
+    [Tooltip("Distance for the bottom exit.")]
+    public float bottomExitDistance = 0.5f;
+    [Tooltip("Angle for the top exit.")]
+    public float topExitAngle = 15f;
+    [Tooltip("Distance for the top exit.")]
+    public float topExitDistance = 2f;
 
-    public float alignmentSpeed;
-    public float offsetFromLadder = 1f; 
-    private Coroutine climbCoroutine;
-    private bool isClimbingAligned = false; 
+    [Header("Alignment Settings")]
+    [Tooltip("Speed at which the player aligns to the ladder.")]
+    public float alignSpeed = 5f;
+    [Tooltip("Offset from the ladder on the Z axis.")]
+    public float ladderOffset = 1f;
 
-    public void Interact(Player player)
+    [Header("Climb Range Settings")]
+    [Tooltip("Relative height offset for starting the climb (from ladder base).")]
+    public float climbStartOffset = 0f;
+    [Tooltip("Relative height offset for ending the climb (from ladder base).")]
+    public float climbEndOffset = 2f;
+
+    [Header("Climbing Settings")]
+    [Tooltip("General speed for climbing up and down the ladder.")]
+    public float climbSpeed = 3f;
+
+    #endregion
+
+    private Coroutine movementCoroutine;
+    private bool isAlignedToLadder = false;
+    private bool isDescending = false;
+
+    #region IInteractable Implementation
+
+    public void Interact(Player interactingPlayer)
     {
-        if (player.state == Player.State.Climbing || isClimbingAligned) return;
-        _player = player;
-        if (_player == null) return;
-        _player.ToggleInput();
-        _player.ToggleGravity();
+        if (interactingPlayer.state == Player.State.Climbing || isAlignedToLadder)
+            return;
 
-        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
-        climbCoroutine = StartCoroutine(AlignToLadderCoroutine(() =>
+        player = interactingPlayer;
+        if (player == null) return;
+
+        player.ToggleInput();
+        player.ToggleGravity();
+
+        Vector3 basePos = transform.position + new Vector3(0, 0, ladderOffset);
+        Vector3 startPos = new Vector3(basePos.x, transform.position.y + climbStartOffset, basePos.z);
+        Vector3 endPos = new Vector3(basePos.x, transform.position.y + climbEndOffset, basePos.z);
+
+        float midY = (startPos.y + endPos.y) / 2f;
+        Vector3 targetPos = player.transform.position.y >= midY ? endPos : startPos;
+
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
+        movementCoroutine = StartCoroutine(AlignPlayerToLadder(targetPos, () =>
         {
-            isClimbingAligned = true;
-            _player.state = Player.State.Climbing;
+            isAlignedToLadder = true;
+            player.state = Player.State.Climbing;
         }));
     }
-    
-    private void Update()
-    {
-        if (_player != null && _player.state == Player.State.Climbing && isClimbingAligned)
-        {
-            HandleBottomExit();
-            HandleTopExit();
-        }
-    }
 
-    private IEnumerator AlignToLadderCoroutine(System.Action onComplete)
-    {
-        Vector3 targetPosition = transform.position + new Vector3(0, 0, offsetFromLadder);
-        targetPosition.y = _player.transform.position.y;
+    #endregion
 
+    #region Climbing & Alignment
+
+    private IEnumerator AlignPlayerToLadder(Vector3 targetPosition, System.Action onComplete)
+    {
+        // Target rotation faces opposite to the ladder's forward direction.
         Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
 
-        while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f ||
-               Quaternion.Angle(_player.transform.rotation, targetRotation) > 1f)
+        while (Vector3.Distance(player.transform.position, targetPosition) > 0.05f ||
+               Quaternion.Angle(player.transform.rotation, targetRotation) > 1f)
         {
-            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignmentSpeed * Time.deltaTime);
-            _player.transform.rotation = Quaternion.Slerp(_player.transform.rotation, targetRotation, alignmentSpeed * Time.deltaTime);
-
+            player.transform.position = Vector3.Lerp(player.transform.position, targetPosition, alignSpeed * Time.deltaTime);
+            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, alignSpeed * Time.deltaTime);
             yield return null;
         }
 
-        _player.transform.position = targetPosition;
-        _player.transform.rotation = targetRotation;
-        _player.ToggleInput();
+        player.transform.position = targetPosition;
+        player.transform.rotation = targetRotation;
+        yield return new WaitForSeconds(0.15f);
+        player.ToggleInput();
         onComplete?.Invoke();
     }
 
-    private void HandleBottomExit()
+    #endregion
+
+    #region Update & Unified Exit Handling
+
+    private void Update()
     {
-        if (_player.Input.MoveInput.y >= 0) return;
-
-        Ray ray = new Ray(_player.transform.position, Vector3.down);
-        Debug.DrawRay(_player.transform.position, Vector3.down, Color.magenta);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, bottomRaycastDistance))
+        if (player != null && player.state == Player.State.Climbing && isAlignedToLadder)
         {
-            ExitLadder(Vector3.back); 
+            // Forced exit safeguard: press Escape to exit ladder immediately.
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ForceExitLadder();
+                return;
+            }
+
+            // When pressing up, attempt to exit at the top.
+            if (player.Input.MoveInput.y > 0)
+            {
+                AttemptExit(ExitType.Top);
+            }
+            // When pressing down, either smoothly descend or exit at the bottom.
+            else if (player.Input.MoveInput.y < 0)
+            {
+                float minHeight = transform.position.y + climbStartOffset;
+                // Smoothly move down if above the bottom threshold.
+                if (player.transform.position.y > minHeight + 0.05f)
+                {
+                    if (!isDescending)
+                        StartCoroutine(SmoothDescent());
+                }
+                else
+                {
+                    // Once at the threshold, exit immediately.
+                    AttemptExit(ExitType.Bottom);
+                }
+            }
         }
     }
 
-    private void HandleTopExit()
+    /// <summary>
+    /// Unified method to handle both top and bottom exits.
+    /// For Top, exit occurs if there is no obstacle and the player is within a threshold distance.
+    /// For Bottom, exit is triggered immediately.
+    /// </summary>
+    private void AttemptExit(ExitType exitType)
     {
-        if (_player.Input.MoveInput.y <= 0) return;
+        Vector3 basePos = transform.position + new Vector3(0, 0, ladderOffset);
+        Vector3 exitOrigin;
+        Vector3 exitDirection;
+        float rayDistance;
+        float exitThreshold = 0.7f; // A threshold to allow smooth exit.
 
-        Vector3 direction = Quaternion.Euler(topRaycastAngle, 0, 0) * _player.transform.forward;
-        Ray ray = new Ray(_player.transform.position, direction);
-        Debug.DrawRay(_player.transform.position, direction, Color.red);
-
-        if (!Physics.Raycast(ray, out RaycastHit hit, topRaycastDistance))
+        if (exitType == ExitType.Top)
         {
-            ExitLadder(Vector3.forward);
+            exitOrigin = new Vector3(basePos.x, transform.position.y + climbEndOffset, basePos.z);
+            // Calculate exit direction using the top exit angle.
+            Vector3 alignedForward = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0) * Vector3.forward;
+            exitDirection = Quaternion.Euler(topExitAngle, 0, 0) * alignedForward;
+            rayDistance = topExitDistance;
+
+            // Check that the path is clear.
+            Ray exitRay = new Ray(player.transform.position, exitDirection);
+            Debug.DrawRay(player.transform.position, exitDirection, Color.red);
+            if (Physics.Raycast(exitRay, rayDistance))
+                return;
         }
+        else // Bottom exit
+        {
+            exitOrigin = new Vector3(basePos.x, transform.position.y + climbStartOffset, basePos.z);
+            exitDirection = Vector3.down;
+            rayDistance = bottomExitDistance;
+        }
+
+        Vector3 exitTarget = exitOrigin + exitDirection * rayDistance;
+        ExitLadder(exitTarget, exitThreshold);
     }
 
-    private void ExitLadder(Vector3 exitDirection)
+    #endregion
+
+    #region Smooth Movement Coroutines
+
+    /// <summary>
+    /// Smoothly descends the player along the ladder as long as the down input is held.
+    /// </summary>
+    private IEnumerator SmoothDescent()
     {
-        if (climbCoroutine != null) StopCoroutine(climbCoroutine);
-        climbCoroutine = StartCoroutine(SmoothExitLadder(exitDirection));
+        isDescending = true;
+        Vector3 basePos = transform.position + new Vector3(0, 0, ladderOffset);
+        float bottomY = transform.position.y + climbStartOffset;
+
+        // Continuously move downward while input is held and not yet at the bottom threshold.
+        while (player != null && player.Input.MoveInput.y < 0 && player.transform.position.y > bottomY + 0.05f)
+        {
+            Vector3 currentPos = player.transform.position;
+            float newY = currentPos.y - climbSpeed * Time.deltaTime;
+            newY = Mathf.Max(newY, bottomY);
+            player.transform.position = new Vector3(basePos.x, newY, basePos.z);
+            yield return null;
+        }
+        isDescending = false;
     }
 
-    private IEnumerator SmoothExitLadder(Vector3 exitDirection)
+    /// <summary>
+    /// Initiates the smooth exit process with a given exit threshold.
+    /// </summary>
+    private void ExitLadder(Vector3 exitPosition, float exitThreshold)
     {
-        isClimbingAligned = false; 
-        _player.state = Player.State.Walking;
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+        movementCoroutine = StartCoroutine(SmoothExit(exitPosition, exitThreshold));
+    }
 
-        Vector3 targetPosition = _player.transform.position + exitDirection * 0.5f;
-
-        _player.transform.position = targetPosition;
+    /// <summary>
+    /// Smoothly moves the player off the ladder.
+    /// The coroutine ends once the player is within the given threshold.
+    /// </summary>
+    private IEnumerator SmoothExit(Vector3 targetPosition, float threshold)
+    {
+        isAlignedToLadder = false;
+        player.state = Player.State.Walking;
+        
+        while (Vector3.Distance(player.transform.position, targetPosition) > threshold)
+        {
+            player.transform.position = Vector3.Lerp(player.transform.position, targetPosition, climbSpeed * Time.deltaTime);
+            yield return null;
+        }
+        // Do not force exact alignment; just allow exit when close enough.
         yield return new WaitForSeconds(1f);
-        _player.SetGravityEnabled(true);
+        player.SetGravityEnabled(true);
     }
+
+    #endregion
+
+    #region Forced Exit
+
+    /// <summary>
+    /// Forcefully exits the ladder from the player's current position.
+    /// This is a safeguard to ensure the player can always exit the ladder.
+    /// </summary>
+    private void ForceExitLadder()
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+            movementCoroutine = null;
+        }
+        isAlignedToLadder = false;
+        player.state = Player.State.Walking;
+        player.ToggleInput();
+        player.SetGravityEnabled(true);
+    }
+
+    #endregion
+
+    #region Debug Visualization
+
+    private void OnDrawGizmos()
+    {
+        Vector3 basePos = transform.position + new Vector3(0, 0, ladderOffset);
+        Vector3 startPos = new Vector3(basePos.x, transform.position.y + climbStartOffset, basePos.z);
+        Vector3 endPos = new Vector3(basePos.x, transform.position.y + climbEndOffset, basePos.z);
+
+        // Visualize the ladder's climb range.
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(startPos, 0.1f);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(endPos, 0.1f);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(startPos, endPos);
+
+        // Visualize the bottom exit.
+        Vector3 bottomExitPoint = startPos + Vector3.down * bottomExitDistance;
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(startPos, bottomExitPoint);
+        Gizmos.DrawSphere(bottomExitPoint, 0.1f);
+
+        // Visualize the top exit.
+        Vector3 alignedForward = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0) * Vector3.forward;
+        Vector3 topExitDirection = Quaternion.Euler(topExitAngle, 0, 0) * alignedForward;
+        Vector3 topExitPoint = endPos + topExitDirection * topExitDistance;
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(endPos, topExitPoint);
+        Gizmos.DrawSphere(topExitPoint, 0.1f);
+    }
+
+    #endregion
 }
