@@ -28,13 +28,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
   m_Name: HallucinationEffect
   m_EditorClassIdentifier: 
-  minInterval: 1
-  maxInterval: 2
-  minDuration: 4
-  maxDuration: 8
+  minInterval: 15
+  maxInterval: 25
+  minDuration: 5
+  maxDuration: 10
   autoTrigger: 0
   disableWhenTrigger: 0
-  particle: {fileID: 0}
+  particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}
 --- !u!114 &7849564353447769295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,10 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
   m_Name: VoiceThoughtEffect
   m_EditorClassIdentifier: 
-  minInterval: 1
-  maxInterval: 2
-  minDuration: 4
-  maxDuration: 8
+  minInterval: 5
+  maxInterval: 8
+  minDuration: 3
+  maxDuration: 5
   autoTrigger: 0
   disableWhenTrigger: 0
   voicesFadeInDuration: 1
@@ -69,11 +69,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
   m_Name: IrregularMovementEffect
   m_EditorClassIdentifier: 
-  minInterval: 1
-  maxInterval: 2
-  minDuration: 4
-  maxDuration: 8
+  minInterval: 10
+  maxInterval: 25
+  minDuration: 5
+  maxDuration: 10
   autoTrigger: 0
   disableWhenTrigger: 0
-  minSpeedMultiplier: 0.6
-  maxSpeedMultiplier: 1.2
+  minSpeedMultiplier: 0
+  maxSpeedMultiplier: 0.7

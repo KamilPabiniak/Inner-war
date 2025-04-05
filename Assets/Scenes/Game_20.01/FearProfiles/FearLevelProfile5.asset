@@ -13,4 +13,24 @@ MonoBehaviour:
   m_Name: FearLevelProfile5
   m_EditorClassIdentifier: 
   effects:
-  - {fileID: 0}
+  - {fileID: 956105542982848836}
+--- !u!114 &956105542982848836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5210592d65a443febaf571a0af583370, type: 3}
+  m_Name: DeathDoorEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 5
+  minDuration: 3
+  maxDuration: 5
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  chanceToKill: 0.6
+  addDeathChancesEverySuccess: 0.05
