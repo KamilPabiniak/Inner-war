@@ -104,6 +104,9 @@ public class PlayerLook : PlayerModule
     private void HandleClimbingLook()
     {
         Player.cameraTransform.localRotation = Quaternion.identity;
+        Vector3 cameraPosition = Player.cameraTransform.localPosition;
+        cameraPosition.y = cameraHeight;
+        Player.cameraTransform.localPosition = cameraPosition;
         _xRotation = 0;
     }
 
