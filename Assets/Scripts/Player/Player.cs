@@ -12,6 +12,8 @@ using UnityEngine;
      public float crouchHeight = 1f;
      [Tooltip("Przyspieszenie pod grawitacyjne.")]
      public float gravity = 20f;
+     [Tooltip("Fall threshold (distance in units) beyond which the player takes damage (dies).")]
+     public float fallDamageThreshold = 10f;
 
      public State state;
 
@@ -34,6 +36,8 @@ using UnityEngine;
     private bool GravityEnabled { get; set; } = true;
     private bool CharacterControllerEnabled { get; set; } = true;
 
+    private bool isFalling = false;
+    private float fallStartHeight;
     private float _verticalVelocity;
     private bool _isSettingsPanelActive;
 
@@ -77,7 +81,7 @@ using UnityEngine;
 
     private void Update()
     {
-        if (characterController.enabled) { ApplyGround(); }
+        if (characterController.enabled) { ApplyGround(); CheckFallDamage();}
     }
 
     public T GetModule<T>() where T : PlayerModule
@@ -86,6 +90,31 @@ using UnityEngine;
         if (module == null)
             Debug.LogError($"Module of type {typeof(T).Name} not found!");
         return module;
+    }
+    
+    private void CheckFallDamage()
+    {
+        if (!characterController.isGrounded)
+        {
+            if (!isFalling)
+            {
+                isFalling = true;
+                fallStartHeight = transform.position.y;
+            }
+        }
+        else if (isFalling)
+        {
+            float fallDistance = fallStartHeight - transform.position.y;
+            if (fallDistance >= fallDamageThreshold)
+            {
+                var deathModule = GetModule<PlayerDeath>();
+                if (deathModule != null)
+                {
+                    deathModule.Kill();
+                }
+            }
+            isFalling = false;
+        }
     }
 
     private void ApplyGround()
