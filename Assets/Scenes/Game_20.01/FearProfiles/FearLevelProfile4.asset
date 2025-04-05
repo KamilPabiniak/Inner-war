@@ -13,4 +13,67 @@ MonoBehaviour:
   m_Name: FearLevelProfile4
   m_EditorClassIdentifier: 
   effects:
-  - {fileID: 0}
+  - {fileID: 5185326519939242182}
+  - {fileID: 7849564353447769295}
+  - {fileID: 9192829598785817700}
+--- !u!114 &5185326519939242182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
+  m_Name: HallucinationEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  particle: {fileID: 0}
+--- !u!114 &7849564353447769295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
+  m_Name: VoiceThoughtEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  voicesFadeInDuration: 1
+  voicesFadeOutDuration: 1
+  voicesTargetVolume: 1
+  voicesSound: {fileID: 0}
+--- !u!114 &9192829598785817700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
+  m_Name: IrregularMovementEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  minSpeedMultiplier: 0.6
+  maxSpeedMultiplier: 1.2

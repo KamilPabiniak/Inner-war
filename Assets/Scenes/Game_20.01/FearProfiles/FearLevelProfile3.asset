@@ -1,5 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4989035808592873722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
+  m_Name: CrouchEffect
+  m_EditorClassIdentifier: 
+  minInterval: 10
+  maxInterval: 25
+  minDuration: 5
+  maxDuration: 10
+  autoTrigger: 0
+  disableWhenTrigger: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,4 +31,47 @@ MonoBehaviour:
   m_Name: FearLevelProfile3
   m_EditorClassIdentifier: 
   effects:
-  - {fileID: 0}
+  - {fileID: 8666978987524335258}
+  - {fileID: 558199883775083294}
+  - {fileID: -4989035808592873722}
+--- !u!114 &558199883775083294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
+  m_Name: VoiceThoughtEffect
+  m_EditorClassIdentifier: 
+  minInterval: 5
+  maxInterval: 8
+  minDuration: 3
+  maxDuration: 5
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  voicesFadeInDuration: 1
+  voicesFadeOutDuration: 1
+  voicesTargetVolume: 1
+  voicesSound: {fileID: 0}
+--- !u!114 &8666978987524335258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
+  m_Name: HallucinationEffect
+  m_EditorClassIdentifier: 
+  minInterval: 15
+  maxInterval: 25
+  minDuration: 5
+  maxDuration: 10
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  particle: {fileID: 0}
