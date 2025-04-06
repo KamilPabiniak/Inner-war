@@ -92,18 +92,18 @@ public class InteractionHighlight : MonoBehaviour
         {
             rimRange = increasing
                 ? Mathf.MoveTowards(rimRange, targetRimRange, Time.deltaTime)
-                : Mathf.MoveTowards(rimRange, 0, Time.deltaTime);
+                : Mathf.MoveTowards(rimRange, 0.01f, Time.deltaTime);
 
             rimBlend = increasing
                 ? Mathf.MoveTowards(rimBlend, targetRimBlend, Time.deltaTime)
-                : Mathf.MoveTowards(rimBlend, 0, Time.deltaTime);
+                : Mathf.MoveTowards(rimBlend, 0.01f, Time.deltaTime);
 
             material.SetFloat(RimRange, rimRange);
             material.SetFloat(RimBlend, rimBlend);
 
             if (increasing && Mathf.Approximately(rimRange, targetRimRange) && Mathf.Approximately(rimBlend, targetRimBlend))
                 increasing = false;
-            else if (!increasing && Mathf.Approximately(rimRange, 0) && Mathf.Approximately(rimBlend, 0))
+            else if (!increasing && Mathf.Approximately(rimRange, 0.01f) && Mathf.Approximately(rimBlend, 0.01f))
                 increasing = true;
 
             yield return null;
