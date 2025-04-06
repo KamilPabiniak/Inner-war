@@ -9,10 +9,9 @@ public class AudioEffectsController : MonoBehaviour
     
     [Header("Audio Source Prefabs")]
     [Binder("AudioSources")]
-    [SerializeField] private GameObject voicesS; // Prefab for voices effect
-    [SerializeField] private GameObject heartS;  // Prefab for heart effect
-
-    // These variables hold the currently playing instances.
+    [SerializeField] private GameObject voicesS; 
+    [SerializeField] private GameObject heartS;  
+    
     private AudioSource currentVoices;
     private AudioSource currentHeart;
     

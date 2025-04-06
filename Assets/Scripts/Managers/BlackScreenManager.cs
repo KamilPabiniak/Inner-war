@@ -18,16 +18,16 @@ namespace Managers
             GameEvents.onBlackScreen -= HandleBlackScreen;
         }
     
-        private void HandleBlackScreen(float fadeTime, float duration)
+        private void HandleBlackScreen(float fadeInTime, float duration, float fadeOutTime)
         {
-            StartCoroutine(BlackScreenCoroutine(fadeTime, duration));
+            StartCoroutine(BlackScreenCoroutine(fadeInTime, duration, fadeOutTime));
         }
 
-        private IEnumerator BlackScreenCoroutine(float fadeTime, float duration)
+        private IEnumerator BlackScreenCoroutine(float fadeIn, float duration, float fadeOut)
         {
-            yield return StartCoroutine(Fade(0f, 1f, fadeTime));
+            yield return StartCoroutine(Fade(0f, 1f, fadeIn));
             yield return new WaitForSeconds(duration);
-            yield return StartCoroutine(Fade(1f, 0f, fadeTime));
+            yield return StartCoroutine(Fade(1f, 0f, fadeOut));
         }
     
         private IEnumerator Fade(float startAlpha, float endAlpha, float fadeTime)

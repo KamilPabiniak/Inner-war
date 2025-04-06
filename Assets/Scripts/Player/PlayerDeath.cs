@@ -1,10 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDeath : PlayerModule
 {
     public Transform checkpoint;
     [SerializeField] private float respawnTime = 3f;
+    [SerializeField] private List<AudioClip> soundsOfDead;
+    [SerializeField] private AudioClip deadEnd;
+    [SerializeField] private AudioClip deadEoldProjectorSound;
     private Vector3 _backupPos;
     private bool _isDead;
     private void Start()
@@ -34,17 +38,25 @@ public class PlayerDeath : PlayerModule
     public void Kill()
     {
         if (_isDead) return;
-        _isDead = true; 
-        GameEvents.onPlayerDied?.Invoke();
+        _isDead = true;
+       
         StartCoroutine(HandleDeathState());
     }
 
     private IEnumerator HandleDeathState()
     {
+        GameEvents.onBlackScreen.Invoke(0f, 10f, 0f);
+        int randomSound = Random.Range(0, soundsOfDead.Count);
+        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(soundsOfDead[randomSound], gameObject.transform, 1f);
+        yield return new WaitForSeconds(soundsOfDead[randomSound].length - 1f);
+        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(deadEnd, gameObject.transform, 1f);
+        yield return new WaitForSeconds(deadEnd.length - 2.5f);
+        GameEvents.onPlayerDied?.Invoke();
+        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfxDestroyOn(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
         Player.ToggleInput();
         Respawn();
         yield return new WaitForSeconds(respawnTime);
-
+        GameEvents.onBlackScreen.Invoke(0f, 1f, 1f);
         Player.ToggleInput();
         _isDead = false;
         GameEvents.onPlayerRespawned?.Invoke();
