@@ -33,9 +33,9 @@ MonoBehaviour:
   m_Name: FearLevelProfile1
   m_EditorClassIdentifier: 
   effects:
-  - {fileID: 2904139858836486033}
   - {fileID: -8009553890672540130}
---- !u!114 &2904139858836486033
+  - {fileID: 1124190121747868112}
+--- !u!114 &1124190121747868112
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,10 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
   m_Name: SoundSuppression
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 20
-  minDuration: 5
-  maxDuration: 10
+  minInterval: 3
+  maxInterval: 6
+  minDuration: 4
+  maxDuration: 6
   autoTrigger: 0
   disableWhenTrigger: 0
   cutOffOn: 350

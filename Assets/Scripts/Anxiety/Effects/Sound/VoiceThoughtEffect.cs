@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Anxiety.Effects
@@ -11,10 +12,23 @@ namespace Anxiety.Effects
         [Range(0f, 1f)]
         [SerializeField] private float voicesTargetVolume = 1f;
 
-        [SerializeField] private AudioClip voicesSound;
+        [SerializeField] private List<AudioClip> voicesSounds;
+        private int _lastClipIndex;
+        
         protected override void ExecuteEffect()
         {
-            AnxietyManager.Instance.audioEffectsController.PlayVoices(voicesFadeInDuration, voicesTargetVolume, voicesSound);
+            int clipIndex = Random.Range(0, voicesSounds.Count);
+            
+            if (voicesSounds.Count > 1)
+            {
+                while (clipIndex == _lastClipIndex)
+                {
+                    clipIndex = Random.Range(0, voicesSounds.Count);
+                }
+            }
+            
+            _lastClipIndex = clipIndex;
+            AnxietyManager.Instance.audioEffectsController.PlayVoices(voicesFadeInDuration, voicesTargetVolume, voicesSounds[clipIndex]);
         }
 
         protected override void EndEffect()
