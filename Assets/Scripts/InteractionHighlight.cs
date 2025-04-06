@@ -8,7 +8,7 @@ public class InteractionHighlight : MonoBehaviour
     public string[] interactableTags;
     public float interactionRadius = 5f;
 
-    private Dictionary<GameObject, Coroutine> activeHighlights = new Dictionary<GameObject, Coroutine>();
+    private Dictionary<GameObject, Coroutine> activeHighlights = new();
     private static readonly int RimRange = Shader.PropertyToID("_Rim_Range");
     private static readonly int RimBlend = Shader.PropertyToID("_Rim_Blend");
     private static readonly int RimColor = Shader.PropertyToID("_Rim_Color");
@@ -29,7 +29,6 @@ public class InteractionHighlight : MonoBehaviour
 
             if (isInteractable)
             {
-                //Debug.Log("is Interactable");
 
                 if (obj.TryGetComponent(out Renderer renderer))
                 {
