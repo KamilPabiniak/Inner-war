@@ -9,13 +9,13 @@ public class DeathScreenHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.onPlayerDied += ShowDeathPanel;
+        GameEvents.onDeathScreen += ShowDeathPanel;
         GameEvents.onPlayerRespawned += HideDeathPanel;
     }
 
     private void OnDisable()
     {
-        GameEvents.onPlayerDied -= ShowDeathPanel;
+        GameEvents.onDeathScreen -= ShowDeathPanel;
         GameEvents.onPlayerRespawned -= HideDeathPanel;
     }
 

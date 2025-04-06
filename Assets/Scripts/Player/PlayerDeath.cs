@@ -45,13 +45,14 @@ public class PlayerDeath : PlayerModule
 
     private IEnumerator HandleDeathState()
     {
+        GameEvents.onPlayerDied?.Invoke();
         GameEvents.onBlackScreen.Invoke(0f, 10f, 0f);
         int randomSound = Random.Range(0, soundsOfDead.Count);
         SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(soundsOfDead[randomSound], gameObject.transform, 1f);
         yield return new WaitForSeconds(soundsOfDead[randomSound].length - 1f);
         SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(deadEnd, gameObject.transform, 1f);
         yield return new WaitForSeconds(deadEnd.length - 2.5f);
-        GameEvents.onPlayerDied?.Invoke();
+        GameEvents.onDeathScreen?.Invoke();
         SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfxDestroyOn(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
         Player.ToggleInput();
         Respawn();

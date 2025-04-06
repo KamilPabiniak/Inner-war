@@ -36,8 +36,8 @@ using UnityEngine;
     private bool GravityEnabled { get; set; } = true;
     private bool CharacterControllerEnabled { get; set; } = true;
 
-    private bool isFalling = false;
-    private float fallStartHeight;
+    private bool _isFalling;
+    private float _fallStartHeight;
     private float _verticalVelocity;
     private bool _isSettingsPanelActive;
 
@@ -96,15 +96,15 @@ using UnityEngine;
     {
         if (!characterController.isGrounded)
         {
-            if (!isFalling)
+            if (!_isFalling)
             {
-                isFalling = true;
-                fallStartHeight = transform.position.y;
+                _isFalling = true;
+                _fallStartHeight = transform.position.y;
             }
         }
-        else if (isFalling)
+        else if (_isFalling)
         {
-            float fallDistance = fallStartHeight - transform.position.y;
+            float fallDistance = _fallStartHeight - transform.position.y;
             if (fallDistance >= fallDamageThreshold)
             {
                 var deathModule = GetModule<PlayerDeath>();
@@ -113,7 +113,7 @@ using UnityEngine;
                     deathModule.Kill();
                 }
             }
-            isFalling = false;
+            _isFalling = false;
         }
     }
 

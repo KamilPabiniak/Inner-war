@@ -1,5 +1,26 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8851251938145622243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
+  m_Name: SoundSuppression
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 1
+  minDuration: 8
+  maxDuration: 8
+  autoTrigger: 1
+  disableWhenTrigger: 0
+  cutOffOn: 350
+  transitionTimeApply: 1
+  transitionTimeCancel: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14,3 +35,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - {fileID: 0}
+  - {fileID: -8851251938145622243}
