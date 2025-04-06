@@ -14,4 +14,7 @@ public static class GameEvents
     //Death
     public static Action onPlayerDied;
     public static Action onPlayerRespawned;
+    
+    // BlackScreen - FadeTime - Duration
+    public static Action<float, float> onBlackScreen;
 }
