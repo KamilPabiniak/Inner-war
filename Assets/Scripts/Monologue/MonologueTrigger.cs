@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class MonologueTrigger : MonoBehaviour
 {
     [Header("Monologue Settings")]
@@ -37,6 +38,20 @@ public class MonologueTrigger : MonoBehaviour
                 _cachedMonologue = monologueModule;
                 monologueModule.PlayMonologue(monologueClip, monologueVolume, delayBeforePlay);
                 _hasTriggered = true;
+            }
+        }
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            Gizmos.color = new Color(0.1f, 0.1f, 0.6f, 1f); 
+            if (col is BoxCollider box)
+            {
+                Gizmos.matrix = transform.localToWorldMatrix;
+                Gizmos.DrawCube(box.center, box.size);
             }
         }
     }
