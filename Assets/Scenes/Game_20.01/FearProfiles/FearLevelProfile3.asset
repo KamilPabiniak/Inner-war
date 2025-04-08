@@ -18,6 +18,29 @@ MonoBehaviour:
   maxDuration: 10
   autoTrigger: 1
   disableWhenTrigger: 0
+--- !u!114 &-2031995008302625909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
+  m_Name: HeartEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  heartFadeInDuration: 1
+  heartFadeOutDuration: 1
+  heartTargetVolume: 1
+  heartDrymixEchoOnValue: 60
+  heartDrymixEchoOffValue: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34,6 +57,11 @@ MonoBehaviour:
   - {fileID: 8666978987524335258}
   - {fileID: 558199883775083294}
   - {fileID: -4989035808592873722}
+  - {fileID: -2031995008302625909}
+  - {fileID: 2296059394773497277}
+  - {fileID: 5388067495803624509}
+  - {fileID: 2241538352562412298}
+  - {fileID: 3933999804909531380}
 --- !u!114 &558199883775083294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56,6 +84,115 @@ MonoBehaviour:
   voicesFadeOutDuration: 1
   voicesTargetVolume: 1
   voicesSounds: []
+--- !u!114 &2241538352562412298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
+  m_Name: ShakeEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  shakeAmplitude: 0.3
+  shakeFrequency: 20
+  shakeFalloffCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  shakePosition: 1
+  shakeRotation: 1
+  shakeType: 0
+  shakeDirection: {x: 1, y: 1, z: 1}
+--- !u!114 &2296059394773497277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
+  m_Name: IrregularMovementEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  minSpeedMultiplier: 0.6
+  maxSpeedMultiplier: 1.2
+--- !u!114 &3933999804909531380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
+  m_Name: SoundSuppression
+  m_EditorClassIdentifier: 
+  minInterval: 3
+  maxInterval: 6
+  minDuration: 4
+  maxDuration: 6
+  autoTrigger: 1
+  disableWhenTrigger: 0
+  cutOffOn: 350
+  transitionTimeApply: 3
+  transitionTimeCancel: 3
+--- !u!114 &5388067495803624509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
+  m_Name: PostProcessingEffect
+  m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  startTransitionDuration: 1
+  endTransitionDuration: 1
 --- !u!114 &8666978987524335258
 MonoBehaviour:
   m_ObjectHideFlags: 0
