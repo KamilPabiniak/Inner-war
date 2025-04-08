@@ -16,7 +16,7 @@ MonoBehaviour:
   maxInterval: 25
   minDuration: 5
   maxDuration: 10
-  autoTrigger: 0
+  autoTrigger: 1
   disableWhenTrigger: 0
 --- !u!114 &11400000
 MonoBehaviour:
@@ -55,7 +55,7 @@ MonoBehaviour:
   voicesFadeInDuration: 1
   voicesFadeOutDuration: 1
   voicesTargetVolume: 1
-  voicesSound: {fileID: 0}
+  voicesSounds: []
 --- !u!114 &8666978987524335258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +72,6 @@ MonoBehaviour:
   maxInterval: 25
   minDuration: 5
   maxDuration: 10
-  autoTrigger: 0
+  autoTrigger: 1
   disableWhenTrigger: 0
   particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}
