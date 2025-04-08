@@ -100,7 +100,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
         if (_player != null && _player.state == Player.State.Climbing && _isAlignedToLadder)
         {
             // Forced exit safeguard: press Escape to exit ladder immediately.
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 ForceExitLadder();
                 return;

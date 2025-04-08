@@ -37,6 +37,7 @@ using UnityEngine;
     private bool CharacterControllerEnabled { get; set; } = true;
 
     private bool _isFalling;
+    private bool _enableFallingDmg;
     private float _fallStartHeight;
     private float _verticalVelocity;
     private bool _isSettingsPanelActive;
@@ -59,18 +60,18 @@ using UnityEngine;
     private void Start()
     {
         Input = GetModule<PlayerInput>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
     
     private void OnEnable()
     {
         GameEvents.onTogglePanel += ToggleSettingsPanel;
+        GameEvents.onMenuExit += StartPlay;
     }
 
     private void OnDisable()
     {
         GameEvents.onTogglePanel -= ToggleSettingsPanel;
+        GameEvents.onMenuExit -= StartPlay;
     }
 
     private void OnValidate()
@@ -91,10 +92,18 @@ using UnityEngine;
             Debug.LogError($"Module of type {typeof(T).Name} not found!");
         return module;
     }
+
+    private void StartPlay()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        GetModule<PlayerInput>().enabled = true;
+        _enableFallingDmg = true;
+    }
     
     private void CheckFallDamage()
     {
-        if (!characterController.isGrounded)
+        if (!characterController.isGrounded && state == State.Walking && _enableFallingDmg)
         {
             if (!_isFalling)
             {
@@ -210,8 +219,8 @@ using UnityEngine;
         
         Debug.Log("Settings panel toggled. Input " + (_isSettingsPanelActive ? "blocked" : "unblocked") + " except SettingsPanel.");
     }
-    
-    public void BlockPlayerInputExceptSettingsPanel(bool block)
+
+    private void BlockPlayerInputExceptSettingsPanel(bool block)
     {
         if (Input != null)
         {

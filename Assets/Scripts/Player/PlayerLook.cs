@@ -140,8 +140,8 @@ public class PlayerLook : PlayerModule
         _shakeFalloffCurve = falloffCurve;
         _shakePosition = affectPosition;
         _shakeRotation = affectRotation;
-        this._shakeType = shakeType;
-        this._shakeDirection = shakeDirection;
+        _shakeType = shakeType;
+        _shakeDirection = shakeDirection;
         _shakeSeed = new Vector3(Random.Range(0f, 100f),
                                 Random.Range(0f, 100f),
                                 Random.Range(0f, 100f));

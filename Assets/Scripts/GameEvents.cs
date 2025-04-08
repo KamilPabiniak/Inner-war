@@ -2,6 +2,9 @@ using System;
 
 public static class GameEvents
 {
+    //MenuAction
+    public static Action onMenuExit;
+    
     //CheatSheet
     public static Action onTogglePanel;
     
