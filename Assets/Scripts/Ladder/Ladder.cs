@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class LadderClimb : MonoBehaviour, IInteractable
+public class Ladder : MonoBehaviour, IInteractable
 {
     private Player _player;
 
@@ -62,13 +62,11 @@ public class LadderClimb : MonoBehaviour, IInteractable
         _player.ToggleInput();
         _player.ToggleGravity();
 
-        // Obliczamy bazow¹ pozycjê drabiny z uwzglêdnieniem offsetu ladderOffset.
-        Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
-        // Dolny i górny punkt toru wyznaczamy na podstawie pozycji drabiny oraz offsetów.
-        Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
-        Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
-
-        // Wybieramy punkt docelowy w zale¿noœci od aktualnej wysokoœci gracza.
+        var position = transform.position;
+        Vector3 basePos = position + transform.rotation * new Vector3(0, 0, ladderOffset);
+        Vector3 lowerPoint = new Vector3(basePos.x, position.y + lowerClimbPointOffset, basePos.z);
+        Vector3 upperPoint = new Vector3(basePos.x, position.y + upperClimbPointOffset, basePos.z);
+        
         float midY = (lowerPoint.y + upperPoint.y) / 2f;
         Vector3 targetPos = _player.transform.position.y >= midY ? upperPoint : lowerPoint;
 
@@ -88,7 +86,6 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
     private IEnumerator AlignPlayerToLadder(Vector3 targetPosition, System.Action onComplete)
     {
-        // Ustawiamy gracza, aby by³ zwrócony twarz¹ do drabiny (odwrócony o 180° wzglêdem forward drabiny).
         Quaternion targetRotation = Quaternion.Euler(0, transform.eulerAngles.y + 180, 0);
 
         while (Vector3.Distance(_player.transform.position, targetPosition) > 0.05f ||
@@ -112,47 +109,40 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (_player != null && _player.state == Player.State.Climbing && _isAlignedToLadder)
+        if (_player == null || _player.state != Player.State.Climbing || !_isAlignedToLadder) return;
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                ForceExitLadder();
-                return;
-            }
+            ForceExitLadder();
+            return;
+        }
 
-            // Obliczamy dolny i górny punkt toru.
-            Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
-            Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
-            Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
-
-            // Obs³uga ruchu w górê.
-            if (_player.Input.MoveInput.y > 0)
+        var position = transform.position;
+        Vector3 basePos = position + transform.rotation * new Vector3(0, 0, ladderOffset);
+        Vector3 lowerPoint = new Vector3(basePos.x, position.y + lowerClimbPointOffset, basePos.z);
+        Vector3 upperPoint = new Vector3(basePos.x, position.y + upperClimbPointOffset, basePos.z);
+            
+        if (_player.Input.MoveInput.y > 0)
+        {
+            if (_player.transform.position.y < upperPoint.y - 0.05f)
             {
-                // Jeœli gracz nie dotar³ jeszcze do górnego punktu toru, wykonujemy p³ynne wchodzenie.
-                if (_player.transform.position.y < upperPoint.y - 0.05f)
-                {
-                    if (!_isAscending)
-                        StartCoroutine(SmoothAscent());
-                }
-                else
-                {
-                    // Po osi¹gniêciu górnego punktu wywo³ujemy wyjœcie.
-                    AttemptExit(ExitType.Top);
-                }
+                if (!_isAscending)
+                    StartCoroutine(SmoothAscent());
             }
-            // Obs³uga ruchu w dó³.
-            else if (_player.Input.MoveInput.y < 0)
+            else
             {
-                // Sprawdzamy, czy gracz powinien zejœæ czy wyjœæ.
-                if (_player.transform.position.y > lowerPoint.y + 0.05f)
-                {
-                    if (!_isDescending)
-                        StartCoroutine(SmoothDescent());
-                }
-                else
-                {
-                    AttemptExit(ExitType.Bottom);
-                }
+                AttemptExit(ExitType.Top);
+            }
+        }
+        else if (_player.Input.MoveInput.y < 0)
+        {
+            if (_player.transform.position.y > lowerPoint.y + 0.05f)
+            {
+                if (!_isDescending)
+                    StartCoroutine(SmoothDescent());
+            }
+            else
+            {
+                AttemptExit(ExitType.Bottom);
             }
         }
     }
@@ -171,8 +161,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
             Vector3 exitOrigin = upperPoint + transform.rotation * topExitLocalOffset;
             Vector3 exitDirection = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
             exitTarget = exitOrigin + exitDirection * topExitDistance;
-
-            // Opcjonalna detekcja kolizji – jeœli jest przeszkoda, nie wychodzimy.
+            
             Ray exitRay = new Ray(_player.transform.position, exitDirection);
             Debug.DrawRay(_player.transform.position, exitDirection, Color.red);
             if (Physics.Raycast(exitRay, topExitDistance))
@@ -180,7 +169,6 @@ public class LadderClimb : MonoBehaviour, IInteractable
         }
         else
         {
-            // Wyjœcie dolne: od punktu lowerPoint dodajemy offset wyjœcia.
             Vector3 exitOrigin = lowerPoint + transform.rotation * bottomExitLocalOffset;
             Vector3 exitDirection = transform.rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
             exitTarget = exitOrigin + exitDirection * bottomExitDistance;
@@ -271,12 +259,11 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
     private void OnDrawGizmos()
     {
-        // Obliczamy bazow¹ pozycjê drabiny.
-        Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
+        var rotation = transform.rotation;
+        Vector3 basePos = transform.position + rotation * new Vector3(0, 0, ladderOffset);
         Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
         Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
-
-        // Wizualizacja toru (œcie¿ki wspinaczki).
+        
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(lowerPoint, 0.1f);
         Gizmos.color = Color.blue;
@@ -284,15 +271,15 @@ public class LadderClimb : MonoBehaviour, IInteractable
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(lowerPoint, upperPoint);
         
-        Vector3 lowerExitOrigin = lowerPoint + transform.rotation * bottomExitLocalOffset;
-        Vector3 lowerExitDir = transform.rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
+        Vector3 lowerExitOrigin = lowerPoint + rotation * bottomExitLocalOffset;
+        Vector3 lowerExitDir = rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
         Vector3 lowerExitPoint = lowerExitOrigin + lowerExitDir * bottomExitDistance;
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(lowerPoint, lowerExitPoint);
         Gizmos.DrawSphere(lowerExitPoint, 0.1f);
         
-        Vector3 upperExitOrigin = upperPoint + transform.rotation * topExitLocalOffset;
-        Vector3 upperExitDir = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
+        Vector3 upperExitOrigin = upperPoint + rotation * topExitLocalOffset;
+        Vector3 upperExitDir = rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
         Vector3 upperExitPoint = upperExitOrigin + upperExitDir * topExitDistance;
         Gizmos.color = Color.red;
         Gizmos.DrawLine(upperPoint, upperExitPoint);

@@ -14,7 +14,7 @@ public class ColliderAdjusterWindow : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("Adjust Parent BoxCollider to Enclose Children", EditorStyles.boldLabel);
+        GUILayout.Label("Adjust Parent Collider to Enclose Children", EditorStyles.boldLabel);
         _parentObject = (GameObject)EditorGUILayout.ObjectField("Parent Object", _parentObject, typeof(GameObject), true);
 
         EditorGUILayout.Space();
@@ -40,14 +40,7 @@ public class ColliderAdjusterWindow : EditorWindow
             Debug.LogWarning("No parent object selected.");
             return;
         }
-
-        BoxCollider boxCol = _parentObject.GetComponent<BoxCollider>();
-        if (boxCol == null)
-        {
-            Debug.LogWarning("The parent object does not have a BoxCollider component.");
-            return;
-        }
-
+        
         Bounds combinedBounds = new Bounds();
         bool boundsInitialized = false;
         
@@ -96,23 +89,82 @@ public class ColliderAdjusterWindow : EditorWindow
             Debug.LogWarning("No child objects found to compute bounds.");
             return;
         }
-        
+       
         combinedBounds.Expand(_margin);
-        
+
         Vector3 localCenter = _parentObject.transform.InverseTransformPoint(combinedBounds.center);
-
-        var lossyScale = _parentObject.transform.lossyScale;
-        Vector3 localSize = new Vector3(
-            combinedBounds.size.x / lossyScale.x,
-            combinedBounds.size.y / lossyScale.y,
-            combinedBounds.size.z / lossyScale.z
-        );
+        Vector3 lossyScale = _parentObject.transform.lossyScale;
         
-        Undo.RecordObject(boxCol, "Adjust Collider");
+        // 1. BoxCollider
+        BoxCollider boxCol = _parentObject.GetComponent<BoxCollider>();
+        if (boxCol != null)
+        {
+            Vector3 localSize = new Vector3(
+                combinedBounds.size.x / lossyScale.x,
+                combinedBounds.size.y / lossyScale.y,
+                combinedBounds.size.z / lossyScale.z
+            );
+            
+            Undo.RecordObject(boxCol, "Adjust BoxCollider");
+            boxCol.center = localCenter;
+            boxCol.size = localSize;
+            Debug.Log("BoxCollider adjusted with margin " + _margin + ".");
+            return;
+        }
 
-        boxCol.center = localCenter;
-        boxCol.size = localSize;
+        // 2. SphereCollider
+        SphereCollider sphereCol = _parentObject.GetComponent<SphereCollider>();
+        if (sphereCol != null)
+        {
+            Vector3 localPos = localCenter;
+            float worldRadius = Mathf.Max(combinedBounds.size.x, Mathf.Max(combinedBounds.size.y, combinedBounds.size.z)) * 0.5f;
+            float maxScale = Mathf.Max(lossyScale.x, Mathf.Max(lossyScale.y, lossyScale.z));
+            float localRadius = worldRadius / maxScale;
+            
+            Undo.RecordObject(sphereCol, "Adjust SphereCollider");
+            sphereCol.center = localPos;
+            sphereCol.radius = localRadius;
+            Debug.Log("SphereCollider adjusted with margin " + _margin + ".");
+            return;
+        }
 
-        Debug.Log("Collider adjusted to fit all child objects with margin " + _margin + ".");
+        // 3. CapsuleCollider
+        CapsuleCollider capsuleCol = _parentObject.GetComponent<CapsuleCollider>();
+        if (capsuleCol != null)
+        {
+            Vector3 localPos = localCenter;
+            int direction = capsuleCol.direction;
+            Vector3 localSize = new Vector3(
+                combinedBounds.size.x / lossyScale.x,
+                combinedBounds.size.y / lossyScale.y,
+                combinedBounds.size.z / lossyScale.z
+            );
+
+            float radius = 0f, height = 0f;
+            switch (direction)
+            {
+                case 0: 
+                    radius = Mathf.Min(localSize.y, localSize.z) * 0.5f;
+                    height = localSize.x;
+                    break;
+                case 1: 
+                    radius = Mathf.Min(localSize.x, localSize.z) * 0.5f;
+                    height = localSize.y;
+                    break;
+                case 2:
+                    radius = Mathf.Min(localSize.x, localSize.y) * 0.5f;
+                    height = localSize.z;
+                    break;
+            }
+
+            Undo.RecordObject(capsuleCol, "Adjust CapsuleCollider");
+            capsuleCol.center = localPos;
+            capsuleCol.radius = radius;
+            capsuleCol.height = height;
+            Debug.Log("CapsuleCollider adjusted with margin " + _margin + ".");
+            return;
+        }
+
+        Debug.LogWarning("No supported collider component found on the parent object. Please attach a BoxCollider, SphereCollider, or CapsuleCollider.");
     }
 }
