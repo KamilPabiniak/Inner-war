@@ -23,6 +23,26 @@ MonoBehaviour:
   heartTargetVolume: 1
   heartDrymixEchoOnValue: 60
   heartDrymixEchoOffValue: 0
+--- !u!114 &-153995736528553497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
+  m_Name: PostProcessingEffect
+  m_EditorClassIdentifier: 
+  minInterval: 10
+  maxInterval: 15
+  minDuration: 3
+  maxDuration: 6
+  autoTrigger: 0
+  disableWhenTrigger: 0
+  startTransitionDuration: 1
+  endTransitionDuration: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39,6 +59,8 @@ MonoBehaviour:
   - {fileID: -3850590786528227050}
   - {fileID: 1830471949182429552}
   - {fileID: 6993675186970100925}
+  - {fileID: -153995736528553497}
+  - {fileID: 7636189157478474265}
 --- !u!114 &1830471949182429552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,3 +129,24 @@ MonoBehaviour:
   disableWhenTrigger: 0
   minSpeedMultiplier: 0.5
   maxSpeedMultiplier: 1.2
+--- !u!114 &7636189157478474265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
+  m_Name: SoundSuppression
+  m_EditorClassIdentifier: 
+  minInterval: 3
+  maxInterval: 6
+  minDuration: 4
+  maxDuration: 6
+  autoTrigger: 1
+  disableWhenTrigger: 0
+  cutOffOn: 350
+  transitionTimeApply: 3
+  transitionTimeCancel: 3
