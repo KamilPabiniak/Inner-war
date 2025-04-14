@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[ExecuteAlways]
 public class Ladder : MonoBehaviour, IInteractable
 {
     private Player _player;
@@ -33,11 +32,6 @@ public class Ladder : MonoBehaviour, IInteractable
     [Header("Climbing Settings")]
     [Tooltip("General speed for climbing up and down the ladder.")]
     public float climbSpeed = 3f;
-    
-    [Header("Debug Settings")]
-    [Tooltip("Player visualization.")]
-    public bool showPlayerCollider;
-    public Color playerColliderColor = Color.cyan;
 
     #endregion
 
@@ -270,18 +264,6 @@ public class Ladder : MonoBehaviour, IInteractable
         Gizmos.color = Color.red;
         Gizmos.DrawLine(upperPoint, upperExitPoint);
         Gizmos.DrawSphere(upperExitPoint, 0.1f);
-        
-        if (showPlayerCollider && _player != null)
-        {
-            CharacterController controller = _player.GetComponent<CharacterController>();
-            if (controller != null)
-            {
-                Vector3 colliderSize = new Vector3(controller.radius * 2f, controller.height, controller.radius * 2f);
-                Gizmos.color = playerColliderColor;
-                Gizmos.DrawWireCube(lowerExitPoint, colliderSize);
-                Gizmos.DrawWireCube(upperExitPoint, colliderSize);
-            }
-        }
     }
 
     #endregion
