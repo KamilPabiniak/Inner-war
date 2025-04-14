@@ -10380,12 +10380,10 @@ MonoBehaviour:
   lowerClimbPointOffset: -7
   upperClimbPointOffset: 5
   topExitLocalOffset: {x: 0, y: 0, z: 0}
-  topExitLocalRotation: {x: 15, y: 0, z: 0}
-  topExitDistance: 2
   bottomExitLocalOffset: {x: 0, y: 0, z: 0}
-  bottomExitLocalRotation: {x: 0, y: 0, z: 0}
-  bottomExitDistance: 0.5
   climbSpeed: 3
+  showPlayerCollider: 0
+  playerColliderColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!4 &563158193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5590373876646825751, guid: fc88c5c8c5a994148b85177ecdf332dd, type: 3}
@@ -11879,12 +11877,10 @@ MonoBehaviour:
   lowerClimbPointOffset: -7
   upperClimbPointOffset: 5
   topExitLocalOffset: {x: 0, y: 0, z: 0}
-  topExitLocalRotation: {x: 15, y: 0, z: 0}
-  topExitDistance: 2
   bottomExitLocalOffset: {x: 0, y: 0, z: 0}
-  bottomExitLocalRotation: {x: 0, y: 0, z: 0}
-  bottomExitDistance: 0.5
   climbSpeed: 3
+  showPlayerCollider: 0
+  playerColliderColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!4 &660958606 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1175867764812654468, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
@@ -16814,12 +16810,10 @@ MonoBehaviour:
   lowerClimbPointOffset: -7
   upperClimbPointOffset: 5
   topExitLocalOffset: {x: 0, y: 0, z: 0}
-  topExitLocalRotation: {x: 15, y: 0, z: 0}
-  topExitDistance: 2
   bottomExitLocalOffset: {x: 0, y: 0, z: 0}
-  bottomExitLocalRotation: {x: 0, y: 0, z: 0}
-  bottomExitDistance: 0.5
   climbSpeed: 3
+  showPlayerCollider: 0
+  playerColliderColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1001 &881193974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59669,15 +59663,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alignSpeed: 20
   ladderOffset: 0.5
-  lowerClimbPointOffset: -7.5
+  lowerClimbPointOffset: -7.9
   upperClimbPointOffset: 0.5
-  topExitLocalOffset: {x: 0, y: 0, z: 0}
-  topExitLocalRotation: {x: -19.5, y: 90, z: 0}
-  topExitDistance: 1.36
+  topExitLocalOffset: {x: 1.15, y: 1, z: 0}
   bottomExitLocalOffset: {x: 0, y: 0, z: 0}
-  bottomExitLocalRotation: {x: 0, y: 0, z: 0}
-  bottomExitDistance: 0
   climbSpeed: 2
+  showPlayerCollider: 0
+  playerColliderColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!65 &1493205301
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60004,12 +59996,10 @@ MonoBehaviour:
   lowerClimbPointOffset: -7
   upperClimbPointOffset: 5
   topExitLocalOffset: {x: 0, y: 0, z: 0}
-  topExitLocalRotation: {x: 15, y: 0, z: 0}
-  topExitDistance: 2
   bottomExitLocalOffset: {x: 0, y: 0, z: 0}
-  bottomExitLocalRotation: {x: 0, y: 0, z: 0}
-  bottomExitDistance: 0.5
   climbSpeed: 3
+  showPlayerCollider: 0
+  playerColliderColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1001 &1507199282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114924,15 +114914,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.40000057
+      value: 4.4100003
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.600001
+      value: 16.7
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -70.80001
+      value: -108.73999
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w

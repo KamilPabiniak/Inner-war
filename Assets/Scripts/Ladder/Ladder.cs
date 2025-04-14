@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[ExecuteAlways]
 public class Ladder : MonoBehaviour, IInteractable
 {
     private Player _player;
@@ -23,23 +24,20 @@ public class Ladder : MonoBehaviour, IInteractable
 
     [Header("Custom Top Exit Settings")]
     [Tooltip("Local space offset (relative to the ladder transform) from the upper climbing point for the top exit.")]
-    public Vector3 topExitLocalOffset = new Vector3(0f, 0f, 0f);
-    [Tooltip("Local rotation offset (in Euler angles, relative to the ladder orientation) for the top exit direction.")]
-    public Vector3 topExitLocalRotation = new Vector3(15f, 0f, 0f);
-    [Tooltip("Distance for the top exit.")]
-    public float topExitDistance = 2f;
+    public Vector3 topExitLocalOffset = new(0f, 0f, 0f);
 
     [Header("Custom Bottom Exit Settings")]
     [Tooltip("Local space offset (relative to the ladder transform) from the lower climbing point for the bottom exit.")]
-    public Vector3 bottomExitLocalOffset = new Vector3(0f, 0f, 0f);
-    [Tooltip("Local rotation offset (in Euler angles, relative to the ladder orientation) for the bottom exit direction.")]
-    public Vector3 bottomExitLocalRotation = new Vector3(0f, 0f, 0f);
-    [Tooltip("Distance for the bottom exit.")]
-    public float bottomExitDistance = 0.5f;
+    public Vector3 bottomExitLocalOffset = new(0f, 0f, 0f);
 
     [Header("Climbing Settings")]
     [Tooltip("General speed for climbing up and down the ladder.")]
     public float climbSpeed = 3f;
+    
+    [Header("Debug Settings")]
+    [Tooltip("Player visualization.")]
+    public bool showPlayerCollider;
+    public Color playerColliderColor = Color.cyan;
 
     #endregion
 
@@ -158,20 +156,11 @@ public class Ladder : MonoBehaviour, IInteractable
 
         if (exitType == ExitType.Top)
         {
-            Vector3 exitOrigin = upperPoint + transform.rotation * topExitLocalOffset;
-            Vector3 exitDirection = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
-            exitTarget = exitOrigin + exitDirection * topExitDistance;
-            
-            Ray exitRay = new Ray(_player.transform.position, exitDirection);
-            Debug.DrawRay(_player.transform.position, exitDirection, Color.red);
-            if (Physics.Raycast(exitRay, topExitDistance))
-                return;
+            exitTarget = upperPoint + transform.rotation * topExitLocalOffset;
         }
         else
         {
-            Vector3 exitOrigin = lowerPoint + transform.rotation * bottomExitLocalOffset;
-            Vector3 exitDirection = transform.rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
-            exitTarget = exitOrigin + exitDirection * bottomExitDistance;
+            exitTarget = lowerPoint + transform.rotation * bottomExitLocalOffset;
         }
 
         ExitLadder(exitTarget, exitThreshold);
@@ -217,8 +206,9 @@ public class Ladder : MonoBehaviour, IInteractable
 
     private void ExitLadder(Vector3 exitPosition, float exitThreshold)
     {
-        if (_movementCoroutine != null)
-            StopCoroutine(_movementCoroutine);
+        if (_movementCoroutine != null) 
+            _player.ToggleInput();
+        StopCoroutine(_movementCoroutine);
         _movementCoroutine = StartCoroutine(SmoothExit(exitPosition, exitThreshold));
     }
 
@@ -233,6 +223,7 @@ public class Ladder : MonoBehaviour, IInteractable
             yield return null;
         }
         yield return new WaitForSeconds(0.1f);
+        _player.ToggleInput();
         _player.SetGravityEnabled(true);
     }
 
@@ -256,7 +247,6 @@ public class Ladder : MonoBehaviour, IInteractable
     #endregion
 
     #region Debug Visualization
-
     private void OnDrawGizmos()
     {
         var rotation = transform.rotation;
@@ -271,19 +261,27 @@ public class Ladder : MonoBehaviour, IInteractable
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(lowerPoint, upperPoint);
         
-        Vector3 lowerExitOrigin = lowerPoint + rotation * bottomExitLocalOffset;
-        Vector3 lowerExitDir = rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
-        Vector3 lowerExitPoint = lowerExitOrigin + lowerExitDir * bottomExitDistance;
+        Vector3 lowerExitPoint = lowerPoint + rotation * bottomExitLocalOffset;
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(lowerPoint, lowerExitPoint);
         Gizmos.DrawSphere(lowerExitPoint, 0.1f);
         
-        Vector3 upperExitOrigin = upperPoint + rotation * topExitLocalOffset;
-        Vector3 upperExitDir = rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
-        Vector3 upperExitPoint = upperExitOrigin + upperExitDir * topExitDistance;
+        Vector3 upperExitPoint = upperPoint + rotation * topExitLocalOffset;
         Gizmos.color = Color.red;
         Gizmos.DrawLine(upperPoint, upperExitPoint);
         Gizmos.DrawSphere(upperExitPoint, 0.1f);
+        
+        if (showPlayerCollider && _player != null)
+        {
+            CharacterController controller = _player.GetComponent<CharacterController>();
+            if (controller != null)
+            {
+                Vector3 colliderSize = new Vector3(controller.radius * 2f, controller.height, controller.radius * 2f);
+                Gizmos.color = playerColliderColor;
+                Gizmos.DrawWireCube(lowerExitPoint, colliderSize);
+                Gizmos.DrawWireCube(upperExitPoint, colliderSize);
+            }
+        }
     }
 
     #endregion
