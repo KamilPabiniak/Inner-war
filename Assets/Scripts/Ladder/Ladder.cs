@@ -46,6 +46,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
     private Coroutine _movementCoroutine;
     private bool _isAlignedToLadder;
     private bool _isDescending;
+    private bool _isAscending;
 
     #region IInteractable Implementation
 
@@ -63,7 +64,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
         // Obliczamy bazow¹ pozycjê drabiny z uwzglêdnieniem offsetu ladderOffset.
         Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
-        // Dolny i górny punkt œcie¿ki wyznaczamy na podstawie sta³ej pozycji Y drabiny oraz offsetów (w lokalnej przestrzeni)
+        // Dolny i górny punkt toru wyznaczamy na podstawie pozycji drabiny oraz offsetów.
         Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
         Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
 
@@ -120,16 +121,30 @@ public class LadderClimb : MonoBehaviour, IInteractable
                 return;
             }
 
+            // Obliczamy dolny i górny punkt toru.
+            Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
+            Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
+            Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
+
+            // Obs³uga ruchu w górê.
             if (_player.Input.MoveInput.y > 0)
             {
-                AttemptExit(ExitType.Top);
+                // Jeœli gracz nie dotar³ jeszcze do górnego punktu toru, wykonujemy p³ynne wchodzenie.
+                if (_player.transform.position.y < upperPoint.y - 0.05f)
+                {
+                    if (!_isAscending)
+                        StartCoroutine(SmoothAscent());
+                }
+                else
+                {
+                    // Po osi¹gniêciu górnego punktu wywo³ujemy wyjœcie.
+                    AttemptExit(ExitType.Top);
+                }
             }
+            // Obs³uga ruchu w dó³.
             else if (_player.Input.MoveInput.y < 0)
             {
                 // Sprawdzamy, czy gracz powinien zejœæ czy wyjœæ.
-                Vector3 lowerPoint = new Vector3(transform.position.x + (transform.rotation * new Vector3(0, 0, ladderOffset)).x,
-                                                 transform.position.y + lowerClimbPointOffset,
-                                                 transform.position.z + (transform.rotation * new Vector3(0, 0, ladderOffset)).z);
                 if (_player.transform.position.y > lowerPoint.y + 0.05f)
                 {
                     if (!_isDescending)
@@ -160,7 +175,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
             Vector3 exitDirection = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
             exitTarget = exitOrigin + exitDirection * topExitDistance;
 
-            // Opcjonalna detekcja kolizji: jeœli w kierunku wyjœcia jest przeszkoda, nie wychodzimy.
+            // Opcjonalna detekcja kolizji – jeœli jest przeszkoda, nie wychodzimy.
             Ray exitRay = new Ray(_player.transform.position, exitDirection);
             Debug.DrawRay(_player.transform.position, exitDirection, Color.red);
             if (Physics.Raycast(exitRay, topExitDistance))
@@ -198,6 +213,23 @@ public class LadderClimb : MonoBehaviour, IInteractable
         _isDescending = false;
     }
 
+    private IEnumerator SmoothAscent()
+    {
+        _isAscending = true;
+        Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
+        Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
+
+        while (_player != null && _player.Input.MoveInput.y > 0 && _player.transform.position.y < upperPoint.y - 0.05f)
+        {
+            Vector3 currentPos = _player.transform.position;
+            float newY = currentPos.y + climbSpeed * Time.deltaTime;
+            newY = Mathf.Min(newY, upperPoint.y);
+            _player.transform.position = new Vector3(basePos.x, newY, basePos.z);
+            yield return null;
+        }
+        _isAscending = false;
+    }
+
     private void ExitLadder(Vector3 exitPosition, float exitThreshold)
     {
         if (_movementCoroutine != null)
@@ -209,7 +241,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
     {
         _isAlignedToLadder = false;
         _player.state = Player.State.Walking;
-        
+
         while (Vector3.Distance(_player.transform.position, targetPosition) > threshold)
         {
             _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, climbSpeed * Time.deltaTime);
