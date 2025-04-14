@@ -114,8 +114,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
     {
         if (_player != null && _player.state == Player.State.Climbing && _isAlignedToLadder)
         {
-            // Umo¿liwienie wymuszonego wyjœcia z drabiny przy wciœniêciu Escape.
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 ForceExitLadder();
                 return;
@@ -160,17 +159,15 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
     private void AttemptExit(ExitType exitType)
     {
-        float exitThreshold = 0.7f; // Próg wykrywania osi¹gniêcia punktu wyjœcia.
+        float exitThreshold = 0.15f;
         Vector3 exitTarget;
-
-        // Obliczamy dolny i górny punkt toru.
+        
         Vector3 basePos = transform.position + transform.rotation * new Vector3(0, 0, ladderOffset);
         Vector3 lowerPoint = new Vector3(basePos.x, transform.position.y + lowerClimbPointOffset, basePos.z);
         Vector3 upperPoint = new Vector3(basePos.x, transform.position.y + upperClimbPointOffset, basePos.z);
 
         if (exitType == ExitType.Top)
         {
-            // Wyjœcie górne: od punktu upperPoint dodajemy offset wyjœcia (w przestrzeni lokalnej drabiny).
             Vector3 exitOrigin = upperPoint + transform.rotation * topExitLocalOffset;
             Vector3 exitDirection = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
             exitTarget = exitOrigin + exitDirection * topExitDistance;
@@ -244,7 +241,7 @@ public class LadderClimb : MonoBehaviour, IInteractable
 
         while (Vector3.Distance(_player.transform.position, targetPosition) > threshold)
         {
-            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, climbSpeed * Time.deltaTime);
+            _player.transform.position = Vector3.Lerp(_player.transform.position, targetPosition, alignSpeed * Time.deltaTime);
             yield return null;
         }
         yield return new WaitForSeconds(0.1f);
@@ -286,16 +283,14 @@ public class LadderClimb : MonoBehaviour, IInteractable
         Gizmos.DrawSphere(upperPoint, 0.1f);
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(lowerPoint, upperPoint);
-
-        // Wizualizacja punktu dolnego wyjœcia.
+        
         Vector3 lowerExitOrigin = lowerPoint + transform.rotation * bottomExitLocalOffset;
         Vector3 lowerExitDir = transform.rotation * Quaternion.Euler(bottomExitLocalRotation) * Vector3.forward;
         Vector3 lowerExitPoint = lowerExitOrigin + lowerExitDir * bottomExitDistance;
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(lowerPoint, lowerExitPoint);
         Gizmos.DrawSphere(lowerExitPoint, 0.1f);
-
-        // Wizualizacja punktu górnego wyjœcia.
+        
         Vector3 upperExitOrigin = upperPoint + transform.rotation * topExitLocalOffset;
         Vector3 upperExitDir = transform.rotation * Quaternion.Euler(topExitLocalRotation) * Vector3.forward;
         Vector3 upperExitPoint = upperExitOrigin + upperExitDir * topExitDistance;
