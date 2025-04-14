@@ -3,12 +3,21 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menuUI;      
-    public Camera camera1;        
-    public Camera camera2;         
+    public GameObject menuUI;
+    public Camera camera1;
+    public Camera camera2;
     public Button playButton;
     public Button exitButton;
-    
+
+    private void OnEnable()
+    {
+        GameEvents.onSkipMenu += SkipMenu;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.onSkipMenu -= SkipMenu;
+    }
 
     private void Start()
     {
@@ -18,8 +27,19 @@ public class MainMenu : MonoBehaviour
         playButton.onClick.AddListener(OnPlayClicked);
         exitButton.onClick.AddListener(OnExitClicked);
     }
-
+    
     private void OnPlayClicked()
+    {
+        StartGame();
+    }
+
+    
+    private void SkipMenu()
+    {
+        StartGame();
+    }
+    
+    private void StartGame()
     {
         SwitchCamera();
         GameEvents.onBlackScreen.Invoke(0f, 1f, 1f);
@@ -29,10 +49,13 @@ public class MainMenu : MonoBehaviour
 
     private void OnExitClicked()
     {
-        Debug.Log("Zamykanie gry...");
+        Debug.Log("Exiting game...");
         Application.Quit();
     }
 
+    /// <summary>
+    /// Switches from camera1 to camera2.
+    /// </summary>
     private void SwitchCamera()
     {
         camera1.enabled = false;

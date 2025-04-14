@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,9 +8,21 @@ public class GameManager : MonoBehaviour
     [Tooltip("Name of the UI scene to load at start.")]
     public string uiSceneName = "UI";
 
+    [Header("Game Options")]
+    [Tooltip("If true, the game will skip the main menu sequence and start immediately.")]
+    public bool skipMenuSequence = false;
+
     private void Awake()
     {
         LoadUIScene();
+    }
+
+    private void Start()
+    {
+        if (skipMenuSequence)
+        {
+            GameEvents.onSkipMenu?.Invoke();
+        }
     }
 
     private void LoadUIScene()

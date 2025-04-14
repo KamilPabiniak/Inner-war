@@ -4,6 +4,7 @@ public static class GameEvents
 {
     //MenuAction
     public static Action onMenuExit;
+    public static Action onSkipMenu;
     
     //CheatSheet
     public static Action onTogglePanel;
