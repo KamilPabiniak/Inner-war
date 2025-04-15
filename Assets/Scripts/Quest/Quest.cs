@@ -1,18 +1,25 @@
 using UnityEngine;
 
-public enum QuestState
+namespace QuestSystem
 {
-    NotStarted,
-    Active,
-    Completed
-}
+    public enum QuestState
+    {
+        NotStarted,
+        Active,
+        Completed
+    }
 
-[CreateAssetMenu(fileName = "NewQuest", menuName = "Quest System/Quest Data")]
-public class Quest : ScriptableObject
-{
-    public string questID;
-    public string questName;
-    [TextArea]
-    public string description;
-    
+    [CreateAssetMenu(fileName = "NewQuest", menuName = "Quest System/Quest Data")]
+    public class Quest : ScriptableObject
+    {
+        [Header("Identification")]
+        public string questID;
+
+        [Header("Display Information")]
+        public string questName;
+
+        [Header("Description")]
+        [TextArea]
+        public string description;
+    }
 }

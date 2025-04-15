@@ -1,39 +1,41 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class QuestUI : MonoBehaviour
+namespace QuestSystem
 {
-    public TextMeshProUGUI questTitleText;
-    public TextMeshProUGUI questDescriptionText;
-
-    private void Start()
+    public class QuestUI : MonoBehaviour
     {
-        if (QuestManager.Instance != null)
-            QuestManager.Instance.OnQuestUpdated += UpdateQuestUI;
+        public TextMeshProUGUI questTitleText;
+        public TextMeshProUGUI questDescriptionText;
 
-        QuestInstance currentQuest = QuestManager.Instance.GetCurrentQuest();
-        if (currentQuest != null)
-            UpdateQuestUI(currentQuest);
-    }
-
-    private void UpdateQuestUI(QuestInstance quest)
-    {
-        if (quest.state == QuestState.Active)
+        private void Start()
         {
-            questTitleText.text = quest.data.questName;
-            questDescriptionText.text = quest.data.description;
-        }
-        else if (quest.state == QuestState.Completed)
-        {
-            questTitleText.text = quest.data.questName + " - COMPLETED";
-            questDescriptionText.text = "";
-        }
-    }
+            if (QuestManager.Instance != null)
+                QuestManager.Instance.OnQuestUpdated += UpdateQuestUI;
 
-    private void OnDestroy()
-    {
-        if (QuestManager.Instance != null)
-            QuestManager.Instance.OnQuestUpdated -= UpdateQuestUI;
+            QuestInstance currentQuest = QuestManager.Instance?.GetCurrentQuest();
+            if (currentQuest != null)
+                UpdateQuestUI(currentQuest);
+        }
+
+        private void UpdateQuestUI(QuestInstance quest)
+        {
+            if (quest.State == QuestState.Active)
+            {
+                questTitleText.text = quest.Data.questName;
+                questDescriptionText.text = quest.Data.description;
+            }
+            else if (quest.State == QuestState.Completed)
+            {
+                questTitleText.text = quest.Data.questName + " - COMPLETED";
+                questDescriptionText.text = "";
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (QuestManager.Instance != null)
+                QuestManager.Instance.OnQuestUpdated -= UpdateQuestUI;
+        }
     }
 }

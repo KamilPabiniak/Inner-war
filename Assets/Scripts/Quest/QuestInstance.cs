@@ -1,11 +1,14 @@
-public class QuestInstance
+namespace QuestSystem
 {
-    public Quest data;
-    public QuestState state;
-
-    public QuestInstance(Quest questData)
+    public class QuestInstance
     {
-        data = questData;
-        state = QuestState.NotStarted;
+        public Quest Data { get; private set; }
+        public QuestState State { get; set; }
+
+        public QuestInstance(Quest questData)
+        {
+            Data = questData;
+            State = QuestState.NotStarted;
+        }
     }
 }

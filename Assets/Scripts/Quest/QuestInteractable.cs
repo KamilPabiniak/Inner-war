@@ -1,16 +1,20 @@
 using UnityEngine;
 
-public class QuestInteractable : MonoBehaviour, IInteractable
+namespace QuestSystem
 {
-    public string associatedQuestID;
-
-    public void Interact(Player player)
+    public class QuestInteractable : MonoBehaviour, IInteractable
     {
-        QuestInstance currentQuest = QuestManager.Instance.GetCurrentQuest();
-        if (currentQuest != null && currentQuest.data.questID == associatedQuestID)
+        [Tooltip("The Quest ID associated with this interactable object.")]
+        public string associatedQuestID;
+
+        public void Interact(Player player)
         {
-            Debug.LogError("Ukoñczono quest: " + currentQuest.data.questName);
-            QuestManager.Instance.CompleteCurrentQuest();
+            QuestInstance currentQuest = QuestManager.Instance.GetCurrentQuest();
+            if (currentQuest != null && currentQuest.Data.questID == associatedQuestID)
+            {
+                Debug.Log("Completed quest: " + currentQuest.Data.questName);
+                QuestManager.Instance.CompleteCurrentQuest();
+            }
         }
     }
 }
