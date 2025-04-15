@@ -6,6 +6,5 @@ using UnityEngine;
 public class FearLevelProfile : ScriptableObject
 {
     [Header("Anxiety effect for this profile")]
-    [Tooltip("Lista efektów (konkretnych assetów dziedzicz¹cych po BaseFearEffect), które maj¹ byæ wywo³ywane przy aktywnym poziomie lêku.")]
-    public List<BaseFearEffect> effects = new List<BaseFearEffect>();
+    [HideInInspector] public List<BaseFearEffect> effects = new();
 }
