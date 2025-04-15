@@ -46,7 +46,7 @@ public class PlayerFootstepSounds : PlayerModule
                 if (surface.footstepSounds.Count > 0)
                 {
                     AudioClip clip = surface.footstepSounds[Random.Range(0, surface.footstepSounds.Count)];
-                    SoundFXManager.Instance.PlaySoundFXClip(clip, footstepSource.transform, 1f);
+                    SoundFXManager.Instance.Play3DSoundFXClip(clip, footstepSource.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
                 }
                 return;
             }

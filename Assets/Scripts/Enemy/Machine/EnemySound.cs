@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class EnemySound : MonoBehaviour
 {
@@ -24,7 +23,7 @@ public class EnemySound : MonoBehaviour
     {
         if (footStepClips == null || _footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
-        SoundFXManager.Instance.PlaySoundFXClip(footStepClips[rand], audioSources.transform, 1f);
+        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
         _footStepPlayed = true;
     }
     
@@ -40,6 +39,6 @@ public class EnemySound : MonoBehaviour
     private void PlayStateSound(AudioClip clip)
     {
         if (clip == null) return;
-        SoundFXManager.Instance.PlaySoundFXClip(clip, audioSources.transform, 1f);
+        SoundFXManager.Instance.Play3DSoundFXClip(clip, audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
     }
 }

@@ -1,13 +1,23 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundFXManager : MonoBehaviour
 {
     public static SoundFXManager Instance { get; private set; }
 
-    [SerializeField] private AudioSource soundFXObject;
-    [SerializeField] private AudioSource soundGlobalFXObject;
-    [SerializeField] private AudioSource soundGlobalNoEffectFXObject;
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource audioSource3D;
+    [SerializeField] private AudioSource audioSource2D;
+    
+    [Header("Audio Mixers")]
+    [SerializeField] private AudioMixerGroup lowPassMixer;
+    [SerializeField] private AudioMixerGroup voicesMixer;
+    [SerializeField] private AudioMixerGroup heartMixer;
 
+    public AudioMixerGroup LowPassMixer => lowPassMixer;
+    public AudioMixerGroup VoicesMixer => voicesMixer;
+    public AudioMixerGroup HeartMixer => heartMixer;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -18,44 +28,41 @@ public class SoundFXManager : MonoBehaviour
         Instance = this;
     }
     
-    public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume)
+    public AudioSource Play3DSoundFXClip(AudioClip clip, Transform spawnTransform, float volume, float maxDistance = 10f, AudioMixerGroup audioMixerGroup = null)
     {
-        AudioSource audioSource= Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        AudioSource audioSource= Instantiate(audioSource3D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);
         audioSource.clip = clip;
         audioSource.volume = volume;
+        audioSource.maxDistance = maxDistance;
+        audioSource.outputAudioMixerGroup = audioMixerGroup;
         audioSource.Play();
         Destroy(audioSource.gameObject, audioSource.clip.length);
+        return audioSource;
     }
     
-    public void PlayGlobalSoundFXClip(AudioClip clip, Transform spawnTransform, float volume)
+    public AudioSource Play2DSoundFXClip(AudioClip clip, Transform spawnTransform, float volume, AudioMixerGroup audioMixerGroup = null)
     {
-        AudioSource audioSource = Instantiate(soundGlobalFXObject, spawnTransform.position, Quaternion.identity);
+        AudioSource audioSource = Instantiate(audioSource2D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);
         audioSource.clip = clip;
         audioSource.volume = volume;
+        audioSource.outputAudioMixerGroup = audioMixerGroup;
         audioSource.Play();
         Destroy(audioSource.gameObject, audioSource.clip.length);
+        return audioSource;
     }
     
-    public void PlayGlobalSoundFXClipNoSfx(AudioClip clip, Transform spawnTransform, float volume)
+    public AudioSource Play2DSoundFXClipDestroyOn(AudioClip clip, Transform spawnTransform, float volume, float destroyTime, bool onLoop, AudioMixerGroup audioMixerGroup = null)
     {
-        AudioSource audioSource = Instantiate(soundGlobalNoEffectFXObject, spawnTransform.position, Quaternion.identity);
-        audioSource.transform.SetParent(spawnTransform);
-        audioSource.clip = clip;
-        audioSource.volume = volume;
-        audioSource.Play();
-        Destroy(audioSource.gameObject, audioSource.clip.length);
-    }
-    
-    public void PlayGlobalSoundFXClipNoSfxDestroyOn(AudioClip clip, Transform spawnTransform, float volume, float destroyTime, bool onLoop)
-    {
-        AudioSource audioSource = Instantiate(soundGlobalNoEffectFXObject, spawnTransform.position, Quaternion.identity);
+        AudioSource audioSource = Instantiate(audioSource2D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);
         audioSource.clip = clip;
         audioSource.volume = volume;
         audioSource.loop = onLoop;
+        audioSource.outputAudioMixerGroup = audioMixerGroup;
         audioSource.Play();
         Destroy(audioSource.gameObject, destroyTime);
+        return audioSource;
     }
 }

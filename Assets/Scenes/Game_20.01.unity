@@ -575,7 +575,7 @@ GameObject:
   - component: {fileID: 55620415}
   - component: {fileID: 55620414}
   m_Layer: 0
-  m_Name: ------------------------<color=#FFC058FF>Ambinet</color>----------------------------
+  m_Name: ---------------------------<color=#FFC058FF>Ambinet</color>-------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -712,7 +712,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: -----------Controllers
+  m_Name: ------------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1672,7 +1672,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>---------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-------------------------</color>
+  m_Name: <color=#842F2FFF>------------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>----------------------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3370,15 +3370,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2857639759455179432, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.5030303
+      value: 3.9030304
       objectReference: {fileID: 0}
     - target: {fileID: 2857639759455179432, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.182
+      value: 7.082
       objectReference: {fileID: 0}
     - target: {fileID: 2857639759455179432, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -91.74872
+      value: -95.64872
       objectReference: {fileID: 0}
     - target: {fileID: 2857639759455179432, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11819,7 +11819,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ---------------------ENVIROMENT-------------------------
+  m_Name: -------------------------ENVIROMENT----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13172,7 +13172,7 @@ GameObject:
   - component: {fileID: 757262063}
   - component: {fileID: 757262062}
   m_Layer: 0
-  m_Name: ------------------------<color=#B0B0B0FF>CAMERA</color>----------------------------
+  m_Name: ---------------------------<color=#B0B0B0FF>CAMERA</color>-------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14866,7 +14866,7 @@ GameObject:
   - component: {fileID: 828615971}
   - component: {fileID: 828615970}
   m_Layer: 0
-  m_Name: -----------------------<color=#7EC2FFFF>Monologue </color>--------------------------
+  m_Name: --------------------------<color=#7EC2FFFF>Monologue </color>-----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16471,7 +16471,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: -----------------------MANAGERS--------------------------
+  m_Name: -------------------------MANAGERS------------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17017,9 +17017,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257338fb6c8206e42a866358faecf77b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundFXObject: {fileID: 3393711293053667138, guid: 472ca9a83caec0d469a8b204c0709c30, type: 3}
-  soundGlobalFXObject: {fileID: 8179409725893164759, guid: d490d601ae179f249a920879c494204d, type: 3}
-  soundGlobalNoEffectFXObject: {fileID: 8179409725893164759, guid: 704448d4b0d058d48b5d527d7793b3f2, type: 3}
+  audioSource3D: {fileID: 3393711293053667138, guid: 472ca9a83caec0d469a8b204c0709c30, type: 3}
+  audioSource2D: {fileID: 8179409725893164759, guid: d490d601ae179f249a920879c494204d, type: 3}
+  lowPassMixer: {fileID: -7593343036394811911, guid: fd699d82a1561c14cad6e03376577c27, type: 2}
+  voicesMixer: {fileID: -1321542525899036561, guid: fd699d82a1561c14cad6e03376577c27, type: 2}
+  heartMixer: {fileID: -4405677733680458954, guid: fd699d82a1561c14cad6e03376577c27, type: 2}
 --- !u!4 &939598142
 Transform:
   m_ObjectHideFlags: 0
@@ -53549,7 +53551,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ---------------------<color=#3D0080FF>CHARACTERS</color>-------------------------
+  m_Name: ------------------------<color=#3D0080FF>CHARACTERS</color>----------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57947,7 +57949,7 @@ GameObject:
   - component: {fileID: 1494555223}
   - component: {fileID: 1494555222}
   m_Layer: 0
-  m_Name: ---------------------Pipes&Ladders------------------------
+  m_Name: ------------------------Pipes&Ladders---------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58137,7 +58139,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: -------------------POSTPROCESSING----------------------
+  m_Name: ---------------------POSTPROCESSING--------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58331,7 +58333,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#EAAD00FF>-</color><color=#D49D00FF>-</color><color=#BF8D00FF>-</color><color=#AA7E00FF>-</color><color=#956E00FF>-</color><color=#805E00FF>-</color><color=#6A4F00FF>-</color><color=#553F00FF>-</color><color=#402F00FF>-</color><color=#2A1F00FF>-</color><color=#151000FF>-</color><color=#000000FF>-</color><color=#151000FF>-</color><color=#2A1F00FF>-</color><color=#402F00FF>-</color><color=#553F00FF>-</color><color=#6A4F00FF>-</color><color=#805E00FF>-</color><color=#956E00FF>-</color><color=#AA7E00FF>-</color><color=#BF8D00FF>-</color><color=#D49D00FF>-</color><color=#EAAD00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EDAF00FF>-</color><color=#DBA200FF>-</color><color=#C89400FF>-</color><color=#B68700FF>-</color><color=#A47900FF>-</color><color=#926C00FF>-</color><color=#805E00FF>-</color><color=#6D5100FF>-</color><color=#5B4300FF>-</color><color=#493600FF>-</color><color=#372800FF>-</color><color=#241B00FF>-</color><color=#120D00FF>-</color><color=#000000FF>-</color><color=#120D00FF>-</color><color=#241B00FF>-</color><color=#372800FF>-</color><color=#493600FF>-</color><color=#5B4300FF>-</color><color=#6D5100FF>-</color><color=#805E00FF>-</color><color=#926C00FF>-</color><color=#A47900FF>-</color><color=#B68700FF>-</color><color=#C89400FF>-</color><color=#DBA200FF>-</color><color=#EDAF00FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#ECAE00FF>-</color><color=#D9A100FF>-</color><color=#C69300FF>-</color><color=#B38500FF>-</color><color=#A17700FF>-</color><color=#8E6900FF>-</color><color=#7B5B00FF>-</color><color=#684D00FF>-</color><color=#553F00FF>-</color><color=#423100FF>-</color><color=#2F2300FF>-</color><color=#1C1500FF>-</color><color=#090700FF>-</color><color=#090700FF>-</color><color=#1C1500FF>-</color><color=#2F2300FF>-</color><color=#423100FF>-</color><color=#553F00FF>-</color><color=#684D00FF>-</color><color=#7B5B00FF>-</color><color=#8E6900FF>-</color><color=#A17700FF>-</color><color=#B38500FF>-</color><color=#C69300FF>-</color><color=#D9A100FF>-</color><color=#ECAE00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EFB000FF>-</color><color=#DEA400FF>-</color><color=#CE9800FF>-</color><color=#BD8C00FF>-</color><color=#AD8000FF>-</color><color=#9C7300FF>-</color><color=#8C6700FF>-</color><color=#7B5B00FF>-</color><color=#6B4F00FF>-</color><color=#5A4300FF>-</color><color=#4A3700FF>-</color><color=#3A2B00FF>-</color><color=#291E00FF>-</color><color=#191200FF>-</color><color=#080600FF>-</color><color=#080600FF>-</color><color=#191200FF>-</color><color=#291E00FF>-</color><color=#3A2B00FF>-</color><color=#4A3700FF>-</color><color=#5A4300FF>-</color><color=#6B4F00FF>-</color><color=#7B5B00FF>-</color><color=#8C6700FF>-</color><color=#9C7300FF>-</color><color=#AD8000FF>-</color><color=#BD8C00FF>-</color><color=#CE9800FF>-</color><color=#DEA400FF>-</color><color=#EFB000FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59259,7 +59261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiSceneName: UI
-  skipMenuSequence: 1
+  skipMenuSequence: 0
 --- !u!1001 &1576518678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60347,8 +60349,8 @@ GameObject:
   - component: {fileID: 1659726293}
   - component: {fileID: 1659726292}
   m_Layer: 0
-  m_Name: ~~~~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
-    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~~~~~
+  m_Name: ~~~~~~~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
+    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~~~~~~
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65526,7 +65528,7 @@ GameObject:
   - component: {fileID: 2037040358}
   - component: {fileID: 2037040357}
   m_Layer: 0
-  m_Name: ---------------------<color=#FFFFFFFF>CHECKPOINTS</color>------------------------
+  m_Name: ------------------------<color=#FFFFFFFF>CHECKPOINTS</color>---------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112672,7 +112674,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 0517d36587ea6fd4188df22c2c9ac9b0, type: 3}
     - target: {fileID: 7343818932019958185, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: respawnTime
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7343818932019958185, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: deadEoldProjectorSound

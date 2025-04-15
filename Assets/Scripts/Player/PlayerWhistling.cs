@@ -67,7 +67,7 @@ public class PlayerWhistling : PlayerModule
     
     private void Whistle()
     {
-        SoundFXManager.Instance.PlaySoundFXClip(whistlingSoundClip, source.transform, volume);
+        SoundFXManager.Instance.Play3DSoundFXClip(whistlingSoundClip, source.transform, volume, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
         var targetsInRange = Physics.OverlapSphereNonAlloc(transform.position, whistlingRange, _results, targetMask);
         
         for (int i = 0; i < targetsInRange; i++)

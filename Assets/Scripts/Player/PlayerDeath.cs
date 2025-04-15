@@ -6,7 +6,6 @@ public class PlayerDeath : PlayerModule
 {
     public Transform checkpoint;
     [SerializeField] private float respawnTime = 3f;
-    [SerializeField] private List<AudioClip> soundsOfDead;
     [SerializeField] private AudioClip deadEnd;
     [SerializeField] private AudioClip deadEoldProjectorSound;
     private Vector3 _backupPos;
@@ -47,13 +46,10 @@ public class PlayerDeath : PlayerModule
     {
         GameEvents.onPlayerDied?.Invoke();
         GameEvents.onBlackScreen.Invoke(0f, 10f, 0f);
-        int randomSound = Random.Range(0, soundsOfDead.Count);
-        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(soundsOfDead[randomSound], gameObject.transform, 1f);
-        yield return new WaitForSeconds(soundsOfDead[randomSound].length - 1f);
-        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfx(deadEnd, gameObject.transform, 1f);
+        SoundFXManager.Instance.Play2DSoundFXClip(deadEnd, gameObject.transform, 1f);
         yield return new WaitForSeconds(deadEnd.length - 2.5f);
         GameEvents.onDeathScreen?.Invoke();
-        SoundFXManager.Instance.PlayGlobalSoundFXClipNoSfxDestroyOn(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
+        SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
         Player.ToggleInput();
         Respawn();
         yield return new WaitForSeconds(respawnTime);

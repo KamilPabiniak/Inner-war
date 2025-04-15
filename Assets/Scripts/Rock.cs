@@ -14,7 +14,7 @@ public class Rock : MonoBehaviour, IInteractable
     private void OnCollisionEnter(Collision collision)
     {
         Vector3 impactPosition = transform.position;
-        SoundFXManager.Instance.PlaySoundFXClip(rockSound, transform, 1f);
+        SoundFXManager.Instance.Play3DSoundFXClip(rockSound, transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
         
         // If the rock directly hits an enemy, force it to attack.
         NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
