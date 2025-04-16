@@ -17,6 +17,9 @@ namespace Anxiety
         [SerializeField] private float passiveFearIncreaseInterval = 15f;
         [SerializeField] private float passiveFearIncreaseAmount = 1f;
 
+        [Header("Player death fear")] 
+        [SerializeField] private float decreaseFrearAfterDeath;
+
         [Header("Controllers")] 
         public AudioEffectsController audioEffectsController;
         public MovementEffectController movementEffectController;
@@ -164,6 +167,7 @@ namespace Anxiety
         {
             _isPlayerAlive = false;
             BlockAutoTriggeredEffects();
+            DecreaseFear(decreaseFrearAfterDeath);
         }
         
         private void OnPlayerRespawned()

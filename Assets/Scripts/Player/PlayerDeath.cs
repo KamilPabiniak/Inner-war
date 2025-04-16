@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Anxiety;
 using UnityEngine;
 
 public class PlayerDeath : PlayerModule
@@ -46,10 +47,10 @@ public class PlayerDeath : PlayerModule
     {
         GameEvents.onPlayerDied?.Invoke();
         GameEvents.onBlackScreen.Invoke(0f, 10f, 0f);
-        SoundFXManager.Instance.Play2DSoundFXClip(deadEnd, gameObject.transform, 1f);
+        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(deadEnd, gameObject.transform, 1f, deadEnd.length, false);
         yield return new WaitForSeconds(deadEnd.length - 2.5f);
         GameEvents.onDeathScreen?.Invoke();
-        SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
+        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
         Player.ToggleInput();
         Respawn();
         yield return new WaitForSeconds(respawnTime);

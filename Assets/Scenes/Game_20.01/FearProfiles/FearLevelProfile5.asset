@@ -21,7 +21,8 @@ MonoBehaviour:
   voicesFadeInDuration: 1
   voicesFadeOutDuration: 1
   voicesTargetVolume: 1
-  voicesSounds: []
+  voicesSounds:
+  - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
 --- !u!114 &-6593780539231661228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,8 +194,8 @@ MonoBehaviour:
   heartFadeInDuration: 1
   heartFadeOutDuration: 1
   heartTargetVolume: 1
+  heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
   heartDrymixEchoOnValue: 60
-  heartDrymixEchoOffValue: 0
 --- !u!114 &6784757188323169077
 MonoBehaviour:
   m_ObjectHideFlags: 0

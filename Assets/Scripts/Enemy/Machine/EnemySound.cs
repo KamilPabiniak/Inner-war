@@ -7,6 +7,7 @@ public class EnemySound : MonoBehaviour
 
     [Header("Audio Clips - Footsteps")]
     [SerializeField] private AudioClip[] footStepClips;
+    [SerializeField] private float footStepsRange;
     
     [Header("Audio Clips - State Sounds")]
     [SerializeField] private AudioClip patrolStateSound;
@@ -14,6 +15,7 @@ public class EnemySound : MonoBehaviour
     [SerializeField] private AudioClip attackStateSound;
     [SerializeField] private AudioClip targetLostSound;
     [SerializeField] private AudioClip overload;
+    [SerializeField] private float stateRange;
 
     private bool _footStepPlayed;
     
@@ -23,7 +25,7 @@ public class EnemySound : MonoBehaviour
     {
         if (footStepClips == null || _footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
-        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer, maxDistance:footStepsRange);
         _footStepPlayed = true;
     }
     
@@ -39,6 +41,6 @@ public class EnemySound : MonoBehaviour
     private void PlayStateSound(AudioClip clip)
     {
         if (clip == null) return;
-        SoundFXManager.Instance.Play3DSoundFXClip(clip, audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+        SoundFXManager.Instance.Play3DSoundFXClip(clip, audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer, maxDistance:stateRange);
     }
 }

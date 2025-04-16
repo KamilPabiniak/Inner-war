@@ -1204,12 +1204,18 @@ MonoBehaviour:
   maxInvestigationTimeAfterLoseSight: 6
   attackDuration: 12
   attackSpeedMultiplier: 8
+  waitingAfterAttack: 6
   sightTarget: {fileID: 3243088900989205589}
   headRotationSpeed: 0.11
   stopPoints: 3
   stopDuration: 0.8
   maxOffsetDistance: 3
-  overloadTimer: 9
+  headDetectionDistance: 5
+  mainDetectionDistance: 6
+  sideDetectionDistance: 4
+  rayOriginHeight: 1.5
+  sideRayAngleOffset: 30
+  additionalRaycastAngleOffset: 20
 --- !u!114 &3505779425706273977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1278,11 +1284,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8a7a8ee0447e4b5469bce225745d9f42, type: 3}
   - {fileID: 8300000, guid: 7e629da20f6fdee418e5e60ba9efc23c, type: 3}
   - {fileID: 8300000, guid: a04e8112fb4cca944baabc0048ff839d, type: 3}
+  footStepsRange: 20
   patrolStateSound: {fileID: 8300000, guid: df17519ca2a6c7a43adc12f38e6d8213, type: 3}
   investigateStateSound: {fileID: 8300000, guid: ea2a1aee373e97c498485b458f5a71ef, type: 3}
   attackStateSound: {fileID: 8300000, guid: 296f3855d6d9f5747b00e9f1098f3b98, type: 3}
   targetLostSound: {fileID: 8300000, guid: b16ed96a8e0179c49aaaec625cc2de27, type: 3}
   overload: {fileID: 8300000, guid: f3179ba3ac1bf1c42a6e5551f3207742, type: 3}
+  stateRange: 16
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0

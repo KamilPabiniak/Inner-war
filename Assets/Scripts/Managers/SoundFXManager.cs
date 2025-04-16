@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -18,6 +19,8 @@ public class SoundFXManager : MonoBehaviour
     public AudioMixerGroup VoicesMixer => voicesMixer;
     public AudioMixerGroup HeartMixer => heartMixer;
     
+    private bool _isPlayerAlive = true;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,10 +30,27 @@ public class SoundFXManager : MonoBehaviour
         }
         Instance = this;
     }
+
+    private void OnEnable()
+    {
+        GameEvents.onPlayerDied += HandlePlayerDied;
+        GameEvents.onPlayerRespawned += HandlePlayerRespawned;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.onPlayerDied -= HandlePlayerDied;
+        GameEvents.onPlayerRespawned -= HandlePlayerRespawned;
+    }
     
+    private void HandlePlayerDied() => _isPlayerAlive = false;
+
+    private void HandlePlayerRespawned() => _isPlayerAlive = true;
+
     public AudioSource Play3DSoundFXClip(AudioClip clip, Transform spawnTransform, float volume, float maxDistance = 10f, AudioMixerGroup audioMixerGroup = null)
     {
-        AudioSource audioSource= Instantiate(audioSource3D, spawnTransform.position, Quaternion.identity);
+        if (!_isPlayerAlive) { return null; }
+        AudioSource audioSource = Instantiate(audioSource3D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);
         audioSource.clip = clip;
         audioSource.volume = volume;
@@ -43,6 +63,7 @@ public class SoundFXManager : MonoBehaviour
     
     public AudioSource Play2DSoundFXClip(AudioClip clip, Transform spawnTransform, float volume, AudioMixerGroup audioMixerGroup = null)
     {
+        if (!_isPlayerAlive) { return null; }
         AudioSource audioSource = Instantiate(audioSource2D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);
         audioSource.clip = clip;
@@ -54,6 +75,20 @@ public class SoundFXManager : MonoBehaviour
     }
     
     public AudioSource Play2DSoundFXClipDestroyOn(AudioClip clip, Transform spawnTransform, float volume, float destroyTime, bool onLoop, AudioMixerGroup audioMixerGroup = null)
+    {
+        if (!_isPlayerAlive) { return null; }
+        AudioSource audioSource = Instantiate(audioSource2D, spawnTransform.position, Quaternion.identity);
+        audioSource.transform.SetParent(spawnTransform);
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.loop = onLoop;
+        audioSource.outputAudioMixerGroup = audioMixerGroup;
+        audioSource.Play();
+        Destroy(audioSource.gameObject, destroyTime);
+        return audioSource;
+    }
+    
+    public AudioSource Play2DSFXClipDestroyOnIgnoreDeath(AudioClip clip, Transform spawnTransform, float volume, float destroyTime, bool onLoop, AudioMixerGroup audioMixerGroup = null)
     {
         AudioSource audioSource = Instantiate(audioSource2D, spawnTransform.position, Quaternion.identity);
         audioSource.transform.SetParent(spawnTransform);

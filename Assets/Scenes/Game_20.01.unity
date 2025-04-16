@@ -54358,7 +54358,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 81934c3e3dabbaf42a2c491d37023b6d, type: 3}
   m_Resource: {fileID: 8300000, guid: 81934c3e3dabbaf42a2c491d37023b6d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.35
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -59275,7 +59275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiSceneName: UI
-  skipMenuSequence: 0
+  skipMenuSequence: 1
 --- !u!1001 &1576518678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74268,6 +74268,7 @@ MonoBehaviour:
   FearLevelText: 
   passiveFearIncreaseInterval: 10
   passiveFearIncreaseAmount: 1
+  decreaseFrearAfterDeath: 20
   audioEffectsController: {fileID: 1187514810}
   movementEffectController: {fileID: 1006559624}
   postProcessingController: {fileID: 326914331}
@@ -112680,15 +112681,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.4100003
+      value: 14.809999
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.7
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -108.73999
+      value: -99.039986
       objectReference: {fileID: 0}
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalRotation.w
