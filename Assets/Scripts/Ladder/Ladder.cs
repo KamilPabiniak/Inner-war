@@ -102,7 +102,7 @@ public class Ladder : MonoBehaviour, IInteractable
     private void Update()
     {
         if (_player == null || _player.state != Player.State.Climbing || !_isAlignedToLadder) return;
-        if (Input.GetKeyDown(KeyCode.C))
+        if (_player.Input.IsCrouchPressed)
         {
             ForceExitLadder();
             return;
@@ -234,7 +234,6 @@ public class Ladder : MonoBehaviour, IInteractable
         }
         _isAlignedToLadder = false;
         _player.state = Player.State.Walking;
-        _player.ToggleInput();
         _player.SetGravityEnabled(true);
     }
 

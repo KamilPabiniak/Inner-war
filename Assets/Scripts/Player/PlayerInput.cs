@@ -21,6 +21,7 @@ public class PlayerInput : PlayerModule
     public bool IsAiming { get; private set; }
     private bool IsSettingsPanelButtonPressed { get; set; }
 
+
     // Events for actions that require immediate reaction
     public event Action OnStartAiming;
     public event Action OnStopAiming;

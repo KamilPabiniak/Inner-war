@@ -8,6 +8,8 @@ public class PlayerFootstepSounds : PlayerModule
     [Header("Audio Settings")]
     public float footstepInterval = 0.5f;
     public GameObject footstepSource;
+    [SerializeField] [Range(0f, 1f)] private float footStepsSound;
+    [SerializeField] [Range(0f, 1f)] private float footStepsSoundOnCrough;
 
     [Serializable]
     public class SurfaceSounds
@@ -16,7 +18,7 @@ public class PlayerFootstepSounds : PlayerModule
         public List<AudioClip> footstepSounds;
     }
 
-    public List<SurfaceSounds> surfaceSoundMappings = new List<SurfaceSounds>();
+    public List<SurfaceSounds> surfaceSoundMappings = new();
     private Transform _footPosition;
     private PlayerMovement _movement;
     private float _nextFootstepTime;
@@ -45,7 +47,14 @@ public class PlayerFootstepSounds : PlayerModule
                 if (surface.footstepSounds.Count > 0)
                 {
                     AudioClip clip = surface.footstepSounds[Random.Range(0, surface.footstepSounds.Count)];
-                    SoundFXManager.Instance.Play3DSoundFXClip(clip, footstepSource.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+                    if (Player.GetModule<PlayerMovement>().GetCrouch())
+                    {
+                        SoundFXManager.Instance.Play3DSoundFXClip(clip, footstepSource.transform, footStepsSoundOnCrough, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+                    }
+                    else
+                    {
+                        SoundFXManager.Instance.Play3DSoundFXClip(clip, footstepSource.transform, footStepsSound, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+                    }
                 }
                 return;
             }
