@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Rock : MonoBehaviour, IInteractable
 {
     public float detectionRadius = 5f; 
-    public AudioClip rockSound;
+    public AudioClip[] rockSound;
 
     // Flag to ensure enemy alert is triggered only once.
     private bool _alertTriggered = false;
@@ -14,7 +14,8 @@ public class Rock : MonoBehaviour, IInteractable
     private void OnCollisionEnter(Collision collision)
     {
         Vector3 impactPosition = transform.position;
-        SoundFXManager.Instance.Play3DSoundFXClip(rockSound, transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
+        int randomSound = Random.Range(0, rockSound.Length);
+        SoundFXManager.Instance.Play3DSoundFXClip(rockSound[randomSound], transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
         
         // If the rock directly hits an enemy, force it to attack.
         NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
