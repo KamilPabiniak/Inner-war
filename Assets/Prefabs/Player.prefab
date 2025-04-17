@@ -267,8 +267,8 @@ GameObject:
   - component: {fileID: 4511191600571463562}
   - component: {fileID: 3224994333188295691}
   - component: {fileID: 676459983098533764}
-  - component: {fileID: 7090547106640871701}
   - component: {fileID: 2438416538683046821}
+  - component: {fileID: 7090547106640871701}
   - component: {fileID: 7343818932019958185}
   - component: {fileID: 5179479191362634091}
   - component: {fileID: 1185043122535811385}
@@ -367,6 +367,7 @@ MonoBehaviour:
   standingHeight: 2
   crouchHeight: 0
   gravity: 12
+  fallDamageThreshold: 10
   state: 0
   characterController: {fileID: 6392378293654077410}
   cameraTransform: {fileID: 4074373934242088296}
@@ -414,17 +415,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footstepInterval: 0.45
   footstepSource: {fileID: 2715986301959049074}
+  footStepsSound: 0
+  footStepsSoundOnCrough: 0
   surfaceSoundMappings:
-  - surfaceName: Brick
-    surfaceLayer:
+  - surfaceLayer:
       serializedVersion: 2
       m_Bits: 128
     footstepSounds:
     - {fileID: 8300000, guid: 44737e645aa918043b3d8cab5d1511bc, type: 3}
     - {fileID: 8300000, guid: 302595b93370c52408825d7fb07d09be, type: 3}
     - {fileID: 8300000, guid: 2bb076cd89fe2a148a76da2a45c910e4, type: 3}
-  - surfaceName: Wood
-    surfaceLayer:
+  - surfaceLayer:
       serializedVersion: 2
       m_Bits: 256
     footstepSounds:
@@ -469,19 +470,11 @@ MonoBehaviour:
   bobbingSpeed: 10
   bobbingStrength: 0.04
   cameraHeight: 0.55
---- !u!114 &7090547106640871701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3528023716618402936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3741ac7db1874fb4f831a14ddb313ad8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionDistance: 3
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  sphereRadius: 0.1
+  collisionBuffer: 0.05
 --- !u!114 &2438416538683046821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,6 +490,24 @@ MonoBehaviour:
   leanAngle: 7.5
   leanOffset: 1
   leanSpeed: 3
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  sphereRadius: 0.1
+  collisionBuffer: 0.05
+--- !u!114 &7090547106640871701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528023716618402936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3741ac7db1874fb4f831a14ddb313ad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionDistance: 3
 --- !u!114 &7343818932019958185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +522,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkpoint: {fileID: 0}
   respawnTime: 3
+  deadEnd: {fileID: 0}
+  deadEoldProjectorSound: {fileID: 0}
 --- !u!114 &5179479191362634091
 MonoBehaviour:
   m_ObjectHideFlags: 0

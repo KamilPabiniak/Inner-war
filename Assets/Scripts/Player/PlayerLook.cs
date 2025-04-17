@@ -1,127 +1,251 @@
 using UnityEngine;
 
-public enum CameraShakeType
-{
-    Perlin,
-    Random,
-    Directional
-}
+public enum CameraShakeType { Perlin, Random, Directional }
 
+[RequireComponent(typeof(Player))]
 public class PlayerLook : PlayerModule
 {
+    [Header("Camera Position & Collision Offset")]
+    [Tooltip("Y = eye height offset; Z = collision push back distance")]
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 0.1f, 0.05f);
+
+    [Header("Follow Settings")]
+    [Tooltip("How quickly the camera follows the target position (higher = snappier)")]
+    [SerializeField] private float cameraFollowSpeed = 5f;
+
     [Header("Mouse Settings")]
-    public float mouseSensitivity = 100f;
-    public float verticalClamp = 85f;
+    [Tooltip("Horizontal and vertical look sensitivity multiplier")]
+    [SerializeField] private float mouseSensitivity = 100f;
+    [Tooltip("Maximum vertical look angle in degrees")]
+    [SerializeField] private float verticalClamp = 85f;
 
     [Header("Camera Bobbing")]
-    public bool enableBobbing = true;
-    public float bobbingSpeed = 10f;
-    public float bobbingStrength = 0.05f;
-    
-    [Header("Camera Settings")]
-    [Tooltip("Base height of the camera relative to the player")]
-    public float cameraHeight = 1.6f;
-    
-    
-    private PlayerInput _input;
-    private float _xRotation;
-    private float _bobbingOffset;
-    private float _bobbingTimer;
-    
-    private Quaternion _leanRotation = Quaternion.identity; 
+    [SerializeField] private bool enableBobbing = true;
+    [Tooltip("Speed of bobbing animation relative to movement speed")]
+    [SerializeField] private float bobbingSpeed = 10f;
+    [Tooltip("Amplitude of bobbing in world units (meters)")]
+    [SerializeField] private float bobbingStrength = 0.05f;
 
-    // Internal state for camera shake
+    [Header("Collision Settings")]
+    [Tooltip("Layers considered for camera collision checks")]
+    [SerializeField] private LayerMask collisionMask;
+    [Tooltip("Radius of the sphere used for collision detection")]
+    [SerializeField] private float sphereRadius = 0.1f;
+
+    [Header("Lean Settings")]
+    [Tooltip("Maximum angle for leaning in degrees")]
+    [SerializeField] private float leanAngle = 15f;
+    [Tooltip("Maximum lateral offset for leaning")]
+    [SerializeField] private float leanOffset = 0.2f;
+    [Tooltip("Speed of lean transition")]
+    [SerializeField] private float leanSpeed = 5f;
+
+    // References & state
+    private PlayerInput _playerInput;
+    private CharacterController _characterController;
+    private Transform _cameraTransform;
+
+    private float _xRotation;
+    private float _bobbingTimer;
+    private float _bobbingOffset;
+
+    private Vector3 _targetLeanPosition;
+    private Quaternion _targetLeanRotation;
+    private Vector3 _currentLeanPosition;
+    private Quaternion _currentLeanRotation;
+
+    // Shake state
     private bool _isShaking;
-    private float _shakeTimer;
-    private float _shakeTotalDuration;
-    private Vector3 _shakeSeed;
-    
+    private float _shakeElapsed;
+    private float _shakeDuration;
     private float _shakeAmplitude;
     private float _shakeFrequency;
     private AnimationCurve _shakeFalloffCurve;
-    private bool _shakePosition;
-    private bool _shakeRotation;
+    private bool _shakePositionEnabled;
+    private bool _shakeRotationEnabled;
     private CameraShakeType _shakeType;
     private Vector3 _shakeDirection;
-
+    private Vector3 _shakeSeed;
 
     private void Start()
     {
-        _input = GetComponent<PlayerInput>();
+        _playerInput = Player.GetModule<PlayerInput>();
+        _characterController = Player.CharacterController;
+
+        // Detach camera for free movement
+        _cameraTransform = Player.cameraTransform;
+        _cameraTransform.SetParent(null, true);
     }
-    
+
     private void Update()
     {
         if (Player.state == Player.State.Walking)
         {
-            HandleLook(_input.LookInput);
-
+            HandleLeanInput();
+            HandleMouseLook();
             if (enableBobbing)
-                HandleCameraBobbing(_input.MoveInput);
+                UpdateHeadBobbing(_playerInput.MoveInput);
         }
         else if (Player.state == Player.State.Climbing)
         {
-            HandleClimbingLook();
+            ResetLookState();
         }
-        
+
         if (_isShaking)
-        {
-            HandleCameraShake();
-        }
+            ProcessCameraShake();
     }
 
-    private void HandleLook(Vector2 lookInput)
+    private void LateUpdate()
     {
+        if (_cameraTransform == null)
+            return;
+
+        // Calculate pivot (eye position)
+        Vector3 pivot = _characterController.transform.position
+                        + _characterController.center
+                        + Vector3.up * cameraOffset.y;
+
+        // Determine world-right based on player yaw
+        Vector3 yawRight = Quaternion.Euler(0f, Player.transform.eulerAngles.y, 0f) * Vector3.right;
+
+        // Dynamic lean clamp
+        float desiredLean = _currentLeanPosition.x;
+        float leanSign = Mathf.Sign(desiredLean);
+        float absLean = Mathf.Abs(desiredLean);
+        float maxLean = absLean;
+
+        if (absLean > 0f)
+        {
+            if (Physics.Raycast(
+                pivot,
+                yawRight * leanSign,
+                out RaycastHit leanHit,
+                absLean + sphereRadius,
+                collisionMask,
+                QueryTriggerInteraction.Ignore))
+            {
+                maxLean = Mathf.Max(0f, leanHit.distance - cameraOffset.z);
+            }
+        }
+        Vector3 leanOffsetVec = yawRight * (maxLean * leanSign);
+
+        // Initial follow target without bobbing
+        Vector3 followTarget = pivot + leanOffsetVec;
+
+        // Camera collision: SphereCast
+        Vector3 dir = followTarget - pivot;
+        float dist = dir.magnitude;
+        Vector3 correctedFollow = followTarget;
+        if (dist > 0f && Physics.SphereCast(
+            pivot,
+            sphereRadius,
+            dir.normalized,
+            out RaycastHit hit,
+            dist,
+            collisionMask,
+            QueryTriggerInteraction.Ignore))
+        {
+            correctedFollow = hit.point + hit.normal * cameraOffset.z;
+        }
+
+        // OverlapSphere fallback
+        Collider[] overlaps = Physics.OverlapSphere(
+            correctedFollow,
+            sphereRadius,
+            collisionMask,
+            QueryTriggerInteraction.Ignore);
+        if (overlaps.Length > 0)
+        {
+            Vector3 push = Vector3.zero;
+            foreach (var col in overlaps)
+            {
+                Vector3 closest = col.ClosestPoint(correctedFollow);
+                float penetration = sphereRadius - Vector3.Distance(closest, correctedFollow);
+                if (penetration > 0f)
+                    push += (correctedFollow - closest).normalized * penetration;
+            }
+            correctedFollow += push;
+        }
+        
+        Vector3 smoothPos = Vector3.Lerp(
+            _cameraTransform.position,
+            correctedFollow,
+            cameraFollowSpeed * Time.deltaTime);
+
+        // Apply bobbing offset in world units
+        _cameraTransform.position = smoothPos + Vector3.up * _bobbingOffset;
+        
+        Quaternion baseRotation = Quaternion.Euler(
+            _xRotation,
+            Player.transform.eulerAngles.y,
+            0f);
+        _cameraTransform.rotation = baseRotation * _currentLeanRotation;
+    }
+
+    private void HandleMouseLook()
+    {
+        Vector2 lookInput = _playerInput.LookInput;
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
 
-        _xRotation -= mouseY;
-        _xRotation = Mathf.Clamp(_xRotation, -verticalClamp, verticalClamp);
-        
-        // Set the basic camera rotation
-        Player.cameraTransform.localRotation = Quaternion.Euler(_xRotation, 0, 0) * _leanRotation;
-        Player.CharacterController.transform.Rotate(Vector3.up * mouseX);
+        _xRotation = Mathf.Clamp(_xRotation - mouseY, -verticalClamp, verticalClamp);
+        Player.transform.Rotate(Vector3.up * mouseX);
     }
 
-    private void HandleCameraBobbing(Vector2 moveInput)
+    private void UpdateHeadBobbing(Vector2 moveInput)
     {
-        if (moveInput.magnitude > 0.1f)
+        float speedFactor = moveInput.magnitude;
+        if (speedFactor > 0f)
         {
-            _bobbingTimer += Time.deltaTime * bobbingSpeed;
-            _bobbingOffset = Mathf.Sin(_bobbingTimer) * bobbingStrength;
+            _bobbingTimer += Time.unscaledDeltaTime * bobbingSpeed;
+            if (_bobbingTimer > Mathf.PI * 2f)
+                _bobbingTimer -= Mathf.PI * 2f;
+
+            _bobbingOffset = Mathf.Sin(_bobbingTimer) * bobbingStrength * Time.unscaledDeltaTime;
         }
         else
         {
-            _bobbingTimer = 0;
-            _bobbingOffset = Mathf.Lerp(_bobbingOffset, 0, Time.deltaTime * bobbingSpeed);
+            _bobbingOffset = Mathf.Lerp(_bobbingOffset, 0f, Time.unscaledDeltaTime * bobbingSpeed);
+        }
+    }
+
+    private void HandleLeanInput()
+    {
+        if (_playerInput.IsLeanLeftPressed)
+        {
+            _targetLeanRotation = Quaternion.Euler(0f, 0f, leanAngle);
+            _targetLeanPosition.x = -leanOffset;
+        }
+        else if (_playerInput.IsLeanRightPressed)
+        {
+            _targetLeanRotation = Quaternion.Euler(0f, 0f, -leanAngle);
+            _targetLeanPosition.x = leanOffset;
+        }
+        else
+        {
+            _targetLeanRotation = Quaternion.identity;
+            _targetLeanPosition.x = 0f;
         }
 
-        Vector3 cameraPosition = Player.cameraTransform.localPosition;
-        cameraPosition.y = cameraHeight + _bobbingOffset;
-        Player.cameraTransform.localPosition = cameraPosition;
-    }
-    
-    private void HandleClimbingLook()
-    {
-        Player.cameraTransform.localRotation = Quaternion.identity;
-        Vector3 cameraPosition = Player.cameraTransform.localPosition;
-        cameraPosition.y = cameraHeight;
-        Player.cameraTransform.localPosition = cameraPosition;
-        _xRotation = 0;
+        _currentLeanRotation = Quaternion.Lerp(
+            _currentLeanRotation,
+            _targetLeanRotation,
+            leanSpeed * Time.deltaTime);
+        _currentLeanPosition = Vector3.Lerp(
+            _currentLeanPosition,
+            _targetLeanPosition,
+            leanSpeed * Time.deltaTime);
     }
 
-    /// <summary>
-    /// Applies additional lean rotation.
-    /// </summary>
-    /// <param name="rotation">Rotation to apply.</param>
-    public void ApplyLeanRotation(Quaternion rotation)
+    private void ResetLookState()
     {
-        _leanRotation = rotation;
+        _xRotation = 0f;
+        _bobbingOffset = 0f;
+
+        _currentLeanRotation = Quaternion.identity;
+        _currentLeanPosition = Vector3.zero;
     }
-    
-    /// <summary>
-    /// Starts the camera shake effect.
-    /// </summary>
+
     public void StartCameraShake(
         float duration,
         float amplitude,
@@ -129,108 +253,81 @@ public class PlayerLook : PlayerModule
         AnimationCurve falloffCurve,
         bool affectPosition,
         bool affectRotation,
-        CameraShakeType shakeType,
-        Vector3 shakeDirection)
+        CameraShakeType type,
+        Vector3 direction)
     {
         _isShaking = true;
-        _shakeTimer = 0f;
-        _shakeTotalDuration = duration;
+        _shakeElapsed = 0f;
+        _shakeDuration = duration;
         _shakeAmplitude = amplitude;
         _shakeFrequency = frequency;
         _shakeFalloffCurve = falloffCurve;
-        _shakePosition = affectPosition;
-        _shakeRotation = affectRotation;
-        _shakeType = shakeType;
-        _shakeDirection = shakeDirection;
-        _shakeSeed = new Vector3(Random.Range(0f, 100f),
-                                Random.Range(0f, 100f),
-                                Random.Range(0f, 100f));
+        _shakePositionEnabled = affectPosition;
+        _shakeRotationEnabled = affectRotation;
+        _shakeType = type;
+        _shakeDirection = direction.normalized;
+        _shakeSeed = new Vector3(
+            Random.value * 100f,
+            Random.value * 100f,
+            Random.value * 100f);
     }
-    
-    /// <summary>
-    /// Updates the camera shake effect by adding offsets to the camera's position and/or rotation.
-    /// </summary>
-    private void HandleCameraShake()
+
+    private void ProcessCameraShake()
     {
-        _shakeTimer += Time.deltaTime;
-        float progress = _shakeTimer / _shakeTotalDuration;
-        float damping = _shakeFalloffCurve.Evaluate(progress);
-        float currentAmplitude = _shakeAmplitude * damping;
-        
-        // Calculate position offset
-        Vector3 shakePosOffset = Vector3.zero;
-        if (_shakePosition)
+        _shakeElapsed += Time.deltaTime;
+        float t = Mathf.Clamp01(_shakeElapsed / _shakeDuration);
+        float damper = _shakeFalloffCurve.Evaluate(t);
+        float currentAmp = _shakeAmplitude * damper;
+
+        Vector3 posOffset = Vector3.zero;
+        Quaternion rotOffset = Quaternion.identity;
+
+        if (_shakePositionEnabled)
         {
             switch (_shakeType)
             {
                 case CameraShakeType.Perlin:
-                    {
-                        float offsetX = (Mathf.PerlinNoise(_shakeSeed.x, Time.time * _shakeFrequency) * 2f - 1f);
-                        float offsetY = (Mathf.PerlinNoise(_shakeSeed.y, Time.time * _shakeFrequency) * 2f - 1f);
-                        float offsetZ = (Mathf.PerlinNoise(_shakeSeed.z, Time.time * _shakeFrequency) * 2f - 1f);
-                        shakePosOffset = new Vector3(offsetX, offsetY, offsetZ) * currentAmplitude;
-                    }
+                    posOffset = new Vector3(
+                        Mathf.PerlinNoise(_shakeSeed.x, Time.time * _shakeFrequency) * 2f - 1f,
+                        Mathf.PerlinNoise(_shakeSeed.y, Time.time * _shakeFrequency) * 2f - 1f,
+                        Mathf.PerlinNoise(_shakeSeed.z, Time.time * _shakeFrequency) * 2f - 1f
+                    ) * currentAmp;
                     break;
                 case CameraShakeType.Random:
-                    {
-                        shakePosOffset = new Vector3(
-                            (Random.value * 2f - 1f),
-                            (Random.value * 2f - 1f),
-                            (Random.value * 2f - 1f)
-                        ) * currentAmplitude;
-                    }
+                    posOffset = Random.insideUnitSphere * currentAmp;
                     break;
                 case CameraShakeType.Directional:
-                    {
-                        // Use shakeDirection modulated by a sine wave for a periodic effect
-                        shakePosOffset = _shakeDirection.normalized * (Mathf.Sin(Time.time * _shakeFrequency) * currentAmplitude);
-                    }
+                    posOffset = _shakeDirection * (Mathf.Sin(Time.time * _shakeFrequency) * currentAmp);
                     break;
             }
         }
-        
-        // Calculate rotation offset
-        Quaternion shakeRot = Quaternion.identity;
-        if (_shakeRotation)
+
+        if (_shakeRotationEnabled)
         {
-            Vector3 shakeRotOffset = Vector3.zero;
+            Vector3 eulerOffset;
             switch (_shakeType)
             {
                 case CameraShakeType.Perlin:
-                    {
-                        float offsetX = (Mathf.PerlinNoise(_shakeSeed.x, Time.time * _shakeFrequency) * 2f - 1f);
-                        float offsetY = (Mathf.PerlinNoise(_shakeSeed.y, Time.time * _shakeFrequency) * 2f - 1f);
-                        float offsetZ = (Mathf.PerlinNoise(_shakeSeed.z, Time.time * _shakeFrequency) * 2f - 1f);
-                        shakeRotOffset = new Vector3(offsetX, offsetY, offsetZ) * currentAmplitude;
-                    }
+                    eulerOffset = new Vector3(
+                        Mathf.PerlinNoise(_shakeSeed.x, Time.time * _shakeFrequency) * 2f - 1f,
+                        Mathf.PerlinNoise(_shakeSeed.y, Time.time * _shakeFrequency) * 2f - 1f,
+                        Mathf.PerlinNoise(_shakeSeed.z, Time.time * _shakeFrequency) * 2f - 1f
+                    ) * currentAmp;
                     break;
                 case CameraShakeType.Random:
-                    {
-                        shakeRotOffset = new Vector3(
-                            (Random.value * 2f - 1f),
-                            (Random.value * 2f - 1f),
-                            (Random.value * 2f - 1f)
-                        ) * currentAmplitude;
-                    }
+                    eulerOffset = Random.insideUnitSphere * currentAmp;
                     break;
-                case CameraShakeType.Directional:
-                    {
-                        // Use shakeDirection modulated by a sine wave for a periodic effect
-                        shakeRotOffset = _shakeDirection.normalized * (Mathf.Sin(Time.time * _shakeFrequency) * currentAmplitude);
-                    }
+                default:
+                    eulerOffset = _shakeDirection * (Mathf.Sin(Time.time * _shakeFrequency) * currentAmp);
                     break;
             }
-            shakeRot = Quaternion.Euler(shakeRotOffset);
+            rotOffset = Quaternion.Euler(eulerOffset);
         }
-        
-        // Apply shake offsets to the camera
-        Player.cameraTransform.localPosition += shakePosOffset;
-        Player.cameraTransform.localRotation *= shakeRot;
-        
-        // End the shake effect when the duration is reached
-        if (_shakeTimer >= _shakeTotalDuration)
-        {
+
+        _cameraTransform.localPosition += posOffset;
+        _cameraTransform.localRotation *= rotOffset;
+
+        if (_shakeElapsed >= _shakeDuration)
             _isShaking = false;
-        }
     }
 }

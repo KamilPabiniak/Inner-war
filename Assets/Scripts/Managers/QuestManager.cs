@@ -1,29 +1,27 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace QuestSystem
 {
     public class QuestManager : MonoBehaviour
     {
         public static QuestManager Instance { get; private set; }
-        [HideInInspector] public List<Quest> quests = new();
-
-        private readonly List<QuestInstance> _questInstances = new();
-
-        [Tooltip("Index of the currently active quest.")]
+        
+        [Tooltip("List of available quests (set in the Inspector)")]
+        public Quest[] quests;
+        
+        [Tooltip("Index of the currently active quest")]
         public int currentQuestIndex = 0;
 
-        public event Action<QuestInstance> OnQuestUpdated;
+        public event Action<Quest> OnQuestUpdated;
 
         private void Awake()
         {
-            // Ensure singleton instance
             if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeQuests();
+                ActivateCurrentQuest();
             }
             else
             {
@@ -31,53 +29,29 @@ namespace QuestSystem
             }
         }
 
-        private void InitializeQuests()
+        private void ActivateCurrentQuest()
         {
-            _questInstances.Clear();
-            foreach (Quest questData in quests)
+            if (currentQuestIndex < quests.Length)
             {
-                if (questData != null)
-                    _questInstances.Add(new QuestInstance(questData));
-            }
-
-            if (_questInstances.Count > 0)
-            {
-                _questInstances[0].State = QuestState.Active;
-                NotifyQuestUpdated(_questInstances[0]);
+                OnQuestUpdated?.Invoke(quests[currentQuestIndex]);
             }
         }
 
-        public QuestInstance GetCurrentQuest()
+        public Quest GetCurrentQuest()
         {
-            if (currentQuestIndex < _questInstances.Count)
-                return _questInstances[currentQuestIndex];
+            if (currentQuestIndex < quests.Length)
+                return quests[currentQuestIndex];
             return null;
         }
 
         public void CompleteCurrentQuest()
         {
-            if (currentQuestIndex < _questInstances.Count)
+            if (currentQuestIndex < quests.Length)
             {
-                _questInstances[currentQuestIndex].State = QuestState.Completed;
-                NotifyQuestUpdated(_questInstances[currentQuestIndex]);
+                Debug.Log("Completed quest: " + quests[currentQuestIndex].questName);
                 currentQuestIndex++;
-
-                if (currentQuestIndex < _questInstances.Count)
-                {
-                    _questInstances[currentQuestIndex].State = QuestState.Active;
-                    NotifyQuestUpdated(_questInstances[currentQuestIndex]);
-                }
+                ActivateCurrentQuest();
             }
-        }
-        
-        private void NotifyQuestUpdated(QuestInstance quest)
-        {
-            OnQuestUpdated?.Invoke(quest);
-        }
-
-        public List<QuestInstance> GetAllQuestInstances()
-        {
-            return _questInstances;
         }
     }
 }

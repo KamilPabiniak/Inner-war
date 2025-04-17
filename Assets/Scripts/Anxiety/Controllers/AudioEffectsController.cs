@@ -53,6 +53,7 @@ public class AudioEffectsController : MonoBehaviour
             onLoop: false,
             audioMixerGroup: SoundFXManager.Instance.VoicesMixer);
         
+        if (!_currentVoices) return;
         StartCoroutine(FadeIn(_currentVoices, voicesFadeInDuration, voicesTargetVolume));
     }
     
@@ -81,6 +82,7 @@ public class AudioEffectsController : MonoBehaviour
             onLoop: true,
             audioMixerGroup: SoundFXManager.Instance.HeartMixer);
 
+        if (!_currentHeart) return;
         StartCoroutine(FadeInHeart(_currentHeart, heartFadeInDuration, heartTargetVolume, targetDrymixEchoOnValue));
     }
     

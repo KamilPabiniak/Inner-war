@@ -38,10 +38,7 @@ public class PlayerMovement : PlayerModule
         }
     }
 
-    public bool GetCrouch()
-    {
-        return _isCrouch;
-    }
+    public bool GetCrouch() => _isCrouch;
 
     public void ForceCrouch()
     {
@@ -82,7 +79,7 @@ public class PlayerMovement : PlayerModule
     private void HandleCrouch()
     {
         _isCrouch = _input.IsCrouchPressed;
-        Player.characterController.height = _input.IsCrouchPressed ? Player.crouchHeight : Player.standingHeight;
+        Player.Instance.ApplyCrouch(_isCrouch);
     }
 
     private void HandleClimbing(Vector2 moveInput)

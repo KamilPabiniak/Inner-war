@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -5,23 +6,19 @@ using UnityEngine;
  public class Player : MonoBehaviour
  { 
      public static Player Instance { get; private set; }
-     [Header("Settings")] 
-     [Tooltip("Wysokość gracza podczas stania.")]
-     public float standingHeight = 2f;
-     [Tooltip("Wysokość gracza podczas kucania.")]
-     public float crouchHeight = 1f;
-     [Tooltip("Przyspieszenie pod grawitacyjne.")]
-     public float gravity = 20f;
-     [Tooltip("Fall threshold (distance in units) beyond which the player takes damage (dies).")]
-     public float fallDamageThreshold = 10f;
+     
+     [Header("Settings")]
+     [Tooltip("Standing height of the player.")]
+     [SerializeField] private float standingHeight = 2f;
+     [Tooltip("Crouch height of the player.")]
+     [SerializeField] private float crouchHeight = 1f;
+     [Tooltip("Gravity acceleration.")]
+     [SerializeField] private float gravity = 20f;
+     [Tooltip("Fall distance threshold causing death.")]
+     [SerializeField] private float fallDamageThreshold = 10f;
 
-     public State state;
-
-    public enum State
-    {
-        Walking,
-        Climbing
-    }
+    public enum State { Walking, Climbing }
+    public State state;
 
     [Header("References")]
     public CharacterController characterController;
@@ -60,6 +57,7 @@ using UnityEngine;
     private void Start()
     {
         Input = GetModule<PlayerInput>();
+        ApplyHeight(standingHeight);
     }
     
     private void OnEnable()
@@ -92,6 +90,11 @@ using UnityEngine;
             Debug.LogError($"Module of type {typeof(T).Name} not found!");
         return module;
     }
+
+    private void ApplyHeight(float newHeight) => characterController.height = newHeight;
+
+    public void ApplyCrouch(bool isCrouching)
+        => ApplyHeight(isCrouching ? crouchHeight : standingHeight);
 
     private void StartPlay()
     {

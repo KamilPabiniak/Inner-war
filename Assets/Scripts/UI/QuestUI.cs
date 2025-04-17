@@ -11,23 +11,25 @@ namespace QuestSystem
         private void Start()
         {
             if (QuestManager.Instance != null)
+            {
                 QuestManager.Instance.OnQuestUpdated += UpdateQuestUI;
-
-            QuestInstance currentQuest = QuestManager.Instance?.GetCurrentQuest();
-            if (currentQuest != null)
-                UpdateQuestUI(currentQuest);
+                // Initialize quest UI with the current quest
+                Quest currentQuest = QuestManager.Instance.GetCurrentQuest();
+                if (currentQuest != null)
+                    UpdateQuestUI(currentQuest);
+            }
         }
 
-        private void UpdateQuestUI(QuestInstance quest)
+        private void UpdateQuestUI(Quest quest)
         {
-            if (quest.State == QuestState.Active)
+            if (quest != null)
             {
-                questTitleText.text = quest.Data.questName;
-                questDescriptionText.text = quest.Data.description;
+                questTitleText.text = quest.questName;
+                questDescriptionText.text = quest.description;
             }
-            else if (quest.State == QuestState.Completed)
+            else
             {
-                questTitleText.text = quest.Data.questName + " - COMPLETED";
+                questTitleText.text = "No active quest";
                 questDescriptionText.text = "";
             }
         }

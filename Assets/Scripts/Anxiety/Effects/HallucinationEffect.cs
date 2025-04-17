@@ -14,7 +14,8 @@ namespace Anxiety.Effects
 
         protected override void EndEffect()
         {
-            _currentParticle.GetComponent<ParticleSystem>().Stop();
+            if (_currentParticle != null) 
+                _currentParticle.GetComponent<ParticleSystem>().Stop();
         }
     }
 }

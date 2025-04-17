@@ -4,15 +4,15 @@ namespace QuestSystem
 {
     public class QuestInteractable : MonoBehaviour, IInteractable
     {
-        [Tooltip("The Quest ID associated with this interactable object.")]
+        // Optional: used to validate if this interactable is for the current quest
         public string associatedQuestID;
 
         public void Interact(Player player)
         {
-            QuestInstance currentQuest = QuestManager.Instance.GetCurrentQuest();
-            if (currentQuest != null && currentQuest.Data.questID == associatedQuestID)
+            Quest currentQuest = QuestManager.Instance.GetCurrentQuest();
+            if (currentQuest != null && currentQuest.questID == associatedQuestID)
             {
-                Debug.Log("Completed quest: " + currentQuest.Data.questName);
+                Debug.Log("Completed quest: " + currentQuest.questName);
                 QuestManager.Instance.CompleteCurrentQuest();
             }
         }

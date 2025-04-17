@@ -26,13 +26,6 @@ namespace Anxiety.Controllers
             _irregularMovementRoutine = StartCoroutine(ApplyIrregularMovement(duration, minSpeedMultiplier, maxSpeedMultiplier));
         }
     
-        public void ExecuteStopMovementEffect(float duration)
-        {
-            if (_stopMovementRoutine != null)
-                StopCoroutine(_stopMovementRoutine);
-            _stopMovementRoutine = StartCoroutine(ApplyStopMovement(duration));
-        }
-    
         public void ExecuteAutoCrouchEffect(float duration)
         {
             if (_autoCrouchRoutine != null)
@@ -47,23 +40,14 @@ namespace Anxiety.Controllers
             yield return new WaitForSeconds(duration);
             _playerMovement.moveSpeed = _originalSpeed;
         }
-
-        private IEnumerator ApplyStopMovement(float duration)
-        {
-            _playerMovement.moveSpeed = 0f;
-            yield return new WaitForSeconds(duration);
-            _playerMovement.moveSpeed = _originalSpeed;
-        }
     
         private IEnumerator ApplyAutoCrouch(float duration)
         {
-            float originalHeight = Player.Instance.standingHeight;
-            _playerMovement.ForceCrouch();
-            Player.Instance.characterController.height = Player.Instance.crouchHeight;
+            Player.Instance.ApplyCrouch(true);
+            Player.Instance.GetModule<PlayerMovement>().ForceCrouch();
             yield return new WaitForSeconds(duration);
-        
-            _playerMovement.DisableForceCrouch();
-            Player.Instance.characterController.height = originalHeight;
+            Player.Instance.GetModule<PlayerMovement>().DisableForceCrouch();
+            Player.Instance.ApplyCrouch(false);
         }
     }
 }
