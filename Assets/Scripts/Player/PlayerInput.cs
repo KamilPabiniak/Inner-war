@@ -14,6 +14,7 @@ public class PlayerInput : PlayerModule
     // Button states (polled)
     public bool IsVaultPressed { get; private set; }
     public bool IsCrouchPressed { get; private set; }
+    public bool ToggleCrouchMode { get; set; } = false; //Crouch mode
     public bool IsInteractPressed { get; internal set; }
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }
@@ -39,6 +40,8 @@ public class PlayerInput : PlayerModule
     // Reset methods if needed
     public void ResetVaultRequest() => IsVaultPressed = false;
     public void ResetSettingsButtonPressed() => IsSettingsPanelButtonPressed = false;
+    
+    public void ResetCrouchState() => IsCrouchPressed = false;
     
     private void LateUpdate()
     {
@@ -85,8 +88,18 @@ public class PlayerInput : PlayerModule
 
         public void OnCrouch(InputAction.CallbackContext context)
         {
-            _playerInput.IsCrouchPressed = context.ReadValueAsButton();
+            if (_playerInput.ToggleCrouchMode)
+            {
+                if (context.phase == InputActionPhase.Started)
+                    _playerInput.IsCrouchPressed = !_playerInput.IsCrouchPressed;
+            }
+            else
+            {
+                _playerInput.IsCrouchPressed = context.ReadValueAsButton();
+            }
         }
+
+
 
         public void OnInteract(InputAction.CallbackContext context)
         {

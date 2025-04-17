@@ -7,7 +7,7 @@ public class PlayerLook : PlayerModule
 {
     [Header("Camera Position & Collision Offset")]
     [Tooltip("Y = eye height offset; Z = collision push back distance")]
-    [SerializeField] private Vector3 cameraOffset = new Vector3(0f, 0.1f, 0.05f);
+    [SerializeField] private Vector3 cameraOffset = new(0f, 0.1f, 0.05f);
 
     [Header("Follow Settings")]
     [Tooltip("How quickly the camera follows the target position (higher = snappier)")]
@@ -180,6 +180,12 @@ public class PlayerLook : PlayerModule
             Player.transform.eulerAngles.y,
             0f);
         _cameraTransform.rotation = baseRotation * _currentLeanRotation;
+    }
+    
+    public float MouseSensitivity
+    {
+        get => mouseSensitivity;
+        set => mouseSensitivity = value;
     }
 
     private void HandleMouseLook()
