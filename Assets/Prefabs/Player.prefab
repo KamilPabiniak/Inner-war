@@ -267,7 +267,6 @@ GameObject:
   - component: {fileID: 4511191600571463562}
   - component: {fileID: 3224994333188295691}
   - component: {fileID: 676459983098533764}
-  - component: {fileID: 2438416538683046821}
   - component: {fileID: 7090547106640871701}
   - component: {fileID: 7343818932019958185}
   - component: {fileID: 5179479191362634091}
@@ -464,37 +463,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b37a04e70b61646b696e44fff6bd20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraOffset: {x: 0, y: 0.1, z: 0.05}
+  cameraFollowSpeed: 5
   mouseSensitivity: 20
   verticalClamp: 80
   enableBobbing: 1
   bobbingSpeed: 10
   bobbingStrength: 0.04
-  cameraHeight: 0.55
   collisionMask:
     serializedVersion: 2
     m_Bits: 0
   sphereRadius: 0.1
-  collisionBuffer: 0.05
---- !u!114 &2438416538683046821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3528023716618402936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1520c36c8bc301b4aab5ded8132e9a3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leanAngle: 7.5
-  leanOffset: 1
-  leanSpeed: 3
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  sphereRadius: 0.1
-  collisionBuffer: 0.05
+  leanAngle: 15
+  leanOffset: 0.2
+  leanSpeed: 5
 --- !u!114 &7090547106640871701
 MonoBehaviour:
   m_ObjectHideFlags: 0

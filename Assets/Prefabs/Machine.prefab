@@ -1142,7 +1142,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7601634890967749561}
   - component: {fileID: 4062520734321915679}
-  - component: {fileID: 3505779425706273977}
   - component: {fileID: 4366536721842437855}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
@@ -1198,7 +1197,7 @@ MonoBehaviour:
   killTrigger: {fileID: 2830206736435647578}
   detectionMark: {fileID: 6020800960388234555}
   patrolRange: 10
-  minPatrolPointDistance: 1.5
+  minPatrolPointDistance: 3
   waitTimeAtPatrolPoint: 6
   detectionValueNeededToMoveToTarget: 15
   maxInvestigationTimeAfterLoseSight: 6
@@ -1206,66 +1205,54 @@ MonoBehaviour:
   attackSpeedMultiplier: 8
   waitingAfterAttack: 6
   sightTarget: {fileID: 3243088900989205589}
-  headRotationSpeed: 0.11
-  stopPoints: 3
-  stopDuration: 0.8
-  maxOffsetDistance: 3
-  headDetectionDistance: 5
-  mainDetectionDistance: 6
-  sideDetectionDistance: 4
-  rayOriginHeight: 1.5
-  sideRayAngleOffset: 30
-  additionalRaycastAngleOffset: 20
---- !u!114 &3505779425706273977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c342a3d4cd93047a29af4adcad859c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  lightComponent: {fileID: 3129667736519373146}
   targetMask:
     serializedVersion: 2
-    m_Bits: 1024
-  detectionIncreaseRate: 4
-  detectionDecreaseRate: 30
-  detectionThreshold: 1
+    m_Bits: 64
+  detectionIncreaseRate: 10
+  detectionDecreaseRate: 5
+  detectionThreshold: 0.1
   distanceEffectMultiplier:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.7
-      inSlope: -0.029791763
-      outSlope: -0.029791763
+      value: 1
+      inSlope: 0
+      outSlope: -0.09
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.25
+      outWeight: 0
     - serializedVersion: 3
       time: 10
-      value: 0.5
-      inSlope: -0.07336555
-      outSlope: -0.07336555
+      value: 0.1
+      inSlope: -0.09
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.06472359
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  headRotationSpeed: 0.11
+  stopPoints: 3
+  stopDuration: 0.8
+  maxOffsetDistance: 3
+  headDetectionDistance: 5
+  mainDetectionDistance: 4
+  sideDetectionDistance: 2
+  rayOriginHeight: 1.5
+  sideRayAngleOffset: 30
+  additionalRaycastAngleOffset: 20
   debugFOV: 1
-  fovColor: {r: 1, g: 0.88550186, b: 0, a: 1}
+  debugWallRays: 1
+  fovColor: {r: 0, g: 1, b: 0, a: 1}
   detectionColor: {r: 1, g: 0, b: 0, a: 1}
   debugRays: 1
   rayHitColor: {r: 0, g: 1, b: 0, a: 1}
   rayMissColor: {r: 1, g: 0, b: 0, a: 1}
-  mEnemy: {fileID: 4062520734321915679}
-  lightComponent: {fileID: 3129667736519373146}
 --- !u!114 &4366536721842437855
 MonoBehaviour:
   m_ObjectHideFlags: 0

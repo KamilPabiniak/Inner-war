@@ -11,7 +11,7 @@ namespace Enemy
     
         [Header("General Settings")]
         public NavMeshAgent navMeshAgent;
-        public Transform Player { get; private set; }
+        public Transform Target { get; private set; }
         [Range(0f, 100f)] // Detection here
         public float detectionProgress;
         public bool seeTarget;
@@ -115,7 +115,7 @@ namespace Enemy
         
         public void SetTarget(Transform target)
         {
-            Player = target;
+            Target = target;
 
             seeTarget = target != null;
         }
@@ -154,11 +154,11 @@ namespace Enemy
     
         public bool IsTargetInNavMesh(out NavMeshHit hit)
         {
-            if (Player != null)
+            if (Target != null)
             {
-                bool isOnNavMesh = NavMesh.SamplePosition(Player.position, out hit, 1f, NavMesh.AllAreas);
+                bool isOnNavMesh = NavMesh.SamplePosition(Target.position, out hit, 1f, NavMesh.AllAreas);
                 // Jeśli SamplePosition znalazło punkt, ale odległość jest większa niż próg, zwróć false
-                if (isOnNavMesh && Vector3.Distance(Player.position, hit.position) < 1f)
+                if (isOnNavMesh && Vector3.Distance(Target.position, hit.position) < 1f)
                 {
                     return true;
                 }
@@ -170,9 +170,9 @@ namespace Enemy
     
         public void FacePlayer()
         {
-            if (Player == null) return;
+            if (Target == null) return;
             
-            Vector3 direction = (Player.position - transform.position).normalized;
+            Vector3 direction = (Target.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationMultiplier);
         }
@@ -200,7 +200,7 @@ namespace Enemy
         [ContextMenu("Investigate")]
         public void ForceInvestigate()
         {
-            Transform target = Player.GameObject().gameObject.transform;
+            Transform target = Target.GameObject().gameObject.transform;
             SetTarget(target);
             OnAlertReceived(target.position);
         }
@@ -208,7 +208,7 @@ namespace Enemy
         [ContextMenu("Attack")]
         public void ForceAttack()
         {
-            Transform target = Player.GameObject().gameObject.transform;
+            Transform target = Target.GameObject().gameObject.transform;
             OnAttackCommandReceived(target);
         }
     }

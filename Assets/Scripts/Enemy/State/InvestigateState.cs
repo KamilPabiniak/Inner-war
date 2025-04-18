@@ -27,10 +27,10 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBase enemy)
         {
-            if (enemy.Player != null && enemy.seeTarget)
+            if (enemy.Target != null && enemy.seeTarget)
             {
                 _lostSightTimer = 0f;
-                _lastKnownPosition = enemy.Player.position;
+                _lastKnownPosition = enemy.Target.position;
 
                 if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
                 {
