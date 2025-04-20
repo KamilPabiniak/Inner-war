@@ -27,20 +27,20 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBase enemy)
         {
-            if (enemy.Target != null && enemy.seeTarget)
+            if (enemy.Target != null && enemy.SeeTarget)
             {
                 _lostSightTimer = 0f;
                 _lastKnownPosition = enemy.Target.position;
 
                 if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
                 {
-                    if (!enemy.canMove || !(enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)) return;
-                    enemy.FacePlayer();
+                    if (!enemy.canMove || !(enemy.DetectionProgress > enemy.detectionValueNeededToMoveToTarget)) return;
+                    enemy.FaceTarget();
                     enemy.navMeshAgent.SetDestination(hit.position);
                 }
                 else
                 {
-                    enemy.FacePlayer();
+                    enemy.FaceTarget();
                 }
             }
             else
@@ -50,7 +50,7 @@ namespace Enemy.State
                 if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
                 {
                     if (!enemy.IsTargetInNavMesh(out NavMeshHit hit)) return;
-                    if (enemy.canMove && enemy.detectionProgress > enemy.detectionValueNeededToMoveToTarget)
+                    if (enemy.canMove && enemy.DetectionProgress > enemy.detectionValueNeededToMoveToTarget)
                     {
                         enemy.navMeshAgent.SetDestination(_lastKnownPosition);
                     }

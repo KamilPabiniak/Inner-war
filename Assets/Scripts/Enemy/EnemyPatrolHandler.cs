@@ -1,83 +1,53 @@
 using System.Collections.Generic;
-using Enemy;
 using UnityEngine;
 using UnityEngine.AI;
 
-public static class EnemyPatrolHandler
+namespace Enemy
 {
-    private static readonly List<EnemyBase> RegisteredEnemies = new();
-    private static readonly List<Vector3> OccupiedPatrolPoints = new();
-    
-    public static void RegisterEnemy(EnemyBase enemy)
+    public static class EnemyPatrolHandler
     {
-        if (!RegisteredEnemies.Contains(enemy))
-        {
-            RegisteredEnemies.Add(enemy);
-        }
-    }
+        private static readonly List<EnemyBase> Registered = new();
+        private static readonly List<Vector3> Occupied = new();
 
-    public static void UnregisterEnemy(EnemyBase enemy)
-    {
-        if (RegisteredEnemies.Contains(enemy))
-        {
-            RegisteredEnemies.Remove(enemy);
-        }
-    }
-    
-    public static Vector3 GetPatrolPoint(EnemyBase enemy)
-    {
-        return GetPatrolPoint(enemy.transform.position, enemy.PatrolRange, enemy.MinPatrolPointDistance);
-    }
+        public static void RegisterEnemy(EnemyBase e) { if (!Registered.Contains(e)) Registered.Add(e); }
+        public static void UnregisterEnemy(EnemyBase e) { Registered.Remove(e); }
 
-    private static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDistance)
-    {
-        NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();
-        int maxAttempts = 5;
-        for (int attempt = 0; attempt < maxAttempts; attempt++)
-        {
-            int triangleIndex = Random.Range(0, navMeshData.indices.Length / 3) * 3;
-            Vector3 vertex1 = navMeshData.vertices[navMeshData.indices[triangleIndex]];
-            Vector3 vertex2 = navMeshData.vertices[navMeshData.indices[triangleIndex + 1]];
-            Vector3 vertex3 = navMeshData.vertices[navMeshData.indices[triangleIndex + 2]];
-            Vector3 randomPoint = GetRandomPointInTriangle(vertex1, vertex2, vertex3);
+        public static Vector3 GetPatrolPoint(EnemyBase e) =>
+            GetPatrolPoint(e.transform.position, EnemyBase.PatrolRange, EnemyBase.MinPatrolPointDistance);
 
-            if (Vector3.Distance(origin, randomPoint) <= range && IsPointValid(randomPoint, minDistance))
+        private static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
+        {
+            var nav = NavMesh.CalculateTriangulation();
+            for (int i = 0; i < 5; i++)
             {
-                OccupiedPatrolPoints.Add(randomPoint);
-                return randomPoint;
+                int t = Random.Range(0, nav.indices.Length / 3) * 3;
+                var v1 = nav.vertices[nav.indices[t]];
+                var v2 = nav.vertices[nav.indices[t + 1]];
+                var v3 = nav.vertices[nav.indices[t + 2]];
+                Vector3 p = RandomPointInTriangle(v1, v2, v3);
+                if (Vector3.Distance(origin, p) <= range && IsValid(p, minDist))
+                {
+                    Occupied.Add(p);
+                    return p;
+                }
             }
+            return origin;
         }
-        return origin;
-    }
 
-    public static bool IsPointValid(Vector3 point, float minDistance)
-    {
-        foreach (var occupiedPoint in OccupiedPatrolPoints)
+        private static Vector3 RandomPointInTriangle(Vector3 a, Vector3 b, Vector3 c)
         {
-            if (Vector3.Distance(point, occupiedPoint) < minDistance)
-                return false;
+            float u = Random.value, v = Random.value;
+            if (u + v > 1f) { u = 1 - u; v = 1 - v; }
+            return u * a + v * b + (1 - u - v) * c;
         }
-        return true;
-    }
 
-    private static Vector3 GetRandomPointInTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
-    {
-        float a = Random.value;
-        float b = Random.value;
-        if (a + b > 1f)
+        private static bool IsValid(Vector3 p, float minDist)
         {
-            a = 1f - a;
-            b = 1f - b;
+            foreach (var o in Occupied)
+                if (Vector3.Distance(o, p) < minDist) return false;
+            return true;
         }
-        float c = 1f - a - b;
-        return a * v1 + b * v2 + c * v3;
-    }
 
-    public static void ReleasePatrolPoint(Vector3 point)
-    {
-        if (OccupiedPatrolPoints.Contains(point))
-        {
-            OccupiedPatrolPoints.Remove(point);
-        }
+        public static void ReleasePatrolPoint(Vector3 p) => Occupied.Remove(p);
     }
 }

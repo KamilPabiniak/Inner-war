@@ -1,5 +1,4 @@
 using Anxiety;
-using Enemy.Type;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,17 +12,11 @@ namespace Enemy.State
         private float _originalSpeed;
     
         //Machine specific
-        private MachineEnemy _machineEnemy;
         private bool _isOverloading;
         private float _lostSightTimer;
 
         public void EnterState(EnemyBase enemy)
         {
-            if (enemy is MachineEnemy machineEnemy)
-            {
-                _machineEnemy = machineEnemy;
-            }
-        
             _enemyBase = enemy;
             enemy.sound.PlayAttackSound();
             enemy.SetStateChangeLock(true); 
@@ -43,8 +36,8 @@ namespace Enemy.State
         {
             if (_isOverloading)
             {
-                _machineEnemy.waitingAfterAttack -= Time.deltaTime;
-                if (_machineEnemy.waitingAfterAttack <= 0f)
+                enemy.waitingAfterAttack -= Time.deltaTime;
+                if (enemy.waitingAfterAttack <= 0f)
                 {
                     Debug.Log($"[{enemy.name}] Przeciążenie zakończone. Wracam do patrolowania.");
                     enemy.ChangeState(new PatrolState());
@@ -72,7 +65,7 @@ namespace Enemy.State
             {
                 Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
                 enemy.SetStateChangeLock(false); 
-                enemy.FacePlayer();
+                enemy.FaceTarget();
                 return;
             }
     

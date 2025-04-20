@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Enemy.Type;
 
 namespace Enemy.State
 {
@@ -51,7 +50,7 @@ namespace Enemy.State
             {
                 // Start waiting and release current patrol point
                 _isWaiting = true;
-                _waitTimer = enemy.waitTimeAtPatrolPoint;
+                _waitTimer = EnemyBase.WaitTimeAtPatrolPoint;
 
                 if (_patrolPoint != Vector3.zero)
                 {
@@ -81,7 +80,7 @@ namespace Enemy.State
 
             _patrolPoint = enemy.RequestPatrolPoint();
 
-            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemy.patrolRange, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, EnemyBase.PatrolRange, NavMesh.AllAreas))
             {
                 _patrolPoint = hit.position;
                 //Debug.Log($"New patrol point set at: {_patrolPoint}");
@@ -98,18 +97,11 @@ namespace Enemy.State
         /// </summary>
         private bool IsObjectInFront(EnemyBase enemy)
         {
-            float mainDetectionDistance = 6f;
-            float sideDetectionDistance = 4f;
-            float rayOriginHeight = 1.5f;
-            float sideRayAngleOffset = 30f;
+            var mainDetectionDistance = enemy.mainDetectionDistance;
+            var sideDetectionDistance = enemy.sideDetectionDistance;
+            var rayOriginHeight = enemy.rayOriginHeight;
+            var sideRayAngleOffset = enemy.sideRayAngleOffset;
             
-            if (enemy is MachineEnemy machineEnemy)
-            {
-                mainDetectionDistance = machineEnemy.mainDetectionDistance;
-                sideDetectionDistance = machineEnemy.sideDetectionDistance;
-                rayOriginHeight = machineEnemy.rayOriginHeight;
-                sideRayAngleOffset = machineEnemy.sideRayAngleOffset;
-            }
 
             var transform = enemy.transform;
             Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
@@ -149,22 +141,14 @@ namespace Enemy.State
         /// </summary>
         private void TurnTowardsFreeSpace(EnemyBase enemy)
         {
-            // Use settings from MachineEnemy if available; otherwise, default values.
-            float mainDetectionDistance = 6f;
-            float sideDetectionDistance = 4f;
-            float rayOriginHeight = 1.5f;
-            float angleRange = 60f;
-            float angleStep = 15f;
-            float sideRayAngleOffset = 30f; // default side ray angle
-
-            MachineEnemy machineEnemy = enemy as MachineEnemy;
-            if (machineEnemy != null)
-            {
-                mainDetectionDistance = machineEnemy.mainDetectionDistance;
-                sideDetectionDistance = machineEnemy.sideDetectionDistance;
-                rayOriginHeight = machineEnemy.rayOriginHeight;
-                sideRayAngleOffset = machineEnemy.sideRayAngleOffset;
-            }
+            const float angleRange = 60f;
+            const float angleStep = 15f;
+            
+            var mainDetectionDistance = enemy.mainDetectionDistance;
+            var sideDetectionDistance = enemy.sideDetectionDistance;
+            var rayOriginHeight = enemy.rayOriginHeight;
+            var sideRayAngleOffset = enemy.sideRayAngleOffset;
+            
 
             var transform = enemy.transform;
             Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
@@ -225,17 +209,14 @@ namespace Enemy.State
                 candidateDirections.Add(rotation * enemy.transform.forward);
             }
             
-            // For MachineEnemy add additional candidate directions.
-            if (machineEnemy != null)
-            {
-                var forward1 = enemy.transform.forward;
-                Vector3 extraRightDir = Quaternion.Euler(0, machineEnemy.additionalRaycastAngleOffset, 0) * forward1;
-                Vector3 extraLeftDir = Quaternion.Euler(0, -machineEnemy.additionalRaycastAngleOffset, 0) * forward1;
-                candidateDirections.Add(extraRightDir);
-                candidateDirections.Add(extraLeftDir);
-                Debug.DrawRay(origin, extraRightDir * mainDetectionDistance, Color.cyan, 0.0f);
-                Debug.DrawRay(origin, extraLeftDir * mainDetectionDistance, Color.cyan, 0.0f);
-            }
+            var forward1 = enemy.transform.forward;
+            Vector3 extraRightDir = Quaternion.Euler(0, enemy.additionalRaycastAngleOffset, 0) * forward1;
+            Vector3 extraLeftDir = Quaternion.Euler(0, -enemy.additionalRaycastAngleOffset, 0) * forward1;
+            candidateDirections.Add(extraRightDir);
+            candidateDirections.Add(extraLeftDir);
+            Debug.DrawRay(origin, extraRightDir * mainDetectionDistance, Color.cyan, 0.0f);
+            Debug.DrawRay(origin, extraLeftDir * mainDetectionDistance, Color.cyan, 0.0f);
+            
             
             // Choose free candidates.
             List<Vector3> freeCandidates = new List<Vector3>();
@@ -290,17 +271,16 @@ namespace Enemy.State
         // Head rotation methods for MachineEnemy types
         private void StartHeadRotation(EnemyBase enemy)
         {
-            if (enemy is not MachineEnemy machineEnemy) return;
-            _headRotationCoroutine ??= enemy.StartCoroutine(HeadRotationRoutine(machineEnemy));
+            _headRotationCoroutine ??= enemy.StartCoroutine(HeadRotationRoutine(enemy));
         }
 
-        private IEnumerator HeadRotationRoutine(MachineEnemy machineEnemy)
+        private IEnumerator HeadRotationRoutine(EnemyBase enemy)
         {
-            float maxDistance = machineEnemy.maxOffsetDistance;
-            int stopPoints = machineEnemy.stopPoints;
-            float stopDuration = machineEnemy.stopDuration;
-            float headRotationSpeed = machineEnemy.headRotationSpeed;
-            float headDetectionDistance = machineEnemy.headDetectionDistance;
+            float maxDistance = enemy.maxOffsetDistance;
+            int stopPoints = enemy.stopPoints;
+            float stopDuration = enemy.stopDuration;
+            float headRotationSpeed = enemy.headRotationSpeed;
+            float headDetectionDistance = enemy.headDetectionDistance;
 
             List<Vector3> movementOffsets = new List<Vector3>();
             for (int i = 0; i < stopPoints; i++)
@@ -324,24 +304,24 @@ namespace Enemy.State
                     yield break;
                 }
 
-                Vector3 targetLocalPosition = machineEnemy.OriginalHeadPos + movementOffsets[_lastHeadPositionIndex];
+                Vector3 targetLocalPosition = enemy.OriginalHeadPos + movementOffsets[_lastHeadPositionIndex];
                 float elapsedTime = 0f;
-                Vector3 startLocalPosition = machineEnemy.sightTarget.transform.localPosition;
+                Vector3 startLocalPosition = enemy.sightTarget.transform.localPosition;
                 float transitionDuration = headRotationSpeed;
 
                 while (elapsedTime < transitionDuration)
                 {
                     elapsedTime += Time.deltaTime;
                     float t = Mathf.SmoothStep(0f, 1f, elapsedTime / transitionDuration);
-                    machineEnemy.sightTarget.transform.localPosition = Vector3.Lerp(startLocalPosition, targetLocalPosition, t);
+                    enemy.sightTarget.transform.localPosition = Vector3.Lerp(startLocalPosition, targetLocalPosition, t);
                     yield return null;
                 }
 
-                machineEnemy.sightTarget.transform.localPosition = targetLocalPosition;
+                enemy.sightTarget.transform.localPosition = targetLocalPosition;
 
                 // Check if head is facing an object within the specified detection distance
-                Vector3 headWorldPos = machineEnemy.sightTarget.transform.position;
-                Vector3 headForward = machineEnemy.sightTarget.transform.forward;
+                Vector3 headWorldPos = enemy.sightTarget.transform.position;
+                Vector3 headForward = enemy.sightTarget.transform.forward;
                 bool headHit = Physics.Raycast(headWorldPos, headForward, headDetectionDistance);
                 Debug.DrawRay(headWorldPos, headForward * headDetectionDistance, headHit ? Color.magenta : Color.cyan, 0.0f);
                 
@@ -361,31 +341,28 @@ namespace Enemy.State
 
         private void ResetHeadRotation(EnemyBase enemy)
         {
-            if (enemy is MachineEnemy machineEnemy)
+            if (_headRotationCoroutine != null)
             {
-                if (_headRotationCoroutine != null)
-                {
-                    enemy.StopCoroutine(_headRotationCoroutine);
-                    _headRotationCoroutine = null;
-                }
-                enemy.StartCoroutine(SmoothResetPosition(machineEnemy));
+                enemy.StopCoroutine(_headRotationCoroutine);
+                _headRotationCoroutine = null;
             }
+            enemy.StartCoroutine(SmoothResetPosition(enemy));
         }
 
-        private IEnumerator SmoothResetPosition(MachineEnemy machineEnemy)
+        private IEnumerator SmoothResetPosition(EnemyBase enemy)
         {
-            float duration = machineEnemy.headRotationSpeed;
-            Vector3 startPosition = machineEnemy.sightTarget.transform.localPosition;
+            float duration = enemy.headRotationSpeed;
+            Vector3 startPosition = enemy.sightTarget.transform.localPosition;
             float elapsedTime = 0f;
 
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime;
                 float t = Mathf.SmoothStep(0f, 1f, elapsedTime / duration);
-                machineEnemy.sightTarget.transform.localPosition = Vector3.Lerp(startPosition, machineEnemy.OriginalHeadPos, t);
+                enemy.sightTarget.transform.localPosition = Vector3.Lerp(startPosition, enemy.OriginalHeadPos, t);
                 yield return null;
             }
-            machineEnemy.sightTarget.transform.localPosition = machineEnemy.OriginalHeadPos;
+            enemy.sightTarget.transform.localPosition = enemy.OriginalHeadPos;
         }
     }
 }

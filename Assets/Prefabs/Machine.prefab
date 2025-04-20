@@ -980,9 +980,9 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
-  m_Height: 2
-  m_Direction: 1
+  m_Radius: 0.5
+  m_Height: 2.3
+  m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2716433088659916575
 GameObject:
@@ -1141,7 +1141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7601634890967749561}
-  - component: {fileID: 4062520734321915679}
+  - component: {fileID: 5535685749611436939}
   - component: {fileID: 4366536721842437855}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
@@ -1174,7 +1174,7 @@ Transform:
   - {fileID: 2196716422450454385}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4062520734321915679
+--- !u!114 &5535685749611436939
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1183,28 +1183,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3247145216075624242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa629ccb90a20d44d9fc764dda65b618, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a6cf7a2c2192cd4f82a3950c3c0512c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshAgent: {fileID: 8826511624185513472}
-  detectionProgress: 0
-  seeTarget: 0
+  sound: {fileID: 4366536721842437855}
+  detectionMark: {fileID: 6020800960388234555}
   canKill: 1
-  killRadius: 1.2
   canMove: 1
   rotationMultiplier: 5
-  sound: {fileID: 4366536721842437855}
-  killTrigger: {fileID: 2830206736435647578}
-  detectionMark: {fileID: 6020800960388234555}
-  patrolRange: 10
-  minPatrolPointDistance: 3
-  waitTimeAtPatrolPoint: 6
-  detectionValueNeededToMoveToTarget: 15
-  maxInvestigationTimeAfterLoseSight: 6
-  attackDuration: 12
-  attackSpeedMultiplier: 8
-  waitingAfterAttack: 6
-  sightTarget: {fileID: 3243088900989205589}
+  detectionProgress: 0
+  sightTarget: {fileID: 7780040305857791367}
   lightComponent: {fileID: 3129667736519373146}
   targetMask:
     serializedVersion: 2
@@ -1212,7 +1200,7 @@ MonoBehaviour:
   detectionIncreaseRate: 10
   detectionDecreaseRate: 5
   detectionThreshold: 0.1
-  distanceEffectMultiplier:
+  distanceMultiplier:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1236,23 +1224,27 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  headRotationSpeed: 0.11
+  headRotationSpeed: 1
   stopPoints: 3
-  stopDuration: 0.8
+  stopDuration: 0.5
   maxOffsetDistance: 3
   headDetectionDistance: 5
-  mainDetectionDistance: 4
-  sideDetectionDistance: 2
+  mainDetectionDistance: 6
+  sideDetectionDistance: 4
   rayOriginHeight: 1.5
   sideRayAngleOffset: 30
   additionalRaycastAngleOffset: 20
   debugFOV: 1
   debugWallRays: 1
-  fovColor: {r: 0, g: 1, b: 0, a: 1}
-  detectionColor: {r: 1, g: 0, b: 0, a: 1}
   debugRays: 1
+  fovColor: {r: 0, g: 1, b: 0, a: 1}
   rayHitColor: {r: 0, g: 1, b: 0, a: 1}
   rayMissColor: {r: 1, g: 0, b: 0, a: 1}
+  detectionValueNeededToMoveToTarget: 25
+  maxInvestigationTimeAfterLoseSight: 10
+  attackDuration: 5
+  attackSpeedMultiplier: 1.5
+  waitingAfterAttack: 6
 --- !u!114 &4366536721842437855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1850,7 +1842,6 @@ GameObject:
   - component: {fileID: 9075837456557689756}
   - component: {fileID: 439114135201743943}
   - component: {fileID: 6867367900992796774}
-  - component: {fileID: 7722752493301349764}
   m_Layer: 11
   m_Name: spine
   m_TagString: Untagged
@@ -1927,29 +1918,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7722752493301349764
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4719301255609536734}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 2
-  m_Center: {x: 0, y: -0.0000000037252903, z: 0}
 --- !u!1 &5152513564798959741
 GameObject:
   m_ObjectHideFlags: 0

@@ -9878,6 +9878,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Machine (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5535685749611436939, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: sightTarget
+      value: 
+      objectReference: {fileID: 1899821684}
     - target: {fileID: 7601634890967749561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.88
@@ -63294,6 +63298,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891653518}
   m_Mesh: {fileID: 3868671361854562809, guid: 6b038beae2dffad4bb67eb9b7ca0de4f, type: 3}
+--- !u!1 &1899821684 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7780040305857791367, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+  m_PrefabInstance: {fileID: 577460369}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1901897117
 PrefabInstance:
   m_ObjectHideFlags: 0
