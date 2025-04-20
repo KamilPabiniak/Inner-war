@@ -172,7 +172,7 @@ namespace Enemy.State
                 Debug.DrawRay(origin, rightSideDir * mainDetectionDistance, Color.blue, 0.0f);
                 return;
             }
-            else if (rightSideHit && !leftSideHit)
+            if (rightSideHit && !leftSideHit)
             {
                 // Right side blocked, turn left.
                 Quaternion targetRotation = Quaternion.LookRotation(new Vector3(leftSideDir.x, 0, leftSideDir.z));
@@ -180,7 +180,7 @@ namespace Enemy.State
                 Debug.DrawRay(origin, leftSideDir * mainDetectionDistance, Color.blue, 0.0f);
                 return;
             }
-            else if (leftSideHit)
+            if (leftSideHit)
             {
                 // Both sides are blocked – try turning backward.
                 Vector3 backwardDir = -enemy.transform.forward;
@@ -210,8 +210,8 @@ namespace Enemy.State
             }
             
             var forward1 = enemy.transform.forward;
-            Vector3 extraRightDir = Quaternion.Euler(0, enemy.additionalRaycastAngleOffset, 0) * forward1;
-            Vector3 extraLeftDir = Quaternion.Euler(0, -enemy.additionalRaycastAngleOffset, 0) * forward1;
+            Vector3 extraRightDir = Quaternion.Euler(0, enemy.additionalRayAngleOffset, 0) * forward1;
+            Vector3 extraLeftDir = Quaternion.Euler(0, -enemy.additionalRayAngleOffset, 0) * forward1;
             candidateDirections.Add(extraRightDir);
             candidateDirections.Add(extraLeftDir);
             Debug.DrawRay(origin, extraRightDir * mainDetectionDistance, Color.cyan, 0.0f);

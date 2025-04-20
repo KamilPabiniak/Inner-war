@@ -7,224 +7,229 @@ namespace Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyBase : MonoBehaviour
     {
-        [Header("References")]
+         [Header("References")] 
         public EnemySound sound;
+        public NavMeshAgent navMeshAgent;
+        public Light lightComponent;
         [SerializeField] private SpriteRenderer detectionMark;
+        public GameObject sightTarget;
+        
+        private readonly Collider[] _senseBuffer = new Collider[4];
         private Color _markColor;
         public Vector3 OriginalHeadPos { get; private set; }
-        protected internal NavMeshAgent navMeshAgent;
-        public IEnemyState CurrentState { get; private set; }
+        private IEnemyState CurrentState { get; set; }
         public Transform Target { get; private set; }
 
-        [Header("Common Settings")]
+        [Header("Common Settings")] 
         public bool canKill = true;
         public bool canMove = true;
         public float rotationMultiplier = 5f;
-        public float DetectionProgress { get; protected set; }
-        public bool SeeTarget { get; protected set; }
-        protected bool CanChangeState { get; private set; } = true;
-        private bool _isChangingState;
-        
-        [Header("Light detection")]
-        [Range(0f, 100f)]
-        public float detectionProgress;
-        public GameObject sightTarget;
-        public Light lightComponent;
-        public LayerMask targetMask;
-        [Tooltip("Detection per second")] public float detectionIncreaseRate = 10f;
-        [Tooltip("Decay per second")]     public float detectionDecreaseRate = 5f;
-        [Tooltip("Min light intensity")]  public float detectionThreshold = 0.1f;
+        public float DetectionProgress { get; private set; }
+        public bool SeeTarget { get; private set; }
+        private bool _canChangeState = true, _isChangingState;
+
+        [Header("Light detection")] 
+        [Range(0f, 1f)] public float detectionThreshold = 0.1f;
+        public float detectionIncreaseRate = 10f;
+        public float detectionDecreaseRate = 5f;
         public AnimationCurve distanceMultiplier = AnimationCurve.Linear(0,1,10,0.1f);
 
-        [Header("Head Scan")]
+        [Header("Head Scan")] 
         public float headRotationSpeed = 1f;
         public int stopPoints = 3;
         public float stopDuration = 0.5f;
         public int maxOffsetDistance = 3;
         public float headDetectionDistance = 5f;
 
-        [Header("Wall avoiding")]
+        [Header("Wall Avoiding")] 
         public float mainDetectionDistance = 6f;
         public float sideDetectionDistance = 4f;
         public float rayOriginHeight = 1.5f;
         public float sideRayAngleOffset = 30f;
-        public float additionalRaycastAngleOffset = 20f;
+        public float additionalRayAngleOffset = 20f;
 
-        [Header("Debug")]
-        public bool debugFOV = true, debugWallRays = true, debugRays = true;
+        [Header("Debug")] 
+        public bool debugFOV = true, debugWallRays = true;
         public Color fovColor = Color.green;
-        public Color rayHitColor = Color.green, rayMissColor = Color.red;
 
-        // Patrol settings (instance-based)
-        [Header("Patrol Settings")]
+        // Patrol & Investigate & Attack Settings
+        [Header("Patrol")] 
         public static readonly float PatrolRange = 10f;
-        [Tooltip("Minimum distance between patrol points")]
         public static readonly float MinPatrolPointDistance = 2f;
-        [Tooltip("Wait time at patrol point")]
         public static readonly float WaitTimeAtPatrolPoint = 3f;
-
-        [Header("Investigate Settings")]
-        [Tooltip("Detection value to start moving to target")]
-        public float detectionValueNeededToMoveToTarget = 25f;
-        [Tooltip("Max investigate time after losing sight")]
-        public float maxInvestigationTimeAfterLoseSight = 10f;
-    
-        [Header("Attack Settings")]
+        [Header("Investigate")] 
+        [Tooltip("Detection progress at which enemy switches to investigate")]
+        public float detectionValueToChase = 25f;
+        [Tooltip("Time before giving up investigation")]
+        public float maxInvestigationTime = 10f;
+        [Header("Attack")] 
+        [Tooltip("Attack state duration before overload")]
         public float attackDuration = 5f;
+        [Tooltip("NavMeshAgent speed multiplier during attack")]
         public float attackSpeedMultiplier = 1.5f;
-        public float waitingAfterAttack = 6f;
+        [Tooltip("Time to wait after overloaded attack")]
+        public float waitAfterAttack = 6f;
+
         private Vector3 _currentPatrolPoint;
 
-        protected virtual void Awake()
+        private void Awake()
         {
-            EnemyPatrolHandler.RegisterEnemy(this);
-            _markColor = detectionMark.color;
             navMeshAgent = GetComponent<NavMeshAgent>();
+            _markColor = detectionMark.color;
+            EnemyPatrolHandler.RegisterEnemy(this);
         }
-        
+
         private void Start()
         {
-            ChangeState(new PatrolState());
             OriginalHeadPos = sightTarget.transform.localPosition;
+            ChangeState(new PatrolState());
         }
 
         private void Update()
         {
             CurrentState?.UpdateState(this);
-            
-            float progress = Mathf.Clamp01(detectionProgress / 100f);
-            // 1) Sense
-            var hits = Physics.OverlapSphere(transform.position, lightComponent.range, targetMask);
-            SetTarget(hits.Length > 0 ? hits[0].transform : null);
-
-            // 2) Update detectionProgress
-            if (Target) UpdateDetection(); 
-            else        DetectionProgress -= detectionDecreaseRate * Time.deltaTime;
-
-            DetectionProgress = Mathf.Clamp(DetectionProgress, 0f, 100f);
-
-            // 3) Visual feedback
-            if (CurrentState is PatrolState)
-                lightComponent.color = Color.white;
-            else if (CurrentState is InvestigateState)
-                lightComponent.color = Color.yellow;
-            else if (CurrentState is AttackState)
-                lightComponent.color = Color.red;
-
-            // 4) State?switch logic
-            if (!CanChangeState) return;
-
-            if (DetectionProgress <= detectionThreshold * 100f && !(CurrentState is PatrolState))
-                ChangeState(new PatrolState());
-            else if (DetectionProgress > detectionThreshold * 100f
-                     && DetectionProgress < 100f
-                     && !(CurrentState is InvestigateState))
-                ChangeState(new InvestigateState(Player.Instance.transform.position));
-            else if (DetectionProgress >= 100f
-                     && !(CurrentState is AttackState)
-                     && IsTargetInNavMesh(out _))
-                ChangeState(new AttackState());
-            
-            if (CurrentState is PatrolState)
-            {
-                _markColor.a = 0f;
-            }
-            else if (CurrentState is InvestigateState)
-            {
-                _markColor.a = 1f;
-                _markColor = Color.Lerp(Color.white, Color.yellow, progress);
-            }
-            else if (CurrentState is AttackState)
-            {
-                _markColor.a = 1f;
-                _markColor = Color.red;
-            }
-            detectionMark.color = _markColor;
-        }
-        
-        private void UpdateDetection()
-        {
-            float I = CalculateLightIntensity(Target);
-            if (I > detectionThreshold)
-            {
-                DetectionProgress += I * detectionIncreaseRate * Time.deltaTime;
-                SeeTarget = true;
-            }
-            else
-            {
-                DetectionProgress -= detectionDecreaseRate * Time.deltaTime;
-                SeeTarget = false;
-            }
+            SenseTarget();
+            UpdateDetectionProgress();
+            TryStateTransition();
+            UpdateVisuals();
         }
 
-        private float CalculateLightIntensity(Transform t)
+        // -- Sensing & Detection --
+        private void SenseTarget()
         {
-            Vector3 dir = (t.position - lightComponent.transform.position).normalized;
-            if (lightComponent.type == LightType.Spot)
+            Transform detected = null;
+            // Use light position as origin for overlap
+            int count = Physics.OverlapSphereNonAlloc(
+                lightComponent.transform.position,
+                lightComponent.range,
+                _senseBuffer
+            );
+            for (int i = 0; i < count; i++)
             {
-                float a = Vector3.Angle(lightComponent.transform.forward, dir);
-                if (a > lightComponent.spotAngle * .5f)
+                var col = _senseBuffer[i];
+                if (!col.CompareTag("Player")) continue;
+                Vector3 origin = lightComponent.transform.position;
+                Vector3 dir = (col.transform.position - origin).normalized;
+                if (lightComponent.type == LightType.Spot &&
+                    Vector3.Angle(lightComponent.transform.forward, dir) > lightComponent.spotAngle * 0.5f)
+                    continue;
+                if (Physics.Raycast(origin, dir, out RaycastHit hit, lightComponent.range) &&
+                    hit.transform == col.transform)
                 {
-                    DebugRay(lightComponent.transform.position, dir, false);
-                    return 0f;
+                    detected = col.transform;
+                    break;
                 }
             }
-            // occlusion
-            if (Physics.Raycast(lightComponent.transform.position, dir, out var hit, lightComponent.range))
+            SetTarget(detected);
+        }
+
+        void UpdateDetectionProgress()
+        {
+            // Calculate intensity exactly as before
+            float I = Target ? CalculateIntensity(Target) : 0f;
+            if (I > detectionThreshold)
             {
-                bool ok = hit.transform == t;
-                DebugRay(lightComponent.transform.position, dir, ok);
-                if (!ok) return 0f;
+                SeeTarget = true;
+                DetectionProgress += I * detectionIncreaseRate * Time.deltaTime;
             }
             else
             {
-                DebugRay(lightComponent.transform.position, dir, false);
-                return 0f;
+                SeeTarget = false;
+                DetectionProgress -= detectionDecreaseRate * Time.deltaTime;
             }
-            // attenuation
-            float d = Vector3.Distance(lightComponent.transform.position, t.position);
-            return (lightComponent.intensity / (d * d)) * distanceMultiplier.Evaluate(d);
+            DetectionProgress = Mathf.Clamp(DetectionProgress, 0f, 100f);
+            // Debug.Log($"I={I:F2}, Progress={DetectionProgress:F1}");
         }
 
-        private void DebugRay(Vector3 o, Vector3 d, bool hit)
+        float CalculateIntensity(Transform t)
         {
-            if (!debugRays) return;
-            Debug.DrawLine(o, o + d * lightComponent.range, hit ? rayHitColor : rayMissColor, .1f);
+            Vector3 origin = lightComponent.transform.position;
+            Vector3 dir = (t.position - origin).normalized;
+            if (lightComponent.type == LightType.Spot &&
+                Vector3.Angle(lightComponent.transform.forward, dir) > lightComponent.spotAngle * 0.5f)
+                return 0f;
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, lightComponent.range) && hit.transform == t)
+                return (lightComponent.intensity / (hit.distance * hit.distance))
+                       * distanceMultiplier.Evaluate(hit.distance);
+            return 0f;
         }
 
-        public void ChangeState(IEnemyState newState)
+
+        // -- State Management --
+        void TryStateTransition()
         {
-            if (_isChangingState || CurrentState == newState) return;
+            if (!_canChangeState) return;
+            // Full bar → Attack
+            if (DetectionProgress >= 100f &&
+                !(CurrentState is AttackState) &&
+                IsTargetInNavMesh(out _))
+            {
+                ChangeState(new AttackState());
+            }
+            // Above chase threshold → Investigate
+            else if (DetectionProgress >= detectionValueToChase &&
+                     DetectionProgress < 100f &&
+                     !(CurrentState is InvestigateState))
+            {
+                ChangeState(new InvestigateState(
+                    Target ? Target.position : transform.position));
+            }
+            // Below chase threshold → Patrol
+            else if (DetectionProgress < detectionValueToChase &&
+                     !(CurrentState is PatrolState))
+            {
+                ChangeState(new PatrolState());
+            }
+        }
+        
+        void UpdateVisuals()
+        {
+            float t = DetectionProgress / 100f;
+            lightComponent.color = CurrentState switch
+            {
+                PatrolState _ => Color.white,
+                InvestigateState _ => Color.yellow,
+                AttackState _ => Color.red,
+                _ => lightComponent.color
+            };
+            _markColor = CurrentState switch
+            {
+                PatrolState _ => new Color(_markColor.r, _markColor.g, _markColor.b, 0f),
+                InvestigateState _ => Color.Lerp(Color.white, Color.yellow, t),
+                AttackState _ => Color.red,
+                _ => _markColor
+            };
+            if (!(CurrentState is PatrolState)) _markColor.a = 1f;
+            detectionMark.color = _markColor;
+        }
+
+        public void ChangeState(IEnemyState next)
+        {
+            if (_isChangingState || CurrentState == next) return;
             _isChangingState = true;
             CurrentState?.ExitState(this);
-            CurrentState = newState;
+            CurrentState = next;
             CurrentState.EnterState(this);
             _isChangingState = false;
         }
-        
-        public Vector3 RequestPatrolPoint()
-        {
-            _currentPatrolPoint = EnemyPatrolHandler.GetPatrolPoint(this);
-            return _currentPatrolPoint;
-        }
 
-        public void SetTarget(Transform t)
-        {
-            Target = t;
-            SeeTarget = t != null;
-        }
-
+        // -- Helpers --
         public bool IsTargetInNavMesh(out NavMeshHit hit)
         {
-            if (Target != null &&
-                NavMesh.SamplePosition(Target.position, out hit, 1f, NavMesh.AllAreas) &&
-                Vector3.Distance(Target.position, hit.position) < 1f)
+            if (Target != null 
+                && NavMesh.SamplePosition(Target.position, out hit, 1f, NavMesh.AllAreas) 
+                && Vector3.Distance(Target.position, hit.position) < 1f)
             {
                 return true;
             }
-            hit = default;
+            hit = new NavMeshHit();
             return false;
         }
+
+        private void SetTarget(Transform t) => Target = t;
+        public void SetStateChangeLock(bool locked) => _canChangeState = !locked;
+        public Vector3 RequestPatrolPoint() => EnemyPatrolHandler.GetPatrolPoint(transform.position, PatrolRange, MinPatrolPointDistance);
+
 
         public void FaceTarget()
         {
@@ -248,8 +253,6 @@ namespace Enemy
                 }
             }
         }
-
-        public void SetStateChangeLock(bool locked) => CanChangeState = !locked;
         
         public void OnAlertReceived(Vector3 alertPosition)
         {
@@ -262,7 +265,7 @@ namespace Enemy
             if (CurrentState is AttackState) return;
             SetTarget(player);
             ChangeState(new AttackState());
-            detectionProgress = 100;
+            DetectionProgress = 100;
         }
         
         [ContextMenu("CurrentState")]
@@ -295,28 +298,51 @@ namespace Enemy
             // Draw FOV sphere
             Gizmos.color = fovColor;
             Gizmos.DrawWireSphere(transform.position, lightComponent.range);
+            
+            Vector3 originLight = lightComponent.transform.position;
+            // Draw detection range sphere
+            Gizmos.color = fovColor;
+            Gizmos.DrawWireSphere(originLight, lightComponent.range);
+
+            // Draw spot light cone
+            if (lightComponent.type == LightType.Spot)
+            {
+                float halfAngle = lightComponent.spotAngle * 0.5f;
+                Vector3 forwardLight = lightComponent.transform.forward;
+                DrawConeRay(originLight, forwardLight, halfAngle);
+                DrawConeRay(originLight, Quaternion.Euler(0, halfAngle, 0) * forwardLight, halfAngle);
+                DrawConeRay(originLight, Quaternion.Euler(0, -halfAngle, 0) * forwardLight, halfAngle);
+                DrawConeRay(originLight, Quaternion.Euler(halfAngle, 0, 0) * forwardLight, halfAngle);
+                DrawConeRay(originLight, Quaternion.Euler(-halfAngle, 0, 0) * forwardLight, halfAngle);
+            }
+
 
             if (!debugWallRays) return;
-            // Draw wall detection rays
             Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
-            
+            var forward = transform.forward;
             // Main forward ray
             Gizmos.color = Color.blue;
-            Gizmos.DrawRay(origin, transform.forward * mainDetectionDistance);
+            Gizmos.DrawRay(origin, forward * mainDetectionDistance);
 
             // Side rays
             Gizmos.color = Color.cyan;
-            Vector3 leftDir  = Quaternion.Euler(0, -sideRayAngleOffset, 0) * transform.forward;
-            Vector3 rightDir = Quaternion.Euler(0,  sideRayAngleOffset, 0) * transform.forward;
+            Vector3 leftDir  = Quaternion.Euler(0, -sideRayAngleOffset, 0) * forward;
+            Vector3 rightDir = Quaternion.Euler(0,  sideRayAngleOffset, 0) * forward;
             Gizmos.DrawRay(origin, leftDir * sideDetectionDistance);
             Gizmos.DrawRay(origin, rightDir * sideDetectionDistance);
 
             // Additional machine-specific rays
             Gizmos.color = Color.magenta;
-            Vector3 extraL = Quaternion.Euler(0, -additionalRaycastAngleOffset, 0) * transform.forward;
-            Vector3 extraR = Quaternion.Euler(0,  additionalRaycastAngleOffset, 0) * transform.forward;
+            Vector3 extraL = Quaternion.Euler(0, -additionalRayAngleOffset, 0) * forward;
+            Vector3 extraR = Quaternion.Euler(0,  additionalRayAngleOffset, 0) * forward;
             Gizmos.DrawRay(origin, extraL * mainDetectionDistance);
             Gizmos.DrawRay(origin, extraR * mainDetectionDistance);
+        }
+        
+        private void DrawConeRay(Vector3 origin, Vector3 direction, float unused)
+        {
+            Gizmos.color = fovColor;
+            Gizmos.DrawRay(origin, direction.normalized * lightComponent.range);
         }
     }
 }

@@ -36,8 +36,8 @@ namespace Enemy.State
         {
             if (_isOverloading)
             {
-                enemy.waitingAfterAttack -= Time.deltaTime;
-                if (enemy.waitingAfterAttack <= 0f)
+                enemy.waitAfterAttack -= Time.deltaTime;
+                if (enemy.waitAfterAttack <= 0f)
                 {
                     Debug.Log($"[{enemy.name}] Przeciążenie zakończone. Wracam do patrolowania.");
                     enemy.ChangeState(new PatrolState());
@@ -48,7 +48,7 @@ namespace Enemy.State
             if (enemy.Target == null)
             {
                 _lostSightTimer += Time.deltaTime;
-                if (_lostSightTimer >= enemy.maxInvestigationTimeAfterLoseSight / 2)
+                if (_lostSightTimer >= enemy.maxInvestigationTime / 2)
                 {
                     enemy.sound.PlayTargetLostSound();
                     enemy.ChangeState(new PatrolState());

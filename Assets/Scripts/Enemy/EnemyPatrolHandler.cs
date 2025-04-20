@@ -11,11 +11,8 @@ namespace Enemy
 
         public static void RegisterEnemy(EnemyBase e) { if (!Registered.Contains(e)) Registered.Add(e); }
         public static void UnregisterEnemy(EnemyBase e) { Registered.Remove(e); }
-
-        public static Vector3 GetPatrolPoint(EnemyBase e) =>
-            GetPatrolPoint(e.transform.position, EnemyBase.PatrolRange, EnemyBase.MinPatrolPointDistance);
-
-        private static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
+        
+        public static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
         {
             var nav = NavMesh.CalculateTriangulation();
             for (int i = 0; i < 5; i++)

@@ -11,7 +11,7 @@ namespace Enemy.State
         private Coroutine _headRotationCoroutine;
         private float _lostSightTimer;
 
-        private float _initialRotationTime = 1.5f; 
+        private readonly float _initialRotationTime = 1.5f; 
         public InvestigateState(Vector3 position)
         {
             _lastKnownPosition  = position;
@@ -34,7 +34,7 @@ namespace Enemy.State
 
                 if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
                 {
-                    if (!enemy.canMove || !(enemy.DetectionProgress > enemy.detectionValueNeededToMoveToTarget)) return;
+                    if (!enemy.canMove || !(enemy.DetectionProgress > enemy.detectionValueToChase)) return;
                     enemy.FaceTarget();
                     enemy.navMeshAgent.SetDestination(hit.position);
                 }
@@ -47,10 +47,10 @@ namespace Enemy.State
             {
                 _lostSightTimer += Time.deltaTime;
             
-                if (_lostSightTimer < enemy.maxInvestigationTimeAfterLoseSight)
+                if (_lostSightTimer < enemy.maxInvestigationTime)
                 {
-                    if (!enemy.IsTargetInNavMesh(out NavMeshHit hit)) return;
-                    if (enemy.canMove && enemy.DetectionProgress > enemy.detectionValueNeededToMoveToTarget)
+                    if (!enemy.IsTargetInNavMesh(out _)) return;
+                    if (enemy.canMove && enemy.DetectionProgress > enemy.maxInvestigationTime)
                     {
                         enemy.navMeshAgent.SetDestination(_lastKnownPosition);
                     }
