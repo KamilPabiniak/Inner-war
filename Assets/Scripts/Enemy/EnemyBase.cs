@@ -29,6 +29,7 @@ namespace Enemy
         private bool _canChangeState = true, _isChangingState;
 
         [Header("Light detection")] 
+        public LayerMask targetMask;
         [Range(0f, 1f)] public float detectionThreshold = 0.1f;
         public float detectionIncreaseRate = 10f;
         public float detectionDecreaseRate = 5f;
@@ -98,35 +99,33 @@ namespace Enemy
         private void SenseTarget()
         {
             Transform detected = null;
-            // Use light position as origin for overlap
-            int count = Physics.OverlapSphereNonAlloc(
-                lightComponent.transform.position,
-                lightComponent.range,
-                _senseBuffer
-            );
+            Vector3 origin = lightComponent.transform.position;
+            float range = lightComponent.range;
+            
+            int count = Physics.OverlapSphereNonAlloc(origin, range, _senseBuffer, targetMask);
             for (int i = 0; i < count; i++)
             {
                 var col = _senseBuffer[i];
                 if (!col.CompareTag("Player")) continue;
-                Vector3 origin = lightComponent.transform.position;
                 Vector3 dir = (col.transform.position - origin).normalized;
                 if (lightComponent.type == LightType.Spot &&
                     Vector3.Angle(lightComponent.transform.forward, dir) > lightComponent.spotAngle * 0.5f)
                     continue;
-                if (Physics.Raycast(origin, dir, out RaycastHit hit, lightComponent.range) &&
-                    hit.transform == col.transform)
+                if (Physics.Raycast(origin, dir, out RaycastHit hit, range) && hit.transform == col.transform)
                 {
                     detected = col.transform;
                     break;
                 }
             }
-            SetTarget(detected);
+            Target = detected;
         }
 
         void UpdateDetectionProgress()
         {
-            // Calculate intensity exactly as before
             float I = Target ? CalculateIntensity(Target) : 0f;
+            // Debug intensity
+            // Debug.Log($"Intensity: {I:F2}, Threshold: {detectionThreshold:F2}");
+
             if (I > detectionThreshold)
             {
                 SeeTarget = true;
@@ -138,7 +137,6 @@ namespace Enemy
                 DetectionProgress -= detectionDecreaseRate * Time.deltaTime;
             }
             DetectionProgress = Mathf.Clamp(DetectionProgress, 0f, 100f);
-            // Debug.Log($"I={I:F2}, Progress={DetectionProgress:F1}");
         }
 
         float CalculateIntensity(Transform t)
