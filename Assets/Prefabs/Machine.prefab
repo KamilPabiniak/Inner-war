@@ -980,10 +980,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Height: 2.3
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.3, y: 0, z: 0}
 --- !u!1 &2716433088659916575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,18 +1224,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  mainDetectionDistance: 6
-  sideDetectionDistance: 4
+  mainDetectionDistance: 4
+  sideDetectionDistance: 3
   rayOriginHeight: 1.5
-  sideRayAngleOffset: 30
-  additionalRayAngleOffset: 20
+  sideRayAngleOffset: 25.5
+  additionalRayAngleOffset: 16
   debugFOV: 1
   debugWallRays: 1
   fovColor: {r: 0, g: 1, b: 0, a: 1}
   detectionValueToChase: 25
   maxInvestigationTime: 10
   attackDuration: 5
-  attackSpeedMultiplier: 1.5
+  attackAfterLostTarget: 5
+  attackSpeedMultiplier: 3.5
   waitAfterAttack: 6
 --- !u!114 &4366536721842437855
 MonoBehaviour:
@@ -1255,13 +1256,24 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8a7a8ee0447e4b5469bce225745d9f42, type: 3}
   - {fileID: 8300000, guid: 7e629da20f6fdee418e5e60ba9efc23c, type: 3}
   - {fileID: 8300000, guid: a04e8112fb4cca944baabc0048ff839d, type: 3}
-  footStepsRange: 20
-  patrolStateSound: {fileID: 8300000, guid: df17519ca2a6c7a43adc12f38e6d8213, type: 3}
-  investigateStateSound: {fileID: 8300000, guid: ea2a1aee373e97c498485b458f5a71ef, type: 3}
-  attackStateSound: {fileID: 8300000, guid: 296f3855d6d9f5747b00e9f1098f3b98, type: 3}
-  targetLostSound: {fileID: 8300000, guid: b16ed96a8e0179c49aaaec625cc2de27, type: 3}
-  overload: {fileID: 8300000, guid: f3179ba3ac1bf1c42a6e5551f3207742, type: 3}
-  stateRange: 16
+  footStepsRange: 25
+  patrolStateSound:
+  - {fileID: 8300000, guid: 14540d2d515ef93498d7493c5d931336, type: 3}
+  - {fileID: 8300000, guid: 986fa88be73a73c4693099c58d2fa15a, type: 3}
+  investigateStateSound:
+  - {fileID: 8300000, guid: ff581e6bb2bb8bf41a319732d1ec9d13, type: 3}
+  - {fileID: 8300000, guid: 6cae0a1760af6314eadb8ac4051190fb, type: 3}
+  attackStateSound:
+  - {fileID: 8300000, guid: 889d872f3b392f743a69cb7ce63a77a8, type: 3}
+  - {fileID: 8300000, guid: dcf300ffd4052204eb1170f3f7158901, type: 3}
+  - {fileID: 8300000, guid: 51dd023b0d25cf940b2e4bced78fcd90, type: 3}
+  targetLostSound:
+  - {fileID: 8300000, guid: 26397eef34b396f4e866361269adf9d6, type: 3}
+  - {fileID: 8300000, guid: da911ccc6cbb36249b074cfcc2b0ccfc, type: 3}
+  overload:
+  - {fileID: 8300000, guid: aab3c1ab354e456499db60e653a54e29, type: 3}
+  warning: {fileID: 8300000, guid: 2907480ffa54afb4b8e8f00cf5e8db82, type: 3}
+  stateRange: 30
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1272,10 +1284,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 6
+  m_Speed: 3
   m_Acceleration: 12
   avoidancePriority: 50
-  m_AngularSpeed: 800
+  m_AngularSpeed: 1200
   m_StoppingDistance: 0.89
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1

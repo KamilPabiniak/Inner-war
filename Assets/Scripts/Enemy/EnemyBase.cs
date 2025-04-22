@@ -36,17 +36,6 @@ namespace Enemy
         public float detectionDecreaseRate = 5f;
         public AnimationCurve distanceMultiplier = AnimationCurve.Linear(0,1,10,0.1f);
 
-        [Header("Wall Avoiding")] 
-        public float mainDetectionDistance = 6f;
-        public float sideDetectionDistance = 4f;
-        public float rayOriginHeight = 1.5f;
-        public float sideRayAngleOffset = 30f;
-        public float additionalRayAngleOffset = 20f;
-
-        [Header("Debug")] 
-        public bool debugFOV = true, debugWallRays = true;
-        public Color fovColor = Color.green;
-
         // Patrol & Investigate & Attack Settings
         [Header("Patrol")] 
         public static readonly float PatrolRange = 10f;
@@ -60,12 +49,24 @@ namespace Enemy
         [Header("Attack")] 
         [Tooltip("Attack state duration before overload")]
         public float attackDuration = 5f;
+        public float attackAfterLostTarget = 5f;
         [Tooltip("NavMeshAgent speed multiplier during attack")]
         public float attackSpeedMultiplier = 1.5f;
         [Tooltip("Time to wait after overloaded attack")]
         public float waitAfterAttack = 6f;
 
         private Vector3 _currentPatrolPoint;
+        
+        [Header("Wall Avoiding")] 
+        public float mainDetectionDistance = 6f;
+        public float sideDetectionDistance = 4f;
+        public float rayOriginHeight = 1.5f;
+        public float sideRayAngleOffset = 30f;
+        public float additionalRayAngleOffset = 20f;
+
+        [Header("Debug")] 
+        public bool debugFOV = true, debugWallRays = true;
+        public Color fovColor = Color.green;
 
         private void Awake()
         {
@@ -79,12 +80,19 @@ namespace Enemy
             ChangeState(new PatrolState());
         }
 
-        private void Update()
+        void Update()
         {
-            CurrentState?.UpdateState(this);
+            if (SeeTarget && DetectionProgress < detectionValueToChase)
+            {
+                navMeshAgent.isStopped = true;
+                FaceTarget();
+                return; 
+            }
+
             SenseTarget();
             UpdateDetectionProgress();
             TryStateTransition();
+            CurrentState?.UpdateState(this);
             UpdateVisuals();
         }
 
@@ -287,6 +295,7 @@ namespace Enemy
         void UpdateVisuals()
         {
             float t = DetectionProgress / 100f;
+            
             lightComponent.color = CurrentState switch
             {
                 PatrolState _ => Color.white,

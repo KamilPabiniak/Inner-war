@@ -48,8 +48,7 @@ namespace Enemy.State
             
                 if (_lostSightTimer < enemy.maxInvestigationTime)
                 {
-                    if (!enemy.IsTargetInNavMesh(out _)) return;
-                    if (enemy.canMove && enemy.DetectionProgress > enemy.maxInvestigationTime)
+                    if (enemy.canMove && enemy.IsTargetInNavMesh(out _) && enemy.DetectionProgress > enemy.detectionValueToChase)
                     {
                         enemy.navMeshAgent.SetDestination(_lastKnownPosition);
                     }

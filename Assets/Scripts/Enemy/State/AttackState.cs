@@ -6,28 +6,38 @@ namespace Enemy.State
 {
     public class AttackState : IEnemyState
     {
-        private EnemyBase _enemyBase;
-        private float _attackDuration;
+        private EnemyBase    _enemy;
+        private NavMeshAgent _agent;
+        private Vector3      _lastKnownPos;
+        
         private float _attackTimer;
+        private float _lostTargetTimer;
+        private bool  _isOverloading;
         private float _originalSpeed;
-    
-        //Machine specific
-        private bool _isOverloading;
-        private float _lostSightTimer;
+        private const float PredictionTime = 0.5f;
 
         public void EnterState(EnemyBase enemy)
         {
-            _enemyBase = enemy;
+            _enemy   = enemy;
+            _agent   = enemy.navMeshAgent;
+            
+            _originalSpeed   = _agent.speed;
+            
+            _agent.speed           *= enemy.attackSpeedMultiplier;
+            _agent.autoBraking      = false;
+            _agent.stoppingDistance = 0f;
+            _agent.updatePosition   = true;
+
+            _attackTimer     = enemy.attackDuration;
+            _lostTargetTimer = 0f;
+            _isOverloading   = false;
+
+        
+            if (enemy.Target != null)
+                _lastKnownPos = enemy.Target.position;
+
             enemy.sound.PlayAttackSound();
-            enemy.SetStateChangeLock(true); 
-        
-            _attackDuration = enemy.attackDuration; 
-            _attackTimer = _attackDuration;
-        
-            var speed = enemy.navMeshAgent.speed;
-            _originalSpeed = speed;
-            speed *= enemy.attackSpeedMultiplier;
-            enemy.navMeshAgent.speed = speed;
+            enemy.SetStateChangeLock(true);
             GameEvents.onPlayerKilled += HandlePlayerKilled;
             AnxietyManager.Instance.TriggerProfileEffects();
         }
@@ -38,59 +48,63 @@ namespace Enemy.State
             {
                 enemy.waitAfterAttack -= Time.deltaTime;
                 if (enemy.waitAfterAttack <= 0f)
-                {
-                    Debug.Log($"[{enemy.name}] Przeciążenie zakończone. Wracam do patrolowania.");
                     enemy.ChangeState(new PatrolState());
-                }
                 return;
             }
-        
-            if (enemy.Target == null)
+            
+            if (enemy.Target != null)
             {
-                _lostSightTimer += Time.deltaTime;
-                if (_lostSightTimer >= enemy.maxInvestigationTime / 2)
+                var predicted = enemy.Target.position;
+                if (enemy.Target.TryGetComponent<Rigidbody>(out var rb))
+                    predicted += rb.linearVelocity * PredictionTime;
+                _lastKnownPos    = predicted;
+                _lostTargetTimer = 0f;
+            }
+            else
+            {
+                _lostTargetTimer += Time.deltaTime;
+                if (_lostTargetTimer >= enemy.attackAfterLostTarget)
                 {
                     enemy.sound.PlayTargetLostSound();
                     enemy.ChangeState(new PatrolState());
                     return;
                 }
             }
+            
+            var path = new NavMeshPath();
+            bool pathOK = NavMesh.CalculatePath(
+                enemy.transform.position,
+                _lastKnownPos,
+                NavMesh.AllAreas,
+                path)
+                && path.status == NavMeshPathStatus.PathComplete;
+
+            if (pathOK)
+                _agent.SetPath(path);
             else
-            {
-                _lostSightTimer = 0f; 
-            }
-        
-            NavMeshPath path = new NavMeshPath();
-            if (!enemy.navMeshAgent.CalculatePath(enemy.Target.position, path) || path.status != NavMeshPathStatus.PathComplete)
-            {
-                Debug.LogWarning($"[{enemy.name}] Nie można wytyczyć trasy do celu. Wracam do patrolowania.");
-                enemy.SetStateChangeLock(false); 
-                enemy.FaceTarget();
-                return;
-            }
-    
+                _agent.SetDestination(_lastKnownPos);
+            
             if (enemy.canMove)
-            {
-                enemy.navMeshAgent.SetDestination(enemy.Target.position);
-            }
-        
+                _agent.Move(_agent.desiredVelocity * Time.deltaTime);
+            
             _attackTimer -= Time.deltaTime;
-            if (!(_attackTimer <= 0f)) return;
-            enemy.sound.PlayOverloadSound();
-            enemy.navMeshAgent.isStopped = true; 
-            _isOverloading = true;
+            if (_attackTimer <= 0f)
+            {
+                enemy.sound.PlayOverloadSound();
+                _isOverloading = true;
+            }
         }
 
         public void ExitState(EnemyBase enemy)
         {
-            enemy.SetStateChangeLock(false); 
-            enemy.navMeshAgent.speed = _originalSpeed;
+            _agent.speed        = _originalSpeed;
+            enemy.SetStateChangeLock(false);
             GameEvents.onPlayerKilled -= HandlePlayerKilled;
         }
-    
+
         private void HandlePlayerKilled()
         {
-            _enemyBase.ChangeState(new PatrolState());
+            _enemy.ChangeState(new PatrolState());
         }
     }
 }

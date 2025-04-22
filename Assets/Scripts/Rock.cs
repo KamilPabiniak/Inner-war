@@ -9,7 +9,7 @@ public class Rock : MonoBehaviour, IInteractable
     public AudioClip[] rockSound;
 
     // Flag to ensure enemy alert is triggered only once.
-    private bool _alertTriggered = false;
+    private bool _alertTriggered;
 
     private void OnCollisionEnter(Collision collision)
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMakeNoise : PlayerModule
 {
-    [Header("Noise Settings")]
+    [Header("Noise Settings")]  
     public LayerMask targetMask;          // Layer mask for potential enemy targets
     public float noiseRange = 10f;        // The range within which noise is detected by enemies
     public float noiseCooldown = 3f;      // Time interval between noise emissions
@@ -17,58 +17,89 @@ public class PlayerMakeNoise : PlayerModule
     private Collider[] _results;
     private Dictionary<Collider, float> _alertedTargets;
     private float _lastNoiseTime;
+    private Vector3 _lastPosition;
+    private bool _lastCrouch;
+    private Player.State _lastState;
+
+    private const float MoveThreshold = 0.01f;
 
     private void Start()
     {
         _results = new Collider[10];
         _alertedTargets = new Dictionary<Collider, float>();
         _lastNoiseTime = -noiseCooldown;
+        _lastPosition = transform.position;
+        _lastCrouch = Player.Instance.GetModule<PlayerMovement>().GetCrouch();
+        _lastState = Player.state;
     }
 
     private void Update()
     {
+        // Reset per-enemy cooldowns
         ResetAlertedTargets();
-        
-        if (Player.state != Player.State.Walking) return;
 
-        if (!(Time.time >= _lastNoiseTime + noiseCooldown)) return;
-        if (Player.Instance.GetModule<PlayerMovement>().GetCrouch()) return;
+        bool isWalking = Player.state == Player.State.Walking;
+        bool isCrouching = Player.Instance.GetModule<PlayerMovement>().GetCrouch();
+
+        // If player state or crouch just changed, reset lastPosition to avoid noise from stance changes
+        if (_lastCrouch != isCrouching || _lastState != Player.state)
+        {
+            _lastPosition = transform.position;
+            _lastCrouch = isCrouching;
+            _lastState = Player.state;
+            return;
+        }
+
+        // Only generate noise when walking and not crouching
+        if (!isWalking || isCrouching)
+        {
+            _lastPosition = transform.position;
+            return;
+        }
+
+        // Respect global noise cooldown
+        if (Time.time < _lastNoiseTime + noiseCooldown)
+            return;
+
+        // Calculate horizontal movement to ignore vertical/stance changes
+        Vector3 delta = transform.position - _lastPosition;
+        delta.y = 0f;
+        if (delta.sqrMagnitude < MoveThreshold * MoveThreshold)
+            return;
+
         EmitNoise();
         _lastNoiseTime = Time.time;
+        _lastPosition = transform.position;
     }
 
     private void EmitNoise()
     {
-        int targetsInRange = Physics.OverlapSphereNonAlloc(transform.position, noiseRange, _results, targetMask);
-        for (int i = 0; i < targetsInRange; i++)
+        int targets = Physics.OverlapSphereNonAlloc(transform.position, noiseRange, _results, targetMask);
+        for (int i = 0; i < targets; i++)
         {
-            var targetCollider = _results[i];
-            var enemy = targetCollider.GetComponentInParent<EnemyBase>();
+            Collider col = _results[i];
+            var enemy = col.GetComponentInParent<EnemyBase>();
             if (enemy == null) continue;
-            
-            if (_alertedTargets.ContainsKey(targetCollider) && _alertedTargets[targetCollider] + alertCooldownTime > Time.time)
+
+            if (_alertedTargets.TryGetValue(col, out float lastAlert) && lastAlert + alertCooldownTime > Time.time)
             {
                 enemy.OnAttackCommandReceived(transform);
             }
             else
             {
                 enemy.OnAlertReceived(transform.position);
-                _alertedTargets[targetCollider] = Time.time;
+                _alertedTargets[col] = Time.time;
             }
         }
     }
 
     private void ResetAlertedTargets()
     {
-        List<Collider> targetsToRemove = new List<Collider>();
-        foreach (var entry in _alertedTargets.Where(entry => entry.Value + alertCooldownTime <= Time.time))
-        {
-            targetsToRemove.Add(entry.Key);
-        }
-        foreach (var target in targetsToRemove)
-        {
-            _alertedTargets.Remove(target);
-        }
+        var expired = _alertedTargets.Where(kv => kv.Value + alertCooldownTime <= Time.time)
+                                     .Select(kv => kv.Key)
+                                     .ToList();
+        foreach (var key in expired)
+            _alertedTargets.Remove(key);
     }
 
     private void OnDrawGizmosSelected()
