@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Enemy.State;
@@ -5,18 +6,18 @@ using Enemy.State;
 namespace Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Animator))]
     public class EnemyBase : MonoBehaviour
     {
-         [Header("References")] 
+        [Header("References")] 
         public EnemySound sound;
         public NavMeshAgent navMeshAgent;
         public Light lightComponent;
+        public Animator animator;     
         [SerializeField] private SpriteRenderer detectionMark;
-        public GameObject sightTarget;
-        
+       
         private readonly Collider[] _senseBuffer = new Collider[4];
         private Color _markColor;
-        public Vector3 OriginalHeadPos { get; private set; }
         private IEnemyState CurrentState { get; set; }
         public Transform Target { get; private set; }
 
@@ -34,13 +35,6 @@ namespace Enemy
         public float detectionIncreaseRate = 10f;
         public float detectionDecreaseRate = 5f;
         public AnimationCurve distanceMultiplier = AnimationCurve.Linear(0,1,10,0.1f);
-
-        [Header("Head Scan")] 
-        public float headRotationSpeed = 1f;
-        public int stopPoints = 3;
-        public float stopDuration = 0.5f;
-        public int maxOffsetDistance = 3;
-        public float headDetectionDistance = 5f;
 
         [Header("Wall Avoiding")] 
         public float mainDetectionDistance = 6f;
@@ -82,7 +76,6 @@ namespace Enemy
 
         private void Start()
         {
-            OriginalHeadPos = sightTarget.transform.localPosition;
             ChangeState(new PatrolState());
         }
 
@@ -123,8 +116,6 @@ namespace Enemy
         void UpdateDetectionProgress()
         {
             float I = Target ? CalculateIntensity(Target) : 0f;
-            // Debug intensity
-            // Debug.Log($"Intensity: {I:F2}, Threshold: {detectionThreshold:F2}");
 
             if (I > detectionThreshold)
             {
@@ -151,6 +142,121 @@ namespace Enemy
                        * distanceMultiplier.Evaluate(hit.distance);
             return 0f;
         }
+        
+        // -- Rotation methods --
+
+        /// <summary>
+        /// Returns true if an obstacle is directly in front or slightly to the sides.
+        /// </summary>
+        public bool IsObjectInFront()
+        {
+            Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
+            // Main ray
+            bool mainHit = Physics.Raycast(origin, transform.forward, mainDetectionDistance);
+            Debug.DrawRay(origin, transform.forward * mainDetectionDistance, mainHit ? Color.red : Color.green);
+
+            // Side rays
+            Vector3 leftDir = Quaternion.Euler(0, -sideRayAngleOffset, 0) * transform.forward;
+            Vector3 rightDir = Quaternion.Euler(0, sideRayAngleOffset, 0) * transform.forward;
+            bool leftHit = Physics.Raycast(origin, leftDir, sideDetectionDistance);
+            bool rightHit = Physics.Raycast(origin, rightDir, sideDetectionDistance);
+            Debug.DrawRay(origin, leftDir * sideDetectionDistance, leftHit ? Color.red : Color.green);
+            Debug.DrawRay(origin, rightDir * sideDetectionDistance, rightHit ? Color.red : Color.green);
+
+            return mainHit || leftHit || rightHit;
+        }
+
+        /// <summary>
+        /// Rotates the enemy towards the clearest direction when blocked.
+        /// </summary>
+        public void TurnTowardsFreeSpace()
+        {
+            const float angleRange = 60f;
+            const float angleStep = 15f;
+            Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
+
+            // Check side blockage
+            Vector3 leftSideDir = Quaternion.Euler(0, sideRayAngleOffset, 0) * transform.forward;
+            Vector3 rightSideDir = Quaternion.Euler(0, -sideRayAngleOffset, 0) * transform.forward;
+            bool leftBlocked = Physics.Raycast(origin, leftSideDir, sideDetectionDistance);
+            bool rightBlocked = Physics.Raycast(origin, rightSideDir, sideDetectionDistance);
+            Debug.DrawRay(origin, leftSideDir * sideDetectionDistance, leftBlocked ? Color.red : Color.green);
+            Debug.DrawRay(origin, rightSideDir * sideDetectionDistance, rightBlocked ? Color.red : Color.green);
+
+            // Simple turn when one side is blocked
+            if (leftBlocked && !rightBlocked)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(new Vector3(rightSideDir.x, 0, rightSideDir.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationMultiplier);
+                return;
+            }
+            if (rightBlocked && !leftBlocked)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(new Vector3(leftSideDir.x, 0, leftSideDir.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationMultiplier);
+                return;
+            }
+            if (leftBlocked)
+            {
+                // Both sides blocked: try backward
+                Vector3 backDir = -transform.forward;
+                bool backBlocked = Physics.Raycast(origin, backDir, mainDetectionDistance);
+                Debug.DrawRay(origin, backDir * mainDetectionDistance, backBlocked ? Color.red : Color.green);
+                if (!backBlocked)
+                {
+                    Quaternion targetRot = Quaternion.LookRotation(new Vector3(backDir.x, 0, backDir.z));
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationMultiplier);
+                    return;
+                }
+                // Fallback to left
+                Quaternion fallbackRot = Quaternion.LookRotation(new Vector3(leftSideDir.x, 0, leftSideDir.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, fallbackRot, Time.deltaTime * rotationMultiplier);
+                return;
+            }
+
+            // Scan candidate directions
+            List<Vector3> candidates = new List<Vector3>();
+            for (float a = -angleRange; a <= angleRange; a += angleStep)
+            {
+                candidates.Add(Quaternion.Euler(0, a, 0) * transform.forward);
+            }
+            // Add extra offsets
+            candidates.Add(Quaternion.Euler(0, additionalRayAngleOffset, 0) * transform.forward);
+            candidates.Add(Quaternion.Euler(0, -additionalRayAngleOffset, 0) * transform.forward);
+
+            // Pick free paths
+            List<Vector3> free = new List<Vector3>();
+            foreach (var dir in candidates)
+            {
+                if (!Physics.Raycast(origin, dir, mainDetectionDistance)) free.Add(dir);
+            }
+
+            Vector3 best;
+            if (free.Count > 0)
+            {
+                best = free[0]; float minAng = Vector3.Angle(transform.forward, best);
+                foreach (var dir in free)
+                {
+                    float ang = Vector3.Angle(transform.forward, dir);
+                    if (ang < minAng) { minAng = ang; best = dir; }
+                }
+            }
+            else
+            {
+                best = candidates[0]; float maxDist = 0f;
+                foreach (var dir in candidates)
+                {
+                    if (Physics.Raycast(origin, dir, out RaycastHit hit, mainDetectionDistance) && hit.distance > maxDist)
+                    {
+                        maxDist = hit.distance; best = dir;
+                    }
+                }
+            }
+
+            Quaternion finalRot = Quaternion.LookRotation(new Vector3(best.x, 0, best.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, finalRot, Time.deltaTime * rotationMultiplier);
+            Debug.DrawRay(origin, best * mainDetectionDistance, Color.blue);
+        }
 
 
         // -- State Management --
@@ -158,9 +264,7 @@ namespace Enemy
         {
             if (!_canChangeState) return;
             // Full bar → Attack
-            if (DetectionProgress >= 100f &&
-                !(CurrentState is AttackState) &&
-                IsTargetInNavMesh(out _))
+            if (DetectionProgress >= 100f && !(CurrentState is AttackState))
             {
                 ChangeState(new AttackState());
             }
@@ -252,6 +356,7 @@ namespace Enemy
             }
         }
         
+        //Commands
         public void OnAlertReceived(Vector3 alertPosition)
         {
             if (CurrentState is AttackState) return;
@@ -284,12 +389,14 @@ namespace Enemy
             OnAttackCommandReceived(target);
         }
         
+        //Clear
         private void OnDestroy()
         {
             EnemyPatrolHandler.ReleasePatrolPoint(_currentPatrolPoint);
             EnemyPatrolHandler.UnregisterEnemy(this);
         }
         
+        //Draw here
         private void OnDrawGizmosSelected()
         {
             if (!debugFOV) return;
@@ -297,24 +404,6 @@ namespace Enemy
             Gizmos.color = fovColor;
             Gizmos.DrawWireSphere(transform.position, lightComponent.range);
             
-            Vector3 originLight = lightComponent.transform.position;
-            // Draw detection range sphere
-            Gizmos.color = fovColor;
-            Gizmos.DrawWireSphere(originLight, lightComponent.range);
-
-            // Draw spot light cone
-            if (lightComponent.type == LightType.Spot)
-            {
-                float halfAngle = lightComponent.spotAngle * 0.5f;
-                Vector3 forwardLight = lightComponent.transform.forward;
-                DrawConeRay(originLight, forwardLight, halfAngle);
-                DrawConeRay(originLight, Quaternion.Euler(0, halfAngle, 0) * forwardLight, halfAngle);
-                DrawConeRay(originLight, Quaternion.Euler(0, -halfAngle, 0) * forwardLight, halfAngle);
-                DrawConeRay(originLight, Quaternion.Euler(halfAngle, 0, 0) * forwardLight, halfAngle);
-                DrawConeRay(originLight, Quaternion.Euler(-halfAngle, 0, 0) * forwardLight, halfAngle);
-            }
-
-
             if (!debugWallRays) return;
             Vector3 origin = transform.position + Vector3.up * rayOriginHeight;
             var forward = transform.forward;
@@ -335,12 +424,6 @@ namespace Enemy
             Vector3 extraR = Quaternion.Euler(0,  additionalRayAngleOffset, 0) * forward;
             Gizmos.DrawRay(origin, extraL * mainDetectionDistance);
             Gizmos.DrawRay(origin, extraR * mainDetectionDistance);
-        }
-        
-        private void DrawConeRay(Vector3 origin, Vector3 direction, float unused)
-        {
-            Gizmos.color = fovColor;
-            Gizmos.DrawRay(origin, direction.normalized * lightComponent.range);
         }
     }
 }

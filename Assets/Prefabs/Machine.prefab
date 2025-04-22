@@ -1189,11 +1189,14 @@ MonoBehaviour:
   sound: {fileID: 4366536721842437855}
   navMeshAgent: {fileID: 8826511624185513472}
   lightComponent: {fileID: 3129667736519373146}
+  animator: {fileID: 5805064814616177901}
   detectionMark: {fileID: 6020800960388234555}
-  sightTarget: {fileID: 3243088900989205589}
-  canKill: 0
+  canKill: 1
   canMove: 1
   rotationMultiplier: 5
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 64
   detectionThreshold: 0.1
   detectionIncreaseRate: 10
   detectionDecreaseRate: 5
@@ -1202,7 +1205,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 2
+      value: 1.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1221,11 +1224,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  headRotationSpeed: 1
-  stopPoints: 3
-  stopDuration: 0.5
-  maxOffsetDistance: 3
-  headDetectionDistance: 5
   mainDetectionDistance: 6
   sideDetectionDistance: 4
   rayOriginHeight: 1.5
@@ -1296,7 +1294,7 @@ Animator:
   m_GameObject: {fileID: 3247145216075624242}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 710db376e73cfe94ea1c5831803849f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

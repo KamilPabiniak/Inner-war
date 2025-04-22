@@ -19,7 +19,6 @@ namespace Enemy.State
 
         public void EnterState(EnemyBase enemy)
         {
-            enemy.SetStateChangeLock(true);
             enemy.StartCoroutine(LookAtAlert(enemy));
             enemy.sound.PlayInvestigateSound();
             AnxietyManager.Instance.IncreaseFear(5f);
