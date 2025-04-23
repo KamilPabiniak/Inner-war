@@ -144,10 +144,7 @@ using UnityEngine;
         Vector3 gravityMovement = Vector3.up * (_verticalVelocity * Time.deltaTime);
         characterController.Move(gravityMovement);
     }
-
-    /// <summary>
-    /// Przełącznik stanu CharacterController z Inspektora.
-    /// </summary>
+    
     [ContextMenu("Toggle CharacterController")]
     public void ToggleCharacterController()
     {
@@ -164,10 +161,7 @@ using UnityEngine;
 
         Debug.Log($"CharacterController is now {(CharacterControllerEnabled ? "Enabled" : "Disabled")}");
     }
-
-    /// <summary>
-    /// Przełącznik stanu wejścia gracza z Inspektora.
-    /// </summary>
+    
     [ContextMenu("Toggle Input")]
     public void ToggleInput()
     {
@@ -184,10 +178,6 @@ using UnityEngine;
         Debug.Log($"Input is now {(isEnabled ? "enabled" : "disabled")}");
     }
     
-
-    /// <summary>
-    /// Przełącznik stanu grawitacji z Inspektora.
-    /// </summary>
     [ContextMenu("Toggle Gravity")]
     public void ToggleGravity()
     {

@@ -10,45 +10,43 @@ namespace Enemy.State
         private float _waitTimer;
         private static readonly int CheckArea = Animator.StringToHash("CheckArea");
 
-        // Machine-specific head rotation
-
-        public void EnterState(EnemyBase enemy)
+        public void EnterState(EnemyBrain enemyBrain)
         {
-            enemy.sound.PlayPatrolSound();
-            enemy.navMeshAgent.isStopped = false;
-            SetNewPatrolPoint(enemy);
+            enemyBrain.audio.PlayPatrolSound();
+            enemyBrain.movement.Resume();
+            SetNewPatrolPoint(enemyBrain);
         }
 
-        public void UpdateState(EnemyBase enemy)
+        public void UpdateState(EnemyBrain enemyBrain)
         {
             if (_isWaiting)
             {
                 _waitTimer -= Time.deltaTime;
-                enemy.animator.SetBool(CheckArea, true); //Animator bool
+                enemyBrain.animator.SetBool(CheckArea, true); //Animator bool
                 
-                if (enemy.IsObjectInFront())
+                if (enemyBrain.movement.IsObjectInFront())
                 {
-                    enemy.TurnTowardsFreeSpace();
+                    enemyBrain.movement.TurnTowardsFreeSpace();
                 }
 
                 if (_waitTimer <= 0f)
                 {
                     _isWaiting = false;
                     
-                    enemy.animator.SetBool(CheckArea, false); // Animator bool reset 
+                    enemyBrain.animator.SetBool(CheckArea, false); // Animator bool reset 
                     EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
-                    SetNewPatrolPoint(enemy);
+                    SetNewPatrolPoint(enemyBrain);
                 }
                 return;
             }
 
             // If the agent has reached the patrol destination
-            if (!enemy.navMeshAgent.pathPending &&
-                enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
+            if (!enemyBrain.movement.agent.pathPending &&
+                enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance)
             {
                 // Start waiting and release current patrol point
                 _isWaiting = true;
-                _waitTimer = EnemyBase.WaitTimeAtPatrolPoint;
+                _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
 
                 if (_patrolPoint != Vector3.zero)
                 {
@@ -58,31 +56,31 @@ namespace Enemy.State
             }
         }
 
-        public void ExitState(EnemyBase enemy)
+        public void ExitState(EnemyBrain enemyBrain)
         {
-            enemy.animator.SetBool(CheckArea, false);
-            if (!enemy.navMeshAgent.pathPending &&
-                enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance)
+            enemyBrain.animator.SetBool(CheckArea, false);
+            if (!enemyBrain.movement.agent.pathPending &&
+                enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance)
             {
                 EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
             }
         }
 
-        private void SetNewPatrolPoint(EnemyBase enemy)
+        private void SetNewPatrolPoint(EnemyBrain enemyBrain)
         {
-            if (!enemy.navMeshAgent.isOnNavMesh || !enemy.navMeshAgent.enabled)
+            if (!enemyBrain.movement.agent.isOnNavMesh || !enemyBrain.movement.agent.enabled)
             {
                 return;
             }
 
-            _patrolPoint = enemy.RequestPatrolPoint();
+            _patrolPoint = enemyBrain.RequestPatrolPoint();
 
-            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, EnemyBase.PatrolRange, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemyBrain.patrolRange, NavMesh.AllAreas))
             {
                 _patrolPoint = hit.position;
-                if (enemy.canMove)
+                if (enemyBrain.canMove)
                 {
-                    enemy.navMeshAgent.SetDestination(_patrolPoint);
+                    enemyBrain.movement.GoTo(_patrolPoint);
                 }
             }
         }

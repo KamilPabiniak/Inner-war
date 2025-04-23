@@ -8,6 +8,8 @@ public class PlayerMakeNoise : PlayerModule
     [Header("Noise Settings")]  
     public LayerMask targetMask;          // Layer mask for potential enemy targets
     public float noiseRange = 10f;        // The range within which noise is detected by enemies
+    [Range(0.1f, 1f)]
+    public float heightScale = 0.5f; 
     public float noiseCooldown = 3f;      // Time interval between noise emissions
     public float alertCooldownTime = 5f;  // Cooldown time before the same enemy can be alerted again
 
@@ -75,11 +77,22 @@ public class PlayerMakeNoise : PlayerModule
     private void EmitNoise()
     {
         int targets = Physics.OverlapSphereNonAlloc(transform.position, noiseRange, _results, targetMask);
+        float invHeight = 1f / heightScale;
+        float rangeSqr = noiseRange * noiseRange;
+
         for (int i = 0; i < targets; i++)
         {
             Collider col = _results[i];
-            var enemy = col.GetComponentInParent<EnemyBase>();
-            if (enemy == null) continue;
+            
+            Vector3 dir = col.transform.position - transform.position;
+            dir.y *= invHeight;
+            
+            if (dir.sqrMagnitude > rangeSqr)
+                continue;
+
+            var enemy = col.GetComponentInParent<Enemy.EnemyBrain>();
+            if (enemy == null)
+                continue;
 
             if (_alertedTargets.TryGetValue(col, out float lastAlert) && lastAlert + alertCooldownTime > Time.time)
             {
@@ -105,7 +118,11 @@ public class PlayerMakeNoise : PlayerModule
     private void OnDrawGizmosSelected()
     {
         if (!drawSphere) return;
+
+        Matrix4x4 old = Gizmos.matrix;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, Quaternion.identity, new Vector3(1f, heightScale, 1f));
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, noiseRange);
+        Gizmos.DrawWireSphere(Vector3.zero, noiseRange);
+        Gizmos.matrix = old;
     }
 }

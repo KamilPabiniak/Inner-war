@@ -73,7 +73,7 @@ public class PlayerWhistling : PlayerModule
         for (int i = 0; i < targetsInRange; i++)
         {
             var targetCollider = _results[i];
-            var enemy = targetCollider.GetComponentInParent<EnemyBase>();
+            var enemy = targetCollider.GetComponentInParent<Enemy.EnemyBrain>();
 
             if (enemy == null) continue;
             if (_alertedTargets.ContainsKey(targetCollider) && _alertedTargets[targetCollider] + alertCooldownTime > Time.time)

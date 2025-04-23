@@ -17,70 +17,77 @@ namespace Enemy.State
             _lastKnownPosition  = position;
         }
 
-        public void EnterState(EnemyBase enemy)
+        public void EnterState(EnemyBrain enemyBrain)
         {
-            enemy.StartCoroutine(LookAtAlert(enemy));
-            enemy.sound.PlayInvestigateSound();
+            enemyBrain.StartCoroutine(LookAtAlert(enemyBrain));
+            enemyBrain.audio.PlayInvestigateSound();
             AnxietyManager.Instance.IncreaseFear(5f);
         }
 
-        public void UpdateState(EnemyBase enemy)
+        public void UpdateState(EnemyBrain enemyBrain)
         {
-            if (enemy.Target != null && enemy.SeeTarget)
+            if (enemyBrain.detection.IsPlayerVisible && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
+            {
+                enemyBrain.movement.Stop();
+                enemyBrain.movement.Face(enemyBrain.Target.position);
+                return; 
+            }
+            
+            if (enemyBrain.Target != null && enemyBrain.detection.IsPlayerVisible)
             {
                 _lostSightTimer = 0f;
-                _lastKnownPosition = enemy.Target.position;
+                _lastKnownPosition = enemyBrain.Target.position;
 
-                if (enemy.IsTargetInNavMesh(out NavMeshHit hit))
+                if (enemyBrain.IsTargetInNavMesh(out NavMeshHit hit))
                 {
-                    if (!enemy.canMove || !(enemy.DetectionProgress > enemy.detectionValueToChase)) return;
-                    enemy.FaceTarget();
-                    enemy.navMeshAgent.SetDestination(hit.position);
+                    if (!enemyBrain.canMove || !(enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)) return;
+                    enemyBrain.movement.Face(enemyBrain.Target.position);
+                    enemyBrain.movement.GoTo(hit.position);
                 }
                 else
                 {
-                    enemy.FaceTarget();
+                    enemyBrain.movement.Face(enemyBrain.Target.position);
                 }
             }
             else
             {
                 _lostSightTimer += Time.deltaTime;
             
-                if (_lostSightTimer < enemy.maxInvestigationTime)
+                if (_lostSightTimer < enemyBrain.maxInvestigationTime)
                 {
-                    if (enemy.canMove && enemy.IsTargetInNavMesh(out _) && enemy.DetectionProgress > enemy.detectionValueToChase)
+                    if (enemyBrain.canMove && enemyBrain.IsTargetInNavMesh(out _) && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
                     {
-                        enemy.navMeshAgent.SetDestination(_lastKnownPosition);
+                        enemyBrain.movement.agent.SetDestination(_lastKnownPosition);
                     }
                 }
                 else
                 {
-                    enemy.ChangeState(new PatrolState());
+                    enemyBrain.ChangeState(new PatrolState());
                 }
             }
         }
 
-        public void ExitState(EnemyBase enemy)
+        public void ExitState(EnemyBrain enemyBrain)
         {
-            enemy.SetStateChangeLock(false);
+            enemyBrain.SetStateChangeLock(false);
         }
     
-        private IEnumerator LookAtAlert(EnemyBase enemy)
+        private IEnumerator LookAtAlert(EnemyBrain enemyBrain)
         {
             float timer = 0f;
             while (timer < _initialRotationTime)
             {
-                RotateToAlert(enemy);
+                RotateToAlert(enemyBrain);
                 timer += Time.deltaTime;
                 yield return null;
             }
         }
     
-        private void RotateToAlert(EnemyBase enemy)
+        private void RotateToAlert(EnemyBrain enemyBrain)
         {
-            Vector3 direction = (_lastKnownPosition - enemy.transform.position).normalized;
+            Vector3 direction = (_lastKnownPosition - enemyBrain.transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, lookRotation, Time.deltaTime * enemy.rotationMultiplier);
+            enemyBrain.transform.rotation = Quaternion.Slerp(enemyBrain.transform.rotation, lookRotation, Time.deltaTime * enemyBrain.movement.rotationSpeed);
         }
     }
 }

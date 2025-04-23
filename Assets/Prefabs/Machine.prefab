@@ -1142,6 +1142,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7601634890967749561}
   - component: {fileID: 5535685749611436939}
+  - component: {fileID: 5965334082298027993}
+  - component: {fileID: 1294484814404840590}
   - component: {fileID: 4366536721842437855}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 5805064814616177901}
@@ -1186,21 +1188,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6cf7a2c2192cd4f82a3950c3c0512c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound: {fileID: 4366536721842437855}
-  navMeshAgent: {fileID: 8826511624185513472}
-  lightComponent: {fileID: 3129667736519373146}
+  audio: {fileID: 4366536721842437855}
+  detection: {fileID: 5965334082298027993}
+  movement: {fileID: 1294484814404840590}
   animator: {fileID: 5805064814616177901}
-  detectionMark: {fileID: 6020800960388234555}
   canKill: 1
   canMove: 1
-  rotationMultiplier: 5
+  patrolRange: 10
+  minPatrolPointDistance: 2
+  waitTimeAtPatrolPoint: 3
+  detectionValueToChase: 25
+  maxInvestigationTime: 10
+  attackDuration: 5
+  attackAfterLostTarget: 5
+  attackSpeedMultiplier: 3.5
+  waitAfterAttack: 6
+--- !u!114 &5965334082298027993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd05975dbb41dfa428587973bc12c9d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lightComponent: {fileID: 3129667736519373146}
+  detectionMark: {fileID: 6020800960388234555}
   targetMask:
     serializedVersion: 2
     m_Bits: 64
-  detectionThreshold: 0.1
-  detectionIncreaseRate: 10
-  detectionDecreaseRate: 5
-  distanceMultiplier:
+  threshold: 0.1
+  increaseRate: 10
+  decreaseRate: 5
+  distanceCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1224,20 +1247,26 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  mainDetectionDistance: 4
-  sideDetectionDistance: 3
+--- !u!114 &1294484814404840590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9640c23eaaeb1a446b76afcf6923fd15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 8826511624185513472}
+  rotationSpeed: 5
+  mainDetectionDistance: 6
+  sideDetectionDistance: 4
   rayOriginHeight: 1.5
-  sideRayAngleOffset: 25.5
-  additionalRayAngleOffset: 16
-  debugFOV: 1
+  sideRayAngleOffset: 30
+  additionalRayAngleOffset: 20
   debugWallRays: 1
-  fovColor: {r: 0, g: 1, b: 0, a: 1}
-  detectionValueToChase: 25
-  maxInvestigationTime: 10
-  attackDuration: 5
-  attackAfterLostTarget: 5
-  attackSpeedMultiplier: 3.5
-  waitAfterAttack: 6
 --- !u!114 &4366536721842437855
 MonoBehaviour:
   m_ObjectHideFlags: 0

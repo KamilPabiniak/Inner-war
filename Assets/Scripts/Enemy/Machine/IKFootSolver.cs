@@ -41,7 +41,7 @@ public class IKFootSolver : MonoBehaviour
                 newPosition = info.point + (body.forward * stepLength * direction) + footOffset;
                 newNormal = info.normal;
                 //sound bool here
-                GetComponentInParent<EnemySound>()?.ResetFootStepFlag();
+                GetComponentInParent<EnemyAudio>()?.ResetFootStepFlag();
             }
         }
 
@@ -56,7 +56,7 @@ public class IKFootSolver : MonoBehaviour
             //sound trigger here
             if (lerp > 0.8f)
             {
-                GetComponentInParent<EnemySound>()?.PlayFootStepSound();
+                GetComponentInParent<EnemyAudio>()?.PlayFootStepSound();
             }
         }
         else

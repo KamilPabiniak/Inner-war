@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySound : MonoBehaviour
+public class EnemyAudio : MonoBehaviour
 {
     [Header("Audio References")]
     [SerializeField] private GameObject audioSources;
@@ -18,6 +18,7 @@ public class EnemySound : MonoBehaviour
     [SerializeField] private AudioClip[] overload;
     [SerializeField] private AudioClip warning;
     [SerializeField] private float stateRange;
+    [SerializeField] private float stateVolume;
 
     private bool _footStepPlayed;
     private AudioSource _currentStateAudio;
@@ -70,16 +71,14 @@ public class EnemySound : MonoBehaviour
     private void PlayStateSound(AudioClip clip)
     {
         if (clip == null) return;
-
-        // Block if a state sound is still playing
+        
         if (_currentStateAudio != null && _currentStateAudio.isPlaying)
             return;
 
-        // Play new state sound and track its AudioSource
         _currentStateAudio = SoundFXManager.Instance.Play3DSoundFXClip(
             clip,
             audioSources.transform,
-            1f,
+            stateVolume,
             audioMixerGroup: SoundFXManager.Instance.LowPassMixer,
             maxDistance: stateRange
         );

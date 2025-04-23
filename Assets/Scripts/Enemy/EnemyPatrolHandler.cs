@@ -6,11 +6,11 @@ namespace Enemy
 {
     public static class EnemyPatrolHandler
     {
-        private static readonly List<EnemyBase> Registered = new();
+        private static readonly List<EnemyBrain> Registered = new();
         private static readonly List<Vector3> Occupied = new();
 
-        public static void RegisterEnemy(EnemyBase e) { if (!Registered.Contains(e)) Registered.Add(e); }
-        public static void UnregisterEnemy(EnemyBase e) { Registered.Remove(e); }
+        public static void RegisterEnemy(EnemyBrain e) { if (!Registered.Contains(e)) Registered.Add(e); }
+        public static void UnregisterEnemy(EnemyBrain e) { Registered.Remove(e); }
         
         public static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
         {

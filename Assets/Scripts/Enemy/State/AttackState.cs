@@ -6,7 +6,7 @@ namespace Enemy.State
 {
     public class AttackState : IEnemyState
     {
-        private EnemyBase    _enemy;
+        private EnemyBrain    _enemyBrain;
         private NavMeshAgent _agent;
         private Vector3      _lastKnownPos;
         
@@ -16,46 +16,46 @@ namespace Enemy.State
         private float _originalSpeed;
         private const float PredictionTime = 0.5f;
 
-        public void EnterState(EnemyBase enemy)
+        public void EnterState(EnemyBrain enemyBrain)
         {
-            _enemy   = enemy;
-            _agent   = enemy.navMeshAgent;
+            _enemyBrain   = enemyBrain;
+            _agent   = enemyBrain.movement.agent;
             
             _originalSpeed   = _agent.speed;
             
-            _agent.speed           *= enemy.attackSpeedMultiplier;
+            _agent.speed           *= enemyBrain.attackSpeedMultiplier;
             _agent.autoBraking      = false;
             _agent.stoppingDistance = 0f;
             _agent.updatePosition   = true;
 
-            _attackTimer     = enemy.attackDuration;
+            _attackTimer     = enemyBrain.attackDuration;
             _lostTargetTimer = 0f;
             _isOverloading   = false;
 
         
-            if (enemy.Target != null)
-                _lastKnownPos = enemy.Target.position;
+            if (enemyBrain.Target != null)
+                _lastKnownPos = enemyBrain.Target.position;
 
-            enemy.sound.PlayAttackSound();
-            enemy.SetStateChangeLock(true);
+            enemyBrain.audio.PlayAttackSound();
+            enemyBrain.SetStateChangeLock(true);
             GameEvents.onPlayerKilled += HandlePlayerKilled;
             AnxietyManager.Instance.TriggerProfileEffects();
         }
 
-        public void UpdateState(EnemyBase enemy)
+        public void UpdateState(EnemyBrain enemyBrain)
         {
             if (_isOverloading)
             {
-                enemy.waitAfterAttack -= Time.deltaTime;
-                if (enemy.waitAfterAttack <= 0f)
-                    enemy.ChangeState(new PatrolState());
+                enemyBrain.waitAfterAttack -= Time.deltaTime;
+                if (enemyBrain.waitAfterAttack <= 0f)
+                    enemyBrain.ChangeState(new PatrolState());
                 return;
             }
             
-            if (enemy.Target != null)
+            if (enemyBrain.Target != null)
             {
-                var predicted = enemy.Target.position;
-                if (enemy.Target.TryGetComponent<Rigidbody>(out var rb))
+                var predicted = enemyBrain.Target.position;
+                if (enemyBrain.Target.TryGetComponent<Rigidbody>(out var rb))
                     predicted += rb.linearVelocity * PredictionTime;
                 _lastKnownPos    = predicted;
                 _lostTargetTimer = 0f;
@@ -63,17 +63,17 @@ namespace Enemy.State
             else
             {
                 _lostTargetTimer += Time.deltaTime;
-                if (_lostTargetTimer >= enemy.attackAfterLostTarget)
+                if (_lostTargetTimer >= enemyBrain.attackAfterLostTarget)
                 {
-                    enemy.sound.PlayTargetLostSound();
-                    enemy.ChangeState(new PatrolState());
+                    enemyBrain.audio.PlayTargetLostSound();
+                    enemyBrain.ChangeState(new PatrolState());
                     return;
                 }
             }
             
             var path = new NavMeshPath();
             bool pathOK = NavMesh.CalculatePath(
-                enemy.transform.position,
+                enemyBrain.transform.position,
                 _lastKnownPos,
                 NavMesh.AllAreas,
                 path)
@@ -84,27 +84,27 @@ namespace Enemy.State
             else
                 _agent.SetDestination(_lastKnownPos);
             
-            if (enemy.canMove)
+            if (enemyBrain.canMove)
                 _agent.Move(_agent.desiredVelocity * Time.deltaTime);
             
             _attackTimer -= Time.deltaTime;
             if (_attackTimer <= 0f)
             {
-                enemy.sound.PlayOverloadSound();
+                enemyBrain.audio.PlayOverloadSound();
                 _isOverloading = true;
             }
         }
 
-        public void ExitState(EnemyBase enemy)
+        public void ExitState(EnemyBrain enemyBrain)
         {
             _agent.speed        = _originalSpeed;
-            enemy.SetStateChangeLock(false);
+            enemyBrain.SetStateChangeLock(false);
             GameEvents.onPlayerKilled -= HandlePlayerKilled;
         }
 
         private void HandlePlayerKilled()
         {
-            _enemy.ChangeState(new PatrolState());
+            _enemyBrain.ChangeState(new PatrolState());
         }
     }
 }

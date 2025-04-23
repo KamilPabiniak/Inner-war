@@ -21,10 +21,10 @@ public class Rock : MonoBehaviour, IInteractable
         NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
-            EnemyBase enemy = agent.GetComponent<EnemyBase>();
-            if (enemy != null)
+            Enemy.EnemyBrain enemyBrain = agent.GetComponent<Enemy.EnemyBrain>();
+            if (enemyBrain != null)
             {
-                enemy.ForceAttack();
+                enemyBrain.ForceAttack();
             }
         }
         
@@ -35,15 +35,15 @@ public class Rock : MonoBehaviour, IInteractable
             Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius);
             
             // Use a HashSet to avoid alerting the same EnemyBase more than once.
-            HashSet<EnemyBase> alertedEnemies = new HashSet<EnemyBase>();
+            HashSet<Enemy.EnemyBrain> alertedEnemies = new HashSet<Enemy.EnemyBrain>();
             
             foreach (Collider col in colliders)
             {
-                EnemyBase enemy = col.GetComponentInParent<EnemyBase>();
-                if (enemy != null && !alertedEnemies.Contains(enemy))
+                Enemy.EnemyBrain enemyBrain = col.GetComponentInParent<Enemy.EnemyBrain>();
+                if (enemyBrain != null && !alertedEnemies.Contains(enemyBrain))
                 {
-                    enemy.OnAlertReceived(impactPosition);
-                    alertedEnemies.Add(enemy);
+                    enemyBrain.OnAlertReceived(impactPosition);
+                    alertedEnemies.Add(enemyBrain);
                 }
             }
         }
