@@ -40,6 +40,10 @@ public class PlayerLook : PlayerModule
     [Tooltip("Speed of lean transition")]
     [SerializeField] private float leanSpeed = 5f;
 
+    [Header("Climb Look Settings")]
+    [Tooltip("Speed of camera pitch adjustment when climbing")]
+    [SerializeField] private float climbLookSpeed = 5f;
+    
     // References & state
     private PlayerInput _playerInput;
     private CharacterController _characterController;
@@ -88,7 +92,7 @@ public class PlayerLook : PlayerModule
         }
         else if (Player.state == Player.State.Climbing)
         {
-            ResetLookState();
+            HandleClimbLook();
         }
 
         if (_isShaking)
@@ -180,6 +184,19 @@ public class PlayerLook : PlayerModule
             Player.transform.eulerAngles.y,
             0f);
         _cameraTransform.rotation = baseRotation * _currentLeanRotation;
+    }
+    
+    private void HandleClimbLook()
+    {
+        // wartoœæ od -1 do +1: -1 = schodzimy, +1 = wspinamy siê
+        float moveY = Mathf.Clamp(_playerInput.MoveInput.y, -1f, 1f);
+    
+        // chcemy, aby przy ruchu w górê _xRotation by³o ujemne (patrzymy w górê),
+        // wiêc mno¿ymy przez -verticalClamp
+        float targetPitch = -verticalClamp * moveY;
+    
+        // p³ynne przejœcie od bie¿¹cej wartoœci do docelowej
+        _xRotation = Mathf.Lerp(_xRotation, targetPitch, climbLookSpeed * Time.deltaTime);
     }
     
     public float MouseSensitivity
