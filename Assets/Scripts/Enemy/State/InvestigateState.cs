@@ -16,6 +16,10 @@ namespace Enemy.State
         {
             _lastKnownPosition  = position;
         }
+        public void UpdatePosition(Vector3 newPosition)
+        {
+            _lastKnownPosition = newPosition;
+        }
 
         public void EnterState(EnemyBrain enemyBrain)
         {
@@ -60,16 +64,11 @@ namespace Enemy.State
                         enemyBrain.movement.agent.SetDestination(_lastKnownPosition);
                     }
                 }
-                else
-                {
-                    enemyBrain.ChangeState(new PatrolState());
-                }
             }
         }
 
         public void ExitState(EnemyBrain enemyBrain)
         {
-            enemyBrain.SetStateChangeLock(false);
         }
     
         private IEnumerator LookAtAlert(EnemyBrain enemyBrain)

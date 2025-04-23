@@ -1,12 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerThrow : PlayerModule
 {
     [Header("Rock Throw Settings")]
     public Transform handPosition;
     public GameObject stonePrefab;
-    public LayerMask groundMask;
     public float throwForce = 10f;
 
     [Header("Trajectory Settings")]
@@ -16,7 +14,7 @@ public class PlayerThrow : PlayerModule
     public float trajectoryWidth = 0.05f;
 
     private PlayerInput _playerInput;
-    private bool canThrow = false;
+    private bool canThrow;
     private bool hasStone = true; // Ammo system: only one stone at a time.
 
     public bool HasStone => hasStone;

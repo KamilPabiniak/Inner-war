@@ -980,10 +980,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 0.9
   m_Height: 2.3
   m_Direction: 2
-  m_Center: {x: -0.3, y: 0, z: 0}
+  m_Center: {x: -0.45, y: 0, z: 0}
 --- !u!1 &2716433088659916575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1221,7 +1221,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   threshold: 0.1
-  increaseRate: 10
+  increaseRate: 8
   decreaseRate: 5
   distanceCurve:
     serializedVersion: 2
@@ -1303,6 +1303,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: aab3c1ab354e456499db60e653a54e29, type: 3}
   warning: {fileID: 8300000, guid: 2907480ffa54afb4b8e8f00cf5e8db82, type: 3}
   stateRange: 30
+  stateVolume: 3
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1316,8 +1317,8 @@ NavMeshAgent:
   m_Speed: 3
   m_Acceleration: 12
   avoidancePriority: 50
-  m_AngularSpeed: 1200
-  m_StoppingDistance: 0.89
+  m_AngularSpeed: 100
+  m_StoppingDistance: 0.3
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

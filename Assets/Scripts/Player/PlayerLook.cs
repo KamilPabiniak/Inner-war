@@ -175,8 +175,7 @@ public class PlayerLook : PlayerModule
             _cameraTransform.position,
             correctedFollow,
             cameraFollowSpeed * Time.deltaTime);
-
-        // Apply bobbing offset in world units
+        
         _cameraTransform.position = smoothPos + Vector3.up * _bobbingOffset;
         
         Quaternion baseRotation = Quaternion.Euler(
@@ -188,14 +187,8 @@ public class PlayerLook : PlayerModule
     
     private void HandleClimbLook()
     {
-        // wartoœæ od -1 do +1: -1 = schodzimy, +1 = wspinamy siê
         float moveY = Mathf.Clamp(_playerInput.MoveInput.y, -1f, 1f);
-    
-        // chcemy, aby przy ruchu w górê _xRotation by³o ujemne (patrzymy w górê),
-        // wiêc mno¿ymy przez -verticalClamp
         float targetPitch = -verticalClamp * moveY;
-    
-        // p³ynne przejœcie od bie¿¹cej wartoœci do docelowej
         _xRotation = Mathf.Lerp(_xRotation, targetPitch, climbLookSpeed * Time.deltaTime);
     }
     

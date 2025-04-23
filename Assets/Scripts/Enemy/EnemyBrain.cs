@@ -7,20 +7,22 @@ namespace Enemy
     [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(DetectionController))]
     public class EnemyBrain : MonoBehaviour
     {
+        // Singletonowe instancje stanów
+        private static readonly PatrolState PatrolState = new();
+        private static readonly InvestigateState InvestigateState = new(Vector3.zero); 
+        private static readonly AttackState AttackState = new();
         public Transform Target { get; private set; }
+        private IEnemyState _currentState;
         
         [Header("References")] 
         public EnemyAudio audio;
         public DetectionController detection;
         public MovementController  movement;
         public Animator animator;     
-        private IEnemyState CurrentState { get; set; }
 
         [Header("Common Settings")] 
         public bool canKill = true;
         public bool canMove = true;
-        private bool _wasPlayerVisible;
-        private bool _canChangeState = true, _isChangingState;
         
         // Patrol & Investigate & Attack Settings
         [Header("Patrol")] 
@@ -39,9 +41,12 @@ namespace Enemy
         [Tooltip("NavMeshAgent speed multiplier during attack")]
         public float attackSpeedMultiplier = 1.5f;
         [Tooltip("Time to wait after overloaded attack")]
-        public float waitAfterAttack = 6f;
-
+        public float waitAfterOverload = 6f;
+        
         private Vector3 _currentPatrolPoint;
+        private bool _wasPlayerVisible;
+        private bool _stateChangeRequested;
+        private IEnemyState _pendingState;
         
         private void Awake() => EnemyPatrolHandler.RegisterEnemy(this);
 
@@ -67,13 +72,19 @@ namespace Enemy
 
         private void Start()
         {
-            ChangeState(new PatrolState());
+            _currentState = PatrolState;
+            _currentState.EnterState(this);
         }
 
         void Update()
         {
             TryStateTransition();
-            CurrentState?.UpdateState(this);
+            _currentState?.UpdateState(this);
+            if (_stateChangeRequested)
+            {
+                PerformStateChange(_pendingState);
+                _stateChangeRequested = false;
+            }
         }
         
         private void SetTarget(Transform t) => Target = t;
@@ -81,28 +92,35 @@ namespace Enemy
         // -- State Management --
         private void TryStateTransition()
         {
-            if (!_canChangeState) return;
+            if (_currentState is AttackState)
+                return;
 
             float awareness = detection.AwarenessLevel;
 
-            // 1) If we’re fully alert → Attack
-            if (awareness >= 100f && !(CurrentState is AttackState))
+            if (awareness >= 100f)
             {
-                ChangeState(new AttackState());
+                if (!(_currentState is AttackState))
+                {
+                    RequestStateChange(AttackState);
+                }
+                return;
             }
-            else if (awareness >= detectionValueToChase && !(CurrentState is InvestigateState))
+
+            if (awareness >= detectionValueToChase)
             {
-                Vector3 alertPos = (detection.IsPlayerVisible && Target != null)
+                Vector3 alertPos = detection.IsPlayerVisible && Target != null
                     ? Target.position
                     : transform.position;
-                ChangeState(new InvestigateState(alertPos));
+                InvestigateState.UpdatePosition(alertPos);
+                RequestStateChange(InvestigateState);
+                return;
             }
-            else if (!(CurrentState is PatrolState))
+            
+            if (!(_currentState is PatrolState))
             {
-                ChangeState(new PatrolState());
+                RequestStateChange(PatrolState);
             }
         }
-
         
         private void HandlePartial() => UpdateVisuals(detection.AwarenessLevel, partial: true, full: false);
 
@@ -132,14 +150,19 @@ namespace Enemy
             }
         }
 
-        public void ChangeState(IEnemyState next)
+        private void RequestStateChange(IEnemyState nextState)
         {
-            if (_isChangingState || CurrentState == next) return;
-            _isChangingState = true;
-            CurrentState?.ExitState(this);
-            CurrentState = next;
-            CurrentState.EnterState(this);
-            _isChangingState = false;
+            if (_currentState == nextState) return;
+            
+            _pendingState = nextState;
+            _stateChangeRequested = true;
+        }
+
+        private void PerformStateChange(IEnemyState nextState)
+        {
+            _currentState?.ExitState(this);
+            _currentState = nextState;
+            _currentState.EnterState(this);
         }
 
         // -- Helpers --
@@ -155,7 +178,6 @@ namespace Enemy
             return false;
         }
         
-        public void SetStateChangeLock(bool locked) => _canChangeState = !locked;
         public Vector3 RequestPatrolPoint() => EnemyPatrolHandler.GetPatrolPoint(transform.position, patrolRange, minPatrolPointDistance);
         
         private void OnTriggerEnter(Collider other)
@@ -174,22 +196,28 @@ namespace Enemy
         }
         
         //Commands
+        public void OnBackToPatrol()
+        {
+            RequestStateChange(PatrolState);
+        }
+        
         public void OnAlertReceived(Vector3 alertPosition)
         {
-            if (CurrentState is AttackState) return;
-            ChangeState(new InvestigateState(alertPosition));
+            if (_currentState is AttackState) return;
+            RequestStateChange(InvestigateState);
+            InvestigateState.UpdatePosition(alertPosition);
         }
     
         public void OnAttackCommandReceived(Transform player)
         {
-            if (CurrentState is AttackState) return;
+            if (_currentState is AttackState) return;
             SetTarget(player);
-            ChangeState(new AttackState()); 
+            RequestStateChange(AttackState); 
             detection.SetAwarenessLevel(100f);
         }
         
         [ContextMenu("CurrentState")]
-        public void TellCurrentState() => Debug.Log(CurrentState);
+        public void TellCurrentState() => Debug.Log(_currentState);
         
         [ContextMenu("Investigate")]
         public void ForceInvestigate()
