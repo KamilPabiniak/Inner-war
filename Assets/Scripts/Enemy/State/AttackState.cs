@@ -16,6 +16,7 @@ namespace Enemy.State
         private float _originalSpeed;
         private float _originalAngularSpeed;
         private const float PredictionTime = 0.5f;
+        private bool _escapeSoundPlayed;
 
         public void EnterState(EnemyBrain enemyBrain)
         {
@@ -83,13 +84,23 @@ namespace Enemy.State
             if (enemyBrain.canMove)
             {
                 _agent.isStopped = false;
-                _agent.SetDestination(_lastKnownPos);
+               enemyBrain.movement.GoTo(_lastKnownPos);
             }
             else
             {
                 _agent.isStopped = true;
             }
 
+            if (_lastKnownPos != null
+                && enemyBrain.detection.IsPlayerVisible
+                && !enemyBrain.IsTargetInNavMesh(out _))
+            {
+                if (_escapeSoundPlayed) return;
+                enemyBrain.audio.PlayTargetEscapeSound();
+                _escapeSoundPlayed = true;
+            }
+
+            
             _attackTimer -= Time.deltaTime;
             if (_attackTimer <= 0f)
             {

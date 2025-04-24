@@ -15,7 +15,6 @@ namespace Enemy
         public AnimationCurve distanceCurve = AnimationCurve.Linear(0,1,10,0.1f);
 
         public event Action<Transform> OnSpotted;
-        public event Action OnPartial, OnLostPartial, OnFull;
         public event Action<float> OnProgress;
 
         private float _awarenessLevel;
@@ -61,19 +60,14 @@ namespace Enemy
 
         void UpdateProgress() {
             float intensity = _isPlayerVisible ? CalcIntensity(_target) : 0f;
-            bool wasSeeing = _isPlayerVisible;
 
             if (intensity > threshold) {
-                if (!wasSeeing) OnPartial?.Invoke();
                 _awarenessLevel += intensity * increaseRate * Time.deltaTime;
             } else {
-                if (wasSeeing) OnLostPartial?.Invoke();
                 _awarenessLevel -= decreaseRate * Time.deltaTime;
             }
-
-            float prev = _awarenessLevel;
+            
             _awarenessLevel = Mathf.Clamp(_awarenessLevel, 0f, 100f);
-            if (prev < 100f && _awarenessLevel >= 100f) OnFull?.Invoke();
             OnProgress?.Invoke(_awarenessLevel);
         }
 

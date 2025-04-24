@@ -10,8 +10,8 @@ namespace Enemy
         private readonly PatrolState _patrolState = new();
         private readonly InvestigateState _investigateState = new(Vector3.zero); 
         private readonly AttackState _attackState = new();
-        public Transform Target { get; private set; }
         private IEnemyState _currentState;
+        public Transform Target { get; private set; }
         
         [Header("References")] 
         public new EnemyAudio audio;
@@ -52,17 +52,15 @@ namespace Enemy
         // internal lock state
         private IEnemyState _lockState;
         private float _lockExpiresAt;
-        //play once Escaped
-        private bool _escapeSoundPlayed;
         
         
-        private void Awake() => EnemyPatrolHandler.RegisterEnemy(this);
+        private void Awake()
+        {
+            EnemyPatrolHandler.RegisterEnemy(this);
+        }
 
         private void OnEnable()
         {
-            detection.OnPartial    += HandlePartial;
-            detection.OnLostPartial+= HandleLostPartial;
-            detection.OnFull       += HandleFull;
             detection.OnProgress   += HandleProgress;
             detection.OnSpotted    += SetTarget;
         }
@@ -71,9 +69,6 @@ namespace Enemy
         {
             EnemyPatrolHandler.ReleasePatrolPoint(_currentPatrolPoint);
             EnemyPatrolHandler.UnregisterEnemy(this);
-            detection.OnPartial    -= HandlePartial;
-            detection.OnLostPartial-= HandleLostPartial;
-            detection.OnFull       -= HandleFull;
             detection.OnProgress   -= HandleProgress;
             detection.OnSpotted    -= SetTarget;
         }
@@ -92,28 +87,18 @@ namespace Enemy
             {
                 movement.Stop();
                 movement.Face(Target.position);
-                
-                if (!(_currentState is AttackState))
-                {
-                    audio.PlayWarningSound();
-                }
-                else
-                {
-                    if (_escapeSoundPlayed) return;
-                    audio.PlayTargetEscapeSound();
-                    _escapeSoundPlayed = true;
-                }
-                
+                if (_currentState is not AttackState) { audio.PlayWarningSound(); }
                 return;
             }
             
-            if (_lockState != null && Time.time < _lockExpiresAt)
+            // Lock on Investigate/Attack
+            if (_lockState != null)
             {
-                _currentState?.UpdateState(this);
-                return;
-            }
-            if (_lockState != null && Time.time >= _lockExpiresAt)
-            {
+                if (Time.time < _lockExpiresAt)
+                {
+                    _currentState.UpdateState(this);
+                    return;
+                }
                 _lockState = null;
             }
 
@@ -154,21 +139,9 @@ namespace Enemy
             }
         }
 
-        
-        private void HandlePartial() => UpdateVisuals(detection.AwarenessLevel, partial: true, full: false);
+        private void HandleProgress(float progress) => UpdateVisuals(progress);
 
-        private void HandleLostPartial() => UpdateVisuals(detection.AwarenessLevel, partial: false, full: false);
-
-        private void HandleFull() => UpdateVisuals(detection.AwarenessLevel, partial: false, full: true);
-
-        private void HandleProgress(float progress)
-        {
-            UpdateVisuals(progress, 
-                partial: progress >= detection.threshold, 
-                full:    progress >= 100f);
-        }
-
-        private void UpdateVisuals(float progress, bool partial, bool full)
+        private void UpdateVisuals(float progress)
         {
             Color targetColor;
             float alpha = Mathf.Clamp01(progress / 100f);
@@ -204,7 +177,6 @@ namespace Enemy
         
         private void PerformStateChange(IEnemyState nextState)
         {
-            _escapeSoundPlayed = false;
             _currentState?.ExitState(this);
             _currentState = nextState;
             _stateChangeRequested = false;
@@ -257,7 +229,6 @@ namespace Enemy
             _lockState = _investigateState;
             _lockExpiresAt = Time.time + investigateLockDuration;
         }
-
     
         public void OnAttackCommandReceived(Transform player)
         {
@@ -276,6 +247,7 @@ namespace Enemy
         [ContextMenu("Investigate")]
         public void ForceInvestigate()
         {
+            SetTarget(Player.Instance.transform);
             Transform target = Target.gameObject.transform;
             SetTarget(target);
             OnAlertReceived(target.position);
@@ -284,6 +256,7 @@ namespace Enemy
         [ContextMenu("Attack")]
         public void ForceAttack()
         {
+            SetTarget(Player.Instance.transform);
             Transform target = Target.gameObject.transform;
             OnAttackCommandReceived(target);
         }
