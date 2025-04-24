@@ -52,6 +52,8 @@ namespace Enemy
         // internal lock state
         private IEnemyState _lockState;
         private float _lockExpiresAt;
+        //play once Escaped
+        private bool _escapeSoundPlayed;
         
         
         private void Awake() => EnemyPatrolHandler.RegisterEnemy(this);
@@ -84,12 +86,32 @@ namespace Enemy
 
         private void Update()
         {
+            if (Target != null 
+                && detection.IsPlayerVisible 
+                && !IsTargetInNavMesh(out _))
+            {
+                movement.Stop();
+                movement.Face(Target.position);
+                
+                if (!(_currentState is AttackState))
+                {
+                    audio.PlayWarningSound();
+                }
+                else
+                {
+                    if (_escapeSoundPlayed) return;
+                    audio.PlayTargetEscapeSound();
+                    _escapeSoundPlayed = true;
+                }
+                
+                return;
+            }
+            
             if (_lockState != null && Time.time < _lockExpiresAt)
             {
                 _currentState?.UpdateState(this);
                 return;
             }
-          
             if (_lockState != null && Time.time >= _lockExpiresAt)
             {
                 _lockState = null;
@@ -102,6 +124,7 @@ namespace Enemy
                 PerformStateChange(_pendingState);
             }
         }
+
         
         private void SetTarget(Transform t) => Target = t;
         
@@ -112,7 +135,7 @@ namespace Enemy
 
             float awarenessLevel = detection.AwarenessLevel;
 
-            if (awarenessLevel >= 100f)
+            if (awarenessLevel >= 100f && IsTargetInNavMesh(out _))
             {
                 RequestStateChange(_attackState);
             }
@@ -181,6 +204,7 @@ namespace Enemy
         
         private void PerformStateChange(IEnemyState nextState)
         {
+            _escapeSoundPlayed = false;
             _currentState?.ExitState(this);
             _currentState = nextState;
             _stateChangeRequested = false;

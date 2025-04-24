@@ -17,6 +17,7 @@ public class EnemyAudio : MonoBehaviour
     [SerializeField] private AudioClip[] targetLostSound;
     [SerializeField] private AudioClip[] overload;
     [SerializeField] private AudioClip warning;
+    [SerializeField] private AudioClip targetEscaped;
     [SerializeField] private float stateRange;
     [SerializeField] private float stateVolume;
 
@@ -36,39 +37,42 @@ public class EnemyAudio : MonoBehaviour
     public void PlayPatrolSound()
     {
         int random = Random.Range(0, patrolStateSound.Length);
-        PlayStateSound(patrolStateSound[random]);
+        PlayMachineVoice(patrolStateSound[random]);
     }
 
     public void PlayInvestigateSound()
     {
         int random = Random.Range(0, investigateStateSound.Length);
-        PlayStateSound(investigateStateSound[random]);
+        PlayMachineVoice(investigateStateSound[random]);
     }
     
     public void PlayWarningSound()
     {
-        PlayStateSound(warning);
+        PlayMachineVoice(warning);
     }
-
+    public void PlayTargetEscapeSound()
+    {
+        PlayMachineVoice(targetEscaped);
+    }
     public void PlayAttackSound()
     {
         int random = Random.Range(0, attackStateSound.Length);
-        PlayStateSound(attackStateSound[random]);
+        PlayMachineVoice(attackStateSound[random]);
     }
 
     public void PlayTargetLostSound()
     {
         int random = Random.Range(0, targetLostSound.Length);
-        PlayStateSound(targetLostSound[random]);
+        PlayMachineVoice(targetLostSound[random]);
     }
 
     public void PlayOverloadSound()
     {
         int random = Random.Range(0, overload.Length);
-        PlayStateSound(overload[random]);
+        PlayMachineVoice(overload[random]);
     }
 
-    private void PlayStateSound(AudioClip clip)
+    private void PlayMachineVoice(AudioClip clip)
     {
         if (clip == null) return;
         
@@ -82,11 +86,11 @@ public class EnemyAudio : MonoBehaviour
             audioMixerGroup: SoundFXManager.Instance.MachineState,
             maxDistance: stateRange
         );
-
-        // Clear the reference after clip has finished
+        
         if (_currentStateAudio != null)
             StartCoroutine(ClearStateSoundAfterDelay(clip.length));
     }
+
 
     private IEnumerator ClearStateSoundAfterDelay(float delay)
     {
