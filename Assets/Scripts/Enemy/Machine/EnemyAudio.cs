@@ -79,7 +79,7 @@ public class EnemyAudio : MonoBehaviour
             clip,
             audioSources.transform,
             stateVolume,
-            audioMixerGroup: SoundFXManager.Instance.LowPassMixer,
+            audioMixerGroup: SoundFXManager.Instance.MachineState,
             maxDistance: stateRange
         );
 

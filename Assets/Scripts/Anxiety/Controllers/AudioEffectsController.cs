@@ -28,17 +28,25 @@ public class AudioEffectsController : MonoBehaviour
     
     private IEnumerator TransitionCutoff(float targetValue, float duration)
     {
-        audioMixer.GetFloat("cutoffFreq", out float startValue);
+        audioMixer.GetFloat("cutoffFreq", out float startFreq);
+        audioMixer.GetFloat("cutoffMusic", out float startMusic);
+        
         float timeElapsed = 0f;
         while (timeElapsed < duration)
         {
             float t = timeElapsed / duration;
-            float newValue = Mathf.Lerp(startValue, targetValue, Mathf.SmoothStep(0f, 1f, t));
-            audioMixer.SetFloat("cutoffFreq", newValue);
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+            
+            float newFreq = Mathf.Lerp(startFreq, targetValue, smoothT);
+            float newMusic = Mathf.Lerp(startMusic, targetValue, smoothT);
+            
+            audioMixer.SetFloat("cutoffFreq", newFreq);
+            audioMixer.SetFloat("cutoffMusic", newMusic);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
         audioMixer.SetFloat("cutoffFreq", targetValue);
+        audioMixer.SetFloat("cutoffMusic", targetValue);
     }
 
     #endregion

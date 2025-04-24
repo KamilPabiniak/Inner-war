@@ -7,7 +7,6 @@ namespace Enemy
     [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(DetectionController))]
     public class EnemyBrain : MonoBehaviour
     {
-        // Singletonowe instancje stanów
         private static readonly PatrolState PatrolState = new();
         private static readonly InvestigateState InvestigateState = new(Vector3.zero); 
         private static readonly AttackState AttackState = new();
@@ -15,7 +14,7 @@ namespace Enemy
         private IEnemyState _currentState;
         
         [Header("References")] 
-        public EnemyAudio audio;
+        public new EnemyAudio audio;
         public DetectionController detection;
         public MovementController  movement;
         public Animator animator;     
