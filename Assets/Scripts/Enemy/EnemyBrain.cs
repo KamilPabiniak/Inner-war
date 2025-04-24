@@ -7,9 +7,9 @@ namespace Enemy
     [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(DetectionController))]
     public class EnemyBrain : MonoBehaviour
     {
-        private static readonly PatrolState PatrolState = new();
-        private static readonly InvestigateState InvestigateState = new(Vector3.zero); 
-        private static readonly AttackState AttackState = new();
+        private readonly PatrolState _patrolState = new();
+        private readonly InvestigateState _investigateState = new(Vector3.zero); 
+        private readonly AttackState _attackState = new();
         public Transform Target { get; private set; }
         private IEnemyState _currentState;
         
@@ -32,20 +32,27 @@ namespace Enemy
         [Tooltip("Detection progress at which enemy switches to investigate")]
         public float detectionValueToChase = 25f;
         [Tooltip("Time before giving up investigation")]
-        public float maxInvestigationTime = 10f;
+        public float investigateLockDuration = 10f;
         [Header("Attack")] 
         [Tooltip("Attack state duration before overload")]
-        public float attackDuration = 5f;
+        public float attackLockDuration = 5f;
         public float attackAfterLostTarget = 5f;
         [Tooltip("NavMeshAgent speed multiplier during attack")]
         public float attackSpeedMultiplier = 1.5f;
         [Tooltip("Time to wait after overloaded attack")]
         public float waitAfterOverload = 6f;
         
+        //Patrol
         private Vector3 _currentPatrolPoint;
+        //Visibility
         private bool _wasPlayerVisible;
+        //State Change
         private bool _stateChangeRequested;
         private IEnemyState _pendingState;
+        // internal lock state
+        private IEnemyState _lockState;
+        private float _lockExpiresAt;
+        
         
         private void Awake() => EnemyPatrolHandler.RegisterEnemy(this);
 
@@ -71,18 +78,28 @@ namespace Enemy
 
         private void Start()
         {
-            _currentState = PatrolState;
+            _currentState = _patrolState;
             _currentState.EnterState(this);
         }
 
-        void Update()
+        private void Update()
         {
+            if (_lockState != null && Time.time < _lockExpiresAt)
+            {
+                _currentState?.UpdateState(this);
+                return;
+            }
+          
+            if (_lockState != null && Time.time >= _lockExpiresAt)
+            {
+                _lockState = null;
+            }
+
             TryStateTransition();
             _currentState?.UpdateState(this);
             if (_stateChangeRequested)
             {
                 PerformStateChange(_pendingState);
-                _stateChangeRequested = false;
             }
         }
         
@@ -91,35 +108,29 @@ namespace Enemy
         // -- State Management --
         private void TryStateTransition()
         {
-            if (_currentState is AttackState)
-                return;
+            if (_currentState is AttackState) return;
 
-            float awareness = detection.AwarenessLevel;
+            float awarenessLevel = detection.AwarenessLevel;
 
-            if (awareness >= 100f)
+            if (awarenessLevel >= 100f)
             {
-                if (!(_currentState is AttackState))
-                {
-                    RequestStateChange(AttackState);
-                }
-                return;
+                RequestStateChange(_attackState);
             }
-
-            if (awareness >= detectionValueToChase)
+            else if (awarenessLevel > 0f)   //  (0,100)
             {
-                Vector3 alertPos = detection.IsPlayerVisible && Target != null
-                    ? Target.position
-                    : transform.position;
-                InvestigateState.UpdatePosition(alertPos);
-                RequestStateChange(InvestigateState);
-                return;
+                _investigateState.UpdatePosition(
+                    detection.IsPlayerVisible && Target!=null
+                        ? Target.position
+                        : transform.position
+                );
+                RequestStateChange(_investigateState);
             }
-            
-            if (!(_currentState is PatrolState))
+            else // a <= 0f
             {
-                RequestStateChange(PatrolState);
+                RequestStateChange(_patrolState);
             }
         }
+
         
         private void HandlePartial() => UpdateVisuals(detection.AwarenessLevel, partial: true, full: false);
 
@@ -134,33 +145,46 @@ namespace Enemy
                 full:    progress >= 100f);
         }
 
-        private void UpdateVisuals(float prog, bool partial, bool full) {
-            if (full) {
-                detection.lightComponent.color = Color.red;
-                detection.detectionMark.color = Color.red;
+        private void UpdateVisuals(float progress, bool partial, bool full)
+        {
+            Color targetColor;
+            float alpha = Mathf.Clamp01(progress / 100f);
+
+            if (_currentState is AttackState)
+            {
+                targetColor = Color.red;
+                alpha = 1f; 
             }
-            else if (partial) {
-                detection.lightComponent.color = Color.yellow;
-                detection.detectionMark.color = Color.Lerp(Color.white, Color.yellow, prog/100f);
+            else if (_currentState is InvestigateState)
+            {
+                targetColor = Color.yellow;
+                alpha = 1f; 
             }
-            else {
-                detection.lightComponent.color = Color.white;
-                var c =  detection.detectionMark.color; c.a = 0;  detection.detectionMark.color = c;
+            else
+            {
+                targetColor = Color.white;
             }
+            
+            detection.lightComponent.color = targetColor;
+            
+            detection.detectionMark.color = new Color(targetColor.r, targetColor.g, targetColor.b, alpha);
         }
+
 
         private void RequestStateChange(IEnemyState nextState)
         {
-            if (_currentState == nextState) return;
+            if (_currentState == nextState || (_stateChangeRequested && _pendingState == nextState)) return;
             
             _pendingState = nextState;
             _stateChangeRequested = true;
         }
-
+        
         private void PerformStateChange(IEnemyState nextState)
         {
             _currentState?.ExitState(this);
             _currentState = nextState;
+            _stateChangeRequested = false;
+            _pendingState = null;
             _currentState.EnterState(this);
         }
 
@@ -197,22 +221,29 @@ namespace Enemy
         //Commands
         public void OnBackToPatrol()
         {
-            RequestStateChange(PatrolState);
+            RequestStateChange(_patrolState);
         }
         
         public void OnAlertReceived(Vector3 alertPosition)
         {
-            if (_currentState is AttackState) return;
-            RequestStateChange(InvestigateState);
-            InvestigateState.UpdatePosition(alertPosition);
+            if (_currentState is AttackState) { return; }
+            detection.SetAwarenessLevel(detectionValueToChase + 1f);
+            PerformStateChange(_investigateState);
+            _investigateState.UpdatePosition(alertPosition);
+            _lockState = _investigateState;
+            _lockExpiresAt = Time.time + investigateLockDuration;
         }
+
     
         public void OnAttackCommandReceived(Transform player)
         {
             if (_currentState is AttackState) return;
+            _lockState = null;
             SetTarget(player);
-            RequestStateChange(AttackState); 
             detection.SetAwarenessLevel(100f);
+            PerformStateChange(_attackState);
+            _lockState = _attackState;
+            _lockExpiresAt = Time.time + attackLockDuration;
         }
         
         [ContextMenu("CurrentState")]

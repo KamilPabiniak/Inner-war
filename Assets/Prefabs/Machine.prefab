@@ -883,6 +883,7 @@ GameObject:
   - component: {fileID: 3488850928756222184}
   - component: {fileID: 405592730463698979}
   - component: {fileID: 2830206736435647578}
+  - component: {fileID: 3960084906147543730}
   m_Layer: 7
   m_Name: hips
   m_TagString: Untagged
@@ -984,6 +985,29 @@ CapsuleCollider:
   m_Height: 2.3
   m_Direction: 2
   m_Center: {x: -0.45, y: 0, z: 0}
+--- !u!136 &3960084906147543730
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2713237391683099481}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2716433088659916575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,11 +1222,11 @@ MonoBehaviour:
   minPatrolPointDistance: 2
   waitTimeAtPatrolPoint: 3
   detectionValueToChase: 25
-  maxInvestigationTime: 10
-  attackDuration: 5
+  investigateLockDuration: 10
+  attackLockDuration: 5
   attackAfterLostTarget: 5
   attackSpeedMultiplier: 3.5
-  waitAfterAttack: 6
+  waitAfterOverload: 6
 --- !u!114 &5965334082298027993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1261,10 +1285,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 8826511624185513472}
   rotationSpeed: 5
-  mainDetectionDistance: 6
-  sideDetectionDistance: 4
+  mainDetectionDistance: 3
+  sideDetectionDistance: 2
   rayOriginHeight: 1.5
-  sideRayAngleOffset: 30
+  sideRayAngleOffset: 24.15
   additionalRayAngleOffset: 20
   debugWallRays: 1
 --- !u!114 &4366536721842437855
@@ -1302,8 +1326,8 @@ MonoBehaviour:
   overload:
   - {fileID: 8300000, guid: aab3c1ab354e456499db60e653a54e29, type: 3}
   warning: {fileID: 8300000, guid: 2907480ffa54afb4b8e8f00cf5e8db82, type: 3}
-  stateRange: 30
-  stateVolume: 3
+  stateRange: 26
+  stateVolume: 1
 --- !u!195 &8826511624185513472
 NavMeshAgent:
   m_ObjectHideFlags: 0

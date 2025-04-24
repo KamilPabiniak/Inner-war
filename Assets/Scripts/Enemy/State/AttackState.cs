@@ -36,13 +36,14 @@ namespace Enemy.State
             _agent.isStopped       = false;
 
             // Reset timers
-            _attackTimer           = enemyBrain.attackDuration;
+            _attackTimer           = enemyBrain.attackLockDuration;
             _lostTargetTimer       = 0f;
             _isOverloading         = false;
 
             if (enemyBrain.Target != null)
                 _lastKnownPos      = enemyBrain.Target.position;
 
+            AnxietyManager.Instance.IncreaseFear(5f);
             // Play effects
             enemyBrain.audio.PlayAttackSound();
             GameEvents.onPlayerKilled += HandlePlayerKilled;

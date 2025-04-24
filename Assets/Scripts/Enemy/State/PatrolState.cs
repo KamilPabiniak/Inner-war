@@ -8,6 +8,8 @@ namespace Enemy.State
         private Vector3 _patrolPoint;
         private bool _isWaiting;
         private float _waitTimer;
+        
+        //Animator
         private static readonly int CheckArea = Animator.StringToHash("CheckArea");
 
         public void EnterState(EnemyBrain enemyBrain)

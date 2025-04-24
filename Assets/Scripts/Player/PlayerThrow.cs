@@ -12,6 +12,9 @@ public class PlayerThrow : PlayerModule
     public int trajectoryResolution = 30;
     public Color trajectoryColor = Color.yellow;
     public float trajectoryWidth = 0.05f;
+    
+    [Header("Ammo Settings")]
+    public bool infiniteAmmo = false;
 
     private PlayerInput _playerInput;
     private bool canThrow;
@@ -77,7 +80,10 @@ public class PlayerThrow : PlayerModule
         if (canThrow && hasStone)
         {
             ThrowStone();
-            hasStone = false; // Stone is used up after throwing.
+            if (!infiniteAmmo)
+            {
+                hasStone = false; 
+            }
             trajectoryLine.positionCount = 0;
         }
     }

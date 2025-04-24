@@ -21,31 +21,31 @@ public class Rock : MonoBehaviour, IInteractable
         NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
-            Enemy.EnemyBrain enemyBrain = agent.GetComponent<Enemy.EnemyBrain>();
+            EnemyBrain enemyBrain = agent.GetComponent<EnemyBrain>();
             if (enemyBrain != null)
             {
-                enemyBrain.ForceAttack();
+                enemyBrain.OnAttackCommandReceived(Player.Instance.transform);
             }
         }
         
-        // Trigger enemy alert only once upon the first collision.
         if (!_alertTriggered)
         {
-            _alertTriggered = true; // Set flag immediately to prevent further alerts.
-            Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius);
-            
-            // Use a HashSet to avoid alerting the same EnemyBase more than once.
-            HashSet<Enemy.EnemyBrain> alertedEnemies = new HashSet<Enemy.EnemyBrain>();
-            
-            foreach (Collider col in colliders)
+            _alertTriggered = true; 
+            LayerMask enemyMask = LayerMask.GetMask("Enemy");
+            Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius, enemyMask);
+
+            foreach (var col in colliders)
             {
-                Enemy.EnemyBrain enemyBrain = col.GetComponentInParent<Enemy.EnemyBrain>();
-                if (enemyBrain != null && !alertedEnemies.Contains(enemyBrain))
+                var brain = col.GetComponent<EnemyBrain>();
+                var brainParent = col.GetComponentInParent<EnemyBrain>();
+
+                if (brain != null || brainParent != null)
                 {
-                    enemyBrain.OnAlertReceived(impactPosition);
-                    alertedEnemies.Add(enemyBrain);
+                    var target = brain ? brain : brainParent;
+                    target.OnAlertReceived(impactPosition);
                 }
             }
+
         }
     }
 
@@ -55,7 +55,6 @@ public class Rock : MonoBehaviour, IInteractable
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
     }
 
-    // Implementation of IInteractable so the rock can be picked up.
     public void Interact(Player player)
     {
         PlayerThrow throwModule = player.GetComponent<PlayerThrow>();

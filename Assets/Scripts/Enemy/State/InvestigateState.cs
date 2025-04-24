@@ -8,8 +8,7 @@ namespace Enemy.State
     public class InvestigateState : IEnemyState
     {
         private Vector3 _lastKnownPosition;
-        private Coroutine _headRotationCoroutine;
-        private float _lostSightTimer;
+        private bool _fearIncreased;
 
         private readonly float _initialRotationTime = 1.5f; 
         public InvestigateState(Vector3 position)
@@ -25,7 +24,6 @@ namespace Enemy.State
         {
             enemyBrain.StartCoroutine(LookAtAlert(enemyBrain));
             enemyBrain.audio.PlayInvestigateSound();
-            AnxietyManager.Instance.IncreaseFear(5f);
         }
 
         public void UpdateState(EnemyBrain enemyBrain)
@@ -34,12 +32,14 @@ namespace Enemy.State
             {
                 enemyBrain.movement.Stop();
                 enemyBrain.movement.Face(enemyBrain.Target.position);
+                if (_fearIncreased) return;
+                AnxietyManager.Instance.IncreaseFear(5f);
+                _fearIncreased = true;
                 return; 
             }
             
             if (enemyBrain.Target != null && enemyBrain.detection.IsPlayerVisible)
             {
-                _lostSightTimer = 0f;
                 _lastKnownPosition = enemyBrain.Target.position;
 
                 if (enemyBrain.IsTargetInNavMesh(out NavMeshHit hit))
@@ -55,20 +55,16 @@ namespace Enemy.State
             }
             else
             {
-                _lostSightTimer += Time.deltaTime;
-            
-                if (_lostSightTimer < enemyBrain.maxInvestigationTime)
+                if (enemyBrain.canMove && enemyBrain.IsTargetInNavMesh(out _) && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
                 {
-                    if (enemyBrain.canMove && enemyBrain.IsTargetInNavMesh(out _) && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
-                    {
-                        enemyBrain.movement.agent.SetDestination(_lastKnownPosition);
-                    }
+                    enemyBrain.movement.GoTo(_lastKnownPosition);
                 }
             }
         }
 
         public void ExitState(EnemyBrain enemyBrain)
         {
+            _fearIncreased = false;
         }
     
         private IEnumerator LookAtAlert(EnemyBrain enemyBrain)
