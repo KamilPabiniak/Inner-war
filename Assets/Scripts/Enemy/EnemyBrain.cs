@@ -18,6 +18,9 @@ namespace Enemy
         public DetectionController detection;
         public MovementController  movement;
         public Animator animator;     
+        
+        [Header("Optional Patrol Area")]
+        public PatrolArea patrolAreaOverride;
 
         [Header("Common Settings")] 
         public bool canKill = true;
@@ -25,8 +28,11 @@ namespace Enemy
         
         // Patrol & Investigate & Attack Settings
         [Header("Patrol")] 
+        [Tooltip("Radius in which the opponent can select a new patrol point")]
         public float patrolRange = 10f;
+        [Tooltip("Minimum distance the new patrol point must be from the current position of the enemy or other opponents")]
         public float minPatrolPointDistance = 2f;
+        [Tooltip("The length of time an opponent “waits” in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
         [Header("Investigate")] 
         [Tooltip("Detection progress at which enemy switches to investigate")]
@@ -36,6 +42,7 @@ namespace Enemy
         [Header("Attack")] 
         [Tooltip("Attack state duration before overload")]
         public float attackLockDuration = 5f;
+        [Tooltip("The length of time an opponent continues the pursuit even if they have lost the player from sight")]
         public float attackAfterLostTarget = 5f;
         [Tooltip("NavMeshAgent speed multiplier during attack")]
         public float attackSpeedMultiplier = 1.5f;
@@ -49,7 +56,7 @@ namespace Enemy
         //State Change
         private bool _stateChangeRequested;
         private IEnemyState _pendingState;
-        // internal lock state
+        //Internal lock state
         private IEnemyState _lockState;
         private float _lockExpiresAt;
         
@@ -260,5 +267,16 @@ namespace Enemy
             Transform target = Target.gameObject.transform;
             OnAttackCommandReceived(target);
         }
+        
+        //Gizmo
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, patrolRange);
+            
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(transform.position, minPatrolPointDistance);
+        }
+
     }
 }

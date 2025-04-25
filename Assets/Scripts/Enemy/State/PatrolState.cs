@@ -75,7 +75,9 @@ namespace Enemy.State
                 return;
             }
 
-            _patrolPoint = enemyBrain.RequestPatrolPoint();
+            _patrolPoint = enemyBrain.patrolAreaOverride != null
+                ? enemyBrain.patrolAreaOverride.GetRandomPatrolPoint(enemyBrain.minPatrolPointDistance)
+                : enemyBrain.RequestPatrolPoint();
 
             if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemyBrain.patrolRange, NavMesh.AllAreas))
             {

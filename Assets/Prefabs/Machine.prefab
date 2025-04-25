@@ -1220,10 +1220,10 @@ MonoBehaviour:
   canMove: 1
   patrolRange: 10
   minPatrolPointDistance: 2
-  waitTimeAtPatrolPoint: 3
+  waitTimeAtPatrolPoint: 4.2
   detectionValueToChase: 25
   investigateLockDuration: 10
-  attackLockDuration: 5
+  attackLockDuration: 6
   attackAfterLostTarget: 5
   attackSpeedMultiplier: 3.5
   waitAfterOverload: 6
@@ -1326,6 +1326,7 @@ MonoBehaviour:
   overload:
   - {fileID: 8300000, guid: aab3c1ab354e456499db60e653a54e29, type: 3}
   warning: {fileID: 8300000, guid: 2907480ffa54afb4b8e8f00cf5e8db82, type: 3}
+  targetEscaped: {fileID: 8300000, guid: 26397eef34b396f4e866361269adf9d6, type: 3}
   stateRange: 26
   stateVolume: 1
 --- !u!195 &8826511624185513472

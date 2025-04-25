@@ -8,6 +8,9 @@ public class InteractionHighlight : MonoBehaviour
     public string[] interactableTags;
     public float interactionRadius = 5f;
 
+    [Header("Debug")] 
+    [SerializeField] private bool showHighlightRange;
+
     private Dictionary<GameObject, Coroutine> activeHighlights = new();
     private static readonly int RimRange = Shader.PropertyToID("_Rim_Range");
     private static readonly int RimBlend = Shader.PropertyToID("_Rim_Blend");
@@ -123,8 +126,9 @@ public class InteractionHighlight : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
+        if (!showHighlightRange) return;
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
     }
