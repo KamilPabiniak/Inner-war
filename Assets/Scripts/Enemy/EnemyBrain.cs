@@ -238,6 +238,7 @@ namespace Enemy
         //Commands
         public void OnBackToPatrol()
         {
+            SetTarget(null);
             RequestStateChange(_patrolState);
         }
         

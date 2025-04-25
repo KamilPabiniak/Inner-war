@@ -38,7 +38,16 @@ namespace Enemy
             foreach (var c in hits)
             {
                 if (!c.CompareTag("Player")) continue;
+
                 var dir = (c.transform.position - origin).normalized;
+
+                // Nowe sprawdzenie: czy gracz jest w sto¿ku œwiat³a
+                if (lightComponent.type == LightType.Spot &&
+                    Vector3.Angle(lightComponent.transform.forward, dir) > lightComponent.spotAngle * 0.5f)
+                {
+                    continue;
+                }
+
                 if (Physics.Raycast(origin, dir, out var hit, lightComponent.range) &&
                     hit.transform == c.transform)
                 {
@@ -47,16 +56,17 @@ namespace Enemy
                 }
             }
 
-            // did we spot a new target?
+            // Aktualizacja targetu
             if (found != _target)
             {
                 _target = found;
                 if (_target != null)
                     OnSpotted?.Invoke(_target);
             }
-            
+
             _isPlayerVisible = (_target != null);
         }
+
 
         void UpdateProgress() {
             float intensity = _isPlayerVisible ? CalcIntensity(_target) : 0f;

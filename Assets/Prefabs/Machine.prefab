@@ -984,7 +984,7 @@ CapsuleCollider:
   m_Radius: 0.9
   m_Height: 2.3
   m_Direction: 2
-  m_Center: {x: -0.45, y: 0, z: 0}
+  m_Center: {x: -0.5, y: 0, z: 0}
 --- !u!136 &3960084906147543730
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1212,6 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6cf7a2c2192cd4f82a3950c3c0512c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStateInfo: 
   audio: {fileID: 4366536721842437855}
   detection: {fileID: 5965334082298027993}
   movement: {fileID: 1294484814404840590}

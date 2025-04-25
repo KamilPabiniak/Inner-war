@@ -52,13 +52,6 @@ namespace Enemy.State
                 }
                 return;
             }
-            
-            if (enemyBrain.canMove && 
-                enemyBrain.IsTargetInNavMesh(out _) && 
-                enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
-            {
-                enemyBrain.movement.GoTo(_lastKnownPosition);
-            }
         }
 
         public void ExitState(EnemyBrain enemyBrain)

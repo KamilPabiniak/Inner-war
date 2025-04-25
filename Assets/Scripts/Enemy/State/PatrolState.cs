@@ -37,7 +37,14 @@ namespace Enemy.State
                     enemyBrain.animator.SetBool(CheckArea, false); // Animator bool reset 
                     if (_patrolPoint != Vector3.zero)
                     {
-                        EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                        if (enemyBrain.patrolAreaOverride != null)
+                        {
+                            enemyBrain.patrolAreaOverride.ReleasePoint(_patrolPoint);
+                        }
+                        else
+                        {
+                            EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                        }
                         _patrolPoint = Vector3.zero;
                     }
                     SetNewPatrolPoint(enemyBrain);
@@ -61,7 +68,14 @@ namespace Enemy.State
             if (!enemyBrain.movement.agent.pathPending &&
                 enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance)
             {
-                EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                if (enemyBrain.patrolAreaOverride != null)
+                {
+                    enemyBrain.patrolAreaOverride.ReleasePoint(_patrolPoint);
+                }
+                else
+                {
+                    EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                }
             }
         }
 

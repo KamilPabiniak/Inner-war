@@ -53,12 +53,6 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            _attackTimer -= Time.deltaTime;
-            if (_attackTimer <= 0f)
-            {
-                enemyBrain.audio.PlayOverloadSound();
-                _isOverloading = true;
-            }
             
             if (_isOverloading)
             {
@@ -69,6 +63,13 @@ namespace Enemy.State
                     enemyBrain.OnBackToPatrol(); 
                 }
                 return;
+            }
+            
+            _attackTimer -= Time.deltaTime;
+            if (_attackTimer <= 0f)
+            {
+                enemyBrain.audio.PlayOverloadSound();
+                _isOverloading = true;
             }
             
             if (enemyBrain.detection.IsPlayerVisible && !enemyBrain.IsTargetInNavMesh(out _))

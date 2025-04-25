@@ -11,10 +11,10 @@ using UnityEngine.AI;
 public class PatrolArea : MonoBehaviour
 {
     [Tooltip("List of BoxCollider volumes that define patrol zones. These should be set as Triggers.")]
-    public List<BoxCollider> zones = new List<BoxCollider>();
+    public List<BoxCollider> zones = new();
 
     // Track occupied points within these zones to avoid overlap
-    private readonly List<Vector3> _occupied = new List<Vector3>();
+    private readonly List<Vector3> _occupied = new();
 
     /// <summary>
     /// Samples a random point inside one of the defined zones, avoiding too-close points.
@@ -74,12 +74,12 @@ public class PatrolArea : MonoBehaviour
         return true;
     }
     
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (zones == null) return;
 
-        Gizmos.color = new Color(0f, 1f, 0f, 0.25f);
+        Gizmos.color = new Color(0f, 1f, 0f, 0.25f); 
         foreach (var zone in zones)
         {
             if (zone == null) continue;
@@ -91,6 +91,6 @@ public class PatrolArea : MonoBehaviour
             Gizmos.matrix = oldMatrix;
         }
     }
-#endif
+    #endif
 
 }
