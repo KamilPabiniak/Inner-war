@@ -1216,6 +1216,7 @@ MonoBehaviour:
   detection: {fileID: 5965334082298027993}
   movement: {fileID: 1294484814404840590}
   animator: {fileID: 5805064814616177901}
+  patrolAreaOverride: {fileID: 0}
   canKill: 1
   canMove: 1
   patrolRange: 10
@@ -1286,7 +1287,7 @@ MonoBehaviour:
   agent: {fileID: 8826511624185513472}
   rotationSpeed: 5
   mainDetectionDistance: 3
-  sideDetectionDistance: 2
+  sideDetectionDistance: 3
   rayOriginHeight: 1.5
   sideRayAngleOffset: 24.15
   additionalRayAngleOffset: 20
@@ -2508,7 +2509,7 @@ MonoBehaviour:
   body: {fileID: 3269036707308892413}
   otherFoot: {fileID: 3945550115581422150}
   speed: 3.5
-  stepDistance: 0.9
+  stepDistance: 0.7
   stepLength: 0.5
   stepHeight: 0.6
   footOffset: {x: 0.1, y: 0.01, z: 0}
@@ -2562,7 +2563,7 @@ MonoBehaviour:
   body: {fileID: 3269036707308892413}
   otherFoot: {fileID: 25067899243708223}
   speed: 3.5
-  stepDistance: 0.9
+  stepDistance: 0.7
   stepLength: 0.5
   stepHeight: 0.6
   footOffset: {x: 0.1, y: 0.01, z: 0}

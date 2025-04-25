@@ -145,9 +145,18 @@ namespace Enemy {
         
         public void Face(Vector3 point)
         {
+            // Add a small height offset to look at the player's center
+            point.y = transform.position.y; // Keep same height to prevent tilting
+    
             Vector3 dir = (point - transform.position).normalized;
-            var targetRot = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * rotationSpeed);
+            if (dir == Vector3.zero) return; // Don't rotate if direction is zero
+    
+            var targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation, 
+                targetRot, 
+                Time.deltaTime * rotationSpeed * 2f // Slightly faster rotation
+            );
         }
         
         private void OnDrawGizmosSelected()

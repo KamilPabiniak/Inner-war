@@ -41,24 +41,23 @@ namespace Enemy.State
             if (enemyBrain.Target != null && enemyBrain.detection.IsPlayerVisible)
             {
                 _lastKnownPosition = enemyBrain.Target.position;
+                
+                enemyBrain.movement.Face(_lastKnownPosition);
 
-                if (enemyBrain.IsTargetInNavMesh(out NavMeshHit hit))
+                if (enemyBrain.canMove && 
+                    enemyBrain.IsTargetInNavMesh(out NavMeshHit hit) &&
+                    enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
                 {
-                    if (!enemyBrain.canMove || !(enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)) return;
-                    enemyBrain.movement.Face(enemyBrain.Target.position);
                     enemyBrain.movement.GoTo(hit.position);
                 }
-                else
-                {
-                    enemyBrain.movement.Face(enemyBrain.Target.position);
-                }
+                return;
             }
-            else
+            
+            if (enemyBrain.canMove && 
+                enemyBrain.IsTargetInNavMesh(out _) && 
+                enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
             {
-                if (enemyBrain.canMove && enemyBrain.IsTargetInNavMesh(out _) && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
-                {
-                    enemyBrain.movement.GoTo(_lastKnownPosition);
-                }
+                enemyBrain.movement.GoTo(_lastKnownPosition);
             }
         }
 

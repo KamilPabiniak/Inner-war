@@ -12,6 +12,9 @@ namespace Enemy
         private readonly AttackState _attackState = new();
         private IEnemyState _currentState;
         public Transform Target { get; private set; }
+
+        [Header("Info")] 
+        [SerializeField] private string currentStateInfo;
         
         [Header("References")] 
         public new EnemyAudio audio;
@@ -88,26 +91,36 @@ namespace Enemy
 
         private void Update()
         {
+            currentStateInfo = _currentState.ToString();
             if (Target != null 
                 && detection.IsPlayerVisible 
                 && !IsTargetInNavMesh(out _))
             {
                 movement.Stop();
                 movement.Face(Target.position);
-                if (_currentState is not AttackState) { audio.PlayWarningSound(); }
+                audio.PlayWarningSound(); 
                 return;
             }
             
             // Lock on Investigate/Attack
             if (_lockState != null)
             {
-                if (Time.time < _lockExpiresAt)
+                // --- NEW: break attack lock if target is outside NavMesh ---
+                if (_lockState is AttackState && Target != null && !IsTargetInNavMesh(out _))
+                {
+                    _lockState = null;
+                }
+                else if (Time.time < _lockExpiresAt)
                 {
                     _currentState.UpdateState(this);
                     return;
                 }
-                _lockState = null;
+                else
+                {
+                    _lockState = null;
+                }
             }
+
 
             TryStateTransition();
             _currentState?.UpdateState(this);
@@ -189,6 +202,7 @@ namespace Enemy
             _stateChangeRequested = false;
             _pendingState = null;
             _currentState.EnterState(this);
+            if (_lockState != _currentState) { _lockState = null; }
         }
 
         // -- Helpers --
@@ -229,7 +243,7 @@ namespace Enemy
         
         public void OnAlertReceived(Vector3 alertPosition)
         {
-            if (_currentState is AttackState) { return; }
+            if (_currentState is AttackState or InvestigateState) { return; }
             detection.SetAwarenessLevel(detectionValueToChase + 1f);
             PerformStateChange(_investigateState);
             _investigateState.UpdatePosition(alertPosition);
@@ -239,7 +253,7 @@ namespace Enemy
     
         public void OnAttackCommandReceived(Transform player)
         {
-            if (_currentState is AttackState) return;
+            if (_currentState is AttackState && !IsTargetInNavMesh(out _)) return;
             _lockState = null;
             SetTarget(player);
             detection.SetAwarenessLevel(100f);

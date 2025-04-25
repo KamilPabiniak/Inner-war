@@ -53,15 +53,36 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
+            _attackTimer -= Time.deltaTime;
+            if (_attackTimer <= 0f)
+            {
+                enemyBrain.audio.PlayOverloadSound();
+                _isOverloading = true;
+            }
+            
             if (_isOverloading)
             {
                 enemyBrain.waitAfterOverload -= Time.deltaTime;
                 if (enemyBrain.waitAfterOverload <= 0f)
                 {
+                    enemyBrain.detection.SetAwarenessLevel(0f);
                     enemyBrain.OnBackToPatrol(); 
                 }
                 return;
             }
+            
+            if (enemyBrain.detection.IsPlayerVisible && !enemyBrain.IsTargetInNavMesh(out _))
+            {
+                if (!_escapeSoundPlayed)
+                {
+                    enemyBrain.audio.PlayTargetEscapeSound();
+                    _escapeSoundPlayed = true;
+                }
+                
+                enemyBrain.detection.SetAwarenessLevel(0f);
+                return;
+            }
+
 
             if (enemyBrain.Target != null)
             {
@@ -89,23 +110,6 @@ namespace Enemy.State
             else
             {
                 _agent.isStopped = true;
-            }
-
-            if (_lastKnownPos != null
-                && enemyBrain.detection.IsPlayerVisible
-                && !enemyBrain.IsTargetInNavMesh(out _))
-            {
-                if (_escapeSoundPlayed) return;
-                enemyBrain.audio.PlayTargetEscapeSound();
-                _escapeSoundPlayed = true;
-            }
-
-            
-            _attackTimer -= Time.deltaTime;
-            if (_attackTimer <= 0f)
-            {
-                enemyBrain.audio.PlayOverloadSound();
-                _isOverloading = true;
             }
         }
 

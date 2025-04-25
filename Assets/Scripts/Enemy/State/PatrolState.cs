@@ -34,9 +34,12 @@ namespace Enemy.State
                 if (_waitTimer <= 0f)
                 {
                     _isWaiting = false;
-                    
                     enemyBrain.animator.SetBool(CheckArea, false); // Animator bool reset 
-                    EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                    if (_patrolPoint != Vector3.zero)
+                    {
+                        EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
+                        _patrolPoint = Vector3.zero;
+                    }
                     SetNewPatrolPoint(enemyBrain);
                 }
                 return;
@@ -49,12 +52,6 @@ namespace Enemy.State
                 // Start waiting and release current patrol point
                 _isWaiting = true;
                 _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
-
-                if (_patrolPoint != Vector3.zero)
-                {
-                    EnemyPatrolHandler.ReleasePatrolPoint(_patrolPoint);
-                    _patrolPoint = Vector3.zero;
-                }
             }
         }
 
