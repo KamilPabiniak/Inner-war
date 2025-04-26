@@ -23,6 +23,8 @@ public class EnemyAudio : MonoBehaviour
 
     private bool _footStepPlayed;
     private AudioSource _currentStateAudio;
+    private Coroutine _currentSoundCoroutine;
+    private bool _isStateSoundPlaying;
     
     public void ResetFootStepFlag() => _footStepPlayed = false;
 
@@ -30,19 +32,22 @@ public class EnemyAudio : MonoBehaviour
     {
         if (footStepClips == null || _footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
-        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer, maxDistance:footStepsRange);
+        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, 
+            audioMixerGroup: SoundFXManager.Instance.LowPassMixer, maxDistance:footStepsRange);
         _footStepPlayed = true;
     }
     
     public void PlayPatrolSound()
     {
+        if (patrolStateSound.Length == 0) return;
         int random = Random.Range(0, patrolStateSound.Length);
         PlayMachineVoice(patrolStateSound[random]);
     }
 
     public void PlayInvestigateSound()
     {
-        int random = Random.Range(0, investigateStateSound.Length);
+        if (investigateStateSound.Length == 0) return;
+        int random = RandomRange(0, investigateStateSound.Length);
         PlayMachineVoice(investigateStateSound[random]);
     }
     
@@ -50,35 +55,49 @@ public class EnemyAudio : MonoBehaviour
     {
         PlayMachineVoice(warning);
     }
+    
     public void PlayTargetEscapeSound()
     {
         PlayMachineVoice(targetEscaped);
     }
+    
     public void PlayAttackSound()
     {
+        if (attackStateSound.Length == 0) return;
         int random = Random.Range(0, attackStateSound.Length);
         PlayMachineVoice(attackStateSound[random]);
     }
 
     public void PlayTargetLostSound()
     {
+        if (targetLostSound.Length == 0) return;
         int random = Random.Range(0, targetLostSound.Length);
         PlayMachineVoice(targetLostSound[random]);
     }
 
     public void PlayOverloadSound()
     {
+        if (overload.Length == 0) return;
         int random = Random.Range(0, overload.Length);
         PlayMachineVoice(overload[random]);
     }
 
     private void PlayMachineVoice(AudioClip clip)
     {
-        if (clip == null) return;
+        if (clip == null || _isStateSoundPlaying) return;
         
+        // Stop any currently playing state sound
         if (_currentStateAudio != null && _currentStateAudio.isPlaying)
-            return;
+        {
+            _currentStateAudio.Stop();
+        }
+        
+        if (_currentSoundCoroutine != null)
+        {
+            StopCoroutine(_currentSoundCoroutine);
+        }
 
+        _isStateSoundPlaying = true;
         _currentStateAudio = SoundFXManager.Instance.Play3DSoundFXClip(
             clip,
             audioSources.transform,
@@ -87,14 +106,20 @@ public class EnemyAudio : MonoBehaviour
             maxDistance: stateRange
         );
         
-        if (_currentStateAudio != null)
-            StartCoroutine(ClearStateSoundAfterDelay(clip.length));
+        _currentSoundCoroutine = StartCoroutine(ClearStateSoundAfterDelay(clip.length));
     }
-
 
     private IEnumerator ClearStateSoundAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         _currentStateAudio = null;
+        _isStateSoundPlaying = false;
+        _currentSoundCoroutine = null;
+    }
+
+    // Helper method to handle empty arrays
+    private int RandomRange(int min, int max)
+    {
+        return max > min ? Random.Range(min, max) : min;
     }
 }

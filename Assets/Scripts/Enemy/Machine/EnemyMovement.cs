@@ -68,6 +68,9 @@ namespace Enemy {
             Debug.DrawRay(origin, leftSideDir * sideDetectionDistance, leftBlocked ? Color.red : Color.green);
             Debug.DrawRay(origin, rightSideDir * sideDetectionDistance, rightBlocked ? Color.red : Color.green);
 
+            if (leftBlocked && rightBlocked)
+                return;
+            
             // Simple turn when one side is blocked
             if (leftBlocked && !rightBlocked)
             {

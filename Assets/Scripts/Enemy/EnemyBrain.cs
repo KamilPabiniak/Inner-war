@@ -147,7 +147,7 @@ namespace Enemy
             else if (awarenessLevel > 0f)   //  (0,100)
             {
                 _investigateState.UpdatePosition(
-                    detection.IsPlayerVisible && Target!=null
+                    detection.IsPlayerVisible
                         ? Target.position
                         : transform.position
                 );
@@ -197,7 +197,18 @@ namespace Enemy
         
         private void PerformStateChange(IEnemyState nextState)
         {
+            if (_currentState == nextState) return;
+            bool wasHighAlert = _currentState is AttackState or InvestigateState;
+            bool willHighAlert = nextState is AttackState or InvestigateState;
+            
             _currentState?.ExitState(this);
+            
+            if (!wasHighAlert && willHighAlert)
+                GameEvents.onHighAlertStart?.Invoke();
+
+            if (wasHighAlert && !willHighAlert)
+                GameEvents.onHighAlertEnd?.Invoke();
+            
             _currentState = nextState;
             _stateChangeRequested = false;
             _pendingState = null;
@@ -231,6 +242,7 @@ namespace Enemy
                     death.Kill();
                     GameEvents.onPlayerKilled?.Invoke();
                     SetTarget(null);
+                    detection.SetAwarenessLevel(0f);
                 }
             }
         }

@@ -22,4 +22,8 @@ public static class GameEvents
     
     // BlackScreen - FadeTime - Duration - FadeOut
     public static Action<float, float, float> onBlackScreen;
+    
+    // Events for shared Investigate/Attack ambience
+    public static Action onHighAlertStart;
+    public static Action onHighAlertEnd;
 }

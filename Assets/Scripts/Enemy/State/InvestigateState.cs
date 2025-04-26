@@ -31,7 +31,7 @@ namespace Enemy.State
             if (enemyBrain.detection.IsPlayerVisible && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
             {
                 enemyBrain.movement.Stop();
-                enemyBrain.movement.Face(enemyBrain.Target.position);
+                enemyBrain.movement.Face(_lastKnownPosition);
                 if (_fearIncreased) return;
                 AnxietyManager.Instance.IncreaseFear(5f);
                 _fearIncreased = true;

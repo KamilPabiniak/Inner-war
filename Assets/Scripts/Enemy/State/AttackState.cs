@@ -53,7 +53,6 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            
             if (_isOverloading)
             {
                 enemyBrain.waitAfterOverload -= Time.deltaTime;
