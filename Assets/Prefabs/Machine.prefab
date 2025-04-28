@@ -1254,7 +1254,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1.5
+      value: 2
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 10
-      value: 1.2
+      value: 1.7
       inSlope: -0.09
       outSlope: -0.09
       tangentMode: 0
@@ -1292,6 +1292,8 @@ MonoBehaviour:
   rayOriginHeight: 1.5
   sideRayAngleOffset: 24.15
   additionalRayAngleOffset: 20
+  destThreshold: 0.5
+  setInterval: 0.2
   debugWallRays: 1
 --- !u!114 &4366536721842437855
 MonoBehaviour:

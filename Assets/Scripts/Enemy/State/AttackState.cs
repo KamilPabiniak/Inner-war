@@ -17,6 +17,8 @@ namespace Enemy.State
         private float _originalAngularSpeed;
         private const float PredictionTime = 0.5f;
         private bool _escapeSoundPlayed;
+        
+        public bool IsOverloading => _isOverloading;
 
         public void EnterState(EnemyBrain enemyBrain)
         {

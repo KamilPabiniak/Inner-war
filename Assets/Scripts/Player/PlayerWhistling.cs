@@ -93,7 +93,6 @@ public class PlayerWhistling : PlayerModule
         
         foreach (var entry in _alertedTargets.Where(entry => entry.Value + alertCooldownTime <= Time.time))
         {
-            Debug.Log($"Resetting alert for {entry.Key.name}");
             targetsToRemove.Add(entry.Key);
         }
         

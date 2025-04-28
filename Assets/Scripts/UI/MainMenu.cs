@@ -1,11 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject menuUI;
-    public Camera camera1;
-    public Camera camera2;
+    public Camera cameraMenu;
+    public Camera cameraMain;
     public Button playButton;
     public Button exitButton;
 
@@ -21,8 +23,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        camera1.enabled = true;
-        camera2.enabled = false;
+        cameraMenu.enabled = true;
+        cameraMain.enabled = false;
         
         playButton.onClick.AddListener(OnPlayClicked);
         exitButton.onClick.AddListener(OnExitClicked);
@@ -32,19 +34,16 @@ public class MainMenu : MonoBehaviour
     {
         StartGame();
     }
+    
+    private void SkipMenu() => StartCoroutine(StartGame());
 
-    
-    private void SkipMenu()
-    {
-        StartGame();
-    }
-    
-    private void StartGame()
+    IEnumerator StartGame()
     {
         SwitchCamera();
-        GameEvents.onBlackScreen.Invoke(0f, 1f, 1f);
+        GameEvents.onBlackScreen.Invoke(2f, 1f, 1f);
         menuUI.SetActive(false);
         GameEvents.onMenuExit?.Invoke();
+        yield return null;
     }
 
     private void OnExitClicked()
@@ -53,13 +52,10 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    /// <summary>
-    /// Switches from camera1 to camera2.
-    /// </summary>
     private void SwitchCamera()
     {
-        camera1.enabled = false;
-        camera2.enabled = true;
-        Destroy(camera1.gameObject);
+        cameraMenu.enabled = false;
+        cameraMain.enabled = true;
+        Destroy(cameraMenu.gameObject);
     }
 }

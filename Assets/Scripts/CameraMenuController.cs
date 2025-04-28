@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CameraMenuController : MonoBehaviour
@@ -11,6 +12,8 @@ public class CameraMenuController : MonoBehaviour
     public float centerZoneSize = 100f; 
     
     private Quaternion initialRotation; 
+    private bool tiltEnabled = true;     
+    private bool returning;
     
     void Start()
     {
@@ -19,6 +22,26 @@ public class CameraMenuController : MonoBehaviour
 
     void Update()
     {
+        if (returning)
+        {
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation, 
+                initialRotation, 
+                smoothSpeed * Time.deltaTime
+            );
+            
+            if (Quaternion.Angle(transform.rotation, initialRotation) < 0.1f)
+            {
+                transform.rotation = initialRotation;
+                returning = false;
+                tiltEnabled = false;
+            }
+            return;
+        }
+        
+        if (!tiltEnabled) 
+            return;
+        
         Vector3 mousePos = Input.mousePosition;
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
@@ -39,5 +62,11 @@ public class CameraMenuController : MonoBehaviour
         Quaternion targetRotation = initialRotation * targetTilt;
         
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, smoothSpeed * Time.deltaTime);
+    }
+    
+    public void StopAndReturnToInitial()
+    {
+        tiltEnabled = false;
+        returning = true;
     }
 }

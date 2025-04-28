@@ -8,7 +8,7 @@ namespace Enemy
     public class EnemyBrain : MonoBehaviour
     {
         private readonly PatrolState _patrolState = new();
-        private readonly InvestigateState _investigateState = new(Vector3.zero); 
+        private readonly InvestigateState _investigateState = new(); 
         private readonly AttackState _attackState = new();
         private IEnemyState _currentState;
         public Transform Target { get; private set; }
@@ -96,6 +96,7 @@ namespace Enemy
                 && detection.IsPlayerVisible 
                 && !IsTargetInNavMesh(out _))
             {
+                if (_currentState is AttackState { IsOverloading: true }) return;
                 movement.Stop();
                 movement.Face(Target.position);
                 audio.PlayWarningSound(); 
@@ -146,11 +147,10 @@ namespace Enemy
             }
             else if (awarenessLevel > 0f)   //  (0,100)
             {
-                _investigateState.UpdatePosition(
-                    detection.IsPlayerVisible
-                        ? Target.position
-                        : transform.position
-                );
+                if (detection.IsPlayerVisible && Target != null)
+                {
+                    _investigateState.UpdatePosition(Target.position);
+                }
                 RequestStateChange(_investigateState);
             }
             else // a <= 0f
@@ -260,8 +260,6 @@ namespace Enemy
             detection.SetAwarenessLevel(detectionValueToChase + 20f);
             PerformStateChange(_investigateState);
             _investigateState.UpdatePosition(alertPosition);
-            _lockState = _investigateState;
-            _lockExpiresAt = Time.time + investigateLockDuration;
         }
     
         public void OnAttackCommandReceived(Transform player)

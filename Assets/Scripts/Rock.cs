@@ -31,18 +31,14 @@ public class Rock : MonoBehaviour, IInteractable
         {
             _alertTriggered = true; 
             LayerMask enemyMask = LayerMask.GetMask("Enemy");
-            Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius, enemyMask);
+            Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius, enemyMask, QueryTriggerInteraction.Ignore);
 
             foreach (var col in colliders)
             {
-                var brain = col.GetComponent<EnemyBrain>();
                 var brainParent = col.GetComponentInParent<EnemyBrain>();
 
-                if (brain != null || brainParent != null)
-                {
-                    var target = brain ? brain : brainParent;
-                    target.OnAlertReceived(impactPosition);
-                }
+                if (brainParent == null) continue;
+                brainParent.OnAlertReceived(impactPosition);
             }
 
         }
