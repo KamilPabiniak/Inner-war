@@ -28,31 +28,42 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            if (enemyBrain.detection.IsPlayerVisible && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
+            if (!enemyBrain.detection.IsPlayerVisible)
+            {
+                if (enemyBrain.canMove)
+                {
+                    enemyBrain.movement.GoTo(_lastKnownPosition);
+                }
+                return;
+            }
+            
+            if (enemyBrain.detection.IsPlayerVisible 
+                && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
             {
                 enemyBrain.movement.Stop();
                 enemyBrain.movement.Face(_lastKnownPosition);
-                if (_fearIncreased) return;
-                AnxietyManager.Instance.IncreaseFear(5f);
-                _fearIncreased = true;
-                return; 
+                if (!_fearIncreased)
+                {
+                    AnxietyManager.Instance.IncreaseFear(5f);
+                    _fearIncreased = true;
+                }
+                return;
             }
             
             if (enemyBrain.Target != null && enemyBrain.detection.IsPlayerVisible)
             {
                 _lastKnownPosition = enemyBrain.Target.position;
-                
                 enemyBrain.movement.Face(_lastKnownPosition);
 
-                if (enemyBrain.canMove && 
-                    enemyBrain.IsTargetInNavMesh(out NavMeshHit hit) &&
-                    enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
+                if (enemyBrain.canMove 
+                    && enemyBrain.IsTargetInNavMesh(out NavMeshHit hit) 
+                    && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
                 {
                     enemyBrain.movement.GoTo(hit.position);
                 }
-                return;
             }
         }
+
 
         public void ExitState(EnemyBrain enemyBrain)
         {

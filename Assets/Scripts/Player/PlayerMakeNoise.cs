@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Enemy;
 using UnityEngine;
 
 public class PlayerMakeNoise : PlayerModule

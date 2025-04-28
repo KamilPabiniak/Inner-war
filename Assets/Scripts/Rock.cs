@@ -1,7 +1,6 @@
 using Enemy;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections.Generic;
 
 public class Rock : MonoBehaviour, IInteractable
 {

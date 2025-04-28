@@ -35,7 +35,7 @@ namespace Enemy
         public float patrolRange = 10f;
         [Tooltip("Minimum distance the new patrol point must be from the current position of the enemy or other opponents")]
         public float minPatrolPointDistance = 2f;
-        [Tooltip("The length of time an opponent “waits” in place after reaching a patrol point before moving on to the next one")]
+        [Tooltip("The length of time an opponent ï¿½waitsï¿½ in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
         [Header("Investigate")] 
         [Tooltip("Detection progress at which enemy switches to investigate")]
@@ -257,7 +257,7 @@ namespace Enemy
         public void OnAlertReceived(Vector3 alertPosition)
         {
             if (_currentState is AttackState or InvestigateState) { return; }
-            detection.SetAwarenessLevel(detectionValueToChase + 1f);
+            detection.SetAwarenessLevel(detectionValueToChase + 20f);
             PerformStateChange(_investigateState);
             _investigateState.UpdatePosition(alertPosition);
             _lockState = _investigateState;
