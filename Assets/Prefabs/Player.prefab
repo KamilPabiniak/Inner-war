@@ -219,6 +219,7 @@ MonoBehaviour:
   - Ladder
   - Bomb
   interactionRadius: 20
+  showHighlightRange: 0
 --- !u!1 &2715986301959049074
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vaultLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 512
   climbSpeed: 4
   vaultDistance: 1.5
   climbHeight: 2
@@ -595,7 +596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraOffset: {x: 0, y: 0.8, z: 0.05}
-  cameraFollowSpeed: 5
+  cameraFollowSpeed: 8
   mouseSensitivity: 20
   verticalClamp: 80
   enableBobbing: 1
@@ -652,7 +653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 128
   whistlingRange: 10
   whistlingCooldown: 2
   alertCooldownTime: 5
@@ -679,6 +680,7 @@ MonoBehaviour:
   trajectoryResolution: 30
   trajectoryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   trajectoryWidth: 0.05
+  infiniteAmmo: 0
 --- !u!114 &1271999008627739933
 MonoBehaviour:
   m_ObjectHideFlags: 0

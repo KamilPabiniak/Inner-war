@@ -9,6 +9,12 @@ public class EnemyAudio : MonoBehaviour
     [Header("Audio Clips - Footsteps")]
     [SerializeField] private AudioClip[] footStepClips;
     [SerializeField] private float footStepsRange;
+    [Tooltip("Minimum pitch for footstep sounds")] 
+    [Range(0f, 1f)]
+    [SerializeField] private float footstepPitchMin = 0.9f;
+    [Tooltip("Maximum pitch for footstep sounds")]
+    [Range(1f, 2f)]
+    [SerializeField] private float footstepPitchMax = 1.1f;
     
     [Header("Audio Clips - State Sounds")]
     [SerializeField] private AudioClip[] patrolStateSound;
@@ -32,8 +38,17 @@ public class EnemyAudio : MonoBehaviour
     {
         if (footStepClips == null || _footStepPlayed) return;
         int rand = Random.Range(0, footStepClips.Length);
-        SoundFXManager.Instance.Play3DSoundFXClip(footStepClips[rand], audioSources.transform, 1f, 
-            audioMixerGroup: SoundFXManager.Instance.LowPassMixer, maxDistance:footStepsRange);
+        AudioSource footAudio = SoundFXManager.Instance.Play3DSoundFXClip(
+            footStepClips[rand],
+            audioSources.transform,
+            1f,
+            audioMixerGroup: SoundFXManager.Instance.LowPassMixer,
+            maxDistance: footStepsRange
+        );
+        if (footAudio != null)
+        {
+            footAudio.pitch = Random.Range(footstepPitchMin, footstepPitchMax);
+        }
         _footStepPlayed = true;
     }
     
