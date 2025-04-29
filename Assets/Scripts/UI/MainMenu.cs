@@ -10,6 +10,9 @@ public class MainMenu : MonoBehaviour
     public Camera cameraMain;
     public Button playButton;
     public Button exitButton;
+    [SerializeField] private Animator letter;
+    private static readonly int Read = Animator.StringToHash("Read");
+    private CameraMenuController _cameraMenuController;
 
     private void OnEnable()
     {
@@ -28,21 +31,32 @@ public class MainMenu : MonoBehaviour
         
         playButton.onClick.AddListener(OnPlayClicked);
         exitButton.onClick.AddListener(OnExitClicked);
+        _cameraMenuController = cameraMenu.GetComponent<CameraMenuController>();
     }
     
     private void OnPlayClicked()
     {
-        StartGame();
+        //StartCoroutine(StartGame());
+        _cameraMenuController.StopAndReturnToInitial();
+        letter.SetBool(Read, true);
+    }
+
+    public void LetterCollected()
+    {
+        Debug.Log("Game Starting");
+        StartCoroutine(StartGame());
     }
     
     private void SkipMenu() => StartCoroutine(StartGame());
 
-    IEnumerator StartGame()
+    private IEnumerator StartGame()
     {
+        GameEvents.onBlackScreen.Invoke(2f, 1f, 2f);
+        yield return new WaitForSeconds(2f);
         SwitchCamera();
-        GameEvents.onBlackScreen.Invoke(2f, 1f, 1f);
         menuUI.SetActive(false);
         GameEvents.onMenuExit?.Invoke();
+        letter.SetBool(Read, false);
         yield return null;
     }
 
