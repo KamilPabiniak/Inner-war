@@ -42,6 +42,7 @@ public class PlayerMovement : PlayerModule
 
     public void ForceCrouch()
     {
+        if (Player.state == Player.State.Climbing) return;
         _blockCrouchHandler = true;
         _isCrouch = true;
     }

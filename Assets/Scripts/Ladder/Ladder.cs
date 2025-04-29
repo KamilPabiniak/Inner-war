@@ -50,7 +50,13 @@ public class Ladder : MonoBehaviour, IInteractable
         _player = interactingPlayer;
         if (_player == null)
             return;
-
+        
+        var playerInput = _player.GetModule<PlayerInput>();
+        var movementModule = _player.GetModule<PlayerMovement>();
+        if (playerInput != null) { playerInput.ResetCrouchState(); }
+        if (movementModule != null) { movementModule.DisableForceCrouch(); }
+        
+        _player.ApplyCrouch(false);
         _player.ToggleInput();
         _player.ToggleGravity();
 

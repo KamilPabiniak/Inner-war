@@ -14,7 +14,7 @@ public class PlayerInput : PlayerModule
     // Button states (polled)
     public bool IsVaultPressed { get; private set; }
     public bool IsCrouchPressed { get; private set; }
-    public bool ToggleCrouchMode { get; set; } = false; //Crouch mode
+    public bool ToggleCrouchMode { get; set; } //Crouch mode
     public bool IsInteractPressed { get; internal set; }
     public bool IsLeanLeftPressed { get; private set; }
     public bool IsLeanRightPressed { get; private set; }

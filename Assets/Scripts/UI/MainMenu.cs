@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,9 +35,10 @@ public class MainMenu : MonoBehaviour
     
     private void OnPlayClicked()
     {
-        //StartCoroutine(StartGame());
         _cameraMenuController.StopAndReturnToInitial();
         letter.SetBool(Read, true);
+        playButton.onClick.AddListener(null);
+        exitButton.onClick.AddListener(null);
     }
 
     public void LetterCollected()
