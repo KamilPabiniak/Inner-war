@@ -61,8 +61,8 @@ MonoBehaviour:
   maxDuration: 15
   autoTrigger: 1
   disableWhenTrigger: 0
-  shakeAmplitude: 0.4
-  shakeFrequency: 20
+  shakeAmplitude: 0.007
+  shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
     m_Curve:
@@ -89,7 +89,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   shakePosition: 1
   shakeRotation: 1
-  shakeType: 0
+  shakeType: 1
   shakeDirection: {x: 1, y: 1, z: 1}
 --- !u!114 &11400000
 MonoBehaviour:
