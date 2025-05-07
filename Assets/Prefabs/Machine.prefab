@@ -652,8 +652,8 @@ CapsuleCollider:
   serializedVersion: 2
   m_Radius: 0.9
   m_Height: 2.3
-  m_Direction: 2
-  m_Center: {x: -0.9, y: 0, z: 0}
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0.9}
 --- !u!136 &8293365711111026890
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -673,9 +673,9 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Height: 2
-  m_Direction: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &740291996517611513
 GameObject:
@@ -1430,7 +1430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 2333045114140165403}
+    m_ConstrainedObject: {fileID: 847960047559722007}
     m_SourceObjects:
       m_Length: 1
       m_Item0:
@@ -1457,7 +1457,7 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: -90, y: 0, z: 0}
+    m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -180
     m_MaxLimit: 180
     m_AimAxis: 4
@@ -1856,7 +1856,7 @@ MonoBehaviour:
   canKill: 1
   canMove: 1
   patrolRange: 10
-  minPatrolPointDistance: 2
+  minPatrolPointDistance: 1
   waitTimeAtPatrolPoint: 4.2
   detectionValueToChase: 25
   investigateLockDuration: 10
@@ -2150,9 +2150,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 7577173014719645031}
-    m_Mid: {fileID: 6448821865408467293}
-    m_Tip: {fileID: 4385852441019035825}
+    m_Root: {fileID: 354053318701895030}
+    m_Mid: {fileID: 1821642161248927301}
+    m_Tip: {fileID: 1696841496955249092}
     m_Target: {fileID: 1592457377329318647}
     m_Hint: {fileID: 7644038097245416056}
     m_TargetPositionWeight: 1
@@ -2446,9 +2446,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_Root: {fileID: 3635028319778434186}
-    m_Mid: {fileID: 1278344873835897052}
-    m_Tip: {fileID: 8488487098865882740}
+    m_Root: {fileID: 1347381530877133458}
+    m_Mid: {fileID: 7034699623417310671}
+    m_Tip: {fileID: 8542721936671917791}
     m_Target: {fileID: 3927203743482195077}
     m_Hint: {fileID: 141393574167074290}
     m_TargetPositionWeight: 1
@@ -4837,7 +4837,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Data:
-    m_ConstrainedObject: {fileID: 8018130167002731165}
+    m_ConstrainedObject: {fileID: 8044662902682477961}
     m_SourceObjects:
       m_Length: 2
       m_Item0:
