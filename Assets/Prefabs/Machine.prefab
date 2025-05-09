@@ -503,7 +503,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 538917707658264655}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1291,13 +1291,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2352246208857014311}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.619455, y: 0.34099194, z: 0.619455, w: 0.34099194}
-  m_LocalPosition: {x: 0.225, y: 0.65, z: -1.25}
-  m_LocalScale: {x: 0.04, y: 0.040000007, z: 0.04}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.225, y: 0.7, z: 0.702}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3747096656396214329}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 122.337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2387584751786167045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1749,13 +1749,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3084730139110513519}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.619455, y: 0.34099194, z: 0.619455, w: 0.34099194}
-  m_LocalPosition: {x: -0.225, y: 0.65, z: -1.25}
-  m_LocalScale: {x: 0.04, y: 0.040000007, z: 0.04}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.225, y: 0.7, z: 0.70200264}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 347033054310649151}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 122.337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3243088900989205589
 GameObject:
   m_ObjectHideFlags: 0
@@ -3753,14 +3753,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 7681
+    m_Bits: 7169
   body: {fileID: 1414623541468806449}
   otherFoot: {fileID: 3945550115581422150}
   speed: 3.5
-  stepDistance: 0.7
-  stepLength: 0.5
-  stepHeight: 0.6
-  footOffset: {x: 0.1, y: 0.01, z: 0}
+  stepDistance: 0.8
+  stepLength: 0.4
+  stepHeight: 0.65
+  footOffset: {x: 0.3, y: 0, z: 0.2}
 --- !u!1 &6294174837133171875
 GameObject:
   m_ObjectHideFlags: 0
@@ -3839,14 +3839,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 7681
+    m_Bits: 7169
   body: {fileID: 1414623541468806449}
   otherFoot: {fileID: 25067899243708223}
   speed: 3.5
-  stepDistance: 0.7
-  stepLength: 0.5
-  stepHeight: 0.6
-  footOffset: {x: 0.1, y: 0.01, z: 0}
+  stepDistance: 0.8
+  stepLength: 0.4
+  stepHeight: 0.65
+  footOffset: {x: 0.3, y: 0, z: 0.2}
 --- !u!1 &6493324806217401705
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,7 +24,7 @@ namespace Enemy.State
             if (_isWaiting)
             {
                 _waitTimer -= Time.deltaTime;
-                enemyBrain.animator.SetBool(CheckArea, true); //Animator bool
+                enemyBrain.animator.SetBool(CheckArea, true); //Animator bool 
                 
                 if (enemyBrain.movement.IsObjectInFront())
                 {
