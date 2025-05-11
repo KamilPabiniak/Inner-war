@@ -3015,11 +3015,11 @@ PrefabInstance:
         zyskaj\u0105, a jedyne co musisz zrobi\u0107 to odebra\u0107 pewn\u0105 paczk\u0119,
         dostarczy\u0107 j\u0105 naszemu cz\u0142owiekowi i pakunek kt\xF3ry Ci da
         po\u0142o\u017Cy\u0107 pod \u015Bcian\u0105 pewnego wysokiego budynku\u2026
-        \r\nPo wyj\u015Bciu z hotelu skieruj si\u0119 na prawo, za przej\u015Bciem
+        \n\r\nPo wyj\u015Bciu z hotelu skieruj si\u0119 na prawo, za przej\u015Bciem
         znajdziesz plac od kt\xF3rego odbija kolejny - mniejszy i os\u0142oni\u0119ty
         po prawej stronie. Tak w cieniu przej\u015Bcia znajdziesz przedmiot kt\xF3ry
         b\u0119dziesz musia\u0142 zanie\u015B\u0107. Nie zwlekaj. Cienie s\u0105
-        ci dzi\u015B sojusznikiem, ale noc nie b\u0119dzie trwa\u0142a wiecznie\u2026\r\n\nPrzyjaciel..."
+        ci dzi\u015B sojusznikiem, ale noc nie b\u0119dzie trwa\u0142a wiecznie\u2026\r\n\nPrzyjaciel."
       objectReference: {fileID: 0}
     - target: {fileID: 5338575199509856480, guid: e89336370bdf62b448d12ef17c850fc1, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -3220,10 +3220,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuUI: {fileID: 3759940516136950659}
-  camera1: {fileID: 0}
-  camera2: {fileID: 0}
+  cameraMenu: {fileID: 0}
+  cameraMain: {fileID: 0}
   playButton: {fileID: 5397054935397696896}
   exitButton: {fileID: 8474651991448778198}
+  letter: {fileID: 0}
 --- !u!1001 &6388280652775807326
 PrefabInstance:
   m_ObjectHideFlags: 0
