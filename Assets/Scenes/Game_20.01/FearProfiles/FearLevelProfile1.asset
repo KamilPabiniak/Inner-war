@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 20
+  minInterval: 5
+  maxInterval: 10
   minDuration: 5
   maxDuration: 10
   autoTrigger: 0
   disableWhenTrigger: 0
-  startTransitionDuration: 1
-  endTransitionDuration: 1
+  startTransitionDuration: 3
+  endTransitionDuration: 2
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,12 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
   m_Name: SoundSuppression
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 4
-  maxDuration: 6
+  minInterval: 5
+  maxInterval: 10
+  minDuration: 5
+  maxDuration: 10
   autoTrigger: 1
   disableWhenTrigger: 0
   cutOffOn: 350
   transitionTimeApply: 3
-  transitionTimeCancel: 3
+  transitionTimeCancel: 2

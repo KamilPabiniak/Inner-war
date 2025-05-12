@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
   m_Name: CrouchEffect
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 25
+  minInterval: 5
+  maxInterval: 10
   minDuration: 5
   maxDuration: 10
   autoTrigger: 1
@@ -30,15 +30,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 15
-  minDuration: 8
-  maxDuration: 15
+  minInterval: 4
+  maxInterval: 8
+  minDuration: 5
+  maxDuration: 10
   autoTrigger: 1
   disableWhenTrigger: 0
   heartFadeInDuration: 1
   heartFadeOutDuration: 1
-  heartTargetVolume: 1
+  heartTargetVolume: 1.2
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
   heartDrymixEchoOnValue: 60
 --- !u!114 &11400000
@@ -75,13 +75,13 @@ MonoBehaviour:
   m_Name: VoiceThoughtEffect
   m_EditorClassIdentifier: 
   minInterval: 5
-  maxInterval: 8
-  minDuration: 3
-  maxDuration: 5
-  autoTrigger: 0
+  maxInterval: 10
+  minDuration: 5
+  maxDuration: 10
+  autoTrigger: 1
   disableWhenTrigger: 0
-  voicesFadeInDuration: 1
-  voicesFadeOutDuration: 1
+  voicesFadeInDuration: 3
+  voicesFadeOutDuration: 3
   voicesTargetVolume: 1
   voicesSounds:
   - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
@@ -97,13 +97,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 20
+  minInterval: 4
+  maxInterval: 8
   minDuration: 5
   maxDuration: 10
   autoTrigger: 1
   disableWhenTrigger: 0
-  shakeAmplitude: 0.005
+  shakeAmplitude: 0.006
   shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
@@ -145,13 +145,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
   m_Name: IrregularMovementEffect
   m_EditorClassIdentifier: 
-  minInterval: 15
-  maxInterval: 25
-  minDuration: 7
+  minInterval: 5
+  maxInterval: 10
+  minDuration: 10
   maxDuration: 15
-  autoTrigger: 0
+  autoTrigger: 1
   disableWhenTrigger: 0
-  minSpeedMultiplier: 0.6
+  minSpeedMultiplier: 0.5
   maxSpeedMultiplier: 1.2
 --- !u!114 &3933999804909531380
 MonoBehaviour:
@@ -167,13 +167,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minInterval: 3
   maxInterval: 6
-  minDuration: 4
-  maxDuration: 6
+  minDuration: 5
+  maxDuration: 10
   autoTrigger: 1
   disableWhenTrigger: 0
   cutOffOn: 350
   transitionTimeApply: 3
-  transitionTimeCancel: 3
+  transitionTimeCancel: 2
 --- !u!114 &5388067495803624509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,14 +186,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 15
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 0
+  minInterval: 3
+  maxInterval: 6
+  minDuration: 5
+  maxDuration: 10
+  autoTrigger: 1
   disableWhenTrigger: 0
-  startTransitionDuration: 1
-  endTransitionDuration: 1
+  startTransitionDuration: 3
+  endTransitionDuration: 2
 --- !u!114 &8666978987524335258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,8 +206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
   m_Name: HallucinationEffect
   m_EditorClassIdentifier: 
-  minInterval: 15
-  maxInterval: 25
+  minInterval: 5
+  maxInterval: 10
   minDuration: 5
   maxDuration: 10
   autoTrigger: 1
