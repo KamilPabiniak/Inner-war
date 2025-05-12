@@ -16,6 +16,9 @@ public class PlayerParkour : PlayerModule
     private PlayerInput _inputHandler;
     private Transform _cameraTransform;
     private bool _isClimbing = false;
+    private bool _vaultRequested;
+    
+    private static readonly RaycastHit[] _raycastHits = new RaycastHit[2];
 
     protected override void OnInitialize()
     {
@@ -25,35 +28,33 @@ public class PlayerParkour : PlayerModule
 
     private void Update()
     {
-        if (_isClimbing || !_inputHandler.IsVaultPressed) return;
-        TryVault();
+        if (!_inputHandler.IsVaultPressed || _isClimbing) return;
+        _vaultRequested = true;
         _inputHandler.ResetVaultRequest();
     }
 
-    /// <summary>
-    /// Próba wykrycia przeszkody i zainicjowania wspinaczki.
-    /// </summary>
-    private void TryVault()
+    private void FixedUpdate()
     {
-        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit firstHit, vaultDistance, vaultLayer))
-        {
-            Vector3 climbStart = firstHit.point + (_cameraTransform.forward * playerRadius) + (Vector3.up * 0.6f * climbHeight);
-
-            if (Physics.Raycast(climbStart, Vector3.down, out RaycastHit secondHit, climbHeight))
-            {
-                StartCoroutine(Climb(secondHit.point));
-            }
-            else
-            {
-                Debug.Log("No valid climb point found!");
-            }
-        }
+        if (_isClimbing || !_vaultRequested) return;
+        _vaultRequested = false;
+        TryVault();
     }
-
-    /// <summary>
-    /// Coroutine obsługująca wspinaczkę gracza.
-    /// </summary>
-    /// <param name="targetPosition">Pozycja, na którą gracz ma się wspiąć.</param>
+    
+      private void TryVault()
+       {
+           if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward,
+               out RaycastHit firstHit, vaultDistance, vaultLayer.value))
+           {
+               Vector3 climbStart = firstHit.point + _cameraTransform.forward * playerRadius + Vector3.up * (0.6f * climbHeight);
+               
+               if (Physics.Raycast(climbStart, Vector3.down, out RaycastHit secondHit,
+                   climbHeight, vaultLayer.value))
+               {
+                   StartCoroutine(Climb(secondHit.point));
+               }
+           }
+       }
+    
     private IEnumerator Climb(Vector3 targetPosition)
     {
         _isClimbing = true;

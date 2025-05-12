@@ -90,14 +90,17 @@ public class PlayerLook : PlayerModule
             if (enableBobbing)
                 UpdateHeadBobbing(_playerInput.MoveInput);
         }
-        else if (Player.state == Player.State.Climbing)
+        else
         {
             HandleClimbLook();
         }
-
-        if (_isShaking)
-            ProcessCameraShake();
     }
+    
+    private void FixedUpdate()
+    {
+        if (_isShaking) ProcessCameraShake();
+    }
+
 
     private void LateUpdate()
     {

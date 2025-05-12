@@ -9,6 +9,8 @@ namespace Enemy.State
         private Vector3 _lastKnownPosition;
         private bool _fearIncreased;
         
+        private static readonly int Walk = Animator.StringToHash("Walk");
+        
         public void UpdatePosition(Vector3 newPosition)
         {
             _lastKnownPosition = newPosition;
@@ -40,6 +42,7 @@ namespace Enemy.State
                 {
                     enemyBrain.movement.GoTo(_lastKnownPosition);
                     enemyBrain.movement.Face(_lastKnownPosition);
+                    enemyBrain.animator.SetBool(Walk, true); 
                 }
                 return;
             }
