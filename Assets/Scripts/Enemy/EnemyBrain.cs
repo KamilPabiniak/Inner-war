@@ -28,6 +28,7 @@ namespace Enemy
         [Header("Common Settings")] 
         public bool canKill = true;
         public bool canMove = true;
+        public float increaseFearValueOnSpotted;
         
         // Patrol & Investigate & Attack Settings
         [Header("Patrol")] 

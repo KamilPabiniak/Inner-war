@@ -30,7 +30,7 @@ namespace Enemy.State
                 enemyBrain.movement.Face(_lastKnownPosition);
                 if (!_fearIncreased)
                 {
-                    AnxietyManager.Instance.IncreaseFear(5f);
+                    AnxietyManager.Instance.IncreaseFear(enemyBrain.increaseFearValueOnSpotted);
                     _fearIncreased = true;
                 }
                 return;

@@ -18,6 +18,8 @@ namespace Enemy.State
         private const float PredictionTime = 0.5f;
         private bool _escapeSoundPlayed;
         
+        private static readonly int Speed = Animator.StringToHash("Speed");
+        
         public bool IsOverloading => _isOverloading;
 
         public void EnterState(EnemyBrain enemyBrain)
