@@ -11,7 +11,7 @@ namespace Enemy.State
         
         //Animator
         private static readonly int CheckArea = Animator.StringToHash("Search");
-        private static readonly int Walk = Animator.StringToHash("Walk");
+        private static readonly int Speed = Animator.StringToHash("Speed");
 
         public void EnterState(EnemyBrain enemyBrain)
         {
@@ -26,7 +26,7 @@ namespace Enemy.State
             {
                 _waitTimer -= Time.deltaTime;
                 enemyBrain.animator.SetBool(CheckArea, true); //Animator bool 
-                enemyBrain.animator.SetBool(Walk, false); 
+                enemyBrain.animator.SetFloat(Speed, 0f); 
                 
                 if (enemyBrain.movement.IsObjectInFront())
                 {
@@ -37,7 +37,7 @@ namespace Enemy.State
                 {
                     _isWaiting = false;
                     enemyBrain.animator.SetBool(CheckArea, false); // Animator bool reset 
-                    enemyBrain.animator.SetBool(Walk, true); 
+                    enemyBrain.animator.SetFloat(Speed, 1.1f); 
                     if (_patrolPoint != Vector3.zero)
                     {
                         if (enemyBrain.patrolAreaOverride != null)
@@ -82,7 +82,7 @@ namespace Enemy.State
             }
             
             enemyBrain.animator.SetBool(CheckArea, false); 
-            enemyBrain.animator.SetBool(Walk, true); 
+            enemyBrain.animator.SetBool(Speed, true); 
         }
 
         private void SetNewPatrolPoint(EnemyBrain enemyBrain)
