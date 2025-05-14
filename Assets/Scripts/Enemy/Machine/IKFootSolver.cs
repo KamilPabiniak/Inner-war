@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class IKFootSolver : MonoBehaviour
 {
@@ -16,6 +14,7 @@ public class IKFootSolver : MonoBehaviour
     Vector3 oldPosition, currentPosition, newPosition;
     Vector3 oldNormal, currentNormal, newNormal;
     float lerp;
+    private EnemyAudio _enemyAudio;
 
     private void Start()
     {
@@ -23,6 +22,7 @@ public class IKFootSolver : MonoBehaviour
         currentPosition = newPosition = oldPosition = transform.position;
         currentNormal = newNormal = oldNormal = transform.up;
         lerp = 1;
+        _enemyAudio = GetComponentInParent<EnemyAudio>();
     }
     
     void Update()
@@ -30,8 +30,7 @@ public class IKFootSolver : MonoBehaviour
         transform.position = currentPosition;
         transform.up = currentNormal;
 
-        Ray ray = new Ray(body.position + (body.right * footSpacing / 2), Vector3.down);
-
+        Ray ray = new Ray(body.position + body.right * footSpacing, Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit info, 10, terrainLayer.value))
         {
             if (Vector3.Distance(newPosition, info.point) > stepDistance && !otherFoot.IsMoving() && lerp >= 1)
@@ -41,22 +40,21 @@ public class IKFootSolver : MonoBehaviour
                 newPosition = info.point + (body.forward * stepLength * direction) + footOffset;
                 newNormal = info.normal;
                 //sound bool here
-                GetComponentInParent<EnemyAudio>()?.ResetFootStepFlag();
+                _enemyAudio.ResetFootStepFlag();
             }
         }
-
         if (lerp < 1)
         {
-            Vector3 tempPosition = Vector3.Lerp(oldPosition, newPosition, lerp);
-            tempPosition.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight;
+            Vector3 footPosition = Vector3.Lerp(oldPosition, newPosition, lerp);
+            footPosition.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight;
 
-            currentPosition = tempPosition;
+            currentPosition = footPosition;
             currentNormal = Vector3.Lerp(oldNormal, newNormal, lerp);
             lerp += Time.deltaTime * speed;
             //sound trigger here
             if (lerp > 0.8f)
             {
-                GetComponentInParent<EnemyAudio>()?.PlayFootStepSound();
+                _enemyAudio.PlayFootStepSound();
             }
         }
         else
@@ -70,6 +68,7 @@ public class IKFootSolver : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(newPosition, 0.5f);
+        
     }
 
     private bool IsMoving()

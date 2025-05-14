@@ -15,6 +15,8 @@ namespace QuestSystem
 
         public event Action<Quest> OnQuestUpdated;
 
+        [SerializeField] private AudioSource questAudio;
+
         private void Awake()
         {
             if (Instance == null)
@@ -46,12 +48,11 @@ namespace QuestSystem
 
         public void CompleteCurrentQuest()
         {
-            if (currentQuestIndex < quests.Length)
-            {
-                Debug.Log("Completed quest: " + quests[currentQuestIndex].questName);
-                currentQuestIndex++;
-                ActivateCurrentQuest();
-            }
+            if (currentQuestIndex >= quests.Length) return;
+            Debug.Log("Completed quest: " + quests[currentQuestIndex].questName);
+            currentQuestIndex++;
+            questAudio.Play();
+            ActivateCurrentQuest();
         }
     }
 }
