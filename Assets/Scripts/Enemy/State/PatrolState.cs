@@ -82,7 +82,7 @@ namespace Enemy.State
             }
             
             enemyBrain.animator.SetBool(CheckArea, false); 
-            enemyBrain.animator.SetBool(Speed, true); 
+            enemyBrain.animator.SetFloat(Speed, 0f); 
         }
 
         private void SetNewPatrolPoint(EnemyBrain enemyBrain)

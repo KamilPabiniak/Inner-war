@@ -92,6 +92,8 @@ public class PlayerThrow : PlayerModule
     {
         GameObject stone = Instantiate(stonePrefab, handPosition.position, Quaternion.identity);
         Rigidbody rb = stone.GetComponent<Rigidbody>();
+        Rock rock = stone.GetComponent<Rock>();
+        rock.canPlaySound = true;
 
         Vector3 targetPoint = GetAimPoint();
         Vector3 throwDirection = (targetPoint - handPosition.position).normalized;

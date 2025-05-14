@@ -9,9 +9,11 @@ public class Rock : MonoBehaviour, IInteractable
 
     // Flag to ensure enemy alert is triggered only once.
     private bool _alertTriggered;
+    public bool canPlaySound = false;
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!canPlaySound) return;
         Vector3 impactPosition = transform.position;
         int randomSound = Random.Range(0, rockSound.Length);
         SoundFXManager.Instance.Play3DSoundFXClip(rockSound[randomSound], transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);

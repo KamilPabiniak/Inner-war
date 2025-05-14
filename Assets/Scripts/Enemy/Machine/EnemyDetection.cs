@@ -40,8 +40,7 @@ namespace Enemy
                 if (!c.CompareTag("Player")) continue;
 
                 var dir = (c.transform.position - origin).normalized;
-
-                // Nowe sprawdzenie: czy gracz jest w sto¿ku œwiat³a
+                
                 if (lightComponent.type == LightType.Spot &&
                     Vector3.Angle(lightComponent.transform.forward, dir) > lightComponent.spotAngle * 0.5f)
                 {
@@ -56,7 +55,6 @@ namespace Enemy
                 }
             }
 
-            // Aktualizacja targetu
             if (found != _target)
             {
                 _target = found;
@@ -70,7 +68,7 @@ namespace Enemy
 
         void UpdateProgress() {
             float intensity = _isPlayerVisible ? CalcIntensity(_target) : 0f;
-
+            
             if (intensity > threshold) {
                 _awarenessLevel += intensity * increaseRate * Time.deltaTime;
             } else {
