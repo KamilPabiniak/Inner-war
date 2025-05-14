@@ -51,8 +51,8 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator StartGame()
     {
-        GameEvents.onBlackScreen.Invoke(2f, 1f, 2f);
-        yield return new WaitForSeconds(2f);
+        GameEvents.onBlackScreen.Invoke(1f, 1f, 1f);
+        yield return new WaitForSeconds(1f);
         SwitchCamera();
         menuUI.SetActive(false);
         GameEvents.onMenuExit?.Invoke();
