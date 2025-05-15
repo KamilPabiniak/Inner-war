@@ -637,7 +637,7 @@ GameObject:
   - component: {fileID: 55620415}
   - component: {fileID: 55620414}
   m_Layer: 0
-  m_Name: -------------------<color=#FFC058FF>Ambinet</color>-----------------------
+  m_Name: ------------<color=#FFC058FF>Ambinet</color>-----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -774,7 +774,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: ---------Controllers
+  m_Name: ------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1612,7 +1612,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>----------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>--------------------</color>
+  m_Name: <color=#842F2FFF>---------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>--------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1932,6 +1932,17 @@ PrefabInstance:
     - target: {fileID: 1944835760268397292, guid: 78805b74923983c499f134cef43699cb, type: 3}
       propertyPath: m_Name
       value: P_MENU
+      objectReference: {fileID: 0}
+    - target: {fileID: 2142202057325228033, guid: 78805b74923983c499f134cef43699cb, type: 3}
+      propertyPath: m_text
+      value: "Nie sprawia mi przyjemno\u015Bci trzymanie no\u017Ca na pa\u0144skim
+        gardle, ale ka\u017Cdy z nas robi to co musi, nie to co chce. Jedyne co musisz
+        zrobi\u0107 to odebra\u0107 pewn\u0105 paczk\u0119, dostarczy\u0107 j\u0105
+        naszemu cz\u0142owiekowi i spe\u0142ni\u0107 instrukcje kt\xF3re ci przeka\u017Ce\u2026
+        \r\n\r\nWyjd\u017A z hotelu i kieruj si\u0119 w stron\u0119 Babilonu. Szukaj
+        placu ze straganami. Jak znajdziesz paczk\u0119 przeczytaj karteczk\u0119
+        po dalsze instrukcje. Nie zwlekaj. Cienie s\u0105 ci dzi\u015B sojusznikiem,
+        ale noc nie b\u0119dzie trwa\u0142a wiecznie\u2026\r\n\r\nPrzyjaciel.\r"
       objectReference: {fileID: 0}
     - target: {fileID: 2654810919618560191, guid: 78805b74923983c499f134cef43699cb, type: 3}
       propertyPath: m_Color.b
@@ -10494,7 +10505,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ----------------ENVIROMENT---------------------
+  m_Name: ---------ENVIROMENT--------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11488,7 +11499,7 @@ GameObject:
   - component: {fileID: 757262063}
   - component: {fileID: 757262062}
   m_Layer: 0
-  m_Name: -------------------<color=#B0B0B0FF>CAMERA</color>-----------------------
+  m_Name: -------------<color=#B0B0B0FF>CAMERA</color>----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12293,7 +12304,7 @@ GameObject:
   - component: {fileID: 828615971}
   - component: {fileID: 828615970}
   m_Layer: 0
-  m_Name: ------------------<color=#7EC2FFFF>Monologue </color>---------------------
+  m_Name: -----------<color=#7EC2FFFF>Monologue </color>---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14020,7 +14031,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: ------------------MANAGERS---------------------
+  m_Name: -----------MANAGERS---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15792,6 +15803,7 @@ GameObject:
   - component: {fileID: 1018440535}
   - component: {fileID: 1018440534}
   - component: {fileID: 1018440533}
+  - component: {fileID: 1018440537}
   m_Layer: 0
   m_Name: Target
   m_TagString: Bomb
@@ -15901,6 +15913,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1018440531}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1018440537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018440531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede3222067d004d4fb5e85fab03357f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1018907282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50979,7 +51003,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ----------------<color=#3D0080FF>CHARACTERS</color>--------------------
+  m_Name: ---------<color=#3D0080FF>CHARACTERS</color>--------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54835,7 +54859,7 @@ GameObject:
   - component: {fileID: 1494555223}
   - component: {fileID: 1494555222}
   m_Layer: 0
-  m_Name: ----------------Pipes&Ladders--------------------
+  m_Name: ---------Pipes&Ladders-------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55159,7 +55183,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: --------------POSTPROCESSING-----------------
+  m_Name: -------POSTPROCESSING-----------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55410,7 +55434,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#E6AA00FF>-</color><color=#CC9700FF>-</color><color=#B28400FF>-</color><color=#997100FF>-</color><color=#805E00FF>-</color><color=#664B00FF>-</color><color=#4C3900FF>-</color><color=#332600FF>-</color><color=#1A1300FF>-</color><color=#000000FF>-</color><color=#1A1300FF>-</color><color=#332600FF>-</color><color=#4C3900FF>-</color><color=#664B00FF>-</color><color=#805E00FF>-</color><color=#997100FF>-</color><color=#B28400FF>-</color><color=#CC9700FF>-</color><color=#E6AA00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#E9AC00FF>-</color><color=#D39C00FF>-</color><color=#BC8B00FF>-</color><color=#A67B00FF>-</color><color=#906B00FF>-</color><color=#7A5A00FF>-</color><color=#644A00FF>-</color><color=#4E3900FF>-</color><color=#372900FF>-</color><color=#211900FF>-</color><color=#0B0800FF>-</color><color=#0B0800FF>-</color><color=#211900FF>-</color><color=#372900FF>-</color><color=#4E3900FF>-</color><color=#644A00FF>-</color><color=#7A5A00FF>-</color><color=#906B00FF>-</color><color=#A67B00FF>-</color><color=#BC8B00FF>-</color><color=#D39C00FF>-</color><color=#E9AC00FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#D89F00FF>-</color><color=#B18200FF>-</color><color=#896500FF>-</color><color=#624800FF>-</color><color=#3B2B00FF>-</color><color=#140E00FF>-</color><color=#140E00FF>-</color><color=#3B2B00FF>-</color><color=#624800FF>-</color><color=#896500FF>-</color><color=#B18200FF>-</color><color=#D89F00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#DFA500FF>-</color><color=#BF8D00FF>-</color><color=#9F7600FF>-</color><color=#805E00FF>-</color><color=#604700FF>-</color><color=#402F00FF>-</color><color=#201800FF>-</color><color=#000000FF>-</color><color=#201800FF>-</color><color=#402F00FF>-</color><color=#604700FF>-</color><color=#805E00FF>-</color><color=#9F7600FF>-</color><color=#BF8D00FF>-</color><color=#DFA500FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57728,8 +57752,8 @@ GameObject:
   - component: {fileID: 1659726293}
   - component: {fileID: 1659726292}
   m_Layer: 0
-  m_Name: ~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
-    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~
+  m_Name: ~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
+    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62762,7 +62786,7 @@ GameObject:
   - component: {fileID: 2037040358}
   - component: {fileID: 2037040357}
   m_Layer: 0
-  m_Name: ----------------<color=#FFFFFFFF>CHECKPOINTS</color>-------------------
+  m_Name: ---------<color=#FFFFFFFF>CHECKPOINTS</color>-------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
