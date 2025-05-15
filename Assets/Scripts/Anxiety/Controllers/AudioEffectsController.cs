@@ -7,6 +7,7 @@ public class AudioEffectsController : MonoBehaviour
     [Header("Audio Mixer")]
     public AudioMixer audioMixer;
     
+    private AudioSource _currentMonologue;
     private AudioSource _currentVoices;
     private AudioSource _currentHeart;
 
@@ -50,6 +51,38 @@ public class AudioEffectsController : MonoBehaviour
     }
 
     #endregion
+    
+    public bool IsMonologuePlaying()
+    {
+        return _currentMonologue != null && _currentMonologue.isPlaying;
+    }
+    
+    public void PlayMonologue(float monologueFadeInDuration, float monologueTargetVolume, AudioClip monologueClip)
+    {
+        if (IsMonologuePlaying())
+            return;
+        
+        _currentMonologue = SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(
+            monologueClip,
+            transform,
+            monologueTargetVolume,
+            destroyTime: monologueClip.length,
+            onLoop: false);
+        
+        if (!_currentMonologue) return;
+        StartCoroutine(FadeIn(_currentMonologue, monologueFadeInDuration, monologueTargetVolume));
+    }
+    
+    public void StopMonologue(float monologueFadeOutDuration)
+    {
+        if (_currentMonologue != null)
+        {
+            StartCoroutine(FadeOutAndStop(_currentMonologue, monologueFadeOutDuration, () =>
+            {
+                _currentMonologue = null;
+            }));
+        }
+    }
     
     public void PlayVoices(float voicesFadeInDuration, float voicesTargetVolume, AudioClip voicesClip)
     {

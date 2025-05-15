@@ -13,8 +13,7 @@ public class FearLevelProfileEditor : Editor
     private void OnEnable()
     {
         _profile = (FearLevelProfile)target;
-
-        // Zapewniamy, ¿e lista efektów nie jest null
+        
         if (_profile.effects == null)
         {
             _profile.effects = new System.Collections.Generic.List<BaseFearEffect>();
