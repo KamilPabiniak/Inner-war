@@ -14,29 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effects:
   - {fileID: 0}
-  - {fileID: 8731973148261383969}
---- !u!114 &8731973148261383969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e42b9809d90a93b4aa05a1ebf665496e, type: 3}
-  m_Name: FearResponse
-  m_EditorClassIdentifier: 
-  minInterval: 2
-  maxInterval: 2
-  minDuration: 10
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  fadeInDuration: 0.1
-  fadeOutDuration: 0.1
-  targetVolume: 1
-  monologueClips:
-  - {fileID: 8300000, guid: 24def10d72a34384cb21834dba48ab61, type: 3}
-  - {fileID: 8300000, guid: 8b740d97abea56f45adb8eda8f0c4d06, type: 3}
-  - {fileID: 8300000, guid: 33f5ed79efc39fe4bb5a951007a38992, type: 3}
