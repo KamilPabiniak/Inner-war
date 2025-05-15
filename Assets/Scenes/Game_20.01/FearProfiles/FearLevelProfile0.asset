@@ -27,13 +27,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42b9809d90a93b4aa05a1ebf665496e, type: 3}
   m_Name: FearResponse
   m_EditorClassIdentifier: 
-  minInterval: 1
+  minInterval: 2
   maxInterval: 2
-  minDuration: 4
-  maxDuration: 8
-  autoTrigger: 0
+  minDuration: 10
+  maxDuration: 10
+  autoTrigger: 1
   disableWhenTrigger: 0
   fadeInDuration: 0.1
   fadeOutDuration: 0.1
   targetVolume: 1
-  monologueClips: []
+  monologueClips:
+  - {fileID: 8300000, guid: 24def10d72a34384cb21834dba48ab61, type: 3}
+  - {fileID: 8300000, guid: 8b740d97abea56f45adb8eda8f0c4d06, type: 3}
+  - {fileID: 8300000, guid: 33f5ed79efc39fe4bb5a951007a38992, type: 3}
