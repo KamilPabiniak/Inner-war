@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class DemoEnd : MonoBehaviour
 {
     [Header("UI Elements")]
-    public TMP_Text textEnd; // Tekst, który ma zyskaæ alphe 1
-    public GameObject clickablePanel; // Panel, który obs³uguje klikniêcie
+    public TMP_Text textEnd; // Tekst, ktÃ³ry ma zyskaÄ‡ alphe 1
+    public GameObject clickablePanel; // Panel, ktÃ³ry obsÅ‚uguje klikniÄ™cie
 
     private void Start()
     {
@@ -25,7 +25,7 @@ public class DemoEnd : MonoBehaviour
 
     private IEnumerator FadeInText()
     {
-        yield return new WaitForSeconds(1f); // Poczekaj sekundê
+        yield return new WaitForSeconds(1f); // Poczekaj sekundÄ™
 
         if (textEnd != null)
         {
@@ -44,7 +44,7 @@ public class DemoEnd : MonoBehaviour
                 yield return null;
             }
 
-            // Po zakoñczeniu efektu fade-in aktywuj panel
+            // Po zakoÅ„czeniu efektu fade-in aktywuj panel
             if (clickablePanel != null)
             {
                 clickablePanel.SetActive(true);
@@ -66,7 +66,7 @@ public class DemoEnd : MonoBehaviour
 
     private void QuitGame()
     {
-        Debug.Log("Gra zostanie zamkniêta...");
-        Application.Quit(); // Wy³¹cza grê (dzia³a w buildzie, nie w edytorze Unity)
+        Debug.Log("Gra zostanie zamkniÄ™ta...");
+        Application.Quit(); // WyÅ‚Ä…cza grÄ™ (dziaÅ‚a w buildzie, nie w edytorze Unity)
     }
 }

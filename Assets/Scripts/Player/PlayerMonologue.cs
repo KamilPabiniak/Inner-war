@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,10 +7,12 @@ public class PlayerMonologue : PlayerModule
     [Header("Monologue Settings")]
     [SerializeField] private AudioSource monologueSource;
 
-    private bool _isPlaying;
+    public bool isPlaying;
     private bool _wasInterrupted;
 
     private Coroutine _monologueCoroutine;
+    
+    public event Action OnMonologueStarted;
 
     private void OnEnable() => GameEvents.onPlayerDied += StopMonologue;
 
@@ -21,7 +24,7 @@ public class PlayerMonologue : PlayerModule
         {
             return;
         }
-        if (_isPlaying)
+        if (isPlaying)
         {
             return;
         }
@@ -35,20 +38,21 @@ public class PlayerMonologue : PlayerModule
             yield return new WaitForSeconds(delay);
         }
 
-        _isPlaying = true;
+        isPlaying = true;
         monologueSource.clip = clip;
         monologueSource.volume = volume;
         monologueSource.Play();
+        OnMonologueStarted.Invoke();
 
         yield return new WaitForSeconds(clip.length);
 
-        _isPlaying = false;
+        isPlaying = false;
         _wasInterrupted = false;
     }
 
     private void StopMonologue()
     {
-        if (_isPlaying)
+        if (isPlaying)
         {
             if (_monologueCoroutine != null)
             {
@@ -57,7 +61,7 @@ public class PlayerMonologue : PlayerModule
             }
 
             monologueSource.Stop();
-            _isPlaying = false;
+            isPlaying = false;
             _wasInterrupted = true;
         }
     }

@@ -7,7 +7,7 @@ public class AudioEffectsController : MonoBehaviour
     [Header("Audio Mixer")]
     public AudioMixer audioMixer;
     
-    private AudioSource _currentMonologue;
+    private AudioSource _currentFearReaction;
     private AudioSource _currentVoices;
     private AudioSource _currentHeart;
 
@@ -52,34 +52,34 @@ public class AudioEffectsController : MonoBehaviour
 
     #endregion
     
-    public bool IsMonologuePlaying()
+    public bool IsFearReactionPlaying()
     {
-        return _currentMonologue != null && _currentMonologue.isPlaying;
+        return _currentFearReaction != null && _currentFearReaction.isPlaying;
     }
     
-    public void PlayMonologue(float monologueFadeInDuration, float monologueTargetVolume, AudioClip monologueClip)
+    public void PlayFearReaction(float monologueFadeInDuration, float monologueTargetVolume, AudioClip monologueClip)
     {
-        if (IsMonologuePlaying())
+        if (IsFearReactionPlaying())
             return;
         
-        _currentMonologue = SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(
+        _currentFearReaction = SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(
             monologueClip,
             transform,
             monologueTargetVolume,
             destroyTime: monologueClip.length,
             onLoop: false);
         
-        if (!_currentMonologue) return;
-        StartCoroutine(FadeIn(_currentMonologue, monologueFadeInDuration, monologueTargetVolume));
+        if (!_currentFearReaction) return;
+        StartCoroutine(FadeIn(_currentFearReaction, monologueFadeInDuration, monologueTargetVolume));
     }
     
-    public void StopMonologue(float monologueFadeOutDuration)
+    public void StopFearReaction(float monologueFadeOutDuration)
     {
-        if (_currentMonologue != null)
+        if (_currentFearReaction != null)
         {
-            StartCoroutine(FadeOutAndStop(_currentMonologue, monologueFadeOutDuration, () =>
+            StartCoroutine(FadeOutAndStop(_currentFearReaction, monologueFadeOutDuration, () =>
             {
-                _currentMonologue = null;
+                _currentFearReaction = null;
             }));
         }
     }

@@ -19,6 +19,8 @@ namespace Anxiety.Effects
         
         protected float currentDuration;
 
+        public virtual void Init() { }
+
         private void OnEnable()
         {
             _isBlocked = false;

@@ -62,6 +62,7 @@ namespace Anxiety
 
         private void Start()
         {
+            InitializeAllEffects();
             UpdateProfileForLevel(DetermineFearLevel());
         }
 
@@ -75,6 +76,29 @@ namespace Anxiety
             }
 
             FearLevelText = FearLevel.ToString();
+        }
+        
+        private void InitializeAllEffects()
+        {
+            var profiles = new[]
+            {
+                level0Profile,
+                level1Profile,
+                level2Profile,
+                level3Profile,
+                level4Profile,
+                level5Profile
+            };
+
+            foreach (var profile in profiles)
+            {
+                if (profile == null) continue;
+                foreach (var effect in profile.effects)
+                {
+                    if (effect != null)
+                        effect.Init();
+                }
+            }
         }
 
         public void IncreaseFear(float amount)
