@@ -42,7 +42,7 @@ public class PlayerMonologue : PlayerModule
         monologueSource.clip = clip;
         monologueSource.volume = volume;
         monologueSource.Play();
-        OnMonologueStarted.Invoke();
+        OnMonologueStarted?.Invoke();
 
         yield return new WaitForSeconds(clip.length);
 
