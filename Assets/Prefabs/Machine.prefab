@@ -152,37 +152,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7601634890967749561}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &352369938929678739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7803889300170737866}
-  m_Layer: 7
-  m_Name: Forearm_PoleTarget_R
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7803889300170737866
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 352369938929678739}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.72100997, y: -4.936803e-14, z: 5.1368974e-14, w: 0.6929247}
-  m_LocalPosition: {x: 0.3134433, y: 0.110611595, z: -0.47303966}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8044662902682477961}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &484969780040672975
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,16 +249,16 @@ SkinnedMeshRenderer:
   - {fileID: 4538687310742641919}
   - {fileID: 6463408763189847832}
   - {fileID: 847960047559722007}
-  - {fileID: 7002382997784990223}
-  - {fileID: 7842662179489218051}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1347381530877133458}
   - {fileID: 7034699623417310671}
   - {fileID: 8542721936671917791}
   - {fileID: 354053318701895030}
   - {fileID: 1821642161248927301}
   - {fileID: 1696841496955249092}
-  - {fileID: 4615789302752118854}
-  - {fileID: 7803889300170737866}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 3148930114603437246}
   - {fileID: 6284567250594251153}
   - {fileID: 0}
@@ -449,10 +418,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7002382997784990223}
-  - {fileID: 7842662179489218051}
-  - {fileID: 4615789302752118854}
-  - {fileID: 7803889300170737866}
   - {fileID: 89151537165356462}
   - {fileID: 1347381530877133458}
   - {fileID: 354053318701895030}
@@ -623,10 +588,6 @@ MonoBehaviour:
   m_Transforms:
   - {fileID: 1414623541468806449}
   - {fileID: 8044662902682477961}
-  - {fileID: 7002382997784990223}
-  - {fileID: 7842662179489218051}
-  - {fileID: 4615789302752118854}
-  - {fileID: 7803889300170737866}
   - {fileID: 89151537165356462}
   - {fileID: 2379129114752897086}
   - {fileID: 8914433801368616443}
@@ -1337,16 +1298,16 @@ SkinnedMeshRenderer:
   - {fileID: 4538687310742641919}
   - {fileID: 6463408763189847832}
   - {fileID: 847960047559722007}
-  - {fileID: 7002382997784990223}
-  - {fileID: 7842662179489218051}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1347381530877133458}
   - {fileID: 7034699623417310671}
   - {fileID: 8542721936671917791}
   - {fileID: 354053318701895030}
   - {fileID: 1821642161248927301}
   - {fileID: 1696841496955249092}
-  - {fileID: 4615789302752118854}
-  - {fileID: 7803889300170737866}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 3148930114603437246}
   - {fileID: 6284567250594251153}
   - {fileID: 0}
@@ -1610,68 +1571,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 205091625980454920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4923663212383119360
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7842662179489218051}
-  m_Layer: 7
-  m_Name: Forearm_IK_Target_R
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7842662179489218051
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4923663212383119360}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.7071067, y: -0.000000053385033, z: -0.00000005338502, w: 0.7071069}
-  m_LocalPosition: {x: 0.31344333, y: -0.17635556, z: 0.23665328}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8044662902682477961}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5453538292684708524
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4615789302752118854}
-  m_Layer: 7
-  m_Name: Forearm_PoleTarget_L
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4615789302752118854
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5453538292684708524}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.72100997, y: -4.936803e-14, z: 5.1368974e-14, w: 0.6929247}
-  m_LocalPosition: {x: -0.32406795, y: 0.110611595, z: -0.47303966}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8044662902682477961}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5631578680259536238
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,16 +1769,16 @@ SkinnedMeshRenderer:
   - {fileID: 4538687310742641919}
   - {fileID: 6463408763189847832}
   - {fileID: 847960047559722007}
-  - {fileID: 7002382997784990223}
-  - {fileID: 7842662179489218051}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 1347381530877133458}
   - {fileID: 7034699623417310671}
   - {fileID: 8542721936671917791}
   - {fileID: 354053318701895030}
   - {fileID: 1821642161248927301}
   - {fileID: 1696841496955249092}
-  - {fileID: 4615789302752118854}
-  - {fileID: 7803889300170737866}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 3148930114603437246}
   - {fileID: 6284567250594251153}
   - {fileID: 0}
@@ -2291,37 +2190,6 @@ MonoBehaviour:
       y: 1
       z: 1
     m_MaintainOffset: 1
---- !u!1 &7846589466758170082
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7002382997784990223}
-  m_Layer: 7
-  m_Name: Forearm_IK_Target_L
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7002382997784990223
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7846589466758170082}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.7071067, y: -0.000000053385033, z: -0.00000005338502, w: 0.7071069}
-  m_LocalPosition: {x: -0.32406792, y: -0.18740603, z: 0.18224125}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8044662902682477961}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7882216915077384914
 GameObject:
   m_ObjectHideFlags: 0

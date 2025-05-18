@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BombInteract : MonoBehaviour, IInteractable
+public class GameEnding : MonoBehaviour, IInteractable
 {
     public void Interact(Player player)
     {
