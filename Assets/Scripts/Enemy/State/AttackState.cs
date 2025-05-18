@@ -58,7 +58,8 @@ namespace Enemy.State
         public void UpdateState(EnemyBrain enemyBrain)
         {
             float vel = enemyBrain.movement.agent.velocity.magnitude;
-            enemyBrain.animator.SetFloat(Speed, vel); 
+            enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedAttack); 
+            
             if (_isOverloading)
             {
                 enemyBrain.waitAfterOverload -= Time.deltaTime;

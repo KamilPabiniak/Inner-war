@@ -24,7 +24,8 @@ namespace Enemy.State
         public void UpdateState(EnemyBrain enemyBrain)
         {
             float vel = enemyBrain.movement.agent.velocity.magnitude;
-            enemyBrain.animator.SetFloat(Speed, vel); 
+            enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedInvestigate); 
+            
             if (enemyBrain.detection.IsPlayerVisible 
                 && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
             {

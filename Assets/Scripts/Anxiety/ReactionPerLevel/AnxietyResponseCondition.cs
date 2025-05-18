@@ -23,10 +23,8 @@ public class AnxietyResponseCondition : PlayerModule
     public bool IsAudioPlaying => _audioPlaying;
     private bool _audioPlaying = false;
     private int _currentLevel = -1;
-    private bool _isWaitingForMonologue = false;
     private AudioSource _currentResponse;
-   private PlayerMonologue _playerMonologue;
-
+    private PlayerMonologue _playerMonologue;
     private bool _wasMonologuePlaying = false;
     private int _pendingLevel = -1;
     public event Action OnConditionAudioStarted;

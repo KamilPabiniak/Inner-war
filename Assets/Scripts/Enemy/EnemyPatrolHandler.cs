@@ -9,42 +9,58 @@ namespace Enemy
         private static readonly List<EnemyBrain> Registered = new();
         private static readonly List<Vector3> Occupied = new();
 
-        public static void RegisterEnemy(EnemyBrain e) { if (!Registered.Contains(e)) Registered.Add(e); }
-        public static void UnregisterEnemy(EnemyBrain e) { Registered.Remove(e); }
-        
-        public static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
+        public static void RegisterEnemy(EnemyBrain e)
         {
-            var nav = NavMesh.CalculateTriangulation();
-            for (int i = 0; i < 5; i++)
-            {
-                int t = Random.Range(0, nav.indices.Length / 3) * 3;
-                var v1 = nav.vertices[nav.indices[t]];
-                var v2 = nav.vertices[nav.indices[t + 1]];
-                var v3 = nav.vertices[nav.indices[t + 2]];
-                Vector3 p = RandomPointInTriangle(v1, v2, v3);
-                if (Vector3.Distance(origin, p) <= range && IsValid(p, minDist))
-                {
-                    Occupied.Add(p);
-                    return p;
-                }
-            }
-            return origin;
+            if (!Registered.Contains(e))
+                Registered.Add(e);
         }
 
-        private static Vector3 RandomPointInTriangle(Vector3 a, Vector3 b, Vector3 c)
+        public static void UnregisterEnemy(EnemyBrain e)
         {
-            float u = Random.value, v = Random.value;
-            if (u + v > 1f) { u = 1 - u; v = 1 - v; }
-            return u * a + v * b + (1 - u - v) * c;
+            Registered.Remove(e);
+        }
+
+        public static Vector3 GetPatrolPoint(Vector3 origin, float range, float minDist)
+        {
+            // Try random directions within the patrol radius
+            for (int i = 0; i < 10; i++)
+            {
+                Vector3 randDir = Random.insideUnitSphere * range;
+                randDir.y = 0f;
+                Vector3 candidate = origin + randDir;
+
+                // Ensure point lies on NavMesh
+                if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+                {
+                    Vector3 p = hit.position;
+                    // Check actual distance and occupancy
+                    if (Vector3.Distance(origin, p) <= range && IsValid(p, minDist))
+                    {
+                        Occupied.Add(p);
+                        return p;
+                    }
+                }
+            }
+
+            // No valid patrol point found: stay in place
+            return origin;
         }
 
         private static bool IsValid(Vector3 p, float minDist)
         {
+            float minDistSqr = minDist * minDist;
             foreach (var o in Occupied)
-                if (Vector3.Distance(o, p) < minDist) return false;
+            {
+                if ((o - p).sqrMagnitude < minDistSqr)
+                    return false;
+            }
             return true;
         }
 
-        public static void ReleasePatrolPoint(Vector3 p) => Occupied.Remove(p);
+        public static void ReleasePatrolPoint(Vector3 p)
+        {
+            if (Occupied.Contains(p))
+                Occupied.Remove(p);
+        }
     }
 }
