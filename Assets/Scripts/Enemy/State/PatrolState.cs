@@ -22,11 +22,12 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
+            float vel = enemyBrain.movement.agent.velocity.magnitude;
+            enemyBrain.animator.SetFloat(Speed, vel); 
             if (_isWaiting)
             {
                 _waitTimer -= Time.deltaTime;
                 enemyBrain.animator.SetBool(CheckArea, true); //Animator bool 
-                enemyBrain.animator.SetFloat(Speed, 0f); 
                 
                 if (enemyBrain.movement.IsObjectInFront())
                 {
@@ -37,7 +38,6 @@ namespace Enemy.State
                 {
                     _isWaiting = false;
                     enemyBrain.animator.SetBool(CheckArea, false); // Animator bool reset 
-                    enemyBrain.animator.SetFloat(Speed, 1.1f); 
                     if (_patrolPoint != Vector3.zero)
                     {
                         if (enemyBrain.patrolAreaOverride != null)
@@ -82,7 +82,6 @@ namespace Enemy.State
             }
             
             enemyBrain.animator.SetBool(CheckArea, false); 
-            enemyBrain.animator.SetFloat(Speed, 0f); 
         }
 
         private void SetNewPatrolPoint(EnemyBrain enemyBrain)
@@ -101,6 +100,7 @@ namespace Enemy.State
                 _patrolPoint = hit.position;
                 if (enemyBrain.canMove)
                 {
+                    enemyBrain.movement.Face(_patrolPoint);
                     enemyBrain.movement.GoTo(_patrolPoint);
                 }
             }

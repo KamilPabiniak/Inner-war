@@ -29,9 +29,13 @@ namespace Enemy
         public bool canKill = true;
         public bool canMove = true;
         public float increaseFearValueOnSpotted;
+        [field: Header("Animation Multiplayer")] 
+        public float animationWalkSpeedPatrol;
+        public float animationWalkSpeedInvestigate;
+        public float animationWalkSpeedAttack;
         
         // Patrol & Investigate & Attack Settings
-        [Header("Patrol")] 
+        [Space, Header("Patrol")] 
         [Tooltip("Radius in which the opponent can select a new patrol point")]
         public float patrolRange = 10f;
         [Tooltip("Minimum distance the new patrol point must be from the current position of the enemy or other opponents")]

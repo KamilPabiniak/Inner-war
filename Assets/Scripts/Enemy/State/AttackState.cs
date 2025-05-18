@@ -57,6 +57,8 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
+            float vel = enemyBrain.movement.agent.velocity.magnitude;
+            enemyBrain.animator.SetFloat(Speed, vel); 
             if (_isOverloading)
             {
                 enemyBrain.waitAfterOverload -= Time.deltaTime;
@@ -124,7 +126,7 @@ namespace Enemy.State
             _agent.angularSpeed     = _originalAngularSpeed;
             _agent.autoBraking      = true;
             _agent.stoppingDistance = _originalAngularSpeed; 
-
+          
             GameEvents.onPlayerKilled -= HandlePlayerKilled;
         }
 

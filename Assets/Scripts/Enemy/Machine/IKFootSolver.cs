@@ -2,77 +2,168 @@
 
 public class IKFootSolver : MonoBehaviour
 {
-    [SerializeField] LayerMask terrainLayer = default;
-    [SerializeField] Transform body = default;
-    [SerializeField] IKFootSolver otherFoot = default;
-    [SerializeField] float speed = 1;
-    [SerializeField] float stepDistance = 4;
-    [SerializeField] float stepLength = 4;
-    [SerializeField] float stepHeight = 1;
-    [SerializeField] Vector3 footOffset = default;
-    float footSpacing;
-    Vector3 oldPosition, currentPosition, newPosition;
-    Vector3 oldNormal, currentNormal, newNormal;
-    float lerp;
-    private EnemyAudio _enemyAudio;
+    [Header("Main")] [Range(0, 1)] public float Weight = 1f;
+    [Header("Settings")] public float MaxStep = 0.5f;
+    public float FootRadius = 0.15f;
+    public LayerMask Ground = 1;
+    public float Offset = 0f;
+    [Header("Speed")] public float HipsPositionSpeed = 1f;
+    public float FeetPositionSpeed = 2f;
+    public float FeetRotationSpeed = 90;
+    [Header("Weight")] [Range(0, 1)] public float HipsWeight = 0.75f;
+    [Range(0, 1)] public float FootPositionWeight = 1f;
+    [Range(0, 1)] public float FootRotationWeight = 1f;
+    [SerializeField] private Animator anim;
 
-    private void Start()
-    {
-        footSpacing = transform.localPosition.x;
-        currentPosition = newPosition = oldPosition = transform.position;
-        currentNormal = newNormal = oldNormal = transform.up;
-        lerp = 1;
-        _enemyAudio = GetComponentInParent<EnemyAudio>();
-    }
+    public bool ShowDebug = true;
+
+    //Private variables
+    Vector3 LIKPosition, RIKPosition, LNormal, RNormal;
+    Quaternion LIKRotation, RIKRotation, LastLeftRotation, LastRightRotation;
+    float LastRFootHeight, LastLFootHeight;
+
+    float Velocity;
+    float FalloffWeight;
+    float LastHeight;
+    Vector3 LastPosition;
+    bool LGrounded, RGrounded, IsGrounded;
     
-    void Update()
+
+    //Updating the position of each foot.
+    private void FixedUpdate()
     {
-        transform.position = currentPosition;
-        transform.up = currentNormal;
+        if (Weight == 0 || !anim)
+        {
+            return;
+        }
 
-        Ray ray = new Ray(body.position + body.right * footSpacing, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit info, 10, terrainLayer.value))
-        {
-            if (Vector3.Distance(newPosition, info.point) > stepDistance && !otherFoot.IsMoving() && lerp >= 1)
-            {
-                lerp = 0;
-                int direction = body.InverseTransformPoint(info.point).z > body.InverseTransformPoint(newPosition).z ? 1 : -1;
-                newPosition = info.point + (body.forward * stepLength * direction) + footOffset;
-                newNormal = info.normal;
-                //sound bool here
-                _enemyAudio.ResetFootStepFlag();
-            }
-        }
-        if (lerp < 1)
-        {
-            Vector3 footPosition = Vector3.Lerp(oldPosition, newPosition, lerp);
-            footPosition.y += Mathf.Sin(lerp * Mathf.PI) * stepHeight;
+        Vector3 Speed = (LastPosition - anim.transform.position) / Time.fixedDeltaTime;
+        Velocity = Mathf.Clamp(Speed.magnitude, 1, Speed.magnitude);
+        LastPosition = anim.transform.position;
 
-            currentPosition = footPosition;
-            currentNormal = Vector3.Lerp(oldNormal, newNormal, lerp);
-            lerp += Time.deltaTime * speed;
-            //sound trigger here
-            if (lerp > 0.8f)
-            {
-                _enemyAudio.PlayFootStepSound();
-            }
-        }
-        else
-        {
-            oldPosition = newPosition;
-            oldNormal = newNormal;
-        }
+        //Raycast to the ground to find positions
+        FeetSolver(HumanBodyBones.LeftFoot, ref LIKPosition, ref LNormal, ref LIKRotation, ref LGrounded); //Left foot
+        FeetSolver(HumanBodyBones.RightFoot, ref RIKPosition, ref RNormal, ref RIKRotation, ref RGrounded); //Right foot
+        //Grounding
+        GetGrounded();
     }
 
-    private void OnDrawGizmos()
+    private void OnAnimatorIK(int layerIndex)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(newPosition, 0.5f);
-        
+        if (Weight == 0 || !anim)
+        {
+            return;
+        }
+
+        //Pelvis height
+        MovePelvisHeight();
+        //Left foot IK
+        MoveIK(AvatarIKGoal.LeftFoot, LIKPosition, LNormal, LIKRotation, ref LastLFootHeight, ref LastLeftRotation);
+        //Right foot IK
+        MoveIK(AvatarIKGoal.RightFoot, RIKPosition, RNormal, RIKRotation, ref LastRFootHeight, ref LastRightRotation);
     }
 
-    private bool IsMoving()
+    //Set the pelvis height.
+    private void MovePelvisHeight()
     {
-        return lerp < 1;
+        //Get height
+        float LeftOffset = LIKPosition.y - anim.transform.position.y;
+        float RightOffset = RIKPosition.y - anim.transform.position.y;
+        float TotalOffset = (LeftOffset < RightOffset) ? LeftOffset : RightOffset;
+        //Get hips position
+        Vector3 NewPosition = anim.bodyPosition;
+        float NewHeight = TotalOffset * (HipsWeight * FalloffWeight);
+        LastHeight = Mathf.MoveTowards(LastHeight, NewHeight, HipsPositionSpeed * Time.deltaTime);
+        NewPosition.y += LastHeight + Offset;
+        //Set position
+        anim.bodyPosition = NewPosition;
+    }
+
+    //Feet
+    void MoveIK(AvatarIKGoal Foot, Vector3 IKPosition, Vector3 Normal, Quaternion IKRotation, ref float LastHeight,
+        ref Quaternion LastRotation)
+    {
+        Vector3 Position = anim.GetIKPosition(Foot);
+        Quaternion Rotation = anim.GetIKRotation(Foot);
+
+        //Position
+        Position = anim.transform.InverseTransformPoint(Position);
+        IKPosition = anim.transform.InverseTransformPoint(IKPosition);
+        LastHeight = Mathf.MoveTowards(LastHeight, IKPosition.y, FeetPositionSpeed * Time.deltaTime);
+        Position.y += LastHeight;
+
+        Position = anim.transform.TransformPoint(Position);
+        Position += Normal * Offset;
+
+        //Rotation
+        Quaternion Relative = Quaternion.Inverse(IKRotation * Rotation) * Rotation;
+        LastRotation = Quaternion.RotateTowards(LastRotation, Quaternion.Inverse(Relative),
+            FeetRotationSpeed * Time.deltaTime);
+
+        Rotation *= LastRotation;
+
+        //Set IK
+        anim.SetIKPosition(Foot, Position);
+        anim.SetIKPositionWeight(Foot, FootPositionWeight * FalloffWeight);
+        anim.SetIKRotation(Foot, Rotation);
+        anim.SetIKRotationWeight(Foot, FootRotationWeight * FalloffWeight);
+    }
+
+    void GetGrounded()
+    {
+        //Set Weight
+        IsGrounded = LGrounded || RGrounded;
+        //Fading out MainWeight when is not grounded
+        FalloffWeight = LerpValue(FalloffWeight, IsGrounded ? 1f : 0f, 1f, 10f, Time.fixedDeltaTime) * Weight;
+    }
+
+
+    public float LerpValue(float Current, float Desired, float IncreaseSpeed, float DecreaseSpeed, float DeltaTime)
+    {
+        if (Current == Desired) return Desired;
+        if (Current < Desired) return Mathf.MoveTowards(Current, Desired, (IncreaseSpeed * Velocity) * DeltaTime);
+        else return Mathf.MoveTowards(Current, Desired, (DecreaseSpeed * Velocity) * DeltaTime);
+    }
+
+
+    //Feet solver
+    private void FeetSolver(HumanBodyBones Foot, ref Vector3 IKPosition, ref Vector3 Normal, ref Quaternion IKRotation,
+        ref bool Grounded)
+    {
+        Vector3 Position = anim.GetBoneTransform(Foot).position;
+        Position.y = anim.transform.position.y + MaxStep;
+
+        //Raycast section 
+        RaycastHit Hit;
+        //Add offset
+        Position -= Normal * Offset;
+        float FeetHeight = MaxStep;
+
+        if (ShowDebug)
+            Debug.DrawLine(Position, Position + Vector3.down * (MaxStep * 2), Color.yellow);
+
+        if (Physics.SphereCast(Position, FootRadius, Vector3.down, out Hit, MaxStep * 2, Ground))
+        {
+            //Position (height)
+            FeetHeight = anim.transform.position.y - Hit.point.y;
+            IKPosition = Hit.point;
+            //Normal (Slope)
+            Normal = Hit.normal;
+            if (ShowDebug)
+                Debug.DrawRay(Hit.point, Hit.normal, Color.blue);
+            //Rotation (normal)
+            Vector3 Axis = Vector3.Cross(Vector3.up, Hit.normal);
+            float Angle = Vector3.Angle(Vector3.up, Hit.normal);
+            IKRotation = Quaternion.AngleAxis(Angle, Axis);
+        }
+
+        Grounded = FeetHeight < MaxStep;
+
+        if (!Grounded)
+        {
+            IKPosition.y = anim.transform.position.y - MaxStep;
+            IKRotation = Quaternion.identity;
+        }
     }
 }
+

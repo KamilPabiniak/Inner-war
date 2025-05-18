@@ -814,6 +814,7 @@ GameObject:
   - component: {fileID: 5805064814616177901}
   - component: {fileID: 2828769371758908747}
   - component: {fileID: 8332329985919692524}
+  - component: {fileID: 6937434833371798856}
   m_Layer: 7
   m_Name: Machine
   m_TagString: Untagged
@@ -863,7 +864,10 @@ MonoBehaviour:
   patrolAreaOverride: {fileID: 0}
   canKill: 1
   canMove: 1
-  increaseFearValueOnSpotted: 0
+  increaseFearValueOnSpotted: 10
+  animationWalkSpeedPatrol: 2
+  animationWalkSpeedInvestigate: 2.2
+  animationWalkSpeedAttack: 4
   patrolRange: 10
   minPatrolPointDistance: 1
   waitTimeAtPatrolPoint: 4.2
@@ -933,9 +937,9 @@ MonoBehaviour:
   rotationSpeed: 5
   mainDetectionDistance: 3
   sideDetectionDistance: 3
-  rayOriginHeight: 1.5
-  sideRayAngleOffset: 24.15
-  additionalRayAngleOffset: 20
+  rayOriginHeight: 1.95
+  sideRayAngleOffset: 40
+  additionalRayAngleOffset: 80
   destThreshold: 0.5
   setInterval: 0.2
   debugWallRays: 1
@@ -990,7 +994,7 @@ NavMeshAgent:
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 100
-  m_StoppingDistance: 0.3
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1079,6 +1083,33 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6937434833371798856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247145216075624242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weight: 1
+  MaxStep: 0.4
+  FootRadius: 0.1
+  Ground:
+    serializedVersion: 2
+    m_Bits: 7169
+  Offset: 0
+  HipsPositionSpeed: 5
+  FeetPositionSpeed: 10
+  FeetRotationSpeed: 180
+  HipsWeight: 1
+  FootPositionWeight: 1
+  FootRotationWeight: 1
+  anim: {fileID: 5805064814616177901}
+  ShowDebug: 1
 --- !u!1 &3546286574828858550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,7 +1884,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3927203743482195077}
-  - component: {fileID: 25067899243708223}
   m_Layer: 7
   m_Name: Leg_L_IK_target
   m_TagString: Untagged
@@ -1870,34 +1900,12 @@ Transform:
   m_GameObject: {fileID: 6246946490400689120}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.45, y: 0.12148762, z: 0.3}
+  m_LocalPosition: {x: -0.45, y: 0.1, z: 0.3}
   m_LocalScale: {x: 0.39999998, y: 0.39999998, z: 0.39999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 347033054310649151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &25067899243708223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6246946490400689120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  terrainLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  body: {fileID: 1414623541468806449}
-  otherFoot: {fileID: 3945550115581422150}
-  speed: 3.5
-  stepDistance: 0.8
-  stepLength: 0.4
-  stepHeight: 0.65
-  footOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6294174837133171875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1939,7 +1947,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1592457377329318647}
-  - component: {fileID: 3945550115581422150}
   m_Layer: 7
   m_Name: Leg_R_IK_target
   m_TagString: Untagged
@@ -1956,34 +1963,12 @@ Transform:
   m_GameObject: {fileID: 6456205226342130256}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.45, y: 0.14547634, z: -0.3}
+  m_LocalPosition: {x: 0.45, y: 0.1, z: -0.3}
   m_LocalScale: {x: 0.39999998, y: 0.39999998, z: 0.39999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3747096656396214329}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3945550115581422150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6456205226342130256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  terrainLayer:
-    serializedVersion: 2
-    m_Bits: 7169
-  body: {fileID: 1414623541468806449}
-  otherFoot: {fileID: 25067899243708223}
-  speed: 3.5
-  stepDistance: 0.8
-  stepLength: 0.4
-  stepHeight: 0.65
-  footOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6682647058156776755
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,16 +2140,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10bdb03db33fb148b858a4a3b646cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 1
+  m_Weight: 0.55
   m_Data:
     m_ConstrainedObject: {fileID: 8044662902682477961}
     m_SourceObjects:
       m_Length: 2
       m_Item0:
-        transform: {fileID: 3927203743482195077}
+        transform: {fileID: 0}
         weight: 1
       m_Item1:
-        transform: {fileID: 1592457377329318647}
+        transform: {fileID: 0}
         weight: 1
       m_Item2:
         transform: {fileID: 0}
@@ -2366,14 +2351,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Effectors:
-  - m_Transform: {fileID: 3927203743482195077}
-    m_Style:
-      shape: {fileID: 4300000, guid: 687b70eb9c49243639f9379f6965034f, type: 2}
-      color: {r: 0, g: 1, b: 0.1493411, a: 0.5}
-      size: 0.1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-    m_Visible: 1
   - m_Transform: {fileID: 141393574167074290}
     m_Style:
       shape: {fileID: 4300000, guid: c6793350c150f456688e39a81f97364a, type: 2}
@@ -2382,25 +2359,9 @@ MonoBehaviour:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
     m_Visible: 1
-  - m_Transform: {fileID: 3927203743482195077}
+  - m_Transform: {fileID: 0}
     m_Style:
-      shape: {fileID: 4300000, guid: 687b70eb9c49243639f9379f6965034f, type: 2}
-      color: {r: 0, g: 1, b: 0.1493411, a: 0.5}
-      size: 0.1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-    m_Visible: 1
-  - m_Transform: {fileID: 3927203743482195077}
-    m_Style:
-      shape: {fileID: 4300000, guid: 687b70eb9c49243639f9379f6965034f, type: 2}
-      color: {r: 0, g: 1, b: 0.1493411, a: 0.5}
-      size: 0.1
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-    m_Visible: 1
-  - m_Transform: {fileID: 1592457377329318647}
-    m_Style:
-      shape: {fileID: 4300000, guid: 687b70eb9c49243639f9379f6965034f, type: 2}
+      shape: {fileID: 0}
       color: {r: 0.039215688, g: 0.92549026, b: 0.08627451, a: 1}
       size: 0.1
       position: {x: 0, y: 0, z: 0}
