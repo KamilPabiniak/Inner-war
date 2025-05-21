@@ -41,6 +41,35 @@ MonoBehaviour:
   heartTargetVolume: 1.2
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
   heartDrymixEchoOnValue: 60
+--- !u!114 &-344500668900366796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42b9809d90a93b4aa05a1ebf665496e, type: 3}
+  m_Name: FearResponse
+  m_EditorClassIdentifier: 
+  minInterval: 10
+  maxInterval: 20
+  minDuration: 6
+  maxDuration: 11
+  autoTrigger: 1
+  disableWhenTrigger: 0
+  fadeInDuration: 0.5
+  fadeOutDuration: 0.5
+  targetVolume: 1
+  fearResponseClips:
+  - {fileID: 8300000, guid: 0685fbbe32cf5874c86844c443cdb824, type: 3}
+  - {fileID: 8300000, guid: 909e2b16320bb244db785ae71c827630, type: 3}
+  - {fileID: 8300000, guid: 4f0c3b21f6d26004a88f14f8fda8a858, type: 3}
+  - {fileID: 8300000, guid: 9aadc5ddf7a435649b3d5c6ef0454591, type: 3}
+  - {fileID: 8300000, guid: f367e1d83f55a7645bcdfb4e5d3f6106, type: 3}
+  - {fileID: 8300000, guid: 64dcd80c6628d0b48b849db151c46aa9, type: 3}
+  - {fileID: 8300000, guid: 952b89d615be85b4faa5a445093b34d2, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +91,7 @@ MonoBehaviour:
   - {fileID: 5388067495803624509}
   - {fileID: 2241538352562412298}
   - {fileID: 3933999804909531380}
+  - {fileID: -344500668900366796}
 --- !u!114 &558199883775083294
 MonoBehaviour:
   m_ObjectHideFlags: 0
