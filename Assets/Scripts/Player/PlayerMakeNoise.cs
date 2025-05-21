@@ -90,7 +90,6 @@ public class PlayerMakeNoise : PlayerModule
                 continue;
 
             var enemy = col.GetComponentInParent<Enemy.EnemyBrain>();
-            Debug.LogError(enemy);
             if (enemy == null)
                 continue;
 

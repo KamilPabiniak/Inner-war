@@ -1011,7 +1011,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3247145216075624242}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: bd9d9c0352bc84e4f91448fefb961f68, type: 3}
+  m_Avatar: {fileID: 9000000, guid: f54ed4631f7d8b34bb081ae278bdd316, type: 3}
   m_Controller: {fileID: 9100000, guid: 2d24ccb7f1819b3488fef78982d0bc74, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -1095,21 +1095,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weight: 1
-  MaxStep: 0.4
-  FootRadius: 0.1
-  Ground:
+  weight: 1
+  maxStep: 0.5
+  footRadius: 0.3
+  ground:
     serializedVersion: 2
     m_Bits: 7169
-  Offset: 0
-  HipsPositionSpeed: 5
-  FeetPositionSpeed: 10
-  FeetRotationSpeed: 180
-  HipsWeight: 1
-  FootPositionWeight: 1
-  FootRotationWeight: 1
+  offset: 0
+  hipsPositionSpeed: 3
+  feetPositionSpeed: 2
+  feetRotationSpeed: 90
+  hipsWeight: 0.6
+  footPositionWeight: 1
+  footRotationWeight: 1
+  stepThreshold: 0.1
   anim: {fileID: 5805064814616177901}
-  ShowDebug: 1
+  enemyAudio: {fileID: 4366536721842437855}
+  showDebug: 0
 --- !u!1 &3546286574828858550
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1201,7 @@ MonoBehaviour:
     m_TargetRotationWeight: 0
     m_HintWeight: 0
     m_MaintainTargetPositionOffset: 1
-    m_MaintainTargetRotationOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &3884858325390607729
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,7 +1410,7 @@ MonoBehaviour:
     m_TargetRotationWeight: 0
     m_HintWeight: 0
     m_MaintainTargetPositionOffset: 1
-    m_MaintainTargetRotationOffset: 1
+    m_MaintainTargetRotationOffset: 0
 --- !u!1 &4267597510823362363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,16 +2142,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10bdb03db33fb148b858a4a3b646cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0.55
+  m_Weight: 0.1
   m_Data:
     m_ConstrainedObject: {fileID: 8044662902682477961}
     m_SourceObjects:
       m_Length: 2
       m_Item0:
-        transform: {fileID: 0}
+        transform: {fileID: 347033054310649151}
         weight: 1
       m_Item1:
-        transform: {fileID: 0}
+        transform: {fileID: 3747096656396214329}
         weight: 1
       m_Item2:
         transform: {fileID: 0}
@@ -2174,7 +2176,7 @@ MonoBehaviour:
       x: 1
       y: 1
       z: 1
-    m_MaintainOffset: 1
+    m_MaintainOffset: 0
 --- !u!1 &7882216915077384914
 GameObject:
   m_ObjectHideFlags: 0
