@@ -187,8 +187,6 @@ namespace Enemy
             }
             
             detection.lightComponent.color = targetColor;
-            
-            detection.detectionMark.color = new Color(targetColor.r, targetColor.g, targetColor.b, alpha);
         }
 
 

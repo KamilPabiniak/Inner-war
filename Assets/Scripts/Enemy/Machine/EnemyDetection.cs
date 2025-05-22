@@ -7,7 +7,6 @@ namespace Enemy
     {
         [Header("Reference")]
         public Light lightComponent;
-        public SpriteRenderer detectionMark;
         [Header("Detection")]
         public LayerMask targetMask;
         [Range(0f,1f)] public float threshold = 0.1f;
