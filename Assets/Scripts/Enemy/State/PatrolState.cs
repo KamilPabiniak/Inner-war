@@ -6,7 +6,8 @@ namespace Enemy.State
     public class PatrolState : IEnemyState
     {
         private Vector3 _patrolPoint;
-        private bool _isWaiting;
+        private bool _isWaiting;                
+        private bool _waitingToMove;              
         private float _waitTimer;
 
         private static readonly int CheckArea = Animator.StringToHash("Search");
@@ -17,6 +18,7 @@ namespace Enemy.State
             enemyBrain.audio.PlayPatrolSound();
             enemyBrain.movement.Resume();
             _isWaiting = false;
+            _waitingToMove = false;
             SetNewPatrolPoint(enemyBrain);
         }
 
@@ -24,7 +26,24 @@ namespace Enemy.State
         {
             float vel = enemyBrain.movement.agent.velocity.magnitude;
             enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedPatrol);
+            
+            if (_waitingToMove)
+            {
+                _waitTimer -= Time.deltaTime;
+                enemyBrain.animator.SetBool(CheckArea, true);
+                
+                // Vector3 dir = (_patrolPoint - enemyBrain.transform.position).normalized;
+                // enemyBrain.transform.forward = Vector3.Lerp(enemyBrain.transform.forward, dir, Time.deltaTime * enemyBrain.rotationSpeed);
 
+                if (_waitTimer <= 0f)
+                {
+                    enemyBrain.animator.SetBool(CheckArea, false);
+                    _waitingToMove = false;  
+                    enemyBrain.movement.GoTo(_patrolPoint);
+                }
+                return;
+            }
+            
             if (_isWaiting)
             {
                 _waitTimer -= Time.deltaTime;
@@ -37,8 +56,7 @@ namespace Enemy.State
                 {
                     enemyBrain.animator.SetBool(CheckArea, false);
                     _isWaiting = false;
-
-                    // Release the previous patrol point
+                    
                     if (_patrolPoint != enemyBrain.transform.position)
                     {
                         if (enemyBrain.patrolAreaOverride != null)
@@ -51,12 +69,10 @@ namespace Enemy.State
                 }
                 return;
             }
-
-            // If reached destination
+            
             if (!enemyBrain.movement.agent.pathPending &&
                 enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance)
             {
-                // Begin waiting
                 _isWaiting = true;
                 _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
             }
@@ -86,8 +102,7 @@ namespace Enemy.State
             _patrolPoint = enemyBrain.patrolAreaOverride != null
                 ? enemyBrain.patrolAreaOverride.GetRandomPatrolPoint(enemyBrain.minPatrolPointDistance)
                 : enemyBrain.RequestPatrolPoint();
-
-            // If no valid point, stay and wait full duration
+            
             if (_patrolPoint == enemyBrain.transform.position)
             {
                 _isWaiting = true;
@@ -95,15 +110,10 @@ namespace Enemy.State
                 return;
             }
 
-            // Move to the new point
-            if (NavMesh.SamplePosition(_patrolPoint, out NavMeshHit hit, enemyBrain.patrolRange, NavMesh.AllAreas))
-            {
-                _patrolPoint = hit.position;
-                if (enemyBrain.canMove)
-                {
-                    enemyBrain.movement.GoTo(_patrolPoint);
-                }
-            }
+            enemyBrain.transform.LookAt(_patrolPoint);
+            
+            _waitingToMove = true;
+            _waitTimer = enemyBrain.waitBeforeMove; 
         }
     }
 }
