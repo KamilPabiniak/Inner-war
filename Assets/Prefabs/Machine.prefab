@@ -698,7 +698,6 @@ GameObject:
   - component: {fileID: 5805064814616177901}
   - component: {fileID: 2828769371758908747}
   - component: {fileID: 8332329985919692524}
-  - component: {fileID: 6937434833371798856}
   m_Layer: 7
   m_Name: Machine
   m_TagString: Untagged
@@ -965,35 +964,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6937434833371798856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weight: 1
-  maxStep: 0.2
-  footRadius: 0.3
-  ground:
-    serializedVersion: 2
-    m_Bits: 7169
-  offset: -0.08
-  hipsPositionSpeed: 3
-  feetPositionSpeed: 3
-  feetRotationSpeed: 90
-  hipsWeight: 1
-  footPositionWeight: 1
-  footRotationWeight: 1
-  stepThreshold: 0.1
-  anim: {fileID: 5805064814616177901}
-  enemyAudio: {fileID: 4366536721842437855}
-  showDebug: 0
 --- !u!1 &3546286574828858550
 GameObject:
   m_ObjectHideFlags: 0

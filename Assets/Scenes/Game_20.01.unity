@@ -7670,6 +7670,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6331385274574726402, guid: d6aad8e3f45fd254fa6db5a6a56032a7, type: 3}
   m_PrefabInstance: {fileID: 549436487}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &397909976 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6456205226342130256, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+  m_PrefabInstance: {fileID: 577460369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &397909978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397909976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainLayer:
+    serializedVersion: 2
+    m_Bits: 7169
+  body: {fileID: 845684725}
+  otherFoot: {fileID: 1039324833}
+  speed: 3
+  stepDistance: 0.4
+  stepLength: 0.3
+  stepHeight: 0.5
+  footOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &398664546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11294,11 +11321,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 738870947710706561, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1592457377329318647, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3247145216075624242, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Name
       value: Machine (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3927203743482195077, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 5535685749611436939, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: patrolAreaOverride
@@ -11350,12 +11385,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8030505407682959657, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6937434833371798856, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6246946490400689120, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1039324833}
+    - targetCorrespondingSourceObject: {fileID: 6456205226342130256, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 397909978}
   m_SourcePrefab: {fileID: 100100000, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
 --- !u!4 &580900575 stripped
 Transform:
@@ -15527,6 +15569,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
+--- !u!4 &845684725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 103715186532762469, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+  m_PrefabInstance: {fileID: 577460369}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &847066213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19573,6 +19620,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3414596415680126870, guid: 1082ebf33a9f09c488ae950ae9432477, type: 3}
   m_PrefabInstance: {fileID: 1032735575}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1039324831 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6246946490400689120, guid: f425bf422c0b99544bf5cda99ec5a5c0, type: 3}
+  m_PrefabInstance: {fileID: 577460369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1039324833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039324831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainLayer:
+    serializedVersion: 2
+    m_Bits: 7169
+  body: {fileID: 845684725}
+  otherFoot: {fileID: 397909978}
+  speed: 3
+  stepDistance: 0.4
+  stepLength: 0.3
+  stepHeight: 0.5
+  footOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &1043770630
 PrefabInstance:
   m_ObjectHideFlags: 0
