@@ -4,7 +4,7 @@ using Enemy.State;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(NavMeshAgent), typeof(Animator), typeof(DetectionController))]
+    [RequireComponent(typeof(NavMeshAgent), typeof(DetectionController))]
     public class EnemyBrain : MonoBehaviour
     {
         private readonly PatrolState _patrolState = new();
@@ -40,7 +40,7 @@ namespace Enemy
         public float patrolRange = 10f;
         [Tooltip("Minimum distance the new patrol point must be from the current position of the enemy or other opponents")]
         public float minPatrolPointDistance = 2f;
-        [Tooltip("The length of time an opponent �waits� in place after reaching a patrol point before moving on to the next one")]
+        [Tooltip("The length of time an opponent  waits  in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
         public float waitBeforeMove = 3f;
         [Header("Investigate")] 

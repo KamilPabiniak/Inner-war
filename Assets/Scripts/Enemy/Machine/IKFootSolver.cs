@@ -16,8 +16,10 @@ namespace Enemy.Machine
         [Range(0, 1)] public float footPositionWeight = 1f;
         [Range(0, 1)] public float footRotationWeight = 1f;
         [Header("Footstep Detection")] public float stepThreshold = 0.1f;
-
+    
         [SerializeField] private Animator anim;
+        [SerializeField] private Transform leftFootTarget;
+        [SerializeField] private Transform rightFootTarget;
         [SerializeField] private EnemyAudio enemyAudio;
         [Header("Debug")] public bool showDebug = true;
 
@@ -46,8 +48,8 @@ namespace Enemy.Machine
             _lastPosition = anim.transform.position;
 
             // Raycast to find foot targets
-            FeetSolver(HumanBodyBones.LeftFoot,  ref _likPosition, ref _lNormal, ref _likRotation, ref _lGrounded);
-            FeetSolver(HumanBodyBones.RightFoot, ref _rikPosition, ref _rNormal, ref _rikRotation, ref _rGrounded);
+            FeetSolver(leftFootTarget,  ref _likPosition, ref _lNormal, ref _likRotation, ref _lGrounded);
+            FeetSolver(rightFootTarget, ref _rikPosition, ref _rNormal, ref _rikRotation, ref _rGrounded);
 
             // Compute falloff for IK weights
             _falloffWeight = LerpValue(_falloffWeight, (_lGrounded || _rGrounded) ? 1f : 0f,
@@ -144,10 +146,10 @@ namespace Enemy.Machine
             anim.SetIKRotationWeight(foot, footRotationWeight * _falloffWeight);
         }
 
-        private void FeetSolver(HumanBodyBones foot, ref Vector3 ikPos, ref Vector3 normal,
+        private void FeetSolver(Transform foot, ref Vector3 ikPos, ref Vector3 normal,
                                  ref Quaternion ikRot, ref bool grounded)
         {
-            Vector3 origin = anim.GetBoneTransform(foot).position;
+            Vector3 origin = foot.position;
             origin.y = anim.transform.position.y + maxStep;
 
             if (showDebug)
