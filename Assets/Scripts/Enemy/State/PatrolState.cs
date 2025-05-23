@@ -38,8 +38,11 @@ namespace Enemy.State
                 if (_waitTimer <= 0f)
                 {
                     enemyBrain.animator.SetBool(CheckArea, false);
-                    _waitingToMove = false;  
-                    enemyBrain.movement.GoTo(_patrolPoint);
+                    _waitingToMove = false;
+                    if (enemyBrain.canMove)
+                    {
+                        enemyBrain.movement.GoTo(_patrolPoint);
+                    }
                 }
                 return;
             }
