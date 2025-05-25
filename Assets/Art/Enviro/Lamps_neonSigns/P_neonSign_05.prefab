@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 85
   m_IsActive: 1
 --- !u!4 &4335045760404014228
 Transform:
@@ -46,7 +46,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 85
   m_IsActive: 1
 --- !u!4 &3927389021433828100
 Transform:
@@ -120,9 +120,17 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0c69b79dc596a0341a70c2146acc76cf, type: 2}
+    - target: {fileID: -304876638058187421, guid: eeeafbfd8262b14479c674fe38e1a877, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eeeafbfd8262b14479c674fe38e1a877, type: 3}
       propertyPath: m_Name
       value: neonSign_05
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eeeafbfd8262b14479c674fe38e1a877, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 85
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

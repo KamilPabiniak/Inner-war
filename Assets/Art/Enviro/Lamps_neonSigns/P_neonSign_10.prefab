@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 85
   m_IsActive: 1
 --- !u!4 &9184674712550110086
 Transform:
@@ -46,7 +46,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 85
   m_IsActive: 1
 --- !u!4 &8274012500534410600
 Transform:
@@ -112,6 +112,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8548296150041788234, guid: 3fd7b491e9aa3b943852066ca60c6a12, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3fd7b491e9aa3b943852066ca60c6a12, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -124,10 +128,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: neonSign_10
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3fd7b491e9aa3b943852066ca60c6a12, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 85
+      objectReference: {fileID: 0}
     - target: {fileID: 5222128626825696900, guid: 3fd7b491e9aa3b943852066ca60c6a12, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0c69b79dc596a0341a70c2146acc76cf, type: 2}
+    - target: {fileID: 5676179395702053866, guid: 3fd7b491e9aa3b943852066ca60c6a12, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 85
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
