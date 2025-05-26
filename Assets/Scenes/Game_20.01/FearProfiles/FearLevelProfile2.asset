@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  heartFadeInDuration: 1
-  heartFadeOutDuration: 1
+  heartFadeInDuration: 2
+  heartFadeOutDuration: 2
   heartTargetVolume: 1
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
   heartDrymixEchoOnValue: 30
@@ -30,7 +30,8 @@ MonoBehaviour:
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
   startTransitionDuration: 3
-  endTransitionDuration: 2
+  endTransitionDuration: 3
+  postProcessingEffect: {fileID: 11400000, guid: 8fee820ab444a394dad6108d404a4a0b, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,7 +51,6 @@ MonoBehaviour:
   effects:
   - {fileID: -3850590786528227050}
   - {fileID: 1830471949182429552}
-  - {fileID: 6993675186970100925}
   - {fileID: -153995736528553497}
   - {fileID: 7636189157478474265}
 --- !u!114 &1830471949182429552
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  shakeAmplitude: 0.005
+  shakeAmplitude: 0.004
   shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
@@ -122,5 +122,5 @@ MonoBehaviour:
   m_Name: SoundSuppression
   m_EditorClassIdentifier: 
   cutOffOn: 350
-  transitionTimeApply: 1
-  transitionTimeCancel: 1
+  transitionTimeApply: 3
+  transitionTimeCancel: 3

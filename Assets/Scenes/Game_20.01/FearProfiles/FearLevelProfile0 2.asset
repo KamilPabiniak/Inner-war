@@ -1,5 +1,28 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9191401073318773407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
+  m_Name: VoiceThoughtEffect
+  m_EditorClassIdentifier: 
+  voicesFadeInDuration: 3
+  voicesFadeOutDuration: 2
+  voicesTargetVolume: 0.5
+  voicesSounds:
+  - {fileID: 8300000, guid: 0685fbbe32cf5874c86844c443cdb824, type: 3}
+  - {fileID: 8300000, guid: 909e2b16320bb244db785ae71c827630, type: 3}
+  - {fileID: 8300000, guid: 4f0c3b21f6d26004a88f14f8fda8a858, type: 3}
+  - {fileID: 8300000, guid: 9aadc5ddf7a435649b3d5c6ef0454591, type: 3}
+  - {fileID: 8300000, guid: f367e1d83f55a7645bcdfb4e5d3f6106, type: 3}
+  - {fileID: 8300000, guid: 64dcd80c6628d0b48b849db151c46aa9, type: 3}
+  - {fileID: 8300000, guid: 952b89d615be85b4faa5a445093b34d2, type: 3}
 --- !u!114 &-8428345349787575088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,9 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83a5b8746404b040bf2790a9326f60b, type: 3}
   m_Name: FearLevelProfile0 2
   m_EditorClassIdentifier: 
-  minInterval: 20
+  minInterval: 15
   maxInterval: 20
-  minDuration: 3
-  maxDuration: 3
+  minDuration: 5
+  maxDuration: 10
   effects:
-  - {fileID: -8428345349787575088}
+  - {fileID: -9191401073318773407}

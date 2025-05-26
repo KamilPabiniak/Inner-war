@@ -1,28 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5133583433891406363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
-  m_Name: VoiceThoughtEffect
-  m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  voicesFadeInDuration: 3
-  voicesFadeOutDuration: 3
-  voicesTargetVolume: 1
-  voicesSounds:
-  - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
 --- !u!114 &-1971298085949833921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,14 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 0
-  maxInterval: 1
-  minDuration: 1000
-  maxDuration: 1000
-  autoTrigger: 1
-  disableWhenTrigger: 0
   startTransitionDuration: 3
   endTransitionDuration: 2
+  postProcessingEffect: {fileID: 0}
 --- !u!114 &-1567473554732156536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,12 +27,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 5
-  maxDuration: 15
-  autoTrigger: 1
-  disableWhenTrigger: 0
   shakeAmplitude: 0.007
   shakeFrequency: 8
   shakeFalloffCurve:
@@ -103,6 +69,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83a5b8746404b040bf2790a9326f60b, type: 3}
   m_Name: FearLevelProfile4
   m_EditorClassIdentifier: 
+  minInterval: 0
+  maxInterval: 0
+  minDuration: 0
+  maxDuration: 0
   effects:
   - {fileID: 5185326519939242182}
   - {fileID: 7849564353447769295}
@@ -125,12 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42b9809d90a93b4aa05a1ebf665496e, type: 3}
   m_Name: FearResponse
   m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 20
-  minDuration: 6
-  maxDuration: 11
-  autoTrigger: 1
-  disableWhenTrigger: 0
   fadeInDuration: 0.5
   fadeOutDuration: 0.5
   targetVolume: 0.7
@@ -154,12 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   heartFadeInDuration: 1
   heartFadeOutDuration: 1
   heartTargetVolume: 1.5
@@ -177,12 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
   m_Name: HallucinationEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}
 --- !u!114 &7849564353447769295
 MonoBehaviour:
@@ -196,12 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
   m_Name: VoiceThoughtEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   voicesFadeInDuration: 3
   voicesFadeOutDuration: 3
   voicesTargetVolume: 1
@@ -219,12 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
   m_Name: CrouchEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
 --- !u!114 &9192829598785817700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,11 +177,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
   m_Name: IrregularMovementEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   minSpeedMultiplier: 0.4
   maxSpeedMultiplier: 1.2
