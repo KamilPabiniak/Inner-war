@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Enemy;
 using UnityEngine;
 
 public class PlayerMakeNoise : PlayerModule
@@ -89,7 +90,7 @@ public class PlayerMakeNoise : PlayerModule
             if (dir.sqrMagnitude > rangeSqr)
                 continue;
 
-            var enemy = col.GetComponentInParent<Enemy.EnemyBrain>();
+            var enemy = col.GetComponentInParent<EnemyBrain>();
             if (enemy == null)
                 continue;
 

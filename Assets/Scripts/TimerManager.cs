@@ -5,19 +5,11 @@ using System.Runtime.CompilerServices;
 
 public class TimerManager : MonoBehaviour
 {
-    private static readonly List<Timer> Timers = new List<Timer>();
-    private static readonly Queue<Timer> TimersToAdd = new Queue<Timer>();
-    private static readonly Queue<Timer> TimersToRemove = new Queue<Timer>();
-
-    /// <summary>
-    /// Schedules a new timer.
-    /// </summary>
-    /// <param name="action">The action to invoke when the delay expires.</param>
-    /// <param name="delay">The delay in seconds.</param>
-    /// <param name="callerName">Automatically filled caller member name.</param>
-    /// <param name="callerFile">Automatically filled caller file path.</param>
-    /// <param name="callerLine">Automatically filled caller line number.</param>
-    public static void Schedule(Action action, float delay,
+    private static readonly List<Timer> Timers = new();
+    private static readonly Queue<Timer> TimersToAdd = new();
+    private static readonly Queue<Timer> TimersToRemove = new();
+    
+    public static TimerHandle Schedule(Action action, float delay,
         [CallerMemberName] string callerName = "",
         [CallerFilePath] string callerFile = "",
         [CallerLineNumber] int callerLine = 0)
@@ -28,8 +20,10 @@ public class TimerManager : MonoBehaviour
         }
 
         string callerInfo = $"{callerName} in {callerFile}:{callerLine}";
-        Timer timer = new Timer(action, delay, callerInfo);
+        var timer = new Timer(action, delay, callerInfo);
+        var handle = new InternalTimerHandle(timer);
         TimersToAdd.Enqueue(timer);
+        return handle;
     }
 
     public static void Cancel(TimerHandle handle)
@@ -38,6 +32,12 @@ public class TimerManager : MonoBehaviour
         TimersToRemove.Enqueue(handle.Timer);
         handle.Timer = null;
     }
+    
+    private class InternalTimerHandle : TimerHandle 
+    { 
+        public InternalTimerHandle(Timer timer) : base(timer) { }
+    }
+    
     
     private void Update()
     {
@@ -76,9 +76,6 @@ public class Timer
 
     public TimerHandle Handle { get; set; }
     
-    /// <summary>
-    /// Exposes caller information.
-    /// </summary>
     public string CallerInfo => _callerInfo;
 
     public Timer(Action action, float delay, string callerInfo)

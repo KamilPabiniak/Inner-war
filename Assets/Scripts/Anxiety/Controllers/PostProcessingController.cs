@@ -6,63 +6,17 @@ namespace Anxiety.Controllers
 {
     public class PostProcessingController : MonoBehaviour
     {
-        [Header("Profiles")]
-        [SerializeField] private VolumeProfile level0;
-        [SerializeField] private VolumeProfile level1;
-        [SerializeField] private VolumeProfile level2;
-        [SerializeField] private VolumeProfile level3;
-        [SerializeField] private VolumeProfile level4;
-        [SerializeField] private VolumeProfile level5;
-    
         [Header("Volume")]
         [SerializeField] private Volume volume;
         
         private Coroutine _transitionCoroutine;
 
-        private void UpdatePostProcessingProfile(int fearLevel)
-        {
-            switch (fearLevel)
-            {
-                case 0 when level0 == null:
-                    return;
-                case 0:
-                    volume.profile = level0;
-                    break;
-                case 1 when level1 == null:
-                    return;
-                case 1:
-                    volume.profile = level1;
-                    break;
-                case 2 when level2 == null:
-                    return;
-                case 2:
-                    volume.profile = level2;
-                    break;
-                case 3 when level3 == null:
-                    return;
-                case 3:
-                    volume.profile = level3;
-                    break;
-                case 4 when level4 == null:
-                    return;
-                case 4:
-                    volume.profile = level4;
-                    break;
-                case 5 when level5 == null:
-                    return;
-                case 5:
-                    volume.profile = level5;
-                    break;
-            }
-        }
-
-
-        public void TurnOnEffects(float duration)
+        public void TurnOnEffects(float duration, VolumeProfile profile)
         {
             if (_transitionCoroutine != null)
                 StopCoroutine(_transitionCoroutine);
 
-            UpdatePostProcessingProfile(AnxietyManager.Instance.DetermineFearLevel());
+            volume.profile = profile;
             _transitionCoroutine = StartCoroutine(TransitionVolumeWeight(1f, duration));
         }
 

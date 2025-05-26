@@ -28,7 +28,6 @@ namespace Enemy
         [Header("Common Settings")] 
         public bool canKill = true;
         public bool canMove = true;
-        public float increaseFearValueOnSpotted;
         [field: Header("Animation Multiplayer")] 
         public float animationWalkSpeedPatrol;
         public float animationWalkSpeedInvestigate;

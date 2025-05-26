@@ -67,7 +67,8 @@ public class AudioEffectsController : MonoBehaviour
             transform,
             monologueTargetVolume,
             destroyTime: monologueClip.length,
-            onLoop: false);
+            onLoop: false,
+            audioMixerGroup: SoundFXManager.Instance.MonologueMixer);
         
         if (!_currentFearReaction) return;
         StartCoroutine(FadeIn(_currentFearReaction, monologueFadeInDuration, monologueTargetVolume));

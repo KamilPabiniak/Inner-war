@@ -32,7 +32,7 @@ public class AnxietyResponseCondition : PlayerModule
     private void Start()
     {
         _playerMonologue = Player.Instance.GetModule<PlayerMonologue>();
-        _currentLevel = AnxietyManager.Instance.DetermineFearLevel();
+        _currentLevel = AnxietyManager.Instance.DeterminePassiveFearLevel();
     }
 
     private void Update()
@@ -57,7 +57,7 @@ public class AnxietyResponseCondition : PlayerModule
             }
         }
 
-        int newLevel = AnxietyManager.Instance.DetermineFearLevel();
+        int newLevel = AnxietyManager.Instance.DeterminePassiveFearLevel();
         if (newLevel != _currentLevel)
         {
             TryPlayAudioForLevel(newLevel);

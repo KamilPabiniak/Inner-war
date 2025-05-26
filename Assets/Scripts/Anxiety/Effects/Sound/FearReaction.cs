@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,10 +18,10 @@ namespace Anxiety.Effects
         private int _currentIndex = 0;
         private PlayerMonologue _playerMonologue;
         private AnxietyResponseCondition _anxietyResponseCondition;
-        
-        public override void Init()
+
+        protected override void InitInside()
         {
-            base.Init();
+            base.InitInside();
             _playerMonologue = Player.Instance.GetModule<PlayerMonologue>();
             _anxietyResponseCondition = Player.Instance.GetModule<AnxietyResponseCondition>();
             
@@ -59,8 +58,10 @@ namespace Anxiety.Effects
 
         private void OnDisable()
         {
-            _playerMonologue.OnMonologueStarted -= Interrupt;
-            _anxietyResponseCondition.OnConditionAudioStarted -= Interrupt;
+            if (_playerMonologue)
+                _playerMonologue.OnMonologueStarted -= Interrupt;
+            if (_anxietyResponseCondition)
+                _anxietyResponseCondition.OnConditionAudioStarted -= Interrupt;
         }
 
         private void Interrupt()

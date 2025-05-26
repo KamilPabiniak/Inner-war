@@ -12,17 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   heartFadeInDuration: 1
   heartFadeOutDuration: 1
   heartTargetVolume: 1
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
-  heartDrymixEchoOnValue: 60
+  heartDrymixEchoOnValue: 30
 --- !u!114 &-153995736528553497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,12 +29,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   startTransitionDuration: 3
   endTransitionDuration: 2
 --- !u!114 &11400000
@@ -55,6 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83a5b8746404b040bf2790a9326f60b, type: 3}
   m_Name: FearLevelProfile2
   m_EditorClassIdentifier: 
+  minInterval: 1
+  maxInterval: 2
+  minDuration: 4
+  maxDuration: 8
   effects:
   - {fileID: -3850590786528227050}
   - {fileID: 1830471949182429552}
@@ -73,12 +65,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   shakeAmplitude: 0.005
   shakeFrequency: 8
   shakeFalloffCurve:
@@ -121,12 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
   m_Name: IrregularMovementEffect
   m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 10
-  maxDuration: 15
-  autoTrigger: 1
-  disableWhenTrigger: 0
   minSpeedMultiplier: 0.6
   maxSpeedMultiplier: 1.2
 --- !u!114 &7636189157478474265
@@ -141,12 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
   m_Name: SoundSuppression
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   cutOffOn: 350
-  transitionTimeApply: 3
-  transitionTimeCancel: 2
+  transitionTimeApply: 1
+  transitionTimeCancel: 1

@@ -7,49 +7,55 @@ using System.Collections.Generic;
 public class QuestInteractableEditor : Editor
 {
     private QuestInteractable _questInteractable;
-    private readonly List<Quest> _availableQuests = new();
+    private readonly List<Quest> _availableQuests = new List<Quest>();
     private string[] _questNames;
 
     private void OnEnable()
     {
         _questInteractable = (QuestInteractable)target;
-        string[] guids = AssetDatabase.FindAssets("t:Quest");
+        RefreshAvailableQuests();
+    }
+
+    private void RefreshAvailableQuests()
+    {
         _availableQuests.Clear();
+        string[] guids = AssetDatabase.FindAssets("t:Quest");
         foreach (string guid in guids)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
             Quest questAsset = AssetDatabase.LoadAssetAtPath<Quest>(path);
             if (questAsset != null)
-            {
                 _availableQuests.Add(questAsset);
-            }
         }
-        _questNames = new string[_availableQuests.Count];
-        for (int i = 0; i < _availableQuests.Count; i++)
-        {
-            _questNames[i] = _availableQuests[i].questName;
-        }
+        _questNames = _availableQuests.ConvertAll(q => q.questName).ToArray();
     }
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspectorWithoutAssociatedQuestID();
-        
+        serializedObject.Update();
+
+        // Draw all properties except associatedQuestID
+        SerializedProperty prop = serializedObject.GetIterator();
+        bool enterChildren = true;
+        while (prop.NextVisible(enterChildren))
+        {
+            enterChildren = false;
+            if (prop.name == "associatedQuestID")
+                continue;
+
+            EditorGUILayout.PropertyField(prop, true);
+        }
+
+        // Quest selection popup
         if (_availableQuests.Count > 0)
         {
-            int selectedIndex = 0;
-            for (int i = 0; i < _availableQuests.Count; i++)
-            {
-                if (_availableQuests[i].questID == _questInteractable.associatedQuestID)
-                {
-                    selectedIndex = i;
-                    break;
-                }
-            }
+            int selectedIndex = _availableQuests.FindIndex(q => q.questID == _questInteractable.associatedQuestID);
+            if (selectedIndex < 0) selectedIndex = 0;
 
             int newSelectedIndex = EditorGUILayout.Popup("Associated Quest", selectedIndex, _questNames);
             if (newSelectedIndex != selectedIndex)
             {
+                Undo.RecordObject(_questInteractable, "Change Associated Quest");
                 _questInteractable.associatedQuestID = _availableQuests[newSelectedIndex].questID;
                 EditorUtility.SetDirty(_questInteractable);
             }
@@ -58,20 +64,7 @@ public class QuestInteractableEditor : Editor
         {
             EditorGUILayout.HelpBox("No available quests found in the project.", MessageType.Info);
         }
-    }
 
-    private void DrawDefaultInspectorWithoutAssociatedQuestID()
-    {
-        serializedObject.Update();
-        SerializedProperty property = serializedObject.GetIterator();
-        bool enterChildren = true;
-        while (property.NextVisible(enterChildren))
-        {
-            if (property.name == "associatedQuestID")
-                continue;
-            EditorGUILayout.PropertyField(property, true);
-            enterChildren = false;
-        }
         serializedObject.ApplyModifiedProperties();
     }
 }

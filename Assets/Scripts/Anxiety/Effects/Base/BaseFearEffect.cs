@@ -4,72 +4,91 @@ namespace Anxiety.Effects
 {
     public abstract class BaseFearEffect : ScriptableObject
     {
-        [Header("Base time set")]
-        public float minInterval = 1f;
-        public float maxInterval = 2f; 
-        public float minDuration = 4f;
-        public float maxDuration = 8f; 
-
-        [Header("Call option")]
-        public bool autoTrigger;
-        public bool disableWhenTrigger;
-
         private bool _isActive;
         private bool _isBlocked;
-        
+        private bool _isPassive;
+        private bool _isScheduled;
+        private float _currentInterval;
         protected float currentDuration;
 
-        public virtual void Init() { }
+        public void Init(bool isPassive)
+        {
+            _isPassive = isPassive;
+            InitInside();
+        }
 
         private void OnEnable()
         {
             _isBlocked = false;
             _isActive = false;
+            _isScheduled = false;
         }
 
-        public void SetBlocked(bool blocked)
+        public void SetBlocked(bool blocked) => _isBlocked = blocked;
+
+        public void SetTiming(float interval, float duration)
         {
-            _isBlocked = blocked;
+            _currentInterval = interval;
+            currentDuration = duration;
         }
 
         public void TriggerEffect()
         {
-            if (_isBlocked || _isActive)
+            // Prevent scheduling or execution if already active, blocked, or pending
+            if (_isBlocked || _isActive || _isScheduled)
                 return;
-            
-            _isActive = true;
 
-            float delay = Random.Range(minInterval, maxInterval);
-            TimerManager.Schedule(() =>
+            _isScheduled = true;
+
+            if (_isPassive)
             {
-                currentDuration = Random.Range(minDuration, maxDuration);
-                ExecuteEffect();
-
+                // Schedule the effect after the interval
                 TimerManager.Schedule(() =>
                 {
-                    EndEffect();
-                    _isActive = false;
-                    if (disableWhenTrigger && AnxietyManager.Instance != null)
-                    {
-                        AnxietyManager.Instance.UnblockAutoTriggeredEffects();
-                    }
+                    _isScheduled = false;
 
-                    if (autoTrigger && AnxietyManager.Instance != null && AnxietyManager.Instance.CurrentProfileContains(this))
+                    if (_isBlocked)
+                        return;
+
+                    _isActive = true;
+                    ExecuteEffect();
+
+                    // Schedule end of effect
+                    TimerManager.Schedule(() =>
                     {
-                        TriggerEffect();
-                    }
-                }, currentDuration);
-            }, delay);
+                        if (!_isBlocked)
+                        {
+                            EndEffect();
+                        }
+                        // Reset active flag to allow new triggers
+                        _isActive = false;
+                    }, currentDuration);
+                }, _currentInterval);
+            }
+            else
+            {
+                // Immediate execution for active-only effects
+                _isActive = true;
+                ExecuteEffect();
+            }
         }
-        
-        protected abstract void ExecuteEffect();
-        protected virtual void EndEffect() { }
 
         public void ForceEndEffect()
         {
-            if (!_isActive) return;
-            EndEffect();
-            _isActive = false;
+            if (!_isActive && !_isScheduled) return;
+
+            _isBlocked = true;
+            _isScheduled = false;
+
+            if (_isActive)
+            {
+                EndEffect();
+                _isActive = false;
+            }
         }
+
+        protected virtual void InitInside() { }
+        protected abstract void ExecuteEffect();
+        protected virtual void EndEffect() { }
     }
 }

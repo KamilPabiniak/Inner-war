@@ -14,11 +14,13 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private AudioMixerGroup voicesMixer;
     [SerializeField] private AudioMixerGroup heartMixer;
     [SerializeField] private AudioMixerGroup machineState;
+    [SerializeField] private AudioMixerGroup monologue;
 
     public AudioMixerGroup LowPassMixer => lowPassMixer;
     public AudioMixerGroup VoicesMixer => voicesMixer;
     public AudioMixerGroup HeartMixer => heartMixer;
     public AudioMixerGroup MachineState => machineState;
+    public AudioMixerGroup MonologueMixer => monologue;
     
     private bool _isPlayerAlive = true;
     

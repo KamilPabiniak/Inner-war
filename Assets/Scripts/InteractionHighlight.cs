@@ -66,6 +66,7 @@ public class InteractionHighlight : MonoBehaviour
             StopCoroutine(activeHighlights[obj]);
             activeHighlights.Remove(obj);
 
+            if (obj == null) return;
             if (obj.TryGetComponent(out Renderer renderer))
             {
                 ResetRimEffects(renderer.material);

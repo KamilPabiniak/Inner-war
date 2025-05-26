@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMonologue : PlayerModule
@@ -11,59 +12,76 @@ public class PlayerMonologue : PlayerModule
     private bool _wasInterrupted;
 
     private Coroutine _monologueCoroutine;
-    
     public event Action OnMonologueStarted;
+    private struct MonologueRequest
+    {
+        public AudioClip Clip;
+        public float Volume;
+        public float Delay;
+    }
+    
+    private readonly Queue<MonologueRequest> _requestQueue = new();
 
     private void OnEnable() => GameEvents.onPlayerDied += StopMonologue;
 
     private void OnDisable() => GameEvents.onPlayerDied -= StopMonologue;
+    
 
     public void PlayMonologue(AudioClip clip, float volume = 1f, float delay = 0f)
     {
-        if (clip == null)
-        {
-            return;
-        }
-        if (isPlaying)
-        {
-            return;
-        }
-        _monologueCoroutine = StartCoroutine(PlayMonologueCoroutine(clip, volume, delay));
+        if (clip == null) { return; }
+        _requestQueue.Enqueue(new MonologueRequest { Clip = clip, Volume = volume, Delay = delay });
+        _monologueCoroutine ??= StartCoroutine(PlayMonologueCoroutine());
     }
 
-    private IEnumerator PlayMonologueCoroutine(AudioClip clip, float volume, float delay)
+    private IEnumerator PlayMonologueCoroutine()
     {
-        if (delay > 0f)
+        isPlaying = true;
+        while (_requestQueue.Count > 0)
         {
-            yield return new WaitForSeconds(delay);
+            var request = _requestQueue.Dequeue();
+            
+            if (request.Delay > 0f)
+                yield return new WaitForSeconds(request.Delay);
+
+            // Play clip
+            monologueSource.clip = request.Clip;
+            monologueSource.volume = request.Volume;
+            monologueSource.outputAudioMixerGroup = SoundFXManager.Instance.MonologueMixer;
+            monologueSource.Play();
+            OnMonologueStarted?.Invoke();
+            
+            float timePlayed = 0f;
+            while (timePlayed < request.Clip.length)
+            {
+                if (!monologueSource.isPlaying)
+                    break;
+                timePlayed += Time.deltaTime;
+                yield return null;
+            }
+            _wasInterrupted = false;
         }
 
-        isPlaying = true;
-        monologueSource.clip = clip;
-        monologueSource.volume = volume;
-        monologueSource.Play();
-        OnMonologueStarted?.Invoke();
-
-        yield return new WaitForSeconds(clip.length);
-
         isPlaying = false;
-        _wasInterrupted = false;
+        _monologueCoroutine = null;
     }
 
     private void StopMonologue()
     {
-        if (isPlaying)
+        // Stop any current playback and clear queue
+        if (_monologueCoroutine != null)
         {
-            if (_monologueCoroutine != null)
-            {
-                StopCoroutine(_monologueCoroutine);
-                _monologueCoroutine = null;
-            }
-
-            monologueSource.Stop();
-            isPlaying = false;
-            _wasInterrupted = true;
+            StopCoroutine(_monologueCoroutine);
+            _monologueCoroutine = null;
         }
+
+        if (monologueSource.isPlaying)
+        {
+            monologueSource.Stop();
+        }
+
+        _requestQueue.Clear();
+        _wasInterrupted = true;
     }
 
     public bool WasInterruptedAndClear()

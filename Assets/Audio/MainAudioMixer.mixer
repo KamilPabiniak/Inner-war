@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8732426484510300322
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 8ef9270a4d41f9044b92c958a223076b
+  m_EffectName: Attenuation
+  m_MixLevel: ed2fdb499c675df4ab30f7d5eaba3993
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-8555639544043232614
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -60,6 +74,25 @@ AudioMixerGroupController:
   - {fileID: 4996781438889626124}
   - {fileID: 9056509749768255390}
   m_UserColorIndex: 5
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!243 &-7306013969331511130
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Monologue
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 4c5640f7f363d6a4cb5326b82b8847ae
+  m_Children: []
+  m_Volume: b38e69911b66b1046b40a5ac53c82008
+  m_Pitch: 41a26d549cd57d348904d429c5e7bbcd
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -8732426484510300322}
+  m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
@@ -224,6 +257,7 @@ AudioMixerController:
     - a249aadb83a8ff342b55a941ac02ea20
     - 4694a6a2e350985458be0f0c0302b42e
     - 47bb6dad276be8e4f9b7a74ffb64dab4
+    - 4c5640f7f363d6a4cb5326b82b8847ae
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -482,6 +516,7 @@ AudioMixerGroupController:
   - {fileID: -7593343036394811911}
   - {fileID: -4405677733680458954}
   - {fileID: -1321542525899036561}
+  - {fileID: -7306013969331511130}
   m_Volume: 0ccc976a0cf72684fadc08965d76a562
   m_Pitch: 1d6f4b2b241d74f4b983d824ae2180c6
   m_Send: 00000000000000000000000000000000

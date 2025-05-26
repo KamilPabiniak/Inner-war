@@ -48,11 +48,10 @@ namespace Enemy.State
             if (enemyBrain.Target != null)
                 _lastKnownPos      = enemyBrain.Target.position;
 
-            AnxietyManager.Instance.IncreaseFear(5f);
+            AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnAttack);
             // Play effects
             enemyBrain.audio.PlayAttackSound();
             GameEvents.onPlayerKilled += HandlePlayerKilled;
-            AnxietyManager.Instance.TriggerProfileEffects();
         }
 
         public void UpdateState(EnemyBrain enemyBrain)

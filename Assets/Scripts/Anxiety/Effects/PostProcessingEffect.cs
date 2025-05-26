@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Anxiety.Effects
 {
@@ -9,9 +10,12 @@ namespace Anxiety.Effects
         [Binder("Transition Settings", fontSize: 15, fontStyle: FontStyle.Bold, bottomSpace:2f)]
         [SerializeField] private float startTransitionDuration = 1f; 
         [SerializeField] private float endTransitionDuration = 1f; 
+        [Header("Profiles")]
+        [SerializeField] private VolumeProfile postProcessingEffect;
+        
         protected override void ExecuteEffect()
         {
-            AnxietyManager.Instance.postProcessingController.TurnOnEffects(startTransitionDuration);
+            AnxietyManager.Instance.postProcessingController.TurnOnEffects(startTransitionDuration, postProcessingEffect);
         }
 
         protected override void EndEffect()
