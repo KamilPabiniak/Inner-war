@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 81
   m_IsActive: 1
 --- !u!4 &796777546790864871
 Transform:
@@ -201,7 +201,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 81
   m_IsActive: 1
 --- !u!4 &72687310236511480
 Transform:
@@ -2970,6 +2970,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 796777546790864871}
     m_Modifications:
+    - target: {fileID: 475598075059556771, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 81
+      objectReference: {fileID: 0}
     - target: {fileID: 1175867764812654468, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.9624
@@ -3021,6 +3025,18 @@ PrefabInstance:
     - target: {fileID: 1952967036200942910, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
       propertyPath: m_Name
       value: P_awning_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3035235083050473734, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 81
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414875355625069361, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 81
+      objectReference: {fileID: 0}
+    - target: {fileID: 5444418067964079273, guid: cc53f17b46c292c4c9fa6bd6e6543604, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 81
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
