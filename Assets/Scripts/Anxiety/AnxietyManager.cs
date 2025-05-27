@@ -142,14 +142,20 @@ namespace Anxiety
                 _ => activeLevel0
             };
             ApplyProfile(profile, false);
-            AddActiveFear();
+            if (top > 0 && increaseFearValueOnActiveLevel > 0)
+            {
+                AddActiveFear();
+            }
         }
 
         private void ApplyProfile(FearLevelProfile profile, bool passive)
         {
+            Debug.Log($"[Anxiety] ApplyProfile: new={profile?.name}, passive={passive}, old={_currentProfile?.name}");
+
             StopPassiveLoop(); 
 
-            if (_currentProfile == profile) return;
+            if (_currentProfile == profile && !passive) 
+                            return;
 
             if (_currentProfile != null)
             {
@@ -210,7 +216,7 @@ namespace Anxiety
 
         public void TriggerActiveContinuous(int level)
         {
-            if (level < 1 || level > 4) throw new ArgumentOutOfRangeException();
+            if (level < 0 || level > 4) throw new ArgumentOutOfRangeException();
             ClearAllActiveLevels();
             _activeLevels.Add(level);
             ApplyActiveProfile();

@@ -8,6 +8,8 @@ namespace QuestSystem
         [Tooltip("Optional: used to validate if this interactable is for the current quest")]
         public string associatedQuestID;
 
+        [SerializeField] private bool destroyAfterInteraction;
+
         [Header("Monologue (Audio)")]
         [Tooltip("Optional audio clip to play on the player when this quest is completed")]
         [SerializeField] private AudioClip completionClip;
@@ -51,6 +53,9 @@ namespace QuestSystem
                     }
                 }
             }
+
+            if (!destroyAfterInteraction) return;
+                Destroy(gameObject);
         }
     }
 }

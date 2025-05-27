@@ -6,9 +6,20 @@ using UnityEngine;
 public class PlayerDeath : PlayerModule
 {
     public Transform checkpoint;
+    
+    [Header("Timing")]
+    [Tooltip("Global time scale for death sequence")]
+    [SerializeField] private float timeScale = 1f;
+
+    [Header("Phase Durations (base values in seconds)")]
+    [SerializeField] private float blackScreenBaseDuration = 2f;
     [SerializeField] private float respawnTime = 3f;
+    [SerializeField] private float fadeOutFromDeathScreen = 1f;
+
+    [Header("Audio Clips")]
     [SerializeField] private AudioClip deadEnd;
     [SerializeField] private AudioClip deadEoldProjectorSound;
+    
     private Vector3 _backupPos;
     private bool _isDead;
     private void Start()
@@ -46,16 +57,25 @@ public class PlayerDeath : PlayerModule
     private IEnumerator HandleDeathState()
     {
         GameEvents.onPlayerDied?.Invoke();
-        GameEvents.onBlackScreen.Invoke(0f, 10f, 0f);
-        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(deadEnd, gameObject.transform, 1f, deadEnd.length, false);
-        yield return new WaitForSeconds(deadEnd.length - 2.5f);
+        float blackDuration = blackScreenBaseDuration * timeScale;
+        GameEvents.onBlackScreen.Invoke(0f, blackDuration, 0f);
+        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(
+            deadEnd, transform, 1f, deadEnd.length, false);
+        yield return new WaitForSeconds(blackDuration);
         GameEvents.onDeathScreen?.Invoke();
-        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(deadEoldProjectorSound, gameObject.transform, 1f, respawnTime, true);
+        float respawnTime = this.respawnTime * timeScale;
+        SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(
+            deadEoldProjectorSound, transform, 1f, respawnTime, true);
         Player.ToggleInput();
         Respawn();
         yield return new WaitForSeconds(respawnTime);
-        GameEvents.onBlackScreen.Invoke(0f, 1f, 1f);
+
+        // Fade-out black screen over scaled duration
+        float fadeOutDuration = fadeOutFromDeathScreen * timeScale;
+        GameEvents.onBlackScreen.Invoke(0f, 1f * timeScale, fadeOutDuration);
         Player.ToggleInput();
+
+        // Sequence end
         _isDead = false;
         GameEvents.onPlayerRespawned?.Invoke();
     }
