@@ -19,6 +19,7 @@ namespace Enemy.State
         public void EnterState(EnemyBrain enemyBrain)
         {
             enemyBrain.audio.PlayInvestigateSound();
+            AnxietyManager.Instance.TriggerActiveContinuous(3);
         }
 
         public void UpdateState(EnemyBrain enemyBrain)

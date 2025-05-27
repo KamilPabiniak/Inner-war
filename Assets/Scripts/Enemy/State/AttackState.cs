@@ -49,6 +49,7 @@ namespace Enemy.State
                 _lastKnownPos      = enemyBrain.Target.position;
 
             AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnAttack);
+            AnxietyManager.Instance.TriggerActiveContinuous(4);
             // Play effects
             enemyBrain.audio.PlayAttackSound();
             GameEvents.onPlayerKilled += HandlePlayerKilled;

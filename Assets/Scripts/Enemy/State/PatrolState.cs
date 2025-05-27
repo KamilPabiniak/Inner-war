@@ -1,3 +1,4 @@
+using Anxiety;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +21,7 @@ namespace Enemy.State
             _isWaiting = false;
             _waitingToMove = false;
             SetNewPatrolPoint(enemyBrain);
+            AnxietyManager.Instance.TriggerActiveContinuous(0);
         }
 
         public void UpdateState(EnemyBrain enemyBrain)
