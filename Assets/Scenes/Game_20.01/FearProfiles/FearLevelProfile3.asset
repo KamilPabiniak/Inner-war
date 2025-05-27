@@ -1,23 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4989035808592873722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
-  m_Name: CrouchEffect
-  m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
 --- !u!114 &-2031995008302625909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,46 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  heartFadeInDuration: 1
-  heartFadeOutDuration: 1
+  heartFadeInDuration: 2
+  heartFadeOutDuration: 2
   heartTargetVolume: 1.2
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
-  heartDrymixEchoOnValue: 60
---- !u!114 &-344500668900366796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e42b9809d90a93b4aa05a1ebf665496e, type: 3}
-  m_Name: FearResponse
-  m_EditorClassIdentifier: 
-  minInterval: 10
-  maxInterval: 20
-  minDuration: 6
-  maxDuration: 11
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  fadeInDuration: 0.5
-  fadeOutDuration: 0.5
-  targetVolume: 0.7
-  fearResponseClips:
-  - {fileID: 8300000, guid: 0685fbbe32cf5874c86844c443cdb824, type: 3}
-  - {fileID: 8300000, guid: 909e2b16320bb244db785ae71c827630, type: 3}
-  - {fileID: 8300000, guid: 4f0c3b21f6d26004a88f14f8fda8a858, type: 3}
-  - {fileID: 8300000, guid: 9aadc5ddf7a435649b3d5c6ef0454591, type: 3}
-  - {fileID: 8300000, guid: f367e1d83f55a7645bcdfb4e5d3f6106, type: 3}
-  - {fileID: 8300000, guid: 64dcd80c6628d0b48b849db151c46aa9, type: 3}
-  - {fileID: 8300000, guid: 952b89d615be85b4faa5a445093b34d2, type: 3}
+  heartDrymixEchoOnValue: 30
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,39 +29,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83a5b8746404b040bf2790a9326f60b, type: 3}
   m_Name: FearLevelProfile3
   m_EditorClassIdentifier: 
+  minInterval: 0
+  maxInterval: 0
+  minDuration: 0
+  maxDuration: 0
   effects:
   - {fileID: 8666978987524335258}
-  - {fileID: 558199883775083294}
-  - {fileID: -4989035808592873722}
   - {fileID: -2031995008302625909}
-  - {fileID: 2296059394773497277}
   - {fileID: 5388067495803624509}
   - {fileID: 2241538352562412298}
-  - {fileID: 3933999804909531380}
-  - {fileID: -344500668900366796}
---- !u!114 &558199883775083294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
-  m_Name: VoiceThoughtEffect
-  m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  voicesFadeInDuration: 3
-  voicesFadeOutDuration: 3
-  voicesTargetVolume: 1
-  voicesSounds:
-  - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
 --- !u!114 &2241538352562412298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,13 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  minInterval: 4
-  maxInterval: 8
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  shakeAmplitude: 0.006
+  shakeAmplitude: 0.005
   shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
@@ -163,47 +80,6 @@ MonoBehaviour:
   shakeRotation: 1
   shakeType: 1
   shakeDirection: {x: 1, y: 1, z: 1}
---- !u!114 &2296059394773497277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
-  m_Name: IrregularMovementEffect
-  m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 10
-  maxDuration: 15
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  minSpeedMultiplier: 0.5
-  maxSpeedMultiplier: 1.2
---- !u!114 &3933999804909531380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 309056ef29464d75ae3e16b86da5dc16, type: 3}
-  m_Name: SoundSuppression
-  m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
-  cutOffOn: 350
-  transitionTimeApply: 3
-  transitionTimeCancel: 2
 --- !u!114 &5388067495803624509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,14 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
   m_Name: PostProcessingEffect
   m_EditorClassIdentifier: 
-  minInterval: 3
-  maxInterval: 6
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   startTransitionDuration: 3
   endTransitionDuration: 2
+  postProcessingEffect: {fileID: 11400000, guid: 7ef6bc9c691d52a40a1adb2559530e1a, type: 2}
 --- !u!114 &8666978987524335258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,10 +107,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6a7d37a8c014006b40d4a31422c69f4, type: 3}
   m_Name: HallucinationEffect
   m_EditorClassIdentifier: 
-  minInterval: 5
-  maxInterval: 10
-  minDuration: 5
-  maxDuration: 10
-  autoTrigger: 1
-  disableWhenTrigger: 0
   particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}

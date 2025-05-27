@@ -42,6 +42,23 @@ MonoBehaviour:
   shakeRotation: 0
   shakeType: 1
   shakeDirection: {x: 1, y: 1, z: 1}
+--- !u!114 &-1875793374329621273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
+  m_Name: VoiceThoughtEffect
+  m_EditorClassIdentifier: 
+  voicesFadeInDuration: 3
+  voicesFadeOutDuration: 4
+  voicesTargetVolume: 0.1
+  voicesSounds:
+  - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,9 +71,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83a5b8746404b040bf2790a9326f60b, type: 3}
   m_Name: FearLevelProfile0 4
   m_EditorClassIdentifier: 
-  minInterval: 6
-  maxInterval: 6
-  minDuration: 3
-  maxDuration: 3
+  minInterval: 20
+  maxInterval: 25
+  minDuration: 5
+  maxDuration: 10
   effects:
-  - {fileID: -8428345349787575088}
+  - {fileID: -1875793374329621273}
