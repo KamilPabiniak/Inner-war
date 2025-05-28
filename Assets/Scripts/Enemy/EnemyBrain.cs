@@ -201,8 +201,8 @@ namespace Enemy
         private void PerformStateChange(IEnemyState nextState)
         {
             if (_currentState == nextState) return;
-            bool wasHighAlert = _currentState is AttackState or InvestigateState;
-            bool willHighAlert = nextState is AttackState or InvestigateState;
+            bool wasHighAlert = _currentState is AttackState;
+            bool willHighAlert = nextState is AttackState;
             
             _currentState?.ExitState(this);
             

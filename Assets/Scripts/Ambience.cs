@@ -4,20 +4,22 @@ using UnityEngine;
 public class Ambience : MonoBehaviour
 {
     private AudioSource _ambience;
+    
     [Header("Default Ambience")]
     [SerializeField] private AudioClip inGameAmbience;
 
     [Header("High Alert Ambiences (Investigate/Attack)")]
     [SerializeField] private AudioClip[] highAlertAmbiences;
 
-    [Header("Fade Settings")]  
-    [SerializeField] private float fadeInDuration = 1.0f;   
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeInDuration = 1.0f;
     [SerializeField] private float fadeOutDuration = 1.0f;
 
     private Coroutine _currentFadeRoutine;
     private float _defaultAudioVolume;
     private int _highAlertIndex;
     private bool _playerIsDead;
+    private bool _isHighAlertActive;
 
     private void OnEnable()
     {
@@ -41,6 +43,7 @@ public class Ambience : MonoBehaviour
     {
         _ambience = GetComponent<AudioSource>();
         _defaultAudioVolume = _ambience.volume;
+        _isHighAlertActive = false;
     }
     
     private void OnMenuExit()
@@ -69,7 +72,7 @@ public class Ambience : MonoBehaviour
         while (timer < duration)
         {
             timer += Time.deltaTime;
-            _ambience.volume = Mathf.Lerp( _ambience.volume, 0f, timer / duration);
+            _ambience.volume = Mathf.Lerp(_ambience.volume, 0f, timer / duration);
             yield return null;
         }
         _ambience.volume = 0;
@@ -81,6 +84,7 @@ public class Ambience : MonoBehaviour
         if (_currentFadeRoutine != null)
             StopCoroutine(_currentFadeRoutine);
         _playerIsDead = false;
+        _isHighAlertActive = false;
         _ambience.clip = inGameAmbience;
 
         _currentFadeRoutine = StartCoroutine(FadeInAudio(fadeInDuration));
@@ -99,24 +103,32 @@ public class Ambience : MonoBehaviour
     {
         if (_currentFadeRoutine != null)
             StopCoroutine(_currentFadeRoutine);
-        if (_playerIsDead) yield return null;
+        if (_playerIsDead) yield break;
 
         yield return StartCoroutine(FadeOutAudio(fadeOutDuration));
         _ambience.clip = clip;
         yield return StartCoroutine(FadeInAudio(fadeInDuration));
     }
-    
+
     private void PlayHighAlertAmbience()
     {
-        if (highAlertAmbiences.Length == 0) return;
+        if (_isHighAlertActive || highAlertAmbiences.Length == 0) 
+            return;
+        
+        _isHighAlertActive = true;
+        
         var clip = highAlertAmbiences[_highAlertIndex];
         _highAlertIndex = (_highAlertIndex + 1) % highAlertAmbiences.Length;
+
         _currentFadeRoutine = StartCoroutine(SetNewAmbience(clip));
     }
 
     private void PlayDefaultAmbience()
     {
-        if (_playerIsDead) return;
+        if (_playerIsDead) 
+            return;
+
+        _isHighAlertActive = false;
         _currentFadeRoutine = StartCoroutine(SetNewAmbience(inGameAmbience));
     }
 }
