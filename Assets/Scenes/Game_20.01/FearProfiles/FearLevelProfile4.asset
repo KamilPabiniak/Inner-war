@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startTransitionDuration: 3
   endTransitionDuration: 2
-  postProcessingEffect: {fileID: 0}
+  postProcessingEffect: {fileID: 11400000, guid: 9bdaf47b95767a44ba25e287c58a3d12, type: 2}
 --- !u!114 &-1567473554732156536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  shakeAmplitude: 0.007
+  shakeAmplitude: 0.006
   shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
@@ -75,9 +75,6 @@ MonoBehaviour:
   maxDuration: 0
   effects:
   - {fileID: 5185326519939242182}
-  - {fileID: 7849564353447769295}
-  - {fileID: 9192829598785817700}
-  - {fileID: 8968116647015427729}
   - {fileID: 3018388283872220411}
   - {fileID: -1971298085949833921}
   - {fileID: -1567473554732156536}
@@ -117,11 +114,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
   m_Name: HeartEffect
   m_EditorClassIdentifier: 
-  heartFadeInDuration: 1
-  heartFadeOutDuration: 1
-  heartTargetVolume: 1.5
+  heartFadeInDuration: 2
+  heartFadeOutDuration: 2
+  heartTargetVolume: 1.6
   heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
-  heartDrymixEchoOnValue: 60
+  heartDrymixEchoOnValue: 35
 --- !u!114 &5185326519939242182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,46 +132,3 @@ MonoBehaviour:
   m_Name: HallucinationEffect
   m_EditorClassIdentifier: 
   particle: {fileID: 6839424162047674327, guid: cde3d47f42b078e4db9eb75227c4da34, type: 3}
---- !u!114 &7849564353447769295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a925be5aca84672b2df6e3b10c403b5, type: 3}
-  m_Name: VoiceThoughtEffect
-  m_EditorClassIdentifier: 
-  voicesFadeInDuration: 3
-  voicesFadeOutDuration: 3
-  voicesTargetVolume: 1
-  voicesSounds:
-  - {fileID: 8300000, guid: e6e01e10d3fab8448936bdfe8b4a4a41, type: 3}
---- !u!114 &8968116647015427729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 865a65244aa94f3e89ee5f706add30f9, type: 3}
-  m_Name: CrouchEffect
-  m_EditorClassIdentifier: 
---- !u!114 &9192829598785817700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
-  m_Name: IrregularMovementEffect
-  m_EditorClassIdentifier: 
-  minSpeedMultiplier: 0.4
-  maxSpeedMultiplier: 1.2
