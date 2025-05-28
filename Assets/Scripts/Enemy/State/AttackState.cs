@@ -13,6 +13,7 @@ namespace Enemy.State
         private float _attackTimer;
         private float _lostTargetTimer;
         private bool  _isOverloading;
+        private float _waitAfterOverload;
         private float _originalSpeed;
         private float _originalAngularSpeed;
         private const float PredictionTime = 0.5f;
@@ -24,29 +25,30 @@ namespace Enemy.State
 
         public void EnterState(EnemyBrain enemyBrain)
         {
-            _enemyBrain            = enemyBrain;
-            _agent                 = enemyBrain.movement.agent;
+            _enemyBrain = enemyBrain;
+            _agent = enemyBrain.movement.agent;
 
             // Cache original values
-            _originalSpeed         = _agent.speed;
-            _originalAngularSpeed  = _agent.angularSpeed;
+            _originalSpeed = _agent.speed;
+            _originalAngularSpeed = _agent.angularSpeed;
 
             // Configure for aggressive pursuit
-            _agent.speed           = _originalSpeed * enemyBrain.attackSpeedMultiplier;
-            _agent.angularSpeed    = 360f;                 
-            _agent.autoBraking     = false;                
-            _agent.stoppingDistance= 0f;
-            _agent.updatePosition  = true;
-            _agent.updateRotation  = true;
-            _agent.isStopped       = false;
+            _agent.speed = _originalSpeed * enemyBrain.attackSpeedMultiplier;
+            _agent.angularSpeed = 360f;                 
+            _agent.autoBraking = false;                
+            _agent.stoppingDistance = 0f;
+            _agent.updatePosition = true;
+            _agent.updateRotation = true;
+            _agent.isStopped = false;
 
             // Reset timers
-            _attackTimer           = enemyBrain.attackLockDuration;
-            _lostTargetTimer       = 0f;
-            _isOverloading         = false;
+            _attackTimer = enemyBrain.attackLockDuration;
+            _lostTargetTimer = 0f;
+            _isOverloading = false;
+            _waitAfterOverload = enemyBrain.waitAfterOverload;
 
             if (enemyBrain.Target != null)
-                _lastKnownPos      = enemyBrain.Target.position;
+                _lastKnownPos = enemyBrain.Target.position;
 
             AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnAttack);
             AnxietyManager.Instance.TriggerActiveContinuous(4);
@@ -62,8 +64,8 @@ namespace Enemy.State
             
             if (_isOverloading)
             {
-                enemyBrain.waitAfterOverload -= Time.deltaTime;
-                if (enemyBrain.waitAfterOverload <= 0f)
+                _waitAfterOverload -= Time.deltaTime;
+                if (_waitAfterOverload <= 0f)
                 {
                     enemyBrain.detection.SetAwarenessLevel(0f);
                     enemyBrain.OnBackToPatrol(); 

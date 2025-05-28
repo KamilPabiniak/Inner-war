@@ -62,8 +62,6 @@ namespace Enemy
         
         //Patrol
         private Vector3 _currentPatrolPoint;
-        //Visibility
-        private bool _wasPlayerVisible;
         //State Change
         private bool _stateChangeRequested;
         private IEnemyState _pendingState;
@@ -252,6 +250,7 @@ namespace Enemy
                     GameEvents.onPlayerKilled?.Invoke();
                     SetTarget(null);
                     detection.SetAwarenessLevel(0f);
+                    _lockState = null;
                 }
             }
         }
@@ -261,6 +260,7 @@ namespace Enemy
         {
             SetTarget(null);
             RequestStateChange(_patrolState);
+            _lockState = null;
         }
         
         public void OnAlertReceived(Vector3 alertPosition)
