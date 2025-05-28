@@ -74,7 +74,6 @@ GameObject:
   - component: {fileID: 4318551185406387747}
   - component: {fileID: 4033008739255278940}
   - component: {fileID: 7446124271564492308}
-  - component: {fileID: 5399676784038882242}
   m_Layer: 7
   m_Name: FootRef_L
   m_TagString: Untagged
@@ -149,26 +148,6 @@ MonoBehaviour:
     m_MaintainPositionOffset: 0
     m_MaintainRotationOffset: 0
 --- !u!114 &7446124271564492308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537791727446321358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 354ed94cd7f60804ba96557fdd6d073f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyAudio: {fileID: 4366536721842437855}
-  rayYOffset: 0
-  rayDistance: 0.1
-  plantedYOffset: 0
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 31745
-  planter: {fileID: 8907743467534571527}
---- !u!114 &5399676784038882242
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -283,7 +262,6 @@ GameObject:
   - component: {fileID: 7692271102172050306}
   - component: {fileID: 7199591306830242343}
   - component: {fileID: 4646326108004210509}
-  - component: {fileID: 1314910333613881094}
   m_Layer: 7
   m_Name: FootRef_R
   m_TagString: Untagged
@@ -358,26 +336,6 @@ MonoBehaviour:
     m_MaintainPositionOffset: 0
     m_MaintainRotationOffset: 0
 --- !u!114 &4646326108004210509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3020668584734196536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 354ed94cd7f60804ba96557fdd6d073f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyAudio: {fileID: 4366536721842437855}
-  rayYOffset: 0
-  rayDistance: 0.1
-  plantedYOffset: 0
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 31745
-  planter: {fileID: 8907743467534571527}
---- !u!114 &1314910333613881094
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -581,7 +539,7 @@ MonoBehaviour:
   audioSources: {fileID: 145489726162541674}
   footStepClips:
   - {fileID: 8300000, guid: 80eed64742a7ab74cb4f7165181b8928, type: 3}
-  footStepsRange: 25
+  footStepsRange: 40.1
   footstepPitchMin: 0.9
   footstepPitchMax: 1.1
   patrolStateSound:
