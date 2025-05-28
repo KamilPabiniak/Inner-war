@@ -16,6 +16,7 @@ public class AnxietyResponseCondition : PlayerModule
         public bool playSequentially = false;         // New: play in order
         [HideInInspector] public int nextIndex = 0;   // New: next clip index
     }
+    
 
     [Header("Level Audio Settings")]
     [SerializeField] private LevelAudio[] levelAudios;
@@ -27,16 +28,34 @@ public class AnxietyResponseCondition : PlayerModule
     private PlayerMonologue _playerMonologue;
     private bool _wasMonologuePlaying = false;
     private int _pendingLevel = -1;
+    private bool _playerDead = false;
     public event Action OnConditionAudioStarted;
 
     private void Start()
     {
         _playerMonologue = Player.Instance.GetModule<PlayerMonologue>();
         _currentLevel = AnxietyManager.Instance.DeterminePassiveFearLevel();
+        
+        GameEvents.onPlayerDied += () => _playerDead = true;
+        GameEvents.onPlayerRespawned += () => _playerDead = false;
     }
+    
+    private void OnDestroy()
+    {
+        GameEvents.onPlayerDied -= () => _playerDead = true;
+        GameEvents.onPlayerRespawned -= () => _playerDead = false;
+    }
+
 
     private void Update()
     {
+        if (_playerDead)
+        {
+            if (_currentResponse == null) return;
+            Destroy(_currentResponse);
+            _audioPlaying = false;
+            return;
+        }
         bool nowPlaying = _playerMonologue != null && _playerMonologue.isPlaying;
 
         // detect monologue end
@@ -67,6 +86,7 @@ public class AnxietyResponseCondition : PlayerModule
 
     private void TryPlayAudioForLevel(int level, bool ignoreMonologue = false)
     {
+        if (_playerDead) return;
         var lvl = GetLevelAudio(level);
         if (lvl == null || lvl.clips == null || lvl.clips.Length == 0)
             return;
@@ -103,7 +123,7 @@ public class AnxietyResponseCondition : PlayerModule
         _audioPlaying = true;
         lvl.hasPlayed = true;
         _currentResponse = SoundFXManager.Instance.Play2DSoundFXClipDestroyOn(
-            clip, transform, volume: 1f, destroyTime: clip.length, onLoop: false, audioMixerGroup: null);
+            clip, transform, volume: 1f, destroyTime: clip.length, onLoop: false, audioMixerGroup: SoundFXManager.Instance.MonologueMixer);
 
         OnConditionAudioStarted?.Invoke();
         StartCoroutine(ResetAudioFlagAfter(clip.length));

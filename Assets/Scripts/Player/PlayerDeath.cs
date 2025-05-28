@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Anxiety;
 using UnityEngine;
 
 public class PlayerDeath : PlayerModule

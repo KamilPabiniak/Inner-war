@@ -18,6 +18,7 @@ namespace Anxiety.Effects
         private int _currentIndex = 0;
         private PlayerMonologue _playerMonologue;
         private AnxietyResponseCondition _anxietyResponseCondition;
+        private bool _playerDead = false;
 
         protected override void InitInside()
         {
@@ -27,10 +28,18 @@ namespace Anxiety.Effects
             
             _playerMonologue.OnMonologueStarted += Interrupt;
             _anxietyResponseCondition.OnConditionAudioStarted += Interrupt;
+            
+            GameEvents.onPlayerDied += () => _playerDead = true;
+            GameEvents.onPlayerRespawned += () => _playerDead = false;
         }
 
         protected override void ExecuteEffect()
         {
+            if (_playerDead)
+            {
+                EndEffect();
+                return;
+            }
             if (AnxietyManager.Instance.audioEffectsController.IsFearReactionPlaying()) return;
             if (_playerMonologue.isPlaying || _anxietyResponseCondition.IsAudioPlaying) { EndEffect(); return; }
             

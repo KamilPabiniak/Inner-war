@@ -8,6 +8,12 @@ public class MonologueTrigger : MonoBehaviour
     [SerializeField] private float monologueVolume = 1f;
     [SerializeField] private bool triggerOnce = true;
     [SerializeField] private float delayBeforePlay;
+    [Tooltip("If enabled, triggers an active anxiety level on quest completion")]
+    [SerializeField] private bool triggerAnxiety = false;
+    [SerializeField, Range(5, 7), Tooltip("Anxiety level (5-7) to activate")]
+    private int anxietyLevel = 5;
+    [SerializeField, Tooltip("Duration in seconds for the active anxiety level")]
+    private float anxietyDuration = 10f;
 
     private bool _hasTriggered;
     private PlayerMonologue _cachedMonologue;
@@ -38,6 +44,18 @@ public class MonologueTrigger : MonoBehaviour
                 _cachedMonologue = monologueModule;
                 monologueModule.PlayMonologue(monologueClip, monologueVolume, delayBeforePlay);
                 _hasTriggered = true;
+            }
+            
+            if (triggerAnxiety)
+            {
+                try
+                {
+                    Anxiety.AnxietyManager.Instance.TriggerActiveTimed(anxietyLevel, anxietyDuration);
+                }
+                catch (System.ArgumentOutOfRangeException e)
+                {
+                    Debug.LogWarning($"Anxiety level must be between 5 and 7. Provided: {anxietyLevel}");
+                }
             }
         }
     }

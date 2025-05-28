@@ -38,4 +38,6 @@ public class AnimationRiggingFootPlanter : MonoBehaviour
         }
         Debug.DrawRay(rayOrigin, Vector3.down * rayDistance, Color.red);
     }
+    
+    public Vector3 FootPosition => footRefConstraint.transform.position;
 }
