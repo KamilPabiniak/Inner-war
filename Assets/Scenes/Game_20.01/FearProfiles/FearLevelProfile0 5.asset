@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  shakeAmplitude: 0.18
-  shakeFrequency: 10
+  shakeAmplitude: 0.07
+  shakeFrequency: 8
   shakeFalloffCurve:
     serializedVersion: 2
     m_Curve:
@@ -60,3 +60,52 @@ MonoBehaviour:
   maxDuration: 3
   effects:
   - {fileID: -8428345349787575088}
+  - {fileID: 9095976187536133516}
+  - {fileID: 1284186154330527296}
+  - {fileID: 2535673128297888305}
+--- !u!114 &1284186154330527296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31f6120a9acc9ff498979066d8d10b99, type: 3}
+  m_Name: HeartEffect
+  m_EditorClassIdentifier: 
+  heartFadeInDuration: 3
+  heartFadeOutDuration: 3
+  heartTargetVolume: 1
+  heartClip: {fileID: 8300000, guid: 80ed12cd02a2d684d85a5b2cea4689ac, type: 3}
+  heartDrymixEchoOnValue: 60
+--- !u!114 &2535673128297888305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8421c47cac49c1afbe3192714e6640, type: 3}
+  m_Name: IrregularMovementEffect
+  m_EditorClassIdentifier: 
+  minSpeedMultiplier: 0.1
+  maxSpeedMultiplier: 0.3
+--- !u!114 &9095976187536133516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bb6ab40d6634550ac1c338b8e38c9e1, type: 3}
+  m_Name: PostProcessingEffect
+  m_EditorClassIdentifier: 
+  startTransitionDuration: 1
+  endTransitionDuration: 1
+  postProcessingEffect: {fileID: 11400000, guid: 7e717964ff073cf47afba85b36a536fe, type: 2}
