@@ -33,7 +33,7 @@ Material:
   stringTagMap: {}
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: _SkyMap
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -97,8 +97,12 @@ Material:
         m_Texture: {fileID: 2800000, guid: fd9e5bf6af2a1354faf4b25ac50feac9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SkyMap:
+    - _SampleTexture2D_66662d574e7f44d38ed675ffd67be3bd_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 072022e6ff46aee46b0025b15cef41a4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SkyMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 3, y: 3}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
