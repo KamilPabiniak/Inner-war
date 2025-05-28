@@ -21,6 +21,9 @@ namespace Enemy
         public DetectionController detection;
         public MovementController  movement;
         public Animator animator;     
+        [SerializeField] private SkinnedMeshRenderer eye;
+        private Material eyeMaterial;
+        private static readonly int RimColor = Shader.PropertyToID("_Emmision");
         
         [Header("Optional Patrol Area")]
         public PatrolArea patrolAreaOverride;
@@ -67,7 +70,7 @@ namespace Enemy
         //Internal lock state
         private IEnemyState _lockState;
         private float _lockExpiresAt;
-        
+            
         
         private void Awake()
         {
@@ -92,6 +95,7 @@ namespace Enemy
         {
             _currentState = _patrolState;
             _currentState.EnterState(this);
+            eyeMaterial = eye.material;
         }
 
         private void Update()
@@ -169,17 +173,14 @@ namespace Enemy
         private void UpdateVisuals(float progress)
         {
             Color targetColor;
-            float alpha = Mathf.Clamp01(progress / 100f);
 
             if (_currentState is AttackState)
             {
                 targetColor = Color.red;
-                alpha = 1f; 
             }
             else if (_currentState is InvestigateState)
             {
                 targetColor = Color.yellow;
-                alpha = 1f; 
             }
             else
             {
@@ -187,6 +188,11 @@ namespace Enemy
             }
             
             detection.lightComponent.color = targetColor;
+            
+            if (eyeMaterial != null)
+            {
+                eyeMaterial.SetColor(RimColor, targetColor);
+            }
         }
 
 
