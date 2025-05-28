@@ -40,11 +40,12 @@ namespace Enemy
         [Space, Header("Patrol")] 
         [Tooltip("Radius in which the opponent can select a new patrol point")]
         public float patrolRange = 10f;
+        public float rotationSpeed = 3f;
         [Tooltip("Minimum distance the new patrol point must be from the current position of the enemy or other opponents")]
         public float minPatrolPointDistance = 2f;
         [Tooltip("The length of time an opponent  waits  in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
-        public float waitBeforeMove = 3f;
+        public float waitBeforeMoveForRotation = 3f;
         [Header("Investigate")] 
         [Tooltip("Detection progress at which enemy switches to investigate")]
         public float detectionValueToChase = 25f;

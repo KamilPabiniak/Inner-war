@@ -10,9 +10,11 @@ namespace Enemy.State
         private bool _isWaiting;                
         private bool _waitingToMove;              
         private float _waitTimer;
+        private float _waitTimerForRotation;
 
         private static readonly int CheckArea = Animator.StringToHash("Search");
-        private static readonly int Speed     = Animator.StringToHash("Speed");
+        private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int Rotation = Animator.StringToHash("Direction");
 
         public void EnterState(EnemyBrain enemyBrain)
         {
@@ -33,17 +35,23 @@ namespace Enemy.State
             {
                 _waitTimer -= Time.deltaTime;
                 enemyBrain.animator.SetBool(CheckArea, true);
-                
-                // Vector3 dir = (_patrolPoint - enemyBrain.transform.position).normalized;
-                // enemyBrain.transform.forward = Vector3.Lerp(enemyBrain.transform.forward, dir, Time.deltaTime * enemyBrain.rotationSpeed);
 
                 if (_waitTimer <= 0f)
                 {
+                    _waitTimerForRotation -= Time.deltaTime;
                     enemyBrain.animator.SetBool(CheckArea, false);
-                    _waitingToMove = false;
-                    if (enemyBrain.canMove)
+                    enemyBrain.animator.SetFloat(Rotation, 1f);
+                    Vector3 dir = (_patrolPoint - enemyBrain.transform.position).normalized;
+                    enemyBrain.transform.forward = Vector3.Lerp(enemyBrain.transform.forward, dir, Time.deltaTime * enemyBrain.rotationSpeed);
+
+                    if (_waitTimerForRotation <= 0f)
                     {
-                        enemyBrain.movement.GoTo(_patrolPoint);
+                        enemyBrain.animator.SetBool(CheckArea, false);
+                        _waitingToMove = false;
+                        if (enemyBrain.canMove)
+                        {
+                            enemyBrain.movement.GoTo(_patrolPoint);
+                        }
                     }
                 }
                 return;
@@ -112,13 +120,13 @@ namespace Enemy.State
             {
                 _isWaiting = true;
                 _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
+                _waitTimerForRotation = enemyBrain.waitBeforeMoveForRotation;
                 return;
             }
-
-            enemyBrain.transform.LookAt(_patrolPoint);
             
             _waitingToMove = true;
-            _waitTimer = enemyBrain.waitBeforeMove; 
+            _waitTimer = enemyBrain.waitTimeAtPatrolPoint; 
+            _waitTimerForRotation = enemyBrain.waitBeforeMoveForRotation; 
         }
     }
 }
