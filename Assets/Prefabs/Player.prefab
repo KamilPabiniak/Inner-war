@@ -218,6 +218,7 @@ MonoBehaviour:
   - Checkpoint
   - Ladder
   - Bomb
+  - Stone
   interactionRadius: 20
   showHighlightRange: 0
 --- !u!1 &2715986301959049074
@@ -393,6 +394,7 @@ GameObject:
   - component: {fileID: 6392378293654077410}
   - component: {fileID: 5508091448107957685}
   - component: {fileID: 4637112317400622803}
+  - component: {fileID: 401418845433198256}
   - component: {fileID: 5163055528134130737}
   - component: {fileID: 4930642353578862968}
   - component: {fileID: 4511191600571463562}
@@ -429,6 +431,7 @@ Transform:
   - {fileID: 6503497215727400287}
   - {fileID: 8770732866530337948}
   - {fileID: 1807900992178632037}
+  - {fileID: 6006601326148764729}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &6392378293654077410
@@ -496,13 +499,65 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standingHeight: 1.5
-  crouchHeight: 0.5
+  crouchHeight: 0.6
   gravity: 12
   fallDamageThreshold: 3
   state: 0
   characterController: {fileID: 6392378293654077410}
   cameraTransform: {fileID: 4074373934242088296}
   modules: []
+--- !u!114 &401418845433198256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528023716618402936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c493274dd0baf6646bc3dd6841984a6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelAudios:
+  - fearLevel: 0
+    clips: []
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
+  - fearLevel: 1
+    clips:
+    - {fileID: 8300000, guid: 335c85d3418686f448d2aebeeb2f3c3d, type: 3}
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
+  - fearLevel: 2
+    clips: []
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
+  - fearLevel: 3
+    clips:
+    - {fileID: 8300000, guid: 59d75e49d6cb8e84c9173d6b956f6572, type: 3}
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
+  - fearLevel: 4
+    clips: []
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
+  - fearLevel: 5
+    clips:
+    - {fileID: 8300000, guid: e59d85e313b9a764880a5a21cec090d6, type: 3}
+    allowReplay: 1
+    hasPlayed: 0
+    playSequentially: 0
+    nextIndex: 0
 --- !u!114 &5163055528134130737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -551,14 +606,14 @@ MonoBehaviour:
   surfaceSoundMappings:
   - surfaceLayer:
       serializedVersion: 2
-      m_Bits: 128
+      m_Bits: 1024
     footstepSounds:
     - {fileID: 8300000, guid: 44737e645aa918043b3d8cab5d1511bc, type: 3}
     - {fileID: 8300000, guid: 302595b93370c52408825d7fb07d09be, type: 3}
     - {fileID: 8300000, guid: 2bb076cd89fe2a148a76da2a45c910e4, type: 3}
   - surfaceLayer:
       serializedVersion: 2
-      m_Bits: 256
+      m_Bits: 2048
     footstepSounds:
     - {fileID: 8300000, guid: 505a015d5525e0442ae4a62d5bac304d, type: 3}
     - {fileID: 8300000, guid: 2802b1a72217c464ea0171ad67e835f7, type: 3}
@@ -636,7 +691,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkpoint: {fileID: 0}
-  respawnTime: 8
+  timeScale: 1
+  blackScreenBaseDuration: 2
+  respawnTime: 3
+  fadeOutFromDeathScreen: 1
   deadEnd: {fileID: 8300000, guid: 0517d36587ea6fd4188df22c2c9ac9b0, type: 3}
   deadEoldProjectorSound: {fileID: 8300000, guid: 40547ab7364858542bf389b1dcdf6c02, type: 3}
 --- !u!114 &5179479191362634091
@@ -680,7 +738,7 @@ MonoBehaviour:
   trajectoryResolution: 30
   trajectoryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   trajectoryWidth: 0.05
-  infiniteAmmo: 1
+  infiniteAmmo: 0
 --- !u!114 &1271999008627739933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,6 +772,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monologueSource: {fileID: 5530174865662167489}
+  isPlaying: 0
+--- !u!1 &3950553962073003023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6006601326148764729}
+  - component: {fileID: 6917372711840479688}
+  m_Layer: 6
+  m_Name: FearTriggerOnEnemyInRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6006601326148764729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950553962073003023}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7257523298164530904}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6917372711840479688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950553962073003023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2d902e895e4d294ebda1c95990236d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wideRange: 10
+  narrowRange: 6
+  heightScale: 0.2
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  showSphere: 0
 --- !u!1 &8591563394090021686
 GameObject:
   m_ObjectHideFlags: 0
@@ -864,7 +974,7 @@ GameObject:
   - component: {fileID: 5632755501973414989}
   - component: {fileID: 7487399191027915872}
   m_Layer: 6
-  m_Name: Spot Light
+  m_Name: flashlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -878,13 +988,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8668654952860799193}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23628941, y: -0, z: -0, w: 0.9716827}
+  m_LocalRotation: {x: 0.07780077, y: -0, z: -0, w: 0.9969689}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4074373934242088296}
-  m_LocalEulerAnglesHint: {x: 27.335, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8.924, y: 0, z: 0}
 --- !u!108 &5632755501973414989
 Light:
   m_ObjectHideFlags: 0
@@ -896,10 +1006,10 @@ Light:
   serializedVersion: 11
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 28.12
-  m_Range: 1.2008662
-  m_SpotAngle: 68.41371
-  m_InnerSpotAngle: 51.2666
+  m_Intensity: 4.85
+  m_Range: 6
+  m_SpotAngle: 95.645805
+  m_InnerSpotAngle: 49.591866
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
