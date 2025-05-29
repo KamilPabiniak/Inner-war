@@ -19,15 +19,15 @@ namespace Enemy.State
         public void EnterState(EnemyBrain enemyBrain)
         {
             enemyBrain.audio.PlayInvestigateSound();
+            if (enemyBrain.detection.IsPlayerVisible)
+            {
+                AnxietyManager.Instance.TriggerActiveContinuous(3);   
+            }
+
         }
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            if (enemyBrain.detection.IsPlayerVisible )
-            {
-                AnxietyManager.Instance.TriggerActiveContinuous(3);   
-            }
-            
             float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
             enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedInvestigate); 
             

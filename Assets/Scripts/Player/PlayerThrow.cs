@@ -54,7 +54,6 @@ public class PlayerThrow : PlayerModule
     private void SetupTrajectoryLine()
     {
         trajectoryLine.startWidth = trajectoryWidth;
-        trajectoryLine.endWidth = trajectoryWidth;
         trajectoryLine.startColor = trajectoryColor;
         trajectoryLine.endColor = trajectoryColor;
         trajectoryLine.positionCount = 0;

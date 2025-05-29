@@ -824,6 +824,7 @@ MonoBehaviour:
   triggerAnxiety: 0
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 0
 --- !u!4 &28750334
 Transform:
   m_ObjectHideFlags: 0
@@ -1092,7 +1093,7 @@ GameObject:
   - component: {fileID: 55620415}
   - component: {fileID: 55620414}
   m_Layer: 0
-  m_Name: ------------<color=#FFC058FF>Ambinet</color>----------------
+  m_Name: ---------------------<color=#FFC058FF>Ambinet</color>--------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1229,7 +1230,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: -----Controllers
+  m_Name: ----------Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2613,7 +2614,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>---------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-------------</color>
+  m_Name: <color=#842F2FFF>------------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>----------------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4544,6 +4545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 189764174}
   col: {fileID: 182439463}
+  doNotDestroy: 0
 --- !u!65 &182439463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12776,6 +12778,7 @@ MonoBehaviour:
   triggerAnxiety: 1
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 0
 --- !u!4 &538435879
 Transform:
   m_ObjectHideFlags: 0
@@ -16108,7 +16111,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ---------ENVIROMENT-------------
+  m_Name: ------------------ENVIROMENT-----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17718,7 +17721,7 @@ GameObject:
   - component: {fileID: 757262063}
   - component: {fileID: 757262062}
   m_Layer: 0
-  m_Name: ------------<color=#B0B0B0FF>CAMERA</color>---------------
+  m_Name: ---------------------<color=#B0B0B0FF>CAMERA</color>-------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18532,7 +18535,7 @@ GameObject:
   - component: {fileID: 828615971}
   - component: {fileID: 828615970}
   m_Layer: 0
-  m_Name: ----------<color=#7EC2FFFF>Monologue </color>--------------
+  m_Name: -------------------<color=#7EC2FFFF>Monologue </color>------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19439,6 +19442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1152857276}
   col: {fileID: 865928577}
+  doNotDestroy: 0
 --- !u!65 &865928577
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20441,7 +20445,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: ----------MANAGERS--------------
+  m_Name: -------------------MANAGERS------------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21896,6 +21900,7 @@ MonoBehaviour:
   triggerAnxiety: 1
   anxietyLevel: 5
   anxietyDuration: 3000
+  extraTime: 0
 --- !u!4 &979067351
 Transform:
   m_ObjectHideFlags: 0
@@ -22712,6 +22717,7 @@ MonoBehaviour:
   triggerAnxiety: 0
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 0
 --- !u!4 &1008984159
 Transform:
   m_ObjectHideFlags: 0
@@ -22876,7 +22882,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -22899,6 +22905,7 @@ MonoBehaviour:
   triggerAnxiety: 0
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 2.5
 --- !u!4 &1014197942
 Transform:
   m_ObjectHideFlags: 0
@@ -22909,7 +22916,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071066, z: -0, w: 0.70710707}
   m_LocalPosition: {x: 4.66, y: 16.237, z: -116.42}
-  m_LocalScale: {x: 2.0543, y: 2.8, z: 6.14}
+  m_LocalScale: {x: 38.168896, y: 2.8, z: 16.367397}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -59523,7 +59530,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ---------<color=#3D0080FF>CHARACTERS</color>-------------
+  m_Name: ------------------<color=#3D0080FF>CHARACTERS</color>-----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63715,6 +63722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1618236523}
   col: {fileID: 1414876419}
+  doNotDestroy: 0
 --- !u!65 &1414876419
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65506,7 +65514,7 @@ GameObject:
   - component: {fileID: 1494555223}
   - component: {fileID: 1494555222}
   m_Layer: 0
-  m_Name: ---------Pipes&Ladders------------
+  m_Name: ------------------Pipes&Ladders----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65923,7 +65931,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: -------POSTPROCESSING----------
+  m_Name: ----------------POSTPROCESSING-------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66306,7 +66314,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#D49D00FF>-</color><color=#AA7E00FF>-</color><color=#805E00FF>-</color><color=#553F00FF>-</color><color=#2A1F00FF>-</color><color=#000000FF>-</color><color=#2A1F00FF>-</color><color=#553F00FF>-</color><color=#805E00FF>-</color><color=#AA7E00FF>-</color><color=#D49D00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#DFA500FF>-</color><color=#BF8D00FF>-</color><color=#9F7600FF>-</color><color=#805E00FF>-</color><color=#604700FF>-</color><color=#402F00FF>-</color><color=#201800FF>-</color><color=#000000FF>-</color><color=#201800FF>-</color><color=#402F00FF>-</color><color=#604700FF>-</color><color=#805E00FF>-</color><color=#9F7600FF>-</color><color=#BF8D00FF>-</color><color=#DFA500FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#E8AB00FF>-</color><color=#D19A00FF>-</color><color=#B98900FF>-</color><color=#A27800FF>-</color><color=#8B6700FF>-</color><color=#745600FF>-</color><color=#5D4500FF>-</color><color=#463300FF>-</color><color=#2E2200FF>-</color><color=#171100FF>-</color><color=#000000FF>-</color><color=#171100FF>-</color><color=#2E2200FF>-</color><color=#463300FF>-</color><color=#5D4500FF>-</color><color=#745600FF>-</color><color=#8B6700FF>-</color><color=#A27800FF>-</color><color=#B98900FF>-</color><color=#D19A00FF>-</color><color=#E8AB00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#EBAD00FF>-</color><color=#D69E00FF>-</color><color=#C28F00FF>-</color><color=#AD8000FF>-</color><color=#997100FF>-</color><color=#856200FF>-</color><color=#705300FF>-</color><color=#5C4400FF>-</color><color=#473500FF>-</color><color=#332600FF>-</color><color=#1F1700FF>-</color><color=#0A0800FF>-</color><color=#0A0800FF>-</color><color=#1F1700FF>-</color><color=#332600FF>-</color><color=#473500FF>-</color><color=#5C4400FF>-</color><color=#705300FF>-</color><color=#856200FF>-</color><color=#997100FF>-</color><color=#AD8000FF>-</color><color=#C28F00FF>-</color><color=#D69E00FF>-</color><color=#EBAD00FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67398,6 +67406,7 @@ MonoBehaviour:
   triggerAnxiety: 0
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 0
 --- !u!4 &1565387882
 Transform:
   m_ObjectHideFlags: 0
@@ -68459,6 +68468,7 @@ MonoBehaviour:
   triggerAnxiety: 0
   anxietyLevel: 5
   anxietyDuration: 10
+  extraTime: 0
 --- !u!4 &1613129358
 Transform:
   m_ObjectHideFlags: 0
@@ -69442,8 +69452,8 @@ GameObject:
   - component: {fileID: 1659726293}
   - component: {fileID: 1659726292}
   m_Layer: 0
-  m_Name: ~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
-    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~
+  m_Name: ~~~~~~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
+    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~~~~
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69771,6 +69781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 148897806}
   col: {fileID: 1669794613}
+  doNotDestroy: 0
 --- !u!65 &1669794613
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -73499,6 +73510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1742432859}
   col: {fileID: 1865678811}
+  doNotDestroy: 0
 --- !u!65 &1865678811
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -74437,6 +74449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1684408418}
   col: {fileID: 1906577097}
+  doNotDestroy: 0
 --- !u!65 &1906577097
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76245,6 +76258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 884385008}
   col: {fileID: 1990424919}
+  doNotDestroy: 0
 --- !u!65 &1990424919
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -77411,7 +77425,7 @@ GameObject:
   - component: {fileID: 2037040358}
   - component: {fileID: 2037040357}
   m_Layer: 0
-  m_Name: ---------<color=#FFFFFFFF>CHECKPOINTS</color>------------
+  m_Name: ------------------<color=#FFFFFFFF>CHECKPOINTS</color>----------------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78660,6 +78674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1195857237}
   col: {fileID: 2079488460}
+  doNotDestroy: 0
 --- !u!65 &2079488460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -121029,6 +121044,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1185043122535811385, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: throwForce
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1185043122535811385, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: trajectoryColor.b
+      value: 0.8867924
+      objectReference: {fileID: 0}
+    - target: {fileID: 1185043122535811385, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: trajectoryColor.g
+      value: 0.8867924
+      objectReference: {fileID: 0}
+    - target: {fileID: 1185043122535811385, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: trajectoryColor.r
+      value: 0.8867924
+      objectReference: {fileID: 0}
+    - target: {fileID: 1185043122535811385, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: trajectoryResolution
+      value: 22
+      objectReference: {fileID: 0}
     - target: {fileID: 3528023716618402936, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_Name
       value: Player
@@ -121176,6 +121211,10 @@ PrefabInstance:
     - target: {fileID: 7257523298164530904, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8770732866530337948, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

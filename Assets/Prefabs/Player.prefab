@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 524372207014967258}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0.3, z: 0}
+  m_LocalPosition: {x: 0.6, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -126,6 +126,15 @@ LineRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -453,7 +462,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.5
-  m_Radius: 0.25
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -501,7 +510,7 @@ MonoBehaviour:
   standingHeight: 1.5
   crouchHeight: 0.6
   gravity: 12
-  fallDamageThreshold: 3
+  fallDamageThreshold: 5
   state: 0
   characterController: {fileID: 6392378293654077410}
   cameraTransform: {fileID: 4074373934242088296}
@@ -599,9 +608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ebb56c3751c074c95567490df36cd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepInterval: 0.45
+  footstepInterval: 0.55
   footstepSource: {fileID: 2715986301959049074}
-  footStepsSound: 1
+  footStepsSound: 0.9
   footStepsSoundOnCrough: 0.2
   surfaceSoundMappings:
   - surfaceLayer:
@@ -618,6 +627,24 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 505a015d5525e0442ae4a62d5bac304d, type: 3}
     - {fileID: 8300000, guid: 2802b1a72217c464ea0171ad67e835f7, type: 3}
     - {fileID: 8300000, guid: cee4ef3ef0fd155409f7b5a5162cece8, type: 3}
+  - surfaceLayer:
+      serializedVersion: 2
+      m_Bits: 8192
+    footstepSounds:
+    - {fileID: 8300000, guid: 8c2c6c300bd8fc441878f426377bec64, type: 3}
+    - {fileID: 8300000, guid: f8e559768bed7ed4680ab0449da7ec3a, type: 3}
+    - {fileID: 8300000, guid: e331a9e83f5b77e49bd9efba1b2c2fd9, type: 3}
+    - {fileID: 8300000, guid: ffa5441258224694690169f4bd95b969, type: 3}
+    - {fileID: 8300000, guid: 5a5fe2a543e35ef44980fcf5ac79551a, type: 3}
+    - {fileID: 8300000, guid: 062aac8f0463d7945a5a16732efbea51, type: 3}
+  - surfaceLayer:
+      serializedVersion: 2
+      m_Bits: 16384
+    footstepSounds:
+    - {fileID: 8300000, guid: 72b37684ac7a413499d259a0a9be50e6, type: 3}
+    - {fileID: 8300000, guid: 22dffeeb60f8846499a8c08a2c0e6f80, type: 3}
+    - {fileID: 8300000, guid: 39ca7e88dc461e8458d02a2284708c0d, type: 3}
+    - {fileID: 8300000, guid: 38f0c96f5fc9ad54bb7f70129602e268, type: 3}
 --- !u!114 &3224994333188295691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,10 +760,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handPosition: {fileID: 8770732866530337948}
   stonePrefab: {fileID: 8859659887717033183, guid: 59bf5957b97948c48a6ac56a5423f6ab, type: 3}
-  throwForce: 10
+  throwForce: 12
   trajectoryLine: {fileID: 8644426200639429476}
-  trajectoryResolution: 30
-  trajectoryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  trajectoryResolution: 22
+  trajectoryColor: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
   trajectoryWidth: 0.05
   infiniteAmmo: 0
 --- !u!114 &1271999008627739933
