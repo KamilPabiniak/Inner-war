@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c75e60777c6441b95af404ea9f60caf, type: 3}
   m_Name: ShakeEffect
   m_EditorClassIdentifier: 
-  shakeAmplitude: 0.18
+  shakeAmplitude: 4.43
   shakeFrequency: 10
   shakeFalloffCurve:
     serializedVersion: 2
@@ -80,7 +80,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   shakePosition: 1
   shakeRotation: 0
-  shakeType: 1
+  shakeType: 0
   shakeDirection: {x: 1, y: 1, z: 1}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -100,3 +100,4 @@ MonoBehaviour:
   maxDuration: 10
   effects:
   - {fileID: -9191401073318773407}
+  - {fileID: -8428345349787575088}

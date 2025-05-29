@@ -19,8 +19,6 @@ namespace Enemy.State
         private const float PredictionTime = 0.5f;
         private bool _escapeSoundPlayed;
         
-        private static readonly int Speed = Animator.StringToHash("Speed");
-        
         public bool IsOverloading => _isOverloading;
 
         public void EnterState(EnemyBrain enemyBrain)
@@ -50,7 +48,7 @@ namespace Enemy.State
             if (enemyBrain.Target != null)
                 _lastKnownPos = enemyBrain.Target.position;
 
-            AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnAttack);
+            AnxietyManager.Instance.AddFear(AnxietyManager.Instance.increaseFearValueOnAttack);
             AnxietyManager.Instance.TriggerActiveContinuous(4);
             // Play effects
             enemyBrain.audio.PlayAttackSound();
@@ -59,9 +57,6 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
-            enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedAttack); 
-            
             if (_isOverloading)
             {
                 _waitAfterOverload -= Time.deltaTime;

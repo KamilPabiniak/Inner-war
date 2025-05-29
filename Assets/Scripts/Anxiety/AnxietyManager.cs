@@ -46,8 +46,6 @@ namespace Anxiety
         private FearLevelProfile _currentProfile;
         private bool _isPlayerAlive = true;
         private readonly SortedSet<int> _activeLevels = new();
-
-        // Coroutine for looping passive effects
         private Coroutine _passiveLoopCoroutine;
 
         private void Awake()
@@ -75,7 +73,7 @@ namespace Anxiety
         private void Start()
         {
             InitializeAllEffects();
-            ApplyPassiveProfile();
+            UpdateProfile();
         }
 
         private void Update()
@@ -86,21 +84,51 @@ namespace Anxiety
 
         private void InitializeAllEffects()
         {
-            var allProfiles = new[]
+            // Init passive and active effect flags
+            InitProfileEffects(passiveLevel0, true);
+            InitProfileEffects(passiveLevel1, true);
+            InitProfileEffects(passiveLevel2, true);
+            InitProfileEffects(passiveLevel3, true);
+            InitProfileEffects(passiveLevel4, true);
+            InitProfileEffects(passiveLevel5, true);
+
+            InitProfileEffects(activeLevel0, false);
+            InitProfileEffects(activeLevel1, false);
+            InitProfileEffects(activeLevel2, false);
+            InitProfileEffects(activeLevel3, false);
+            InitProfileEffects(activeLevel4, false);
+            InitProfileEffects(activeLevel5, false);
+            InitProfileEffects(activeLevel6, false);
+            InitProfileEffects(activeLevel7, false);
+        }
+
+        private void InitProfileEffects(FearLevelProfile profile, bool isPassive)
+        {
+            if (profile == null) return;
+            foreach (var effect in profile.effects)
+                effect.Init(isPassive);
+        }
+
+        private void UpdateProfile()
+        {
+            if (!_isPlayerAlive) return;
+
+            if (_activeLevels.Count == 0)
             {
-                passiveLevel0, passiveLevel1, passiveLevel2,
-                passiveLevel3, passiveLevel4, passiveLevel5,
-                activeLevel0, activeLevel1, activeLevel2,
-                activeLevel3, activeLevel4, activeLevel5,
-                activeLevel6, activeLevel7
-            };
-            foreach (var profile in allProfiles)
+                ApplyPassiveProfile();
+            }
+            else
             {
-                if (profile == null) continue;
-                bool isPassive = profile.name.StartsWith("Passive") || profile == passiveLevel0;
-                foreach (var effect in profile.effects)
+                int top = _activeLevels.Max;
+                if (top <= 0)
                 {
-                    effect.Init(isPassive);
+                    // treat 0 as clear
+                    _activeLevels.Remove(0);
+                    ApplyPassiveProfile();
+                }
+                else
+                {
+                    ApplyActiveProfile();
                 }
             }
         }
@@ -108,6 +136,8 @@ namespace Anxiety
         private void ApplyPassiveProfile()
         {
             int level = DeterminePassiveFearLevel();
+            Debug.Log($"[Anxiety] Applying PASSIVE profile level {level}");
+
             var profile = level switch
             {
                 0 => passiveLevel0,
@@ -118,18 +148,15 @@ namespace Anxiety
                 5 => passiveLevel5,
                 _ => passiveLevel0
             };
+
             ApplyProfile(profile, true);
         }
 
         private void ApplyActiveProfile()
         {
-            if (_activeLevels.Count == 0)
-            {
-                ApplyPassiveProfile();
-                return;
-            }
-
             int top = _activeLevels.Max;
+            Debug.Log($"[Anxiety] Applying ACTIVE profile level {top}");
+
             var profile = top switch
             {
                 1 => activeLevel1,
@@ -141,53 +168,43 @@ namespace Anxiety
                 7 => activeLevel7,
                 _ => activeLevel0
             };
+
             ApplyProfile(profile, false);
             if (top > 0 && increaseFearValueOnActiveLevel > 0)
-            {
-                AddActiveFear();
-            }
+                AddFear(increaseFearValueOnActiveLevel);
         }
 
-        private void ApplyProfile(FearLevelProfile profile, bool passive)
+        private void ApplyProfile(FearLevelProfile profile, bool isPassive)
         {
-            Debug.Log($"[Anxiety] ApplyProfile: new={profile?.name}, passive={passive}, old={_currentProfile?.name}");
+            if (_currentProfile == profile) return;
 
-            StopPassiveLoop(); 
+            Debug.Log($"[Anxiety] Switching profile to: {profile?.name} (Passive: {isPassive})");
 
-            if (_currentProfile == profile && !passive) 
-                            return;
-
-            if (_currentProfile != null)
-            {
-                foreach (var e in _currentProfile.effects)
-                    e.ForceEndEffect();
-            }
-
+            StopPassiveLoop();
+            EndCurrentEffects();
             _currentProfile = profile;
+
             if (!_isPlayerAlive || _currentProfile == null) return;
 
-            if (passive)
-            {
-                _passiveLoopCoroutine = StartCoroutine(PassiveEffectsLoop());
-            }
-            else
-            {
-                TriggerEffectsBatch(_currentProfile);
-            }
-        }
+            // trigger immediately
+            TriggerEffectsBatch(_currentProfile);
 
+            if (isPassive)
+                _passiveLoopCoroutine = StartCoroutine(PassiveEffectsLoop());
+        }
 
         private IEnumerator PassiveEffectsLoop()
         {
             while (_activeLevels.Count == 0 && _isPlayerAlive && _currentProfile != null)
             {
-                TriggerEffectsBatch(_currentProfile);
                 yield return new WaitForSeconds(0.1f);
+                TriggerEffectsBatch(_currentProfile);
             }
         }
 
         private void TriggerEffectsBatch(FearLevelProfile profile)
         {
+            if (profile == null) return;
             foreach (var e in profile.effects)
             {
                 e.SetBlocked(false);
@@ -198,7 +215,14 @@ namespace Anxiety
             }
         }
 
-        public void ChangeFear(float amount)
+        private void EndCurrentEffects()
+        {
+            if (_currentProfile == null) return;
+            foreach (var e in _currentProfile.effects)
+                e.ForceEndEffect();
+        }
+
+        public void AddFear(float amount)
         {
             FearLevel = Mathf.Clamp(FearLevel + amount, 0f, 100f);
             if (_activeLevels.Count == 0)
@@ -216,39 +240,40 @@ namespace Anxiety
 
         public void TriggerActiveContinuous(int level)
         {
-            if (level < 0 || level > 4) throw new ArgumentOutOfRangeException();
-            ClearAllActiveLevels();
+            if (level == 0)
+            {
+                ClearAllActiveLevels();
+                return;
+            }
+            if (level < 1 || level > 4) throw new ArgumentOutOfRangeException();
             _activeLevels.Add(level);
-            ApplyActiveProfile();
+            UpdateProfile();
         }
 
         public void TriggerActiveTimed(int level, float duration)
         {
             if (level < 5 || level > 7) throw new ArgumentOutOfRangeException();
-            ClearAllActiveLevels();
             _activeLevels.Add(level);
-            ApplyActiveProfile();
-            TimerManager.Schedule(() =>
-            {
+            UpdateProfile();
+            TimerManager.Schedule(() => {
                 _activeLevels.Remove(level);
-                ApplyActiveProfile();
+                UpdateProfile();
             }, duration);
         }
 
         public void ClearActive(int level)
         {
             if (_activeLevels.Remove(level))
-                ApplyActiveProfile();
+                UpdateProfile();
         }
 
-        private void ClearAllActiveLevels()
+        public void ClearAllActiveLevels()
         {
             if (_activeLevels.Count > 0)
             {
-                if (_currentProfile != null)
-                    foreach (var e in _currentProfile.effects)
-                        e.ForceEndEffect();
+                Debug.Log("[Anxiety] Clearing ALL active levels");
                 _activeLevels.Clear();
+                UpdateProfile();
             }
         }
 
@@ -261,29 +286,21 @@ namespace Anxiety
             }
         }
 
-        private void AddActiveFear()
-        {
-            if (increaseFearValueOnActiveLevel > 0)
-                ChangeFear(increaseFearValueOnActiveLevel);
-        }
-        
-
         private void OnPlayerDied()
         {
             _isPlayerAlive = false;
             StopPassiveLoop();
-            if (_currentProfile != null)
-                foreach (var e in _currentProfile.effects)
-                    e.ForceEndEffect();
+            EndCurrentEffects();
+            ClearAllActiveLevels();
         }
 
         private void OnPlayerRespawned()
         {
             _isPlayerAlive = true;
-            if (_activeLevels.Count > 0)
-                ApplyActiveProfile();
-            else
-                ApplyPassiveProfile();
+            UpdateProfile();
         }
+
+        [ContextMenu("Give 20 passive fear")]
+        public void GivePassiveFear() => AddFear(20f);
     }
 }

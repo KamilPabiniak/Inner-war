@@ -1,6 +1,5 @@
 using Anxiety;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Enemy.State
 {
@@ -12,7 +11,6 @@ namespace Enemy.State
         private float _waitTimer;
 
         private static readonly int CheckArea = Animator.StringToHash("Search");
-        private static readonly int Speed = Animator.StringToHash("Speed");
         private static readonly int Rotation = Animator.StringToHash("Direction");
 
         public void EnterState(EnemyBrain enemyBrain)
@@ -27,9 +25,6 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
-            enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedPatrol);
-            
             if (_waitingToMove)
             {
                 _waitTimer -= Time.deltaTime;
@@ -99,6 +94,7 @@ namespace Enemy.State
         public void ExitState(EnemyBrain enemyBrain)
         {
             enemyBrain.animator.SetBool(CheckArea, false);
+            enemyBrain.animator.SetFloat(Rotation, 0f);
 
             // Clean up current point if standing on it
             if (!enemyBrain.enemyMovement.agent.pathPending &&

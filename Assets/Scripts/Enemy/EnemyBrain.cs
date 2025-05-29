@@ -67,6 +67,7 @@ namespace Enemy
         private IEnemyState _lockState;
         private float _lockExpiresAt;
             
+        private static readonly int Speed = Animator.StringToHash("Speed");
         
         private void Awake()
         {
@@ -97,6 +98,18 @@ namespace Enemy
         private void Update()
         {
             currentStateInfo = _currentState.ToString();
+            float multiply = 1f;
+            if (_currentState is AttackState)
+            {
+                multiply = animationWalkSpeedAttack;
+            }
+            else
+            {
+                multiply = 1f;
+            }
+            float vel = enemyMovement.agent.velocity.magnitude;
+            animator.SetFloat(Speed, vel * multiply); 
+            
             if (Target != null 
                 && detection.IsPlayerVisible 
                 && !IsTargetInNavMesh(out _))
