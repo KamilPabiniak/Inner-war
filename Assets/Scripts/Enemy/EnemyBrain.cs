@@ -45,6 +45,7 @@ namespace Enemy
         public float minPatrolPointDistance = 2f;
         [Tooltip("The length of time an opponent  waits  in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
+        public float MaxRotationTime = 4f;
         [Header("Investigate")] 
         [Tooltip("Detection progress at which enemy switches to investigate")]
         public float detectionValueToChase = 25f;

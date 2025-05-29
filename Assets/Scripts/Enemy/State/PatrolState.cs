@@ -9,6 +9,7 @@ namespace Enemy.State
         private bool _isWaiting;                
         private bool _waitingToMove;              
         private float _waitTimer;
+        private float _rotationTimer;
 
         private static readonly int CheckArea = Animator.StringToHash("Search");
         private static readonly int Rotation = Animator.StringToHash("Direction");
@@ -34,6 +35,7 @@ namespace Enemy.State
                 {
                     enemyBrain.animator.SetBool(CheckArea, false);
                     enemyBrain.animator.SetFloat(Rotation, 1f);
+                    _rotationTimer -= Time.deltaTime;
                     Vector3 dir = (_patrolPoint - enemyBrain.transform.position).normalized;
                     if (dir != Vector3.zero)
                     {
@@ -52,6 +54,11 @@ namespace Enemy.State
                             if (enemyBrain.canMove)
                                 enemyBrain.enemyMovement.GoTo(_patrolPoint);
                         }
+                    }
+                    if (_rotationTimer <= 0f)
+                    {
+                        FinishRotation(enemyBrain);
+                        return;
                     }
                 }
                 return;
@@ -125,7 +132,17 @@ namespace Enemy.State
             }
             
             _waitingToMove = true;
-            _waitTimer = enemyBrain.waitTimeAtPatrolPoint; 
+            _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
+            _rotationTimer = enemyBrain.MaxRotationTime;
+        }
+        
+        private void FinishRotation(EnemyBrain enemyBrain)
+        {
+            _waitingToMove = false;
+            enemyBrain.animator.SetBool(CheckArea, false);
+            enemyBrain.animator.SetFloat(Rotation, 0f);
+            if (enemyBrain.canMove)
+                enemyBrain.enemyMovement.GoTo(_patrolPoint);
         }
     }
 }
