@@ -19,6 +19,9 @@ public class FearRangeDetector : MonoBehaviour
 
     private void Update()
     {
+        if (_currentLevel == 3 || _currentLevel == 4)
+            return;
+
         bool inNarrow = HasEnemyInRange(narrowRange);
         bool inWide   = !inNarrow && HasEnemyInRange(wideRange);
         
@@ -49,17 +52,15 @@ public class FearRangeDetector : MonoBehaviour
         if (count == 0) return false;
 
         float rangeSqr = range * range;
-        // Teraz mniejszy heightScale daje mniejsz¹ tolerancjê na Y
         for (int i = 0; i < count; i++)
         {
             Vector3 dir = _results[i].transform.position - transform.position;
-            dir.y *= heightScale;  // <-- tu zmiana
+            dir.y *= heightScale; 
             if (dir.sqrMagnitude <= rangeSqr)
                 return true;
         }
         return false;
     }
-
 
     private void OnDrawGizmos()
     {

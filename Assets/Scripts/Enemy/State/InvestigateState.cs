@@ -9,8 +9,6 @@ namespace Enemy.State
         private Vector3 _lastKnownPosition;
         private bool _fearIncreased;
         
-        private static readonly int Speed = Animator.StringToHash("Speed");
-        
         public void UpdatePosition(Vector3 newPosition)
         {
             _lastKnownPosition = newPosition;
@@ -23,14 +21,10 @@ namespace Enemy.State
             {
                 AnxietyManager.Instance.TriggerActiveContinuous(3);   
             }
-
         }
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
-            enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedInvestigate); 
-            
             if (enemyBrain.detection.IsPlayerVisible 
                 && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
             {
@@ -38,7 +32,7 @@ namespace Enemy.State
                 enemyBrain.enemyMovement.Face(_lastKnownPosition);
                 if (!_fearIncreased)
                 {
-                    AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnSpotted);
+                    AnxietyManager.Instance.AddFear(AnxietyManager.Instance.increaseFearValueOnSpotted);
                     _fearIncreased = true;
                 }
                 return;
