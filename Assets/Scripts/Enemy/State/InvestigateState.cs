@@ -28,14 +28,14 @@ namespace Enemy.State
                 AnxietyManager.Instance.TriggerActiveContinuous(3);   
             }
             
-            float vel = enemyBrain.movement.agent.velocity.magnitude;
+            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
             enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedInvestigate); 
             
             if (enemyBrain.detection.IsPlayerVisible 
                 && enemyBrain.detection.AwarenessLevel < enemyBrain.detectionValueToChase)
             {
-                enemyBrain.movement.Stop();
-                enemyBrain.movement.Face(_lastKnownPosition);
+                enemyBrain.enemyMovement.Stop();
+                enemyBrain.enemyMovement.Face(_lastKnownPosition);
                 if (!_fearIncreased)
                 {
                     AnxietyManager.Instance.ChangeFear(AnxietyManager.Instance.increaseFearValueOnSpotted);
@@ -48,8 +48,8 @@ namespace Enemy.State
             {
                 if (enemyBrain.canMove)
                 {
-                    enemyBrain.movement.GoTo(_lastKnownPosition);
-                    enemyBrain.movement.Face(_lastKnownPosition);
+                    enemyBrain.enemyMovement.GoTo(_lastKnownPosition);
+                    enemyBrain.enemyMovement.Face(_lastKnownPosition);
                 }
                 return;
             }
@@ -57,13 +57,13 @@ namespace Enemy.State
             if (enemyBrain.Target != null && enemyBrain.detection.IsPlayerVisible)
             {
                 _lastKnownPosition = enemyBrain.Target.position;
-                enemyBrain.movement.Face(_lastKnownPosition);
+                enemyBrain.enemyMovement.Face(_lastKnownPosition);
 
                 if (enemyBrain.canMove 
                     && enemyBrain.IsTargetInNavMesh(out NavMeshHit hit) 
                     && enemyBrain.detection.AwarenessLevel > enemyBrain.detectionValueToChase)
                 {
-                    enemyBrain.movement.GoTo(hit.position);
+                    enemyBrain.enemyMovement.GoTo(hit.position);
                 }
             }
         }

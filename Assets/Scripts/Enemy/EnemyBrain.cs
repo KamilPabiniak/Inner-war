@@ -19,7 +19,7 @@ namespace Enemy
         [Header("References")] 
         public new EnemyAudio audio;
         public DetectionController detection;
-        public MovementController  movement;
+        public EnemyMovement  enemyMovement;
         public Animator animator;     
         [SerializeField] private SkinnedMeshRenderer eye;
         private Material eyeMaterial;
@@ -45,12 +45,9 @@ namespace Enemy
         public float minPatrolPointDistance = 2f;
         [Tooltip("The length of time an opponent  waits  in place after reaching a patrol point before moving on to the next one")]
         public float waitTimeAtPatrolPoint = 3f;
-        public float waitBeforeMoveForRotation = 3f;
         [Header("Investigate")] 
         [Tooltip("Detection progress at which enemy switches to investigate")]
         public float detectionValueToChase = 25f;
-        [Tooltip("Time before giving up investigation")]
-        public float investigateLockDuration = 10f;
         [Header("Attack")] 
         [Tooltip("Attack state duration before overload")]
         public float attackLockDuration = 5f;
@@ -105,8 +102,8 @@ namespace Enemy
                 && !IsTargetInNavMesh(out _))
             {
                 if (_currentState is AttackState { IsOverloading: true }) return;
-                movement.Stop();
-                movement.Face(Target.position);
+                enemyMovement.Stop();
+                enemyMovement.Face(Target.position);
                 audio.PlayWarningSound(); 
                 return;
             }

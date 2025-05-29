@@ -10,7 +10,6 @@ namespace Enemy.State
         private bool _isWaiting;                
         private bool _waitingToMove;              
         private float _waitTimer;
-        private float _waitTimerForRotation;
 
         private static readonly int CheckArea = Animator.StringToHash("Search");
         private static readonly int Speed = Animator.StringToHash("Speed");
@@ -19,7 +18,7 @@ namespace Enemy.State
         public void EnterState(EnemyBrain enemyBrain)
         {
             enemyBrain.audio.PlayPatrolSound();
-            enemyBrain.movement.Resume();
+            enemyBrain.enemyMovement.Resume();
             _isWaiting = false;
             _waitingToMove = false;
             SetNewPatrolPoint(enemyBrain);
@@ -28,7 +27,7 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            float vel = enemyBrain.movement.agent.velocity.magnitude;
+            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
             enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedPatrol);
             
             if (_waitingToMove)
@@ -38,19 +37,25 @@ namespace Enemy.State
 
                 if (_waitTimer <= 0f)
                 {
-                    _waitTimerForRotation -= Time.deltaTime;
                     enemyBrain.animator.SetBool(CheckArea, false);
                     enemyBrain.animator.SetFloat(Rotation, 1f);
                     Vector3 dir = (_patrolPoint - enemyBrain.transform.position).normalized;
-                    enemyBrain.transform.forward = Vector3.Lerp(enemyBrain.transform.forward, dir, Time.deltaTime * enemyBrain.rotationSpeed);
-
-                    if (_waitTimerForRotation <= 0f)
+                    if (dir != Vector3.zero)
                     {
-                        enemyBrain.animator.SetBool(CheckArea, false);
-                        _waitingToMove = false;
-                        if (enemyBrain.canMove)
+                        Quaternion targetRotation = Quaternion.LookRotation(dir);
+                        enemyBrain.transform.rotation = Quaternion.RotateTowards(
+                            enemyBrain.transform.rotation,
+                            targetRotation,
+                            enemyBrain.rotationSpeed * Time.deltaTime 
+                        );
+                        
+                        float angle = Quaternion.Angle(enemyBrain.transform.rotation, targetRotation);
+                        if (angle < 1f) 
                         {
-                            enemyBrain.movement.GoTo(_patrolPoint);
+                            _waitingToMove = false;
+                            enemyBrain.animator.SetFloat(Rotation, 0f);
+                            if (enemyBrain.canMove)
+                                enemyBrain.enemyMovement.GoTo(_patrolPoint);
                         }
                     }
                 }
@@ -62,8 +67,8 @@ namespace Enemy.State
                 _waitTimer -= Time.deltaTime;
                 enemyBrain.animator.SetBool(CheckArea, true);
 
-                if (enemyBrain.movement.IsObjectInFront())
-                    enemyBrain.movement.TurnTowardsFreeSpace();
+                if (enemyBrain.enemyMovement.IsObstacleInFront(out _))
+                    enemyBrain.enemyMovement.TurnTowardsFreeSpace();
 
                 if (_waitTimer <= 0f)
                 {
@@ -83,8 +88,8 @@ namespace Enemy.State
                 return;
             }
             
-            if (!enemyBrain.movement.agent.pathPending &&
-                enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance)
+            if (!enemyBrain.enemyMovement.agent.pathPending &&
+                enemyBrain.enemyMovement.agent.remainingDistance <= enemyBrain.enemyMovement.agent.stoppingDistance)
             {
                 _isWaiting = true;
                 _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
@@ -96,8 +101,8 @@ namespace Enemy.State
             enemyBrain.animator.SetBool(CheckArea, false);
 
             // Clean up current point if standing on it
-            if (!enemyBrain.movement.agent.pathPending &&
-                enemyBrain.movement.agent.remainingDistance <= enemyBrain.movement.agent.stoppingDistance &&
+            if (!enemyBrain.enemyMovement.agent.pathPending &&
+                enemyBrain.enemyMovement.agent.remainingDistance <= enemyBrain.enemyMovement.agent.stoppingDistance &&
                 _patrolPoint != enemyBrain.transform.position)
             {
                 if (enemyBrain.patrolAreaOverride != null)
@@ -109,7 +114,7 @@ namespace Enemy.State
 
         private void SetNewPatrolPoint(EnemyBrain enemyBrain)
         {
-            if (!enemyBrain.movement.agent.isOnNavMesh || !enemyBrain.movement.agent.enabled)
+            if (!enemyBrain.enemyMovement.agent.isOnNavMesh || !enemyBrain.enemyMovement.agent.enabled)
                 return;
 
             _patrolPoint = enemyBrain.patrolAreaOverride != null
@@ -120,13 +125,11 @@ namespace Enemy.State
             {
                 _isWaiting = true;
                 _waitTimer = enemyBrain.waitTimeAtPatrolPoint;
-                _waitTimerForRotation = enemyBrain.waitBeforeMoveForRotation;
                 return;
             }
             
             _waitingToMove = true;
             _waitTimer = enemyBrain.waitTimeAtPatrolPoint; 
-            _waitTimerForRotation = enemyBrain.waitBeforeMoveForRotation; 
         }
     }
 }

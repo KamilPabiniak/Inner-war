@@ -26,7 +26,7 @@ namespace Enemy.State
         public void EnterState(EnemyBrain enemyBrain)
         {
             _enemyBrain = enemyBrain;
-            _agent = enemyBrain.movement.agent;
+            _agent = enemyBrain.enemyMovement.agent;
 
             // Cache original values
             _originalSpeed = _agent.speed;
@@ -59,7 +59,7 @@ namespace Enemy.State
 
         public void UpdateState(EnemyBrain enemyBrain)
         {
-            float vel = enemyBrain.movement.agent.velocity.magnitude;
+            float vel = enemyBrain.enemyMovement.agent.velocity.magnitude;
             enemyBrain.animator.SetFloat(Speed, vel * enemyBrain.animationWalkSpeedAttack); 
             
             if (_isOverloading)
@@ -114,7 +114,7 @@ namespace Enemy.State
             if (enemyBrain.canMove)
             {
                 _agent.isStopped = false;
-               enemyBrain.movement.GoTo(_lastKnownPos);
+               enemyBrain.enemyMovement.GoTo(_lastKnownPos);
             }
             else
             {
