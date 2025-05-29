@@ -220,59 +220,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 31745
   planter: {fileID: 8907743467534571527}
---- !u!1 &2069223966825400453
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2720845327598039652}
-  - component: {fileID: 1525975534586180330}
-  m_Layer: 7
-  m_Name: RayCast_R
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2720845327598039652
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069223966825400453}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.159, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5659174376061166786}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1525975534586180330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069223966825400453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90342029b0017c499df0360518990cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  footRefConstraint: {fileID: 7199591306830242343}
-  footIK: {fileID: 8030505407682959657}
-  IKTarget: {fileID: 1592457377329318647}
-  rayYOffset: 1
-  rayDistance: 0.1
-  plantedYOffset: 0.1
-  mask:
-    serializedVersion: 2
-    m_Bits: 7681
 --- !u!1 &2352246208857014311
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +401,6 @@ GameObject:
   - component: {fileID: 4366536721842437855}
   - component: {fileID: 8826511624185513472}
   - component: {fileID: 8332329985919692524}
-  - component: {fileID: 6937434833371798856}
   m_Layer: 7
   m_Name: Machine
   m_TagString: Untagged
@@ -569,7 +515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 8826511624185513472}
   rotationSpeed: 5
-  detectionDistance: 3.3
+  detectionDistance: 2
   rayOriginHeight: 1.7
   destThreshold: 0.5
   setInterval: 0.2
@@ -660,37 +606,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &6937434833371798856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247145216075624242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130319ecadb3e784ca100d413ec5fa6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weight: 1
-  maxStep: 0.2
-  footRadius: 0.3
-  ground:
-    serializedVersion: 2
-    m_Bits: 7169
-  offset: 0
-  hipsPositionSpeed: 3
-  feetPositionSpeed: 3
-  feetRotationSpeed: 2
-  hipsWeight: 1
-  footPositionWeight: 1
-  footRotationWeight: 1
-  stepThreshold: 0.1
-  anim: {fileID: 3539548301195543050}
-  leftFootTarget: {fileID: 3927203743482195077}
-  rightFootTarget: {fileID: 1592457377329318647}
-  enemyAudio: {fileID: 4366536721842437855}
-  showDebug: 0
 --- !u!1 &3607764748430535458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1074,6 @@ Transform:
   - {fileID: 7336881728025133013}
   - {fileID: 6358366654256030387}
   - {fileID: 347033054310649151}
-  - {fileID: 2720845327598039652}
   - {fileID: 3747096656396214329}
   m_Father: {fileID: 7493757481058097264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
