@@ -1092,7 +1092,7 @@ GameObject:
   - component: {fileID: 55620415}
   - component: {fileID: 55620414}
   m_Layer: 0
-  m_Name: ----------------<color=#FFC058FF>Ambinet</color>-------------------
+  m_Name: ------------<color=#FFC058FF>Ambinet</color>----------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1229,7 +1229,7 @@ GameObject:
   - component: {fileID: 58214150}
   - component: {fileID: 58214149}
   m_Layer: 0
-  m_Name: -------Controllers
+  m_Name: -----Controllers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2613,7 +2613,7 @@ GameObject:
   - component: {fileID: 113237347}
   - component: {fileID: 113237346}
   m_Layer: 0
-  m_Name: <color=#842F2FFF>-------------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>----------------</color>
+  m_Name: <color=#842F2FFF>---------</color><color=#FF7575FF>ENCOUNTERS</color><color=#842F2FFF>-------------</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4574,7 +4574,7 @@ Transform:
   m_GameObject: {fileID: 182439461}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.29, y: 1.63, z: -3.74}
+  m_LocalPosition: {x: -12.87, y: 1.63, z: -3.74}
   m_LocalScale: {x: 1, y: 2.9136, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16108,7 +16108,7 @@ GameObject:
   - component: {fileID: 695772515}
   - component: {fileID: 695772514}
   m_Layer: 0
-  m_Name: ------------ENVIROMENT-----------------
+  m_Name: ---------ENVIROMENT-------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17718,7 +17718,7 @@ GameObject:
   - component: {fileID: 757262063}
   - component: {fileID: 757262062}
   m_Layer: 0
-  m_Name: ---------------<color=#B0B0B0FF>CAMERA</color>-------------------
+  m_Name: ------------<color=#B0B0B0FF>CAMERA</color>---------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18532,7 +18532,7 @@ GameObject:
   - component: {fileID: 828615971}
   - component: {fileID: 828615970}
   m_Layer: 0
-  m_Name: --------------<color=#7EC2FFFF>Monologue </color>-----------------
+  m_Name: ----------<color=#7EC2FFFF>Monologue </color>--------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19526,7 +19526,7 @@ Transform:
   m_GameObject: {fileID: 865928575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.63, y: 1.63, z: -61.72}
+  m_LocalPosition: {x: 28.99, y: 1.63, z: -61.72}
   m_LocalScale: {x: 1, y: 2.9136, z: 18.1515}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20498,7 +20498,7 @@ GameObject:
   - component: {fileID: 920049564}
   - component: {fileID: 920049563}
   m_Layer: 0
-  m_Name: --------------MANAGERS-----------------
+  m_Name: ----------MANAGERS--------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21895,6 +21895,79 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8575328886399634656, guid: ac8b2ebabcd31844b91170c5477b1a77, type: 3}
   m_PrefabInstance: {fileID: 499824761}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &979067348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 979067351}
+  - component: {fileID: 979067350}
+  - component: {fileID: 979067349}
+  m_Layer: 0
+  m_Name: Monologue - 6
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &979067349
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979067348}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &979067350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979067348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f3754a796579c4e8cdb285935e5720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monologueClip: {fileID: 0}
+  monologueVolume: 0
+  triggerOnce: 1
+  delayBeforePlay: 0
+  triggerAnxiety: 1
+  anxietyLevel: 5
+  anxietyDuration: 20
+--- !u!4 &979067351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979067348}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 82.66, y: 1.47, z: 20.79}
+  m_LocalScale: {x: 10.714687, y: 3.3062398, z: 9.139277}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &979894626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22892,8 +22965,8 @@ Transform:
   m_GameObject: {fileID: 1014197939}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071066, z: -0, w: 0.70710707}
-  m_LocalPosition: {x: 4.66, y: 16.237, z: -117.46}
-  m_LocalScale: {x: 1, y: 2.8, z: 6.14}
+  m_LocalPosition: {x: 4.66, y: 16.237, z: -116.42}
+  m_LocalScale: {x: 2.0543, y: 2.8, z: 6.14}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -59507,7 +59580,7 @@ GameObject:
   - component: {fileID: 1243767705}
   - component: {fileID: 1243767704}
   m_Layer: 0
-  m_Name: ------------<color=#3D0080FF>CHARACTERS</color>-----------------
+  m_Name: ---------<color=#3D0080FF>CHARACTERS</color>-------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65424,7 +65497,7 @@ GameObject:
   - component: {fileID: 1494555223}
   - component: {fileID: 1494555222}
   m_Layer: 0
-  m_Name: ------------Pipes&Ladders----------------
+  m_Name: ---------Pipes&Ladders------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65841,7 +65914,7 @@ GameObject:
   - component: {fileID: 1510743468}
   - component: {fileID: 1510743467}
   m_Layer: 0
-  m_Name: ----------POSTPROCESSING--------------
+  m_Name: -------POSTPROCESSING----------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66224,7 +66297,7 @@ GameObject:
   - component: {fileID: 1525228045}
   - component: {fileID: 1525228044}
   m_Layer: 0
-  m_Name: <color=#FFBC00FF>-</color><color=#DDA300FF>-</color><color=#BB8A00FF>-</color><color=#997100FF>-</color><color=#775800FF>-</color><color=#553F00FF>-</color><color=#332600FF>-</color><color=#110D00FF>-</color><color=#110D00FF>-</color><color=#332600FF>-</color><color=#553F00FF>-</color><color=#775800FF>-</color><color=#997100FF>-</color><color=#BB8A00FF>-</color><color=#DDA300FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#E6AA00FF>-</color><color=#CC9700FF>-</color><color=#B28400FF>-</color><color=#997100FF>-</color><color=#805E00FF>-</color><color=#664B00FF>-</color><color=#4C3900FF>-</color><color=#332600FF>-</color><color=#1A1300FF>-</color><color=#000000FF>-</color><color=#1A1300FF>-</color><color=#332600FF>-</color><color=#4C3900FF>-</color><color=#664B00FF>-</color><color=#805E00FF>-</color><color=#997100FF>-</color><color=#B28400FF>-</color><color=#CC9700FF>-</color><color=#E6AA00FF>-</color><color=#FFBC00FF>-</color>
+  m_Name: <color=#FFBC00FF>-</color><color=#D49D00FF>-</color><color=#AA7E00FF>-</color><color=#805E00FF>-</color><color=#553F00FF>-</color><color=#2A1F00FF>-</color><color=#000000FF>-</color><color=#2A1F00FF>-</color><color=#553F00FF>-</color><color=#805E00FF>-</color><color=#AA7E00FF>-</color><color=#D49D00FF>-</color><color=#FFBC00FF>-</color><color=#FFFF00FF>LIGHT</color><color=#FFBC00FF>-</color><color=#DFA500FF>-</color><color=#BF8D00FF>-</color><color=#9F7600FF>-</color><color=#805E00FF>-</color><color=#604700FF>-</color><color=#402F00FF>-</color><color=#201800FF>-</color><color=#000000FF>-</color><color=#201800FF>-</color><color=#402F00FF>-</color><color=#604700FF>-</color><color=#805E00FF>-</color><color=#9F7600FF>-</color><color=#BF8D00FF>-</color><color=#DFA500FF>-</color><color=#FFBC00FF>-</color>
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66733,6 +66806,10 @@ PrefabInstance:
     - target: {fileID: 812143166477994966, guid: 7a9cc1c0fd0f6f540a2b35f23a711dab, type: 3}
       propertyPath: m_Name
       value: P_trashContainer_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 812143166477994966, guid: 7a9cc1c0fd0f6f540a2b35f23a711dab, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -69356,8 +69433,8 @@ GameObject:
   - component: {fileID: 1659726293}
   - component: {fileID: 1659726292}
   m_Layer: 0
-  m_Name: ~~~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
-    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~~~~
+  m_Name: ~~~~<color=#FFFFFFFF>F</color><color=#B3B3B3FF>U</color><color=#A1A1A1FF>C</color><color=#ECECECFF>K</color><color=#CCCCCCFF>I</color><color=#999999FF>N</color><color=#DDDDDDFF>G</color><color=#DDDDDDFF>
+    </color><color=#999999FF>S</color><color=#CCCCCCFF>T</color><color=#ECECECFF>O</color><color=#A1A1A1FF>N</color><color=#B3B3B3FF>E</color><color=#FFFFFFFF>S</color>~~~~~~~~
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71729,6 +71806,10 @@ PrefabInstance:
     - target: {fileID: 812143166477994966, guid: 7a9cc1c0fd0f6f540a2b35f23a711dab, type: 3}
       propertyPath: m_Name
       value: P_trashContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 812143166477994966, guid: 7a9cc1c0fd0f6f540a2b35f23a711dab, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -74438,7 +74519,7 @@ Transform:
   m_GameObject: {fileID: 1906577095}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70707947, z: -0, w: 0.7071341}
-  m_LocalPosition: {x: 1.5107899, y: 1.63, z: -109.231895}
+  m_LocalPosition: {x: 1.5107899, y: 1.63, z: -103.13}
   m_LocalScale: {x: 1, y: 2.9136, z: 18.1515}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -76246,7 +76327,7 @@ Transform:
   m_GameObject: {fileID: 1990424917}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.52, y: 1.63, z: -39.04}
+  m_LocalPosition: {x: 13.52, y: 1.63, z: -38.47}
   m_LocalScale: {x: 7, y: 2.9136, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -77382,7 +77463,7 @@ GameObject:
   - component: {fileID: 2037040358}
   - component: {fileID: 2037040357}
   m_Layer: 0
-  m_Name: ------------<color=#FFFFFFFF>CHECKPOINTS</color>----------------
+  m_Name: ---------<color=#FFFFFFFF>CHECKPOINTS</color>------------
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78662,7 +78743,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -25.86, y: 1.63, z: -54.93}
-  m_LocalScale: {x: 15, y: 2.9136, z: 15}
+  m_LocalScale: {x: 8.998651, y: 2.9136, z: 10.4364}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1195857237}
@@ -119294,6 +119375,10 @@ PrefabInstance:
       propertyPath: 'surfaceSoundMappings.Array.data[4].footstepSounds.Array.data[3]'
       value: 
       objectReference: {fileID: 8300000, guid: 38f0c96f5fc9ad54bb7f70129602e268, type: 3}
+    - target: {fileID: 4637112317400622803, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
+      propertyPath: fallDamageThreshold
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6392378293654077410, guid: e704f8231a7c62c4b80757ee8fceec86, type: 3}
       propertyPath: m_Radius
       value: 0.3
@@ -131987,4 +132072,5 @@ SceneRoots:
   - {fileID: 1565387882}
   - {fileID: 1613129358}
   - {fileID: 1008984159}
+  - {fileID: 979067351}
   - {fileID: 536069229}
