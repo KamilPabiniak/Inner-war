@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Checkpoint
@@ -7,11 +6,13 @@ namespace Checkpoint
     {
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Collider col;
+        [SerializeField] private bool doNotDestroy;
         private void OnTriggerEnter(Collider other)
         {
             if (!other.gameObject.CompareTag("Player")) return;
             Player.Instance.GetModule<PlayerDeath>().checkpoint = spawnPoint;
             GameEvents.onSaveCheckpoint.Invoke();
+            if (doNotDestroy) return;
             gameObject.SetActive(false);
         }
 

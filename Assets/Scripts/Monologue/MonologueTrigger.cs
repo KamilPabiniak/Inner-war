@@ -15,12 +15,39 @@ public class MonologueTrigger : MonoBehaviour
     [SerializeField, Tooltip("Duration in seconds for the active anxiety level")]
     private float anxietyDuration = 10f;
 
+    [Space, Header("Extra time for activation after start game")] 
+    [SerializeField] private float extraTime;
+
     private bool _hasTriggered;
+    private Collider _trigger;
     private PlayerMonologue _cachedMonologue;
 
-    private void OnEnable() => GameEvents.onPlayerRespawned += HandleRespawn;
+    private void Start()
+    {
+        _trigger = GetComponent<Collider>();
+    }
 
-    private void OnDisable() => GameEvents.onPlayerRespawned -= HandleRespawn;
+    private void OnEnable()
+    {
+        GameEvents.onPlayerRespawned += HandleRespawn;
+        GameEvents.onMenuExit += HandleGameStart;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.onPlayerRespawned -= HandleRespawn;
+        GameEvents.onMenuExit -= HandleGameStart;
+    }
+
+    private void HandleGameStart()
+    {
+        Invoke(nameof(SetUpTrigger),extraTime);
+    }
+
+    private void SetUpTrigger()
+    {
+        _trigger.enabled = true;
+    }
 
     private void HandleRespawn()
     {
