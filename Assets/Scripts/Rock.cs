@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using Enemy;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Rock : MonoBehaviour, IInteractable
 {
@@ -11,6 +14,27 @@ public class Rock : MonoBehaviour, IInteractable
     private bool _alertTriggered;
     public bool canPlaySound = false;
 
+    private MeshRenderer _meshRenderer;
+    private Rigidbody _rigidbody;
+    private BoxCollider _boxCollider;
+
+    private void Start()
+    {
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _boxCollider = GetComponent<BoxCollider>();
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.onPlayerDied += SetActive;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.onPlayerDied -= SetActive;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (!canPlaySound) return;
@@ -18,7 +42,6 @@ public class Rock : MonoBehaviour, IInteractable
         int randomSound = Random.Range(0, rockSound.Length);
         SoundFXManager.Instance.Play3DSoundFXClip(rockSound[randomSound], transform, 1f, audioMixerGroup: SoundFXManager.Instance.LowPassMixer);
         
-        // If the rock directly hits an enemy, force it to attack.
         NavMeshAgent agent = collision.gameObject.GetComponent<NavMeshAgent>();
         if (agent != null)
         {
@@ -28,22 +51,21 @@ public class Rock : MonoBehaviour, IInteractable
                 enemyBrain.OnAttackCommandReceived(Player.Instance.transform);
             }
         }
-        
-        if (!_alertTriggered)
+
+        if (_alertTriggered) return;
+        _alertTriggered = true; 
+        LayerMask enemyMask = LayerMask.GetMask("Enemy");
+        Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius, enemyMask, QueryTriggerInteraction.Ignore);
+
+        foreach (var col in colliders)
         {
-            _alertTriggered = true; 
-            LayerMask enemyMask = LayerMask.GetMask("Enemy");
-            Collider[] colliders = Physics.OverlapSphere(impactPosition, detectionRadius, enemyMask, QueryTriggerInteraction.Ignore);
+            var brainParent = col.GetComponentInParent<EnemyBrain>();
 
-            foreach (var col in colliders)
-            {
-                var brainParent = col.GetComponentInParent<EnemyBrain>();
-
-                if (brainParent == null) continue;
-                brainParent.OnAlertReceived(impactPosition);
-            }
-
+            if (brainParent == null) continue;
+            brainParent.OnAlertReceived(impactPosition);
         }
+        
+        Destroy(gameObject, 1f);
     }
 
     private void OnDrawGizmosSelected()
@@ -59,5 +81,19 @@ public class Rock : MonoBehaviour, IInteractable
         {
             throwModule.PickupStone(gameObject);
         }
+    }
+
+    public void SetUnactive()
+    {
+        _meshRenderer.enabled = false;
+        _boxCollider.enabled = false;
+        _rigidbody.isKinematic = true;
+    }
+
+    private void SetActive()
+    {
+        _meshRenderer.enabled = true;
+        _boxCollider.enabled = true;
+        _rigidbody.isKinematic = false;
     }
 }

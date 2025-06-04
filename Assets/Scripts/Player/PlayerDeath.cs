@@ -18,8 +18,10 @@ public class PlayerDeath : PlayerModule
     [SerializeField] private AudioClip deadEnd;
     [SerializeField] private AudioClip deadEoldProjectorSound;
     
+    
     private Vector3 _backupPos;
     private bool _isDead;
+    private bool savedHasStoneAtCheckpoint = false;
     private void Start()
     {
         _backupPos = transform.position;
@@ -82,5 +84,14 @@ public class PlayerDeath : PlayerModule
     {
         Vector3 targetPosition = checkpoint != null ? checkpoint.position : _backupPos;
         transform.position = targetPosition;
+        
+        var playerThrow = Player.GetModule<PlayerThrow>();
+        playerThrow.LoadStone(savedHasStoneAtCheckpoint);
+        
+    }
+    
+    public void SetSavedHasStone(bool hasStone)
+    {
+        savedHasStoneAtCheckpoint = hasStone;
     }
 }

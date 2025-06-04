@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8859659887717033183}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -92.57}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -108,8 +108,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.40798378, y: 0.47428876, z: 0.24662687}
-  m_Center: {x: -0.021086693, y: 0.008457661, z: 0.07331342}
+  m_Size: {x: 0.2, y: 0.2, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0.04}
 --- !u!54 &4545406083891296714
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f83b46c0d4e24c4084bea5f69358ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 6
+  detectionRadius: 7
   rockSound:
   - {fileID: 8300000, guid: b31dc31dddf36624bb8e17de89bd729d, type: 3}
   - {fileID: 8300000, guid: 3a54e31a017be7e458e5bb90e7da7974, type: 3}

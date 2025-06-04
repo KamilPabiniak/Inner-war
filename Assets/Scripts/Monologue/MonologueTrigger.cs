@@ -62,7 +62,9 @@ public class MonologueTrigger : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            if (_hasTriggered && triggerOnce)
+            if (_hasTriggered)
+                return;
+            if (triggerOnce)
                 return;
 
             var monologueModule = player.GetModule<PlayerMonologue>();
