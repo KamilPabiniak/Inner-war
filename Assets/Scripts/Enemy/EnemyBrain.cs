@@ -263,6 +263,7 @@ namespace Enemy
                     SetTarget(null);
                     detection.SetAwarenessLevel(0f);
                     _lockState = null;
+                    RequestStateChange(_patrolState);
                 }
             }
         }

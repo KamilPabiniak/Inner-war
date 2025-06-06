@@ -18,7 +18,8 @@ namespace Enemy.State
         private float _originalAngularSpeed;
         private const float PredictionTime = 0.5f;
         private bool _escapeSoundPlayed;
-        
+        private static readonly int Overload = Animator.StringToHash("Overload");
+
         public bool IsOverloading => _isOverloading;
 
         public void EnterState(EnemyBrain enemyBrain)
@@ -64,6 +65,8 @@ namespace Enemy.State
                 {
                     enemyBrain.detection.SetAwarenessLevel(0f);
                     enemyBrain.OnBackToPatrol(); 
+                    enemyBrain.animator.SetBool(Overload, false);
+                    _agent.isStopped = false;
                 }
                 return;
             }
@@ -72,6 +75,9 @@ namespace Enemy.State
             if (_attackTimer <= 0f)
             {
                 enemyBrain.audio.PlayOverloadSound();
+                enemyBrain.animator.SetBool(Overload, true);
+                _agent.isStopped = true;
+                _agent.ResetPath();
                 _isOverloading = true;
             }
             
@@ -128,7 +134,11 @@ namespace Enemy.State
             GameEvents.onPlayerKilled -= HandlePlayerKilled;
         }
 
-        private void HandlePlayerKilled() =>
+        private void HandlePlayerKilled()
+        {
             _enemyBrain.detection.SetAwarenessLevel(0f);
+            _enemyBrain.OnBackToPatrol();
+        }
+
     }
 }

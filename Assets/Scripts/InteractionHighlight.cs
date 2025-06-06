@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using QuestSystem;  // <-- upewnij siê, ¿e namespace QuestSystem jest dostêpny
 
 public class InteractionHighlight : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class InteractionHighlight : MonoBehaviour
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactionRadius);
 
+        // Zbiór obiektów, które w tej klatce powinny byæ podœwietlone
         HashSet<GameObject> detectedObjects = new HashSet<GameObject>();
         
         List<GameObject> objectsToAdd = new List<GameObject>();
@@ -28,24 +30,38 @@ public class InteractionHighlight : MonoBehaviour
         foreach (var collider in hitColliders)
         {
             GameObject obj = collider.gameObject;
-            bool isInteractable = HasValidTag(obj);
+            // SprawdŸmy najpierw, czy obiekt w ogóle ma poprawny tag
+            if (!HasValidTag(obj))
+                continue;
 
-            if (isInteractable)
+            // Je¿eli obiekt ma QuestInteractable, to sprawdŸmy, czy jest to aktualny quest
+            QuestInteractable qi = obj.GetComponent<QuestInteractable>();
+            if (qi != null)
             {
+                Quest currentQuest = QuestManager.Instance.GetCurrentQuest();
+                // Jeœli nie ma w ogóle aktywnego questa, albo ID siê nie zgadza, pomijamy go
+                if (currentQuest == null || qi.associatedQuestID != currentQuest.questID)
+                    continue;
+            }
 
-                if (obj.TryGetComponent(out Renderer renderer))
+            // Po tych filtrach – obiekt kwalifikuje siê do podœwietlania
+            if (obj.TryGetComponent(out Renderer renderer))
+            {
+                detectedObjects.Add(obj);
+                // Jeœli jeszcze nie ma coroutine, a materia³ ma odpowiednie w³aœciwoœci -> dodajemy do animacji
+                if (!activeHighlights.ContainsKey(obj) 
+                    && renderer.material.HasProperty(RimRange) 
+                    && renderer.material.HasProperty(RimBlend))
                 {
-                    detectedObjects.Add(obj);
-                    if (!activeHighlights.ContainsKey(obj) && renderer.material.HasProperty(RimRange) && renderer.material.HasProperty(RimBlend))
-                    {
-                        objectsToAdd.Add(obj);
-                    }
+                    objectsToAdd.Add(obj);
                 }
             }
         }
         
+        // Uruchomienie podœwietlenia dla nowych obiektów
         foreach (var obj in objectsToAdd)
         {
+            if (obj == null) continue;
             if (obj.TryGetComponent(out Renderer renderer))
             {
                 Coroutine highlightCoroutine = StartCoroutine(AnimateRimEffects(renderer.material, 1.5f, 0.5f));
@@ -53,20 +69,27 @@ public class InteractionHighlight : MonoBehaviour
             }
         }
         
-        foreach (var obj in activeHighlights.Keys)
+        // SprawdŸmy, które obiekty opuœci³y zakres albo zosta³y odfiltrowane – musimy usun¹æ z aktywnego s³ownika
+        foreach (var kvp in activeHighlights)
         {
+            GameObject obj = kvp.Key;
             if (!detectedObjects.Contains(obj))
             {
-                objectsToRemove.Add(obj); 
+                objectsToRemove.Add(obj);
             }
         }
-        
+
         foreach (var obj in objectsToRemove)
         {
-            StopCoroutine(activeHighlights[obj]);
-            activeHighlights.Remove(obj);
+            if (activeHighlights.TryGetValue(obj, out Coroutine cor))
+            {
+                StopCoroutine(cor);
+                activeHighlights.Remove(obj);
+            }
 
-            if (obj == null) return;
+            if (obj == null) 
+                continue;
+
             if (obj.TryGetComponent(out Renderer renderer))
             {
                 ResetRimEffects(renderer.material);
@@ -79,9 +102,7 @@ public class InteractionHighlight : MonoBehaviour
         foreach (var tag in interactableTags)
         {
             if (obj.CompareTag(tag))
-            {
                 return true;
-            }
         }
         return false;
     }
