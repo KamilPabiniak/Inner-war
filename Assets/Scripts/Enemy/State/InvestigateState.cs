@@ -16,7 +16,7 @@ namespace Enemy.State
 
         public void EnterState(EnemyBrain enemyBrain)
         {
-            enemyBrain.audio.PlayInvestigateSound();
+            enemyBrain.enemyAudio.PlayInvestigateSound();
             if (enemyBrain.detection.IsPlayerVisible)
             {
                 AnxietyManager.Instance.TriggerActiveContinuous(3);   

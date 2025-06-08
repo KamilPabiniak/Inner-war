@@ -39,18 +39,10 @@ namespace QuestSystem
                 {
                     monologue.PlayMonologue(completionClip, completionVolume, completionDelay);
                 }
-
-                // Trigger optional active timed anxiety
+                
                 if (triggerAnxiety)
                 {
-                    try
-                    {
-                        Anxiety.AnxietyManager.Instance.TriggerActiveTimed(anxietyLevel, anxietyDuration);
-                    }
-                    catch (System.ArgumentOutOfRangeException e)
-                    {
-                        Debug.LogWarning($"Anxiety level must be between 5 and 7. Provided: {anxietyLevel}");
-                    }
+                    Anxiety.AnxietyManager.Instance.TriggerActiveTimed(anxietyLevel, anxietyDuration);
                 }
             }
 

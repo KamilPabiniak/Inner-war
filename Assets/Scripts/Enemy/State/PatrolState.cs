@@ -16,7 +16,7 @@ namespace Enemy.State
 
         public void EnterState(EnemyBrain enemyBrain)
         {
-            enemyBrain.audio.PlayPatrolSound();
+            enemyBrain.enemyAudio.PlayPatrolSound();
             enemyBrain.enemyMovement.Resume();
             _isWaiting = false;
             _waitingToMove = false;

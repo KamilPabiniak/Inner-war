@@ -17,7 +17,7 @@ namespace Enemy
         [SerializeField] private string currentStateInfo;
         
         [Header("References")] 
-        public new EnemyAudio audio;
+        public EnemyAudio enemyAudio;
         public DetectionController detection;
         public EnemyMovement  enemyMovement;
         public Animator animator;     
@@ -118,7 +118,7 @@ namespace Enemy
                 if (_currentState is AttackState { IsOverloading: true }) return;
                 enemyMovement.Stop();
                 enemyMovement.Face(Target.position);
-                audio.PlayWarningSound(); 
+                enemyAudio.PlayWarningSound(); 
                 return;
             }
             

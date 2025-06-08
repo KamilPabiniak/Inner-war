@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStateInfo: 
-  audio: {fileID: 4366536721842437855}
+  enemyAudio: {fileID: 4366536721842437855}
   detection: {fileID: 5965334082298027993}
   enemyMovement: {fileID: 1294484814404840590}
   animator: {fileID: 3539548301195543050}
@@ -453,6 +453,7 @@ MonoBehaviour:
   rotationSpeed: 60
   minPatrolPointDistance: 1
   waitTimeAtPatrolPoint: 4.2
+  MaxRotationTime: 4
   detectionValueToChase: 25
   attackLockDuration: 6
   attackAfterLostTarget: 5

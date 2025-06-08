@@ -1,3 +1,4 @@
+using Anxiety;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -62,9 +63,7 @@ public class MonologueTrigger : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            if (_hasTriggered)
-                return;
-            if (triggerOnce)
+            if (_hasTriggered && triggerOnce)
                 return;
 
             var monologueModule = player.GetModule<PlayerMonologue>();
@@ -77,14 +76,7 @@ public class MonologueTrigger : MonoBehaviour
             
             if (triggerAnxiety)
             {
-                try
-                {
-                    Anxiety.AnxietyManager.Instance.TriggerActiveTimed(anxietyLevel, anxietyDuration);
-                }
-                catch (System.ArgumentOutOfRangeException e)
-                {
-                    Debug.LogWarning($"Anxiety level must be between 5 and 7. Provided: {anxietyLevel}");
-                }
+                AnxietyManager.Instance.TriggerActiveTimed(anxietyLevel, anxietyDuration);
             }
         }
     }

@@ -52,7 +52,7 @@ namespace Enemy.State
             AnxietyManager.Instance.AddFear(AnxietyManager.Instance.increaseFearValueOnAttack);
             AnxietyManager.Instance.TriggerActiveContinuous(4);
             // Play effects
-            enemyBrain.audio.PlayAttackSound();
+            enemyBrain.enemyAudio.PlayAttackSound();
             GameEvents.onPlayerKilled += HandlePlayerKilled;
         }
 
@@ -74,7 +74,7 @@ namespace Enemy.State
             _attackTimer -= Time.deltaTime;
             if (_attackTimer <= 0f)
             {
-                enemyBrain.audio.PlayOverloadSound();
+                enemyBrain.enemyAudio.PlayOverloadSound();
                 enemyBrain.animator.SetBool(Overload, true);
                 _agent.isStopped = true;
                 _agent.ResetPath();
@@ -85,7 +85,7 @@ namespace Enemy.State
             {
                 if (!_escapeSoundPlayed)
                 {
-                    enemyBrain.audio.PlayTargetEscapeSound();
+                    enemyBrain.enemyAudio.PlayTargetEscapeSound();
                     _escapeSoundPlayed = true;
                 }
                 
@@ -107,7 +107,7 @@ namespace Enemy.State
                 _lostTargetTimer += Time.deltaTime;
                 if (_lostTargetTimer >= enemyBrain.attackAfterLostTarget)
                 {
-                    enemyBrain.audio.PlayTargetLostSound();
+                    enemyBrain.enemyAudio.PlayTargetLostSound();
                     return;
                 }
             }
