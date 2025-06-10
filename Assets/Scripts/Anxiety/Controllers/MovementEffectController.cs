@@ -13,7 +13,7 @@ namespace Anxiety.Controllers
 
         private PlayerMovement _playerMovement;
 
-        private void Awake()
+        private void Start()
         {
             _originalSpeed = Player.Instance.GetModule<PlayerMovement>().moveSpeed;
             _playerMovement = Player.Instance.GetModule<PlayerMovement>();

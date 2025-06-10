@@ -58,10 +58,10 @@ public class PlayerDeath : PlayerModule
     {
         GameEvents.onPlayerDied?.Invoke();
         float blackDuration = blackScreenBaseDuration * timeScale;
-        GameEvents.onBlackScreen.Invoke(0f, blackDuration, 0f);
+        GameEvents.onBlackScreen.Invoke(0f, blackDuration, 1f);
         SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(
             deadEnd, transform, 1f, deadEnd.length, false);
-        yield return new WaitForSeconds(blackDuration);
+        yield return new WaitForSeconds(blackDuration - 1f);
         GameEvents.onDeathScreen?.Invoke();
         float respawnTime = this.respawnTime * timeScale;
         SoundFXManager.Instance.Play2DSFXClipDestroyOnIgnoreDeath(
